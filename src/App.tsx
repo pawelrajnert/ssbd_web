@@ -1,7 +1,7 @@
 function App() {
   return (
       <div>
-        <h1></h1>
+        <h1>Witaj na serwerze Zespołu 1! 🤫👮‍👂📝</h1>
       </div>
   )
 }
