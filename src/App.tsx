@@ -1,8 +1,15 @@
+import {RouterProvider} from "react-router-dom";
+import {router} from "./routes";
+import {AuthProvider} from "./providers/AuthProvider.tsx";
+
 function App() {
-  return (
-      <div>
-        <h1>Witaj na serwerze Zespołu 1! 🤫👮‍👂📝</h1>
-      </div>
-  )
+    return (
+        <>
+            <AuthProvider>
+                <RouterProvider router={router}/>
+            </AuthProvider>
+        </>
+    )
 }
+
 export default App
