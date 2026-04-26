@@ -1,0 +1,14 @@
+{
+  "auth": {
+    "title": "Ochrona Uczciwości Akademickiej",
+    "subtitle": "Analiza wkładu naukowego z precyzją i prestiżowym autorytetem na Politechnice Łódzkiej.",
+    "founded": "Założona w 1945",
+    "login": {
+      "heading": "Logowanie",
+      "subheading": "Uzyskaj dostęp do swojego panelu",
+      "button": "Zaloguj się",
+      "noAccount": "Nowy w systemie platformy?",
+      "createAccount": "Utwórz konto"
+    }
+  }
+}
