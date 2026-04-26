@@ -1,0 +1,14 @@
+{
+  "auth": {
+    "title": "Preserving Academic Integrity",
+    "subtitle": "Analyzing scholarly contributions with precision and prestigious authority at the Technical University of Lodz.",
+    "founded": "Founded 1945",
+    "login": {
+      "heading": "Login",
+      "subheading": "Access your academic integrity dashboard",
+      "button": "Log in",
+      "noAccount": "New to the platform system?",
+      "createAccount": "Create an account"
+    }
+  }
+}
