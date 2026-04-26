@@ -1,12 +1,10 @@
-import {createContext, type ReactNode, useMemo, useState} from "react";
+import {type ReactNode, useMemo, useState} from "react";
 import { jwtDecode } from "jwt-decode";
-import type {AuthContextType, JwtPayload} from "../hooks/useAuth.ts";
-
-const AuthContext = createContext<AuthContextType | null>(null);
+import { AuthContext, type JwtPayload } from "../hooks/useAuth.ts";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [token, setToken] = useState<string | null>(() => localStorage.getItem("access_token"));
-    const [refreshToken, setRefreshToken] = useState<string | null>(() => localStorage.getItem("refresh_token"));
+    const [token, setToken] = useState<string | null>(() => sessionStorage.getItem("access_token"));
+    const [refreshToken, setRefreshToken] = useState<string | null>(() => sessionStorage.getItem("refresh_token"));
 
     const { userRole, userLogin } = useMemo(() => {
         if (token && token !== "undefined" && token !== "null") {
@@ -39,8 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('refresh_token');
         setToken(null);
         setRefreshToken(null);
     };

@@ -10,27 +10,30 @@ import AuthLayout from "../shared/layouts/AuthLayout.tsx";
 
 const routes: RouteObject[] = [
     {
-        element: <AuthLayout />,
+        //odkomentować jeżeli chcecie zobaczyć header na login page
+    // element: <Layout />,
+    // children: [{
+        element: <AuthLayout/>,
         children: [
             {
                 path: PATHS.LOGIN,
-                element: <LoginPage />
+                element: <LoginPage/>
             },
             // {
             //     path: PATHS.REGISTER,
             //     element: <RegisterPage />
             // }
         ]
+        // }]
     },
-    // PROTECTED ROUTES FOR ADMINS ONLY
     {
         element: <ProtectedRoute allowedRoles={[RoleEnum.ADMIN]}/>,
         children: [
             {
-                element: <Layout />,
+                element: <Layout/>,
                 children: [
                     {
-                        index: true, // This is still "/"
+                        index: true,
                         element: <UserListPage/>
                     }
                 ]

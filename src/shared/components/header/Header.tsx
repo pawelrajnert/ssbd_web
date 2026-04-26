@@ -1,19 +1,102 @@
-import {useNavigate} from "react-router-dom";
-import {PATHS} from "../../../routes/paths.ts";
+import {useLocation, useNavigate} from "react-router-dom";
+import {Bell, Settings} from "lucide-react";
+import {useAuth} from "../../../hooks/useAuth";
+import {PATHS} from "../../../routes/paths";
 
 export default function Header() {
+    const { logout, userRole, userLogin } = useAuth();
+    const location = useLocation();
     const navigate = useNavigate();
-    function handleHome() {
-        navigate(PATHS.HOME)
-    }
-    function handleAbout() {
-        navigate(PATHS.ABOUT)
-    }
+
+    const handleLogout = () => {
+        logout();
+        navigate(PATHS.LOGIN);
+    };
+
+    const generateBreadcrumbs = () => {
+        const paths = location.pathname.split('/').filter(p => p !== '');
+
+        if (paths.length === 0) return [{ name: "Dashboard", isLast: true }];
+
+        return paths.map((path, index) => {
+            const isLast = index === paths.length - 1;
+
+            let formattedName = path.replace(/-/g, ' ');
+            formattedName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+
+            if (path.toLowerCase() === 'users') formattedName = 'User Management';
+
+            return { name: formattedName, isLast };
+        });
+    };
+
+    const breadcrumbs = generateBreadcrumbs();
 
     return (
-        <header>
-            <button onClick={handleHome} className={"bg-amber-600 text-5xl"}>home</button>
-            <button onClick={handleAbout}>about</button>
+        <header className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200">
+
+            <div className="flex items-center gap-8">
+                <div>
+                    <h1 className="text-xl font-bold text-gray-900 leading-tight">
+                        Academic Curator
+                    </h1>
+                    <p className="text-xs text-gray-500 font-semibold tracking-wider uppercase">
+                        Lodz University of Technology
+                    </p>
+                </div>
+
+                <div className="h-8 w-px bg-red-100 hidden md:block"></div>
+
+                <nav className="hidden md:flex items-center gap-2 text-sm font-medium">
+                    {breadcrumbs.map((crumb, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                            {index > 0 && <span className="text-gray-300">/</span>}
+                            <span className={crumb.isLast ? "text-[#7A1014] border-b border-[#7A1014]" : "text-gray-400"}>
+                                {crumb.name}
+                            </span>
+                        </div>
+                    ))}
+                </nav>
+            </div>
+
+            <div className="flex items-center gap-6">
+
+                <div className="flex items-center gap-4 text-gray-600">
+                    <button className="hover:text-[#7A1014] transition-colors">
+                        <Bell size={20} />
+                    </button>
+                    <button className="hover:text-[#7A1014] transition-colors">
+                        <Settings size={20} />
+                    </button>
+                </div>
+
+                <div className="h-8 w-px bg-gray-200"></div>
+
+                <div className="flex items-center gap-4">
+                    <div className="text-right hidden sm:block">
+                        <p className="text-sm font-bold text-gray-900">{userLogin || "User"}</p>
+                        <p className="text-xs text-gray-500 tracking-wider uppercase">{userRole || "Guest"}</p>
+                    </div>
+
+                    <div className="relative">
+                        <div className="w-10 h-10 bg-red-500 rounded-md overflow-hidden flex items-center justify-center">
+                            <img
+                                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userLogin || 'default'}`}
+                                alt="Avatar"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                </div>
+
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 text-sm font-bold text-[#7A1014] hover:text-red-900 transition-colors ml-2"
+                >
+                    Logout
+                </button>
+            </div>
         </header>
-    )
+    );
 }

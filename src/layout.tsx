@@ -3,12 +3,10 @@ import Header from "./shared/components/header/Header.tsx";
 
 const Layout = () => {
     return (
-        <>
-            <Header/>
             <main>
+                <Header/>
                 <Outlet/>
             </main>
-        </>
     )
 }
 export default Layout;
