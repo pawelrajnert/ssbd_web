@@ -7,6 +7,9 @@ import Layout from "../layout.tsx";
 import {RoleEnum} from "../types/role.types.ts";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import AuthLayout from "../shared/layouts/AuthLayout.tsx";
+import PasswordResetInitPage from "../pages/password_reset/PasswordResetInitPage.tsx";
+import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfirmPage.tsx";
+
 
 const routes: RouteObject[] = [
     {
@@ -23,6 +26,14 @@ const routes: RouteObject[] = [
             //     path: PATHS.REGISTER,
             //     element: <RegisterPage />
             // }
+            {
+                path: PATHS.FORGOT_PASSWORD,
+                element: <PasswordResetInitPage/>
+            },
+            {
+                path: PATHS.RESET_PASSWORD,
+                element: <PasswordResetConfirmPage/>
+            }
         ]
         // }]
     },
