@@ -9,6 +9,35 @@
       "button": "Zaloguj się",
       "noAccount": "Nowy w systemie platformy?",
       "createAccount": "Utwórz konto"
+    },
+    "register": {
+      "heading": "Utwórz Konto",
+      "subheading": "Dostęp instytucjonalny dla wykładowców i badaczy",
+      "name": "IMIĘ",
+      "surname": "NAZWISKO",
+      "login": "LOGIN",
+      "email": "EMAIL UCZELNIANY",
+      "password": "HASŁO",
+      "confirmPassword": "POTWIERDŹ HASŁO",
+      "passwordHelper": "Minimum 8 znaków, 1 wielka litera, 1 znak specjalny.",
+      "terms": "Akceptuję Regulamin i Politykę Prywatności dotyczącą przetwarzania danych naukowych.",
+      "button": "UTWÓRZ KONTO",
+      "haveAccount": "Jesteś już zarejestrowany w portalu?",
+      "loginLink": "ZALOGUJ SIĘ",
+      "successHeading": "Sprawdź swoją skrzynkę",
+      "successText": "Wysłaliśmy link aktywacyjny na Twój adres e-mail. Kliknij go, aby zweryfikować konto przed logowaniem.",
+      "spamNote": "Nie widzisz wiadomości? Sprawdź folder SPAM.",
+      "backToLogin": "WRÓĆ DO LOGOWANIA"
+    },
+    "activate": {
+      "loading": "Aktywacja konta...",
+      "loadingSub": "Proszę czekać, weryfikujemy Twój token.",
+      "success": "Konto Aktywowane!",
+      "successSub": "Twój adres e-mail został pomyślnie zweryfikowany.",
+      "proceed": "PRZEJDŹ DO LOGOWANIA",
+      "error": "Aktywacja Nie Powiodła Się",
+      "errorSub": "Link aktywacyjny jest nieprawidłowy, wygasł lub Twoje konto jest już aktywne.",
+      "back": "WRÓĆ DO LOGOWANIA"
     }
   },
   "userList": {
@@ -33,5 +62,14 @@
       "of": "z",
       "users": "użytkowników"
     }
+  },
+  "profile": {
+    "oldPassword": "Stare hasło",
+    "newPassword": "Nowe hasło",
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "applyChanges": "Zapisz zmiany"
+  },
+  "error": {
+    "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne."
   }
 }
