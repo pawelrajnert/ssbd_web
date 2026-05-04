@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type {FailedQueueItem} from "../../types/failed_query.type.ts";
 
-const baseURL = 'http://localhost:8080/PAS_SPA/api/v1';
+const baseURL = '/api';
 
 const axiosInstance = axios.create({
     baseURL: baseURL,

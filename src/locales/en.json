@@ -9,6 +9,35 @@
       "button": "Log in",
       "noAccount": "New to the platform system?",
       "createAccount": "Create an account"
+    },
+    "register": {
+      "heading": "Create Account",
+      "subheading": "Institutional access for faculty and researchers",
+      "firstName": "FIRST NAME",
+      "lastName": "LAST NAME",
+      "login": "LOGIN",
+      "email": "UNIVERSITY EMAIL",
+      "password": "PASSWORD",
+      "confirmPassword": "CONFIRM PASSWORD",
+      "passwordHelper": "Minimum 8 characters, 1 uppercase, 1 symbol.",
+      "terms": "I agree to the Terms of Service and Privacy Policy regarding academic data processing.",
+      "button": "CREATE ACCOUNT",
+      "haveAccount": "Already registered with the institutional portal?",
+      "loginLink": "LOGIN",
+      "successHeading": "Check your inbox",
+      "successText": "We have sent an activation link to your email address. Please click the link to verify your account before logging in.",
+      "spamNote": "Don't see the email? Check your spam or junk folder.",
+      "backToLogin": "RETURN TO LOGIN"
+    },
+    "activate": {
+      "loading": "Activating your account...",
+      "loadingSub": "Please wait while we verify your token.",
+      "success": "Account Activated!",
+      "successSub": "Your email has been successfully verified.",
+      "proceed": "PROCEED TO LOGIN",
+      "error": "Activation Failed",
+      "errorSub": "The activation link is invalid, expired, or your account is already active.",
+      "back": "BACK TO LOGIN"
     }
   }
 }

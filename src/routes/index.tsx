@@ -7,6 +7,8 @@ import Layout from "../layout.tsx";
 import {RoleEnum} from "../types/role.types.ts";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import AuthLayout from "../shared/layouts/AuthLayout.tsx";
+import RegisterPage from "../pages/register/RegisterPage.tsx";
+import ActivatePage from "../pages/activate/ActivatePage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -19,10 +21,14 @@ const routes: RouteObject[] = [
                 path: PATHS.LOGIN,
                 element: <LoginPage/>
             },
-            // {
-            //     path: PATHS.REGISTER,
-            //     element: <RegisterPage />
-            // }
+            {
+                path: PATHS.REGISTER,
+                element: <RegisterPage/>
+            },
+            {
+                path: PATHS.ACTIVATE,
+                element: <ActivatePage />
+            }
         ]
         // }]
     },
