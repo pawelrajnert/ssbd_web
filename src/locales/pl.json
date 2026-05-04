@@ -13,8 +13,8 @@
     "register": {
       "heading": "Utwórz Konto",
       "subheading": "Dostęp instytucjonalny dla wykładowców i badaczy",
-      "firstName": "IMIĘ",
-      "lastName": "NAZWISKO",
+      "name": "IMIĘ",
+      "surname": "NAZWISKO",
       "login": "LOGIN",
       "email": "EMAIL UCZELNIANY",
       "password": "HASŁO",

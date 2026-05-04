@@ -5,12 +5,15 @@ import { User, Mail, Lock, CheckSquare, Square, IdCard, MailCheck } from "lucide
 import { PATHS } from "../../routes/paths.ts";
 import axiosInstance from "../../api/auth/middleware.ts";
 
+import LinkButton from "../../shared/components/buttons/LinkButton";
+import SubmitButton from "../../shared/components/buttons/SubmitButton";
+
 export default function RegisterPage() {
     const { t } = useTranslation();
 
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        name: "",
+        surname: "",
         login: "",
         email: "",
         password: "",
@@ -19,7 +22,7 @@ export default function RegisterPage() {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false); // NOWY STAN
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,18 +33,25 @@ export default function RegisterPage() {
         setError(null);
 
         if (!termsAccepted) {
-            setError("You must accept the terms and conditions.");
+            setError(t('auth.register.errorTerms') || "You must accept the terms and conditions.");
             return;
         }
 
         if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t('auth.register.errorPasswordMismatch') || "Passwords do not match.");
+            return;
+        }
+
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/;
+        if (!passwordRegex.test(formData.password)) {
+            setError(t('auth.register.errorPasswordWeak') || "Password must contain an uppercase letter and a special symbol.");
             return;
         }
 
         setIsLoading(true);
         try {
-            await axiosInstance.post("/account/register", formData);
+            const { confirmPassword, ...payload } = formData;
+            await axiosInstance.post("/account/register", payload);
             setIsSuccess(true);
         } catch (err: any) {
             setError(err.response?.data || "An error occurred during registration.");
@@ -65,12 +75,13 @@ export default function RegisterPage() {
                 <p className="text-xs text-gray-400 mb-8 italic">
                     {t('auth.register.spamNote')}
                 </p>
-                <Link
+
+                <LinkButton
                     to={PATHS.LOGIN}
-                    className="w-full py-3 bg-[#8a151b] hover:bg-[#6b1014] text-white text-xs font-bold tracking-widest uppercase transition-colors block text-center"
+                    className="mt-2 text-xs tracking-widest uppercase"
                 >
                     {t('auth.register.backToLogin')}
-                </Link>
+                </LinkButton>
             </div>
         );
     }
@@ -94,14 +105,14 @@ export default function RegisterPage() {
                 <div className="flex gap-4">
                     <div className="w-1/2">
                         <label className="block text-xs font-bold text-gray-600 tracking-wider mb-2 uppercase">
-                            {t('auth.register.firstName')}
+                            {t('auth.register.name')}
                         </label>
                         <div className="relative border-b border-gray-300 focus-within:border-[#7A1014] transition-colors pb-1">
                             <User className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 type="text"
-                                name="firstName"
-                                value={formData.firstName}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
                                 placeholder="Jan"
                                 className="w-full pl-8 py-1 outline-none text-sm text-gray-800 bg-transparent"
@@ -112,13 +123,13 @@ export default function RegisterPage() {
                     </div>
                     <div className="w-1/2">
                         <label className="block text-xs font-bold text-gray-600 tracking-wider mb-2 uppercase">
-                            {t('auth.register.lastName')}
+                            {t('auth.register.surname')}
                         </label>
                         <div className="relative border-b border-gray-300 focus-within:border-[#7A1014] transition-colors pb-1">
                             <input
                                 type="text"
-                                name="lastName"
-                                value={formData.lastName}
+                                name="surname"
+                                value={formData.surname}
                                 onChange={handleChange}
                                 placeholder="Kowalski"
                                 className="w-full pl-2 py-1 outline-none text-sm text-gray-800 bg-transparent"
@@ -223,13 +234,13 @@ export default function RegisterPage() {
                     </p>
                 </div>
 
-                <button
+                <SubmitButton
                     type="submit"
-                    disabled={isLoading}
-                    className="w-full py-3 mt-8 bg-[#8a151b] hover:bg-[#6b1014] text-white text-xs font-bold tracking-widest uppercase transition-colors disabled:opacity-70 flex justify-center items-center"
+                    isLoading={isLoading}
+                    className="mt-6 text-xs tracking-widest uppercase"
                 >
-                    {isLoading ? "Processing..." : t('auth.register.button')}
-                </button>
+                    {t('auth.register.button')}
+                </SubmitButton>
 
                 <div className="text-center mt-6">
                     <p className="text-xs text-gray-500">

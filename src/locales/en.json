@@ -13,8 +13,8 @@
     "register": {
       "heading": "Create Account",
       "subheading": "Institutional access for faculty and researchers",
-      "firstName": "FIRST NAME",
-      "lastName": "LAST NAME",
+      "name": "FIRST NAME",
+      "surname": "LAST NAME",
       "login": "LOGIN",
       "email": "UNIVERSITY EMAIL",
       "password": "PASSWORD",
