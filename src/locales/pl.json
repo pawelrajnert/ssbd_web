@@ -10,5 +10,14 @@
       "noAccount": "Nowy w systemie platformy?",
       "createAccount": "Utwórz konto"
     }
+  },
+  "profile": {
+    "oldPassword": "Stare hasło",
+    "newPassword": "Nowe hasło",
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "applyChanges": "Zapisz zmiany"
+  },
+  "error": {
+    "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne."
   }
 }
