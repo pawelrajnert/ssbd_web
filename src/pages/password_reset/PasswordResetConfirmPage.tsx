@@ -1,0 +1,165 @@
+import {useState} from "react";
+import {Link, useSearchParams} from "react-router-dom";
+import {Lock, ArrowLeft, CheckCircle2, AlertCircle} from "lucide-react";
+import {PATHS} from "../../routes/paths.ts";
+import {passwordResetService} from "../../services/passwordResetService.ts";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {type PasswordFormData, passwordSchema} from "../../shared/validators/passwordSchema.ts";
+import axios from "axios";
+import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
+import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
+
+export default function PasswordResetConfirmPage() {
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get("token");
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const {
+        register,
+        handleSubmit,
+        formState: {errors}
+    } = useForm<PasswordFormData>({
+        resolver: yupResolver(passwordSchema)
+    });
+
+    const onSubmit = async (data: PasswordFormData) => {
+
+        setStatus('loading');
+        setErrorMessage("");
+
+        try {
+            await passwordResetService.confirmReset(token!, data.newPassword);
+            setStatus('success');
+        } catch (error) {
+            console.error("Failed to reset password", error);
+            setStatus('error');
+            if (axios.isAxiosError(error)) {
+                setErrorMessage(error.response?.data?.message || "Failed to reset password. The link may have expired or already been used.");
+            } else if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("An unexpected error occurred.");
+            }
+        }
+    };
+
+    if (!token) {
+        return (
+            <div
+                className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
+                <div className="flex justify-center mb-4 text-red-500">
+                    <AlertCircle size={48}/>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">Invalid Link</h2>
+                <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                    This password reset link is invalid or missing the required security token.
+                </p>
+                <Link
+                    to={PATHS.RESET_PASSWORD}
+                    className="inline-block w-full max-w-sm bg-[#7A1014] text-white font-bold py-3 rounded-md hover:bg-red-900 transition-colors shadow-sm"
+                >
+                    Request a new link
+                </Link>
+            </div>
+        );
+    }
+
+    if (status === 'success') {
+        return (
+            <div
+                className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
+                <div className="flex justify-center mb-4 text-green-600">
+                    <CheckCircle2 size={48}/>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">Password Updated</h2>
+                <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                    Your password has been successfully changed. You can now log in with your new credentials.
+                </p>
+                <LinkButton to={PATHS.LOGIN} className="max-w-sm">
+                    Return to Login
+                </LinkButton>
+            </div>
+        );
+    }
+
+    return (
+        <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Create New Password</h2>
+            <p className="text-sm text-gray-500 mb-8">
+                Please enter your new password below.
+            </p>
+
+            {status === 'error' && (
+                <div
+                    className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-md flex items-start gap-2 border border-red-100">
+                    <AlertCircle size={16} className="mt-0.5 flex-shrink-0"/>
+                    <span>{errorMessage}</span>
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
+                <div className="mb-6">
+                    <label htmlFor="newPassword"
+                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        New Password
+                    </label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
+                            <Lock size={18}/>
+                        </div>
+                        <input
+                            id="newPassword"
+                            type="password"
+                            placeholder="••••••••••••"
+                            {...register("newPassword")}
+                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50 ${errors.newPassword ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
+                            disabled={status === 'loading'}
+                        />
+                    </div>
+                    {errors.newPassword && (
+                        <p className="text-red-500 text-xs mt-1">{errors.newPassword.message}</p>
+                    )}
+                </div>
+
+                <div className="mb-8">
+                    <label htmlFor="confirmPassword"
+                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        Confirm Password
+                    </label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
+                            <Lock size={18}/>
+                        </div>
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="••••••••••••"
+                            {...register("confirmPassword")}
+                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50 ${errors.confirmPassword ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
+                            disabled={status === 'loading'}
+                        />
+                    </div>
+                    {errors.confirmPassword && (
+                        <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
+                    )}
+                </div>
+
+                <SubmitButton
+                    type="submit"
+                    isLoading={status === 'loading'}
+                >
+                    Reset Password
+                </SubmitButton>
+            </form>
+
+            <div className="mt-8 text-center max-w-sm">
+                <LinkButton to={PATHS.LOGIN} variant="ghost">
+                    <ArrowLeft size={16} className="mr-2"/>
+                    Back to Login
+                </LinkButton>
+            </div>
+        </div>
+    );
+}

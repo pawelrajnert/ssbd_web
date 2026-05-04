@@ -9,6 +9,8 @@ import ProtectedRoute from "./ProtectedRoute.tsx";
 import AuthLayout from "../shared/layouts/AuthLayout.tsx";
 import RegisterPage from "../pages/register/RegisterPage.tsx";
 import ActivatePage from "../pages/activate/ActivatePage.tsx";
+import PasswordResetInitPage from "../pages/password_reset/PasswordResetInitPage.tsx";
+import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfirmPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -28,6 +30,14 @@ const routes: RouteObject[] = [
             {
                 path: PATHS.ACTIVATE,
                 element: <ActivatePage />
+            },
+            {
+                path: PATHS.FORGOT_PASSWORD,
+                element: <PasswordResetInitPage/>
+            },
+            {
+                path: PATHS.RESET_PASSWORD,
+                element: <PasswordResetConfirmPage/>
             }
         ]
         // }]
