@@ -10,5 +10,14 @@
       "noAccount": "New to the platform system?",
       "createAccount": "Create an account"
     }
+  },
+  "profile": {
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "applyChanges": "Apply Changes"
+  },
+  "error": {
+    "changePasswordFailed": "Failed to change the password. Check if the old password and data version are correct."
   }
 }
