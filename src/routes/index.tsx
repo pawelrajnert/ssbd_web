@@ -9,6 +9,7 @@ import ProtectedRoute from "./ProtectedRoute.tsx";
 import AuthLayout from "../shared/layouts/AuthLayout.tsx";
 import PasswordResetInitPage from "../pages/password_reset/PasswordResetInitPage.tsx";
 import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfirmPage.tsx";
+import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
 import EmailChangeInitPage from "../pages/own_email_change/EmailChangeMainPage.tsx";
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 
@@ -55,6 +56,10 @@ const routes: RouteObject[] = [
                     {
                         index: true,
                         element: <UserListPage/>
+                    },
+                    {
+                        path: PATHS.PROFILE,
+                        element: <ProfilePage/>
                     }
                     // {
                     //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,

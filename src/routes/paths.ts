@@ -5,6 +5,7 @@ export const PATHS = {
     REGISTER: "/register",
     FORGOT_PASSWORD: "/forgot-password",
     RESET_PASSWORD: "/reset-password",
+    PROFILE: "/profile"
     OWN_EMAIL_CHANGE_MAIN: "/email/change",
     OWN_EMAIL_CHANGE_CONFIRM: "/change-email"
 } as const;
