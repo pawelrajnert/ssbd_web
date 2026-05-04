@@ -40,6 +40,29 @@
       "back": "WRÓĆ DO LOGOWANIA"
     }
   },
+  "userList": {
+    "title": "Zarządzanie użytkownikami",
+    "subtitle": "Skutecznie zarządzaj dostępem instytucjonalnym, definiuj role akademickie i monitoruj aktywność badaczy w repozytorium uniwersyteckim.",
+    "refresh": "Odśwież",
+    "filterPlaceholder": "Filtruj po imieniu, e-mailu...",
+    "table": {
+      "role": "Rola",
+      "firstName": "Imię",
+      "surname": "Nazwisko",
+      "login": "Login",
+      "email": "E-mail",
+      "lastLogin": "Ostatnie logowanie",
+      "actions": "Akcje",
+      "edit": "Edytuj",
+      "noUsers": "Nie znaleziono użytkowników spełniających kryteria filtrowania."
+    },
+    "pagination": {
+      "showing": "Wyświetlanie",
+      "to": "do",
+      "of": "z",
+      "users": "użytkowników"
+    }
+  },
   "profile": {
     "oldPassword": "Stare hasło",
     "newPassword": "Nowe hasło",

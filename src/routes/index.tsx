@@ -60,7 +60,7 @@ const routes: RouteObject[] = [
                 element: <Layout/>,
                 children: [
                     {
-                        index: true,
+                        path: PATHS.USER_LIST,
                         element: <UserListPage/>
                     },
                     {
