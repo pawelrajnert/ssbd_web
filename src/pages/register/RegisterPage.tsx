@@ -2,59 +2,51 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { User, Mail, Lock, CheckSquare, Square, IdCard, MailCheck } from "lucide-react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 import { PATHS } from "../../routes/paths.ts";
 import axiosInstance from "../../api/auth/middleware.ts";
-
 import LinkButton from "../../shared/components/buttons/LinkButton";
 import SubmitButton from "../../shared/components/buttons/SubmitButton";
 
+import { registerSchema, type RegisterFormData } from "../../shared/validators/registerSchema.ts";
+
 export default function RegisterPage() {
     const { t } = useTranslation();
-
-    const [formData, setFormData] = useState({
-        name: "",
-        surname: "",
-        login: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
-    });
-    const [termsAccepted, setTermsAccepted] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [globalError, setGlobalError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(null);
-
-        if (!termsAccepted) {
-            setError(t('auth.register.errorTerms') || "You must accept the terms and conditions.");
-            return;
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors }
+    } = useForm<RegisterFormData>({
+        resolver: yupResolver(registerSchema),
+        defaultValues: {
+            name: "",
+            surname: "",
+            login: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            termsAccepted: false
         }
+    });
 
-        if (formData.password !== formData.confirmPassword) {
-            setError(t('auth.register.errorPasswordMismatch') || "Passwords do not match.");
-            return;
-        }
-
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/;
-        if (!passwordRegex.test(formData.password)) {
-            setError(t('auth.register.errorPasswordWeak') || "Password must contain an uppercase letter and a special symbol.");
-            return;
-        }
-
+    const onSubmit = async (data: RegisterFormData) => {
+        setGlobalError(null);
         setIsLoading(true);
+
         try {
-            const { confirmPassword, ...payload } = formData;
+            const { confirmPassword, termsAccepted, ...payload } = data;
+
             await axiosInstance.post("/account/register", payload);
             setIsSuccess(true);
         } catch (err: any) {
-            setError(err.response?.data || "An error occurred during registration.");
+            setGlobalError(err.response?.data || "An error occurred during registration.");
         } finally {
             setIsLoading(false);
         }
@@ -75,7 +67,6 @@ export default function RegisterPage() {
                 <p className="text-xs text-gray-400 mb-8 italic">
                     {t('auth.register.spamNote')}
                 </p>
-
                 <LinkButton
                     to={PATHS.LOGIN}
                     className="mt-2 text-xs tracking-widest uppercase"
@@ -95,13 +86,13 @@ export default function RegisterPage() {
                 {t('auth.register.subheading')}
             </p>
 
-            {error && (
+            {globalError && (
                 <div className="mb-4 p-3 bg-red-50 text-[#7A1014] text-sm rounded-md border border-red-200">
-                    {error}
+                    {globalError}
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="flex gap-4">
                     <div className="w-1/2">
                         <label className="block text-xs font-bold text-gray-600 tracking-wider mb-2 uppercase">
@@ -111,16 +102,14 @@ export default function RegisterPage() {
                             <User className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
                                 placeholder="Jan"
-                                className="w-full pl-8 py-1 outline-none text-sm text-gray-800 bg-transparent"
-                                required
-                                minLength={3}
+                                className={`w-full pl-8 py-1 outline-none text-sm bg-transparent ${errors.name ? "text-red-500" : "text-gray-800"}`}
+                                {...register("name")}
                             />
                         </div>
+                        {errors.name && <p className="text-red-500 text-[10px] mt-1">{errors.name.message}</p>}
                     </div>
+
                     <div className="w-1/2">
                         <label className="block text-xs font-bold text-gray-600 tracking-wider mb-2 uppercase">
                             {t('auth.register.surname')}
@@ -128,15 +117,12 @@ export default function RegisterPage() {
                         <div className="relative border-b border-gray-300 focus-within:border-[#7A1014] transition-colors pb-1">
                             <input
                                 type="text"
-                                name="surname"
-                                value={formData.surname}
-                                onChange={handleChange}
                                 placeholder="Kowalski"
-                                className="w-full pl-2 py-1 outline-none text-sm text-gray-800 bg-transparent"
-                                required
-                                minLength={3}
+                                className={`w-full pl-2 py-1 outline-none text-sm bg-transparent ${errors.surname ? "text-red-500" : "text-gray-800"}`}
+                                {...register("surname")}
                             />
                         </div>
+                        {errors.surname && <p className="text-red-500 text-[10px] mt-1">{errors.surname.message}</p>}
                     </div>
                 </div>
 
@@ -148,15 +134,12 @@ export default function RegisterPage() {
                         <IdCard className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input
                             type="text"
-                            name="login"
-                            value={formData.login}
-                            onChange={handleChange}
                             placeholder="jkowalski"
-                            className="w-full pl-8 py-1 outline-none text-sm text-gray-800 bg-transparent"
-                            required
-                            minLength={3}
+                            className={`w-full pl-8 py-1 outline-none text-sm bg-transparent ${errors.login ? "text-red-500" : "text-gray-800"}`}
+                            {...register("login")}
                         />
                     </div>
+                    {errors.login && <p className="text-red-500 text-[10px] mt-1">{errors.login.message}</p>}
                 </div>
 
                 <div>
@@ -167,14 +150,12 @@ export default function RegisterPage() {
                         <Mail className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input
                             type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
                             placeholder="name@p.lodz.pl"
-                            className="w-full pl-8 py-1 outline-none text-sm text-gray-800 bg-transparent"
-                            required
+                            className={`w-full pl-8 py-1 outline-none text-sm bg-transparent ${errors.email ? "text-red-500" : "text-gray-800"}`}
+                            {...register("email")}
                         />
                     </div>
+                    {errors.email && <p className="text-red-500 text-[10px] mt-1">{errors.email.message}</p>}
                 </div>
 
                 <div className="flex gap-4">
@@ -186,17 +167,15 @@ export default function RegisterPage() {
                             <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
                                 placeholder="••••••••••••"
-                                className="w-full pl-8 py-1 outline-none text-sm text-gray-800 bg-transparent"
-                                required
-                                minLength={8}
-                                pattern="^(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$"
-                                title="Minimum 8 characters, 1 uppercase, 1 symbol"
+                                className={`w-full pl-8 py-1 outline-none text-sm bg-transparent ${errors.password ? "text-red-500" : "text-gray-800"}`}
+                                {...register("password")}
                             />
                         </div>
+                        {errors.password ?
+                            <p className="text-red-500 text-[10px] mt-1">{errors.password.message}</p> :
+                            <p className="text-[10px] text-gray-400 mt-1">{t('auth.register.passwordHelper')}</p>
+                        }
                     </div>
                     <div className="w-1/2">
                         <label className="block text-xs font-bold text-gray-600 tracking-wider mb-2 uppercase">
@@ -206,32 +185,36 @@ export default function RegisterPage() {
                             <Lock className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                             <input
                                 type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
                                 placeholder="••••••••••••"
-                                className="w-full pl-8 py-1 outline-none text-sm text-gray-800 bg-transparent"
-                                required
-                                minLength={8}
-                                pattern="^(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$"
+                                className={`w-full pl-8 py-1 outline-none text-sm bg-transparent ${errors.confirmPassword ? "text-red-500" : "text-gray-800"}`}
+                                {...register("confirmPassword")}
                             />
                         </div>
+                        {errors.confirmPassword && <p className="text-red-500 text-[10px] mt-1">{errors.confirmPassword.message}</p>}
                     </div>
                 </div>
-                <p className="text-[10px] text-gray-400 -mt-4">
-                    {t('auth.register.passwordHelper')}
-                </p>
 
-                <div
-                    className="flex items-start gap-3 mt-6 cursor-pointer"
-                    onClick={() => setTermsAccepted(!termsAccepted)}
-                >
-                    <div className="mt-0.5 text-red-800">
-                        {termsAccepted ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}
-                    </div>
-                    <p className="text-xs text-gray-600 leading-tight select-none">
-                        {t('auth.register.terms')}
-                    </p>
+                <div className="mt-6">
+                    <Controller
+                        name="termsAccepted"
+                        control={control}
+                        render={({ field }) => (
+                            <div>
+                                <div
+                                    className="flex items-start gap-3 cursor-pointer"
+                                    onClick={() => field.onChange(!field.value)}
+                                >
+                                    <div className="mt-0.5 text-red-800">
+                                        {field.value ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}
+                                    </div>
+                                    <p className="text-xs text-gray-600 leading-tight select-none">
+                                        {t('auth.register.terms')}
+                                    </p>
+                                </div>
+                                {errors.termsAccepted && <p className="text-red-500 text-[10px] mt-1">{errors.termsAccepted.message}</p>}
+                            </div>
+                        )}
+                    />
                 </div>
 
                 <SubmitButton
