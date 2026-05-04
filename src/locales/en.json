@@ -10,5 +10,28 @@
       "noAccount": "New to the platform system?",
       "createAccount": "Create an account"
     }
+  },
+  "userList": {
+    "title": "User Management",
+    "subtitle": "Efficiently manage institutional access, define academic roles, and monitor investigator activity across the university repository.",
+    "refresh": "Refresh",
+    "filterPlaceholder": "Filter by name, email...",
+    "table": {
+      "role": "Role",
+      "firstName": "First Name",
+      "surname": "Surname",
+      "login": "Login",
+      "email": "Email",
+      "lastLogin": "Last Login",
+      "actions": "Actions",
+      "edit": "Edit",
+      "noUsers": "No users found matching your filter criteria."
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "users": "users"
+    }
   }
 }
