@@ -37,8 +37,7 @@ export const ChangeOwnPasswordForm: React.FC<Props> = ({ version, onSuccess }) =
         try {
             await changeOwnPassword({
                 oldPassword: data.oldPassword,
-                newPassword: data.newPassword,
-                confirmNewPassword: data.confirmPassword
+                newPassword: data.newPassword
             }, version);
             reset();
             onSuccess();
