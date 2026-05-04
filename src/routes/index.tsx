@@ -7,6 +7,8 @@ import Layout from "../layout.tsx";
 import {RoleEnum} from "../types/role.types.ts";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import AuthLayout from "../shared/layouts/AuthLayout.tsx";
+import RegisterPage from "../pages/register/RegisterPage.tsx";
+import ActivatePage from "../pages/activate/ActivatePage.tsx";
 import PasswordResetInitPage from "../pages/password_reset/PasswordResetInitPage.tsx";
 import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfirmPage.tsx";
 import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
@@ -24,10 +26,14 @@ const routes: RouteObject[] = [
                 path: PATHS.LOGIN,
                 element: <LoginPage/>
             },
-            // {
-            //     path: PATHS.REGISTER,
-            //     element: <RegisterPage />
-            // }
+            {
+                path: PATHS.REGISTER,
+                element: <RegisterPage/>
+            },
+            {
+                path: PATHS.ACTIVATE,
+                element: <ActivatePage />
+            },
             {
                 path: PATHS.FORGOT_PASSWORD,
                 element: <PasswordResetInitPage/>
