@@ -32,7 +32,7 @@ export default function UserListPage() {
     const fetchUsers = async () => {
         setIsLoading(true);
         try {
-            const result = await userService.getUsers(page, size, debouncedPhrase);
+            const result = await userService.getUsers(page, size, /*debouncedPhrase*/);
             setData(result);
         } catch (error) {
             console.error(error);

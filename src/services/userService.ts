@@ -1,23 +1,51 @@
 import axiosInstance from "../api/auth/middleware";
-import type {Page, AccountWithAccessLevelsDTO} from "../types/user.types";
+import type {AccountWithAccessLevelsDTO} from "../types/user.types";
 
 export const userService = {
-    getUsers: async (page: number, size: number, phrase: string = "") => {
-        const params = new URLSearchParams({
-            page: page.toString(),
-            size: size.toString(),
-        });
-        if (phrase.trim() !== "") {
-            params.append('phrase', phrase.trim());
-        }
+    getUsers: async (page: number, size: number, /*phrase: string = ""*/) => {
+        // Symulacja opóźnienia sieciowego
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-        const response = await axiosInstance.get<Page<AccountWithAccessLevelsDTO>>('/account', { params });
-        return response.data;
+        // Zwracamy sztuczne dane (MOCK), które frontend wyświetli bez pytania backendu
+        return {
+            content: [
+                {
+                    account: {
+                        id: "123-uuid-admin",
+                        name: "Andrzej",
+                        surname: "Kowalski",
+                        login: "a.kowalski",
+                        email: "a.kowalski@p.lodz.pl",
+                        lastLoginSuccessDateTime: "2026-05-05T20:00:00",
+                        version: 1,
+                        versionHash: "hash123",
+                        active: true
+                    },
+                    accessLevels: [{ accessLevelName: "TEACHER", active: true }]
+                }
+            ],
+            totalElements: 1,
+            totalPages: 1,
+            size: size,
+            number: page
+        };
     },
 
+    // Podobnie zrób dla pobierania jednego użytkownika pod edycję (MOK.11)
     getAccountById: async (id: string) => {
-        const response = await axiosInstance.get<AccountWithAccessLevelsDTO>(`/account/${id}`);
-        return response.data;
+        return {
+            account: {
+                id: id,
+                name: "Andrzej",
+                surname: "Kowalski",
+                login: "a.kowalski",
+                email: "a.kowalski@p.lodz.pl",
+                version: 1,
+                versionHash: "hash123",
+                active: true
+            },
+            accessLevels: [{ accessLevelName: "TEACHER", active: true }]
+        };
     },
 
     grantAccessLevel: async (id: string, accessLevelName: string, versionHash: string) => {

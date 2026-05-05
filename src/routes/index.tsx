@@ -53,19 +53,19 @@ const routes: RouteObject[] = [
             }
         ]
     },
-    // {
-    //     element: <Layout/>,
-    //     children: [
-    //         {
-    //             path: PATHS.USER_LIST,
-    //             element: <UserListPage/>
-    //         },
-    //         {
-    //             path: PATHS.USER_EDIT,
-    //             element: <UserEditPage/>
-    //         }
-    //     ]
-    // }, dla testu :)
+    {
+        element: <Layout/>,
+        children: [
+            {
+                path: PATHS.USER_LIST,
+                element: <UserListPage/>
+            },
+            {
+                path: PATHS.USER_EDIT,
+                element: <UserEditPage/>
+            }
+        ]
+    }, //dla testu :)
     {
         element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
         children: [
@@ -84,24 +84,24 @@ const routes: RouteObject[] = [
             }
         ]
     },
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    {
-                        path: PATHS.USER_LIST,
-                        element: <UserListPage/>
-                    },
-                    {
-                        path: PATHS.USER_EDIT,
-                        element: <UserEditPage/>
-                    }
-                ]
-            }
-        ]
-    }
+    // {
+    //     element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR]}/>,
+    //     children: [
+    //         {
+    //             element: <Layout/>,
+    //             children: [
+    //                 {
+    //                     path: PATHS.USER_LIST,
+    //                     element: <UserListPage/>
+    //                 },
+    //                 {
+    //                     path: PATHS.USER_EDIT,
+    //                     element: <UserEditPage/>
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // }
 ]
 
 export const router = createBrowserRouter(routes);
