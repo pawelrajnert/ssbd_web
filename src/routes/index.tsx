@@ -33,7 +33,7 @@ const routes: RouteObject[] = [
             },
             {
                 path: PATHS.ACTIVATE,
-                element: <ActivatePage />
+                element: <ActivatePage/>
             },
             {
                 path: PATHS.FORGOT_PASSWORD,
@@ -46,10 +46,6 @@ const routes: RouteObject[] = [
             {
                 path: PATHS.OWN_EMAIL_CHANGE_CONFIRM,
                 element: <EmailChangeConfirmPage/>
-            },
-            {
-                path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-                element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
             }
         ]
     },
@@ -63,9 +59,13 @@ const routes: RouteObject[] = [
     //         {
     //             path: PATHS.USER_EDIT,
     //             element: <UserEditPage/>
+    //         },
+    //         {
+    //             path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+    //             element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
     //         }
     //     ]
-    // }, dla testu :)
+    // }, //dla testu :)
     {
         element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
         children: [
@@ -75,11 +75,11 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.PROFILE,
                         element: <ProfilePage/>
+                    },
+                    {
+                        path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+                        element: <EmailChangeInitPage/>
                     }
-                    // {
-                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-                    //     element: <EmailChangeInitPage/> //to potem odkomentowac zeby bylo za blokada
-                    // }
                 ]
             }
         ]
