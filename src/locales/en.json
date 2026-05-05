@@ -83,8 +83,8 @@
       "email": "Email Address"
     },
     "blockStatus": {
-      "title": "Block Status",
-      "hint": "Prevent user from accessing the system (Read-only)",
+      "title": "Block user account",
+      "hint": "Block user account in the whole system",
       "active": "Active",
       "blocked": "Blocked"
     },
@@ -111,5 +111,53 @@
   },
   "error": {
     "changePasswordFailed": "Failed to change the password. Check if the old password and data version are correct."
+  },
+  "emailChange": {
+    "main": {
+      "breadcrumb": "Change e-mail address",
+      "title": "Change your own e-mail address",
+      "backToProfile": "Return",
+      "success": {
+        "title": "Check your current mailbox",
+        "description": "A link to change your email address has been sent to your current email address. Click on it to complete the process.",
+        "timeLimit": "Link is valid for 10 minutes only.",
+        "backButton": "Return"
+      },
+      "form": {
+        "title": "Change your own e-mail address",
+        "subtitle": "Changing your email address requires two-step verification via a link sent to your current email address.",
+        "description1": "After clicking a button below at ",
+        "descriptionBold": "your current e-mail address",
+        "description2": "link for changing e-mail address would be sent.",
+        "submitButton": "Send link to change an e-mail"
+      },
+      "error": {
+        "default": "Error occurred while trying to change an e-mail address.",
+        "unexpected": "Unexpected error."
+      }
+    },
+    "confirm": {
+      "invalidLink": {
+        "title": "Invalid link",
+        "description": "The link is invalid or has expired please try again."
+      },
+      "success": {
+        "title": "Email has been updated",
+        "description": "Your email address has been updated successfully."
+      },
+      "form": {
+        "title": "Provide new email address",
+        "subtitle": "To change your email address, provide the new address and confirm the operation with your current password.",
+        "newEmailLabel": "New email address",
+        "passwordLabel": "Current password",
+        "submitButton": "Confirm email change"
+      },
+      "backButton": "Return",
+      "error": {
+        "wrongCredentials": "Invalid account credentials.",
+        "expired": "The link has expired or is invalid.",
+        "unexpected": "An unexpected error occurred."
+      }
+    }
   }
 }
