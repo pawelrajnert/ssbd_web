@@ -56,20 +56,26 @@ export default function UserListPage() {
     };
 
     const renderRoleBadge = (roleName: string) => {
-        if (roleName === "ADMINISTRATOR") {
-            return (
-                <span key={roleName} className="inline-block px-3 py-1 bg-red-100 text-[#7A1014] text-[10px] font-bold rounded-full tracking-wider mb-1">
-                    {t('userEdit.roles.adminBadge')}
-                </span>
-            );
-        }
-        return (
-            <span key={roleName} className="inline-block px-3 py-1 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-full tracking-wider mb-1">
-                {roleName === "TEACHER" ? t('userEdit.roles.teacher').toUpperCase() : roleName === "STUDENT" ? t('userEdit.roles.student').toUpperCase() : roleName}
-        const colors = roleName === "ADMINISTRATOR"
+        // Define styles and labels outside the JSX for clarity
+        const isAdmin = roleName === "ADMINISTRATOR";
+        const colors = isAdmin
             ? "bg-red-100 text-[#7A1014]"
             : "bg-teal-100 text-teal-800";
-            </span>
+
+        const getLabel = () => {
+            if (roleName === "ADMINISTRATOR") return t('userEdit.roles.adminBadge');
+            if (roleName === "TEACHER") return t('userEdit.roles.teacher').toUpperCase();
+            if (roleName === "STUDENT") return t('userEdit.roles.student').toUpperCase();
+            return roleName;
+        };
+
+        return (
+            <span
+                key={roleName}
+                className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}
+            >
+            {getLabel()}
+        </span>
         );
     };
 
@@ -116,7 +122,7 @@ export default function UserListPage() {
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                            {data?.content.map((row) => (
+                            {data?.content?.map((row) => (
                                 <tr key={row.account.id} className="hover:bg-gray-50 transition-colors">
                                     <td className="py-4 px-8 align-middle">
                                         <div className="flex flex-col items-start">

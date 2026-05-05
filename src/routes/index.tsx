@@ -52,8 +52,20 @@ const routes: RouteObject[] = [
                 element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
             }
         ]
-        // }]
     },
+    // {
+    //     element: <Layout/>,
+    //     children: [
+    //         {
+    //             path: PATHS.USER_LIST,
+    //             element: <UserListPage/>
+    //         },
+    //         {
+    //             path: PATHS.USER_EDIT,
+    //             element: <UserEditPage/>
+    //         }
+    //     ]
+    // }, dla testu :)
     {
         element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
         children: [
