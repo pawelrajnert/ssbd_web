@@ -63,6 +63,46 @@
       "users": "użytkowników"
     }
   },
+  "userEdit": {
+    "title": "Edycja Użytkownika",
+    "noRoles": "Brak przypisanych ról",
+    "stats": {
+      "title": "Statystyki konta",
+      "lastLogin": "Ostatnie logowanie",
+      "never": "Nigdy"
+    },
+    "credentials": {
+      "title": "Dane uwierzytelniające",
+      "login": "Login",
+      "loginHint": "Identyfikator instytucjonalny nie może być zmieniony ręcznie.",
+      "password": "Hasło"
+    },
+    "personal": {
+      "firstName": "Imię",
+      "surname": "Nazwisko",
+      "email": "Adres e-mail"
+    },
+    "blockStatus": {
+      "title": "Status blokady",
+      "hint": "Zablokuj użytkownikowi dostęp do systemu (Tylko do odczytu)",
+      "active": "Aktywny",
+      "blocked": "Zablokowany"
+    },
+    "roles": {
+      "title": "Przypisane role",
+      "student": "Student",
+      "teacher": "Wykładowca",
+      "admin": "Administrator",
+      "adminBadge": "ADMIN"
+    },
+    "actions": {
+      "discard": "Odrzuć zmiany",
+      "save": "Zapisz zmiany"
+    },
+    "messages": {
+      "updateError": "Wystąpił błąd podczas aktualizacji ról."
+    }
+  },
   "profile": {
     "oldPassword": "Stare hasło",
     "newPassword": "Nowe hasło",

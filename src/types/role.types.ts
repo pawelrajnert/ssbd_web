@@ -1,5 +1,5 @@
 export const RoleEnum = {
-    ADMIN: 'ADMIN',
+    ADMINISTRATOR: 'ADMINISTRATOR',
     TEACHER: 'TEACHER',
     STUDENT: 'STUDENT',
 } as const;
