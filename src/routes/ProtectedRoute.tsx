@@ -21,8 +21,8 @@ const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
         console.warn("Access Denied. User Role:", userRole, "Allowed:", allowedRoles);
 
         //TODO: Zmienić na strony na które będziemy robić redirect w przypadku odmowy przejścia na jakąś stronę
-        if (userRole === RoleEnum.ADMIN) {
-            return <Navigate to="/admin/cos/tam" replace />;
+        if (userRole === RoleEnum.ADMINISTRATOR) {
+            return <Navigate to={PATHS.USER_LIST} replace />;
         } else if (userRole === RoleEnum.STUDENT) {
             return <Navigate to="/student/cos/tam" replace />;
         }

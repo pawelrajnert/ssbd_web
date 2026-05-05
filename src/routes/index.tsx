@@ -14,6 +14,7 @@ import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfi
 import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
 import EmailChangeInitPage from "../pages/own_email_change/EmailChangeMainPage.tsx";
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
+import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -51,10 +52,40 @@ const routes: RouteObject[] = [
                 element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
             }
         ]
-        // }]
+    },
+    // {
+    //     element: <Layout/>,
+    //     children: [
+    //         {
+    //             path: PATHS.USER_LIST,
+    //             element: <UserListPage/>
+    //         },
+    //         {
+    //             path: PATHS.USER_EDIT,
+    //             element: <UserEditPage/>
+    //         }
+    //     ]
+    // }, dla testu :)
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.PROFILE,
+                        element: <ProfilePage/>
+                    }
+                    // {
+                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+                    //     element: <EmailChangeInitPage/> //to potem odkomentowac zeby bylo za blokada
+                    // }
+                ]
+            }
+        ]
     },
     {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMIN, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR]}/>,
         children: [
             {
                 element: <Layout/>,
@@ -64,13 +95,9 @@ const routes: RouteObject[] = [
                         element: <UserListPage/>
                     },
                     {
-                        path: PATHS.PROFILE,
-                        element: <ProfilePage/>
+                        path: PATHS.USER_EDIT,
+                        element: <UserEditPage/>
                     }
-                    // {
-                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-                    //     element: <EmailChangeInitPage/> //to potem odkomentowac zeby bylo za blokada
-                    // }
                 ]
             }
         ]

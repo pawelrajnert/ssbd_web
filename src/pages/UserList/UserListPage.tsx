@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, Filter } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/userService";
+import { PATHS } from "../../routes/paths";
 import type { Page, AccountWithAccessLevelsDTO, AccountDTO } from "../../types/user.types";
 import ChangePasswordModal from "./ChangeOtherPasswordModal";
 
 export default function UserListPage() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+
     const [data, setData] = useState<Page<AccountWithAccessLevelsDTO> | null>(null);
     const [page, setPage] = useState(0);
     const [size] = useState(5);
@@ -21,6 +25,7 @@ export default function UserListPage() {
             setDebouncedPhrase(phrase);
             setPage(0);
         }, 500);
+
         return () => clearTimeout(timer);
     }, [phrase]);
 
@@ -51,14 +56,26 @@ export default function UserListPage() {
     };
 
     const renderRoleBadge = (roleName: string) => {
-        const colors = roleName === "ADMINISTRATOR"
+        // Define styles and labels outside the JSX for clarity
+        const isAdmin = roleName === "ADMINISTRATOR";
+        const colors = isAdmin
             ? "bg-red-100 text-[#7A1014]"
             : "bg-teal-100 text-teal-800";
 
+        const getLabel = () => {
+            if (roleName === "ADMINISTRATOR") return t('userEdit.roles.adminBadge');
+            if (roleName === "TEACHER") return t('userEdit.roles.teacher').toUpperCase();
+            if (roleName === "STUDENT") return t('userEdit.roles.student').toUpperCase();
+            return roleName;
+        };
+
         return (
-            <span key={roleName} className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}>
-                {roleName === "ADMINISTRATOR" ? "ADMIN" : roleName}
-            </span>
+            <span
+                key={roleName}
+                className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}
+            >
+            {getLabel()}
+        </span>
         );
     };
 
@@ -105,7 +122,7 @@ export default function UserListPage() {
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                            {data?.content.map((row) => (
+                            {data?.content?.map((row) => (
                                 <tr key={row.account.id} className="hover:bg-gray-50 transition-colors">
                                     <td className="py-4 px-8 align-middle">
                                         <div className="flex flex-col items-start">
@@ -117,6 +134,12 @@ export default function UserListPage() {
                                     <td className="py-4 px-6 text-sm text-gray-500">{row.account.login}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500">{row.account.email}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
+                                    <td
+                                        className="py-4 px-8 text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors"
+                                        onClick={() => navigate(PATHS.USER_EDIT.replace(':id', row.account.id))}
+                                    >
+                                        {t('userList.table.edit')}
+                                    </td>
                                     <td className="py-4 px-8">
                                         <button
                                             onClick={() => setSelectedUser(row.account)}
