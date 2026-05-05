@@ -4,11 +4,12 @@ import { Lock, Eye } from "lucide-react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { userService } from "../../services/userService";
-import type { AccountWithAccessLevelsDTO } from "../../types/user.types";
+import type {AccountWithAccessLevelsDTO, ChangeEmailDTO} from "../../types/user.types";
 import { RoleEnum } from "../../types/role.types";
 import { PATHS } from "../../routes/paths";
 import SubmitButton from "../../shared/components/buttons/SubmitButton";
 import { useBreadcrumb } from "../../contexts/BreadcrumbContext";
+import {emailChangeService} from "../../services/emailChangeService.ts";
 
 export default function UserEditPage() {
     const { id } = useParams<{ id: string }>();
@@ -20,6 +21,7 @@ export default function UserEditPage() {
     const [localRoles, setLocalRoles] = useState<string[]>([]);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [emailValue, setEmailValue] = useState('');
 
     useEffect(() => {
         if (id) {
@@ -39,6 +41,7 @@ export default function UserEditPage() {
             const data = await userService.getAccountById(userId);
             setUser(data);
             setLocalRoles(data.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
+            setEmailValue(data.account.email);
         } catch (err) {
             console.error(err);
             navigate(PATHS.USER_LIST);
@@ -52,6 +55,16 @@ export default function UserEditPage() {
 
         try {
             let currentHash = user.account.versionHash;
+
+            if (user.account.email !== emailValue) {
+                const emailDTO: ChangeEmailDTO = {email: emailValue, version: user.account.versionHash}
+                await emailChangeService.changeEmailByAdmin(user.account.id, emailDTO);
+
+                const updatedUser = await userService.getAccountById(user.account.id);
+                setUser(updatedUser);
+                currentHash = updatedUser.account.versionHash;
+            }
+
             const initialRoles = user.accessLevels.filter(al => al.active).map(al => al.accessLevelName);
 
             const rolesToGrant = localRoles.filter(r => !initialRoles.includes(r));
@@ -213,9 +226,9 @@ export default function UserEditPage() {
                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.email')}</label>
                             <input
                                 type="email"
-                                value={user.account.email}
-                                readOnly
-                                className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none cursor-not-allowed focus:border-gray-300"
+                                value={emailValue}
+                                onChange={(e) => setEmailValue(e.target.value)}
+                                className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none focus:border-gray-300"
                             />
                         </div>
 

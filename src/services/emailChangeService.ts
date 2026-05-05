@@ -1,4 +1,5 @@
 import axiosInstance from "../api/auth/middleware";
+import type {AccountDTO, ChangeEmailDTO} from "../types/user.types.ts";
 
 export const emailChangeService = {
     requestEmailChange: async () => {
@@ -12,6 +13,11 @@ export const emailChangeService = {
             password,
             newEmail
         });
+        return response.data;
+    },
+
+    changeEmailByAdmin: async (id:string ,dto: ChangeEmailDTO): Promise<AccountDTO> => {
+        const response = await axiosInstance.patch(`/account/${id}/email`, dto);
         return response.data;
     }
 };
