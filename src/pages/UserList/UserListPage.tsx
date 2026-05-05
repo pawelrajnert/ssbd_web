@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/userService";
-import type {Page, AccountWithAccessLevelsDTO} from "../../types/user.types";
+import type { Page, AccountWithAccessLevelsDTO } from "../../types/user.types";
+import { PATHS } from "../../routes/paths";
 
 export default function UserListPage() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+
     const [data, setData] = useState<Page<AccountWithAccessLevelsDTO> | null>(null);
     const [page, setPage] = useState(0);
     const [size] = useState(5);
@@ -18,6 +22,7 @@ export default function UserListPage() {
             setDebouncedPhrase(phrase);
             setPage(0);
         }, 500);
+
         return () => clearTimeout(timer);
     }, [phrase]);
 
@@ -51,13 +56,13 @@ export default function UserListPage() {
         if (roleName === "ADMINISTRATOR") {
             return (
                 <span key={roleName} className="inline-block px-3 py-1 bg-red-100 text-[#7A1014] text-[10px] font-bold rounded-full tracking-wider mb-1">
-                    ADMIN
+                    {t('userEdit.roles.adminBadge')}
                 </span>
             );
         }
         return (
             <span key={roleName} className="inline-block px-3 py-1 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-full tracking-wider mb-1">
-                {roleName}
+                {roleName === "TEACHER" ? t('userEdit.roles.teacher').toUpperCase() : roleName === "STUDENT" ? t('userEdit.roles.student').toUpperCase() : roleName}
             </span>
         );
     };
@@ -80,7 +85,6 @@ export default function UserListPage() {
                             <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
                             {t('userList.refresh')}
                         </button>
-
                         <div className="relative">
                             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-500">
                                 <Filter size={16} />
@@ -125,7 +129,10 @@ export default function UserListPage() {
                                     <td className="py-4 px-6 text-sm text-gray-500">{row.account.login}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500">{row.account.email}</td>
                                     <td className="py-4 px-6 text-sm text-gray-500">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
-                                    <td className="py-4 px-8 text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors">
+                                    <td
+                                        className="py-4 px-8 text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors"
+                                        onClick={() => navigate(PATHS.USER_EDIT.replace(':id', row.account.id))}
+                                    >
                                         {t('userList.table.edit')}
                                     </td>
                                 </tr>

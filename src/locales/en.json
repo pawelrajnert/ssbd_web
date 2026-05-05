@@ -63,6 +63,46 @@
       "users": "users"
     }
   },
+  "userEdit": {
+    "title": "Edit User",
+    "noRoles": "No roles assigned",
+    "stats": {
+      "title": "Account Statistics",
+      "lastLogin": "Last Login Date",
+      "never": "Never"
+    },
+    "credentials": {
+      "title": "User Credentials",
+      "login": "Login",
+      "loginHint": "Institutional ID cannot be changed manually.",
+      "password": "Password"
+    },
+    "personal": {
+      "firstName": "First Name",
+      "surname": "Surname",
+      "email": "Email Address"
+    },
+    "blockStatus": {
+      "title": "Block Status",
+      "hint": "Prevent user from accessing the system (Read-only)",
+      "active": "Active",
+      "blocked": "Blocked"
+    },
+    "roles": {
+      "title": "Assigned Roles",
+      "student": "Student",
+      "teacher": "Teacher",
+      "admin": "Admin",
+      "adminBadge": "ADMIN"
+    },
+    "actions": {
+      "discard": "Discard Changes",
+      "save": "Save Changes"
+    },
+    "messages": {
+      "updateError": "An error occurred while updating roles."
+    }
+  },
   "profile": {
     "oldPassword": "Old password",
     "newPassword": "New password",

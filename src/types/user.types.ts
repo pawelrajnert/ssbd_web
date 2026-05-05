@@ -12,6 +12,8 @@ export interface AccountDTO {
     lastLoginSuccessDateTime?: string | null;
     version: number;
     versionHash: string;
+    active: boolean;
+    verified?: boolean;
 }
 
 export interface AccountWithAccessLevelsDTO {
