@@ -4,6 +4,8 @@ import {AlertCircle, ArrowLeft, CheckCircle2, Lock, Mail} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import axios from "axios";
+import {useTranslation} from "react-i18next";
+
 import {PATHS} from "../../routes/paths.ts";
 import {emailChangeService} from "../../services/emailChangeService.ts";
 import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
@@ -12,9 +14,10 @@ import {type EmailChangeFormData, emailChangeSchema} from "../../shared/validato
 import {useAuth} from "../../hooks/useAuth.ts";
 
 export default function EmailChangeConfirmPage() {
+    const {t} = useTranslation();
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
-    const { logout } = useAuth();
+    const {logout} = useAuth();
 
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState("");
@@ -22,7 +25,7 @@ export default function EmailChangeConfirmPage() {
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: {errors}
     } = useForm<EmailChangeFormData>({
         resolver: yupResolver(emailChangeSchema)
     });
@@ -40,28 +43,29 @@ export default function EmailChangeConfirmPage() {
             setStatus('error');
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 401) {
-                    setErrorMessage("Wrong credentials provided.");
+                    setErrorMessage(t('emailChange.confirm.error.wrongCredentials'));
                 } else {
-                    setErrorMessage(error.response?.data?.message || "The link has expired or is invalid.");
+                    setErrorMessage(error.response?.data?.message || t('emailChange.confirm.error.expired'));
                 }
             } else {
-                setErrorMessage("Unexpected error.");
+                setErrorMessage(t('emailChange.confirm.error.unexpected'));
             }
         }
     };
 
     if (!token) {
         return (
-            <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
+            <div
+                className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
                 <div className="flex justify-center mb-4 text-red-500">
-                    <AlertCircle size={48} />
+                    <AlertCircle size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Nieprawidłowy link</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.confirm.invalidLink.title')}</h2>
                 <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
-                    Link jest nieprawidłowy, spróbuj wykonać akcję zmiany adresu e-mail ponownie.
+                    {t('emailChange.confirm.invalidLink.description')}
                 </p>
-                <LinkButton to={PATHS.OWN_EMAIL_CHANGE_MAIN} className="max-w-sm">
-                    Powrót
+                <LinkButton to={PATHS.OWN_EMAIL_CHANGE_MAIN} className="max-w-sm mx-auto">
+                    {t('emailChange.confirm.backButton')}
                 </LinkButton>
             </div>
         );
@@ -69,16 +73,17 @@ export default function EmailChangeConfirmPage() {
 
     if (status === 'success') {
         return (
-            <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
+            <div
+                className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
                 <div className="flex justify-center mb-4 text-green-600">
-                    <CheckCircle2 size={48} />
+                    <CheckCircle2 size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">E-mail zmieniony</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.confirm.success.title')}</h2>
                 <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
-                    Adres e-mail został pomyślnie zaaktualizowany.
+                    {t('emailChange.confirm.success.description')}
                 </p>
-                <LinkButton to={PATHS.USER_LIST} className="max-w-sm">
-                    Powrót
+                <LinkButton to={PATHS.LOGIN} className="max-w-sm mx-auto">
+                    {t('emailChange.confirm.backButton')}
                 </LinkButton>
             </div>
         );
@@ -86,26 +91,28 @@ export default function EmailChangeConfirmPage() {
 
     return (
         <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Wprowadź nowy adres e-mail</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.confirm.form.title')}</h2>
             <p className="text-sm text-gray-500 mb-8">
-                W celu zmiany adresu e-mail wprowadź nowy adres oraz potwierdź operację prawidłowym hasłem do konta.
+                {t('emailChange.confirm.form.subtitle')}
             </p>
 
             {status === 'error' && (
-                <div className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-md flex items-start gap-2 border border-red-100">
-                    <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+                <div
+                    className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-md flex items-start gap-2 border border-red-100">
+                    <AlertCircle size={16} className="mt-0.5 flex-shrink-0"/>
                     <span>{errorMessage}</span>
                 </div>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm mx-auto">
                 <div className="mb-6">
-                    <label htmlFor="newEmail" className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        Nowy Adres E-mail
+                    <label htmlFor="newEmail"
+                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        {t('emailChange.confirm.form.newEmailLabel')}
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
-                            <Mail size={18} />
+                            <Mail size={18}/>
                         </div>
                         <input
                             id="newEmail"
@@ -122,12 +129,13 @@ export default function EmailChangeConfirmPage() {
                 </div>
 
                 <div className="mb-8">
-                    <label htmlFor="password" className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        Obecne hasło
+                    <label htmlFor="password"
+                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                        {t('emailChange.confirm.form.passwordLabel')}
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
-                            <Lock size={18} />
+                            <Lock size={18}/>
                         </div>
                         <input
                             id="password"
@@ -147,14 +155,14 @@ export default function EmailChangeConfirmPage() {
                     type="submit"
                     isLoading={status === 'loading'}
                 >
-                    Potwierdź zmianę adresu e-mail
+                    {t('emailChange.confirm.form.submitButton')}
                 </SubmitButton>
             </form>
 
-            <div className="mt-8 text-center max-w-sm">
+            <div className="mt-8 text-center max-w-sm mx-auto">
                 <LinkButton to={PATHS.USER_LIST} variant="ghost">
-                    <ArrowLeft size={16} className="mr-2" />
-                    Powrót
+                    <ArrowLeft size={16} className="mr-2"/>
+                    {t('emailChange.confirm.backButton')}
                 </LinkButton>
             </div>
         </div>
