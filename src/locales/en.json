@@ -6,9 +6,17 @@
     "login": {
       "heading": "Login",
       "subheading": "Access your academic integrity dashboard",
-      "button": "Log in",
-      "noAccount": "New to the platform system?",
-      "createAccount": "Create an account"
+      "loginLabel": "LOGIN",
+      "loginPlaceholder": "E.G. Jan_Kowalski",
+      "passwordLabel": "PASSWORD",
+      "rememberMe": "Remember my device",
+      "button": "Log In",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "New to the plagiarism system?",
+      "createAccount": "Create an account",
+      "errorInvalid": "Invalid login or password.",
+      "errorBlocked": "Your account has been blocked. Please contact the administrator.",
+      "errorGeneric": "An unexpected error occurred. Please try again later."
     },
     "register": {
       "heading": "Create Account",

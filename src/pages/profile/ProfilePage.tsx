@@ -4,7 +4,9 @@ import { getAccountByLogin } from '../../services/accountService';
 import { ChangeOwnPasswordForm } from './ChangeOwnPasswordForm';
 
 export const ProfilePage: React.FC = () => {
-    const { userLogin } = useAuth();
+    const { userLogin, token } = useAuth();
+    console.log("Token w sesji:", token);
+    console.log("Zdekodowany login:", userLogin);
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -36,15 +38,16 @@ export const ProfilePage: React.FC = () => {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <p className="text-sm text-gray-500">Imię i Nazwisko</p>
-                            <p className="font-medium">{user.name} {user.surname}</p>
+                            {/* POPRAWKA: Czytamy dane z user.account */}
+                            <p className="font-medium">{user.account.name} {user.account.surname}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Email</p>
-                            <p className="font-medium">{user.email}</p>
+                            <p className="font-medium">{user.account.email}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-500">Login</p>
-                            <p className="font-medium">{user.login}</p>
+                            <p className="font-medium">{user.account.login}</p>
                         </div>
                     </div>
                 </div>
@@ -75,7 +78,7 @@ export const ProfilePage: React.FC = () => {
                                 </button>
                             </div>
                             <ChangeOwnPasswordForm
-                                version={user.version}
+                                version={user.account.version}
                                 onSuccess={() => {
                                     alert('Hasło zmienione pomyślnie!');
                                     setShowPasswordForm(false);

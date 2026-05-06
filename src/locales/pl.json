@@ -5,10 +5,18 @@
     "founded": "Założona w 1945",
     "login": {
       "heading": "Logowanie",
-      "subheading": "Uzyskaj dostęp do swojego panelu",
+      "subheading": "Uzyskaj dostęp do swojego panelu integralności akademickiej",
+      "loginLabel": "LOGIN",
+      "loginPlaceholder": "NP. Jan_Kowalski",
+      "passwordLabel": "HASŁO",
+      "rememberMe": "Zapamiętaj moje urządzenie",
       "button": "Zaloguj się",
-      "noAccount": "Nowy w systemie platformy?",
-      "createAccount": "Utwórz konto"
+      "forgotPassword": "Zapomniałeś hasła?",
+      "noAccount": "Nowy w systemie antyplagiatowym?",
+      "createAccount": "Utwórz konto",
+      "errorInvalid": "Nieprawidłowy login lub hasło.",
+      "errorBlocked": "Twoje konto zostało zablokowane. Skontaktuj się z administratorem.",
+      "errorGeneric": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później."
     },
     "register": {
       "heading": "Utwórz Konto",
