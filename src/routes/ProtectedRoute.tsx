@@ -24,7 +24,7 @@ const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
         if (userRole === RoleEnum.ADMINISTRATOR) {
             return <Navigate to={PATHS.USER_LIST} replace />;
         } else if (userRole === RoleEnum.STUDENT) {
-            return <Navigate to="/student/cos/tam" replace />;
+            return <Navigate to={PATHS.PROFILE} replace />;
         }
     }
 

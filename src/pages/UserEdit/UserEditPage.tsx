@@ -1,23 +1,27 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Eye, Lock} from "lucide-react";
+import {Lock} from "lucide-react";
 import axios from "axios";
 import * as yup from "yup";
-import { useTranslation } from "react-i18next";
-import { userService } from "../../services/userService";
+import {useTranslation} from "react-i18next";
+import {userService} from "../../services/userService";
 import type {AccountWithAccessLevelsDTO, ChangeEmailDTO} from "../../types/user.types";
-import { RoleEnum } from "../../types/role.types";
-import { PATHS } from "../../routes/paths";
+import {RoleEnum} from "../../types/role.types";
+import {PATHS} from "../../routes/paths";
 import SubmitButton from "../../shared/components/buttons/SubmitButton";
-import { useBreadcrumb } from "../../contexts/BreadcrumbContext";
+import {useBreadcrumb} from "../../contexts/BreadcrumbContext";
 import {emailChangeService} from "../../services/emailChangeService.ts";
 import {emailSchema} from "../../shared/validators/emailSchema.ts";
+import {useAuth} from "../../hooks/useAuth.ts";
+import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
 
 export default function UserEditPage() {
     const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
     const {t} = useTranslation();
     const {setDynamicBreadcrumb} = useBreadcrumb();
+    const {userLogin, userRole} = useAuth();
+    const isAdmin = userRole?.includes(RoleEnum.ADMINISTRATOR);
 
     const [user, setUser] = useState<AccountWithAccessLevelsDTO | null>(null);
     const [localRoles, setLocalRoles] = useState<string[]>([]);
@@ -26,12 +30,53 @@ export default function UserEditPage() {
     const [error, setError] = useState<string | null>(null);
     const [emailValue, setEmailValue] = useState('');
     const [emailError, setEmailError] = useState<boolean>(false);
+    const [nameValue, setNameValue] = useState('');
+    const [surnameValue, setSurnameValue] = useState('');
+
+    const fetchUser = useCallback(async (userId: string) => {
+        try {
+            const data = await userService.getAccountById(userId);
+            setUser(data);
+            setLocalRoles(data.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
+            setNameValue(data.account.name);
+            setSurnameValue(data.account.surname);
+            setEmailValue(data.account.email);
+        } catch (err) {
+            console.error(err);
+            navigate(PATHS.USER_LIST);
+        }
+    }, [navigate, setLocalRoles]);
+
+    const fetchUserByLogin = useCallback(async (login: string) => {
+        try {
+            const data = await userService.getAccountByLogin(login);
+            setUser(data);
+            setLocalRoles(data.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
+            setNameValue(data.account.name);
+            setSurnameValue(data.account.surname);
+            setEmailValue(data.account.email);
+        } catch (err) {
+            console.error(err);
+            navigate(PATHS.USER_LIST);
+        }
+    }, [navigate, setLocalRoles]);
 
     useEffect(() => {
-        if (id) {
-            fetchUser(id);
+        const effectiveId = id || "me"
+        // const isAdmin = userRole?.includes(RoleEnum.ADMINISTRATOR);
+        if (effectiveId !== "me" && !isAdmin) {
+            navigate('/users/me', {replace: true});
+            return;
         }
-    }, [id]);
+        console.log(userLogin)
+        console.log(userRole)
+        console.log(effectiveId)
+        if (effectiveId === "me" && userLogin) {
+            fetchUserByLogin(userLogin);
+        } else if (effectiveId && effectiveId !== "me") {
+            fetchUser(effectiveId);
+        }
+    }, [id, userLogin, userRole, isAdmin, navigate, fetchUser, fetchUserByLogin]);
 
     useEffect(() => {
         if (user) {
@@ -40,17 +85,6 @@ export default function UserEditPage() {
         return () => setDynamicBreadcrumb(null);
     }, [user, setDynamicBreadcrumb]);
 
-    const fetchUser = async (userId: string) => {
-        try {
-            const data = await userService.getAccountById(userId);
-            setUser(data);
-            setLocalRoles(data.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
-            setEmailValue(data.account.email);
-        } catch (err) {
-            console.error(err);
-            navigate(PATHS.USER_LIST);
-        }
-    };
 
     const handleBlock = async () => {
         if (!user || isBlocking) return;
@@ -59,10 +93,10 @@ export default function UserEditPage() {
         setError(null);
 
         try {
-            if (user.account.active) {
-                await userService.blockUser(user.account.id);
+            if (!user.account.isBlocked) {
+                await userService.blockUser(user.account.id, user.account.versionHash);
             } else {
-                await userService.unblockUser(user.account.id);
+                await userService.unblockUser(user.account.id, user.account.versionHash);
             }
             if (id) await fetchUser(id);
         } catch (err) {
@@ -86,34 +120,47 @@ export default function UserEditPage() {
             await emailSchema.validate({email: emailValue});
 
             let currentHash = user.account.versionHash;
-
-            if (user.account.email !== emailValue) {
-                const emailDTO: ChangeEmailDTO = {email: emailValue, version: user.account.versionHash}
-                await emailChangeService.changeEmailByAdmin(user.account.id, emailDTO);
-
-                const updatedUser = await userService.getAccountById(user.account.id);
-                setUser(updatedUser);
-                currentHash = updatedUser.account.versionHash;
-            }
-
-            const initialRoles = user.accessLevels.filter(al => al.active).map(al => al.accessLevelName);
-            const rolesToGrant = localRoles.filter(r => !initialRoles.includes(r));
-            const rolesToRevoke = initialRoles.filter(r => !localRoles.includes(r));
-
             let latestUser = user;
 
-            for (const role of rolesToGrant) {
-                latestUser = await userService.grantAccessLevel(user.account.id, role, currentHash);
+            if (latestUser.account.email !== emailValue && isAdmin) {
+                const emailDTO: ChangeEmailDTO = {email: emailValue}
+                await emailChangeService.changeEmailByAdmin(latestUser.account.id, emailDTO, currentHash);
+
+                latestUser = await userService.getAccountById(latestUser.account.id);
                 currentHash = latestUser.account.versionHash;
             }
-
-            for (const role of rolesToRevoke) {
-                latestUser = await userService.revokeAccessLevel(user.account.id, role, currentHash);
-                currentHash = latestUser.account.versionHash;
+            if (latestUser.account.name !== nameValue || latestUser.account.surname !== surnameValue) {
+                const accountUpdateDTO = {
+                    name: nameValue,
+                    surname: surnameValue,
+                };
+                if (isAdmin){
+                    await userService.updateUserDetails(latestUser.account.id, accountUpdateDTO, currentHash);
+                    latestUser = await userService.getAccountById(latestUser.account.id);
+                }else{
+                    latestUser = await userService.updateMyDetails(accountUpdateDTO, currentHash);
+                    latestUser = await userService.getAccountByLogin(latestUser.account.login);
+                }
             }
+            currentHash = latestUser.account.versionHash;
+            if(isAdmin) {
+                const initialRoles = user.accessLevels.filter(al => al.active).map(al => al.accessLevelName);
+                const rolesToGrant = localRoles.filter(r => !initialRoles.includes(r));
+                const rolesToRevoke = initialRoles.filter(r => !localRoles.includes(r));
 
+                for (const role of rolesToGrant) {
+                    latestUser = await userService.grantAccessLevel(user.account.id, role, currentHash);
+                    currentHash = latestUser.account.versionHash;
+                }
+
+                for (const role of rolesToRevoke) {
+                    latestUser = await userService.revokeAccessLevel(user.account.id, role, currentHash);
+                    currentHash = latestUser.account.versionHash;
+                }
+            }
             setUser(latestUser);
             setLocalRoles(latestUser.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
+
         } catch (err) {
             console.error(err);
             if (yup.ValidationError.isError(err)) {
@@ -126,7 +173,6 @@ export default function UserEditPage() {
             } else {
                 setError(t('userEdit.messages.updateError'));
             }
-            //if (id) fetchUser(id); Może lepiej, to wyrzucić? Użytkownik pewnie będzie chciał poprawić nieprawidłowe dane.
         } finally {
             setIsSaving(false);
         }
@@ -244,8 +290,6 @@ export default function UserEditPage() {
                                             readOnly
                                             className="w-full bg-transparent p-3 text-sm font-medium text-gray-600 outline-none pr-10 cursor-not-allowed"
                                         />
-                                        <Eye size={16}
-                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-[#7A1014]"/>
                                     </div>
                                 </div>
                             </div>
@@ -259,9 +303,9 @@ export default function UserEditPage() {
                                     className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.firstName')}</label>
                                 <input
                                     type="text"
-                                    value={user.account.name}
-                                    readOnly
-                                    className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none cursor-not-allowed focus:border-gray-300"
+                                    value={nameValue}
+                                    onChange={(e) => setNameValue(e.target.value)}
+                                    className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none focus:border-gray-300"
                                 />
                             </div>
                             <div>
@@ -269,9 +313,9 @@ export default function UserEditPage() {
                                     className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.surname')}</label>
                                 <input
                                     type="text"
-                                    value={user.account.surname}
-                                    readOnly
-                                    className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none cursor-not-allowed focus:border-gray-300"
+                                    value={surnameValue}
+                                    onChange={(e) => setSurnameValue(e.target.value)}
+                                    className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none focus:border-gray-300"
                                 />
                             </div>
                         </div>
@@ -283,12 +327,21 @@ export default function UserEditPage() {
                                 type="email"
                                 value={emailValue}
                                 required={true}
+                                readOnly={!isAdmin}
                                 onChange={(e) => setEmailValue(e.target.value)}
                                 onBlur={handleEmailOnBlur}
                                 className={`w-full border rounded-md p-3 text-sm font-medium transition-colors outline-none ${
                                     emailError ? "border-[#7A1014] focus:border-[#7A1014]" : "border-gray-200 focus:border-gray-300"
-                                }`}
+                                }
+                                ${isAdmin ? "" : "text-gray-600 bg-gray-50 cursor-not-allowed"}`}
                             />
+                            {!isAdmin && (
+                                <>
+                                    <LinkButton to={PATHS.OWN_EMAIL_CHANGE_MAIN}>
+                                        Change email
+                                    </LinkButton>
+                                </>
+                            )}
                             {emailError && (
                                 <p className="text-xs text-[#7A1014] font-semibold mt-2">
                                     {t('userEdit.personal.emailError')}
@@ -297,63 +350,68 @@ export default function UserEditPage() {
                         </div>
 
                         <hr className="border-gray-100 mb-8"/>
-
-                        <div
-                            className={`bg-gray-50 border border-gray-100 rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>
-                            <div>
-                                <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-1">{t('userEdit.blockStatus.title')}</h3>
-                                <p className="text-xs text-gray-500">{t('userEdit.blockStatus.hint')}</p>
-                            </div>
-                            <div className="flex items-center gap-2">
+                        {isAdmin && (
+                            <>
                                 <div
-                                    onClick={handleBlock}
-                                    className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.active ? "bg-gray-300" : "bg-[#7A1014]"}`}
-                                >
-                                    <div
-                                        className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.active ? "" : "translate-x-4"}`}></div>
-                                </div>
-                                <span className="text-sm font-bold text-gray-800">
-                                    {user.account.active ? t('userEdit.blockStatus.active') : t('userEdit.blockStatus.blocked')}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="mb-10">
-                            <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.roles.title')}</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                {[
-                                    {id: RoleEnum.STUDENT, label: t('userEdit.roles.student')},
-                                    {id: RoleEnum.TEACHER, label: t('userEdit.roles.teacher')},
-                                    {id: RoleEnum.ADMINISTRATOR, label: t('userEdit.roles.admin')}
-                                ].map((role) => {
-                                    const isChecked = localRoles.includes(role.id);
-                                    return (
+                                    className={`bg-gray-50 border border-gray-100 rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>
+                                    <div>
+                                        <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-1">{t('userEdit.blockStatus.title')}</h3>
+                                        <p className="text-xs text-gray-500">{t('userEdit.blockStatus.hint')}</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
                                         <div
-                                            key={role.id}
-                                            onClick={() => toggleRole(role.id)}
-                                            className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${isChecked ? 'bg-red-50 border-[#7A1014]' : 'bg-gray-50 border-transparent hover:border-gray-200'}`}
+                                            onClick={handleBlock}
+                                            className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.isBlocked ? "bg-[#7A1014]" : "bg-gray-300"}`}
                                         >
                                             <div
-                                                className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#7A1014] border-[#7A1014]' : 'bg-white border-gray-300'}`}>
-                                                {isChecked && (
-                                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24"
-                                                         stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                                              strokeWidth={3} d="M5 13l4 4L19 7"/>
-                                                    </svg>
-                                                )}
+                                                className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}>
                                             </div>
-                                            <span
-                                                className={`text-sm font-bold ${isChecked ? 'text-[#7A1014]' : 'text-gray-700'}`}>
+                                        </div>
+                                        <span className="text-sm font-bold text-gray-800">
+                                    {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
+        </span>
+                                    </div>
+                                </div>
+
+                                < div className="mb-10">
+                                    <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.roles.title')}
+                                    </h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        {[
+                                            {id: RoleEnum.STUDENT, label: t('userEdit.roles.student')},
+                                            {id: RoleEnum.TEACHER, label: t('userEdit.roles.teacher')},
+                                            {id: RoleEnum.ADMINISTRATOR, label: t('userEdit.roles.admin')}
+                                        ].map((role) => {
+                                            const isChecked = localRoles.includes(role.id);
+                                            return (
+                                                <div
+                                                    key={role.id}
+                                                    onClick={() => toggleRole(role.id)}
+                                                    className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${isChecked ? 'bg-red-50 border-[#7A1014]' : 'bg-gray-50 border-transparent hover:border-gray-200'}`}
+                                                >
+                                                    <div
+                                                        className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#7A1014] border-[#7A1014]' : 'bg-white border-gray-300'}`}>
+                                                        {isChecked && (
+                                                            <svg className="w-3 h-3 text-white" fill="none"
+                                                                 viewBox="0 0 24 24"
+                                                                 stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                                      strokeWidth={3} d="M5 13l4 4L19 7"/>
+                                                            </svg>
+                                                        )}
+                                                    </div>
+                                                    <span
+                                                        className={`text-sm font-bold ${isChecked ? 'text-[#7A1014]' : 'text-gray-700'}`}>
                                                 {role.label}
                                             </span>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </div>
+                                                </div>
+                                            )
+                                        })}
 
-                        <div className="flex items-center justify-end gap-4 pt-6">
+                                    </div>
+                                </div>
+                            </>)}
+                        < div className="flex items-center justify-end gap-4 pt-6">
                             <button
                                 onClick={handleDiscard}
                                 disabled={isSaving}
@@ -374,5 +432,6 @@ export default function UserEditPage() {
                 </div>
             </div>
         </div>
-    );
+    )
+        ;
 }
