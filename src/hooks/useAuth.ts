@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 
 export interface JwtPayload {
     sub: string;
-    role: string;
+    roles: string[];
     exp: number;
 }
 
