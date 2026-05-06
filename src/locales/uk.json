@@ -15,6 +15,8 @@
     "subtitle": "Ефективно керуйте інституційним доступом, визначайте академічні ролі та відстежуйте активність дослідників в університетському репозиторії.",
     "refresh": "Оновити",
     "filterPlaceholder": "Фільтрувати за ім'ям, email...",
+    "noResults": "Немає результатів",
+    "changePassword": "Змінити пароль",
     "table": {
       "role": "Роль",
       "firstName": "Ім'я",
@@ -30,7 +32,10 @@
       "showing": "Показано",
       "to": "до",
       "of": "з",
-      "users": "користувачів"
+      "users": "користувачів",
+      "page": "Сторінка",
+      "prev": "Попередня",
+      "next": "Наступна"
     }
   },
   "userEdit": {
@@ -76,49 +81,49 @@
   },
   "emailChange": {
     "main": {
-      "breadcrumb": "Zmiana adresu e-mail",
-      "title": "Zmień adres e-mail",
-      "backToProfile": "Powrót",
+      "breadcrumb": "Зміна електронної адреси",
+      "title": "Змінити електронну адресу",
+      "backToProfile": "Повернутися",
       "success": {
-        "title": "Sprawdź swoją skrzynkę mailową",
-        "description": "Na Twój obecny adres e-mail został wysłany link do zmiany adresu na inny. Kliknij w niego w celu dokończenia akcji.",
-        "timeLimit": "Link jest ważny przez 10 minut.",
-        "backButton": "Powrót"
+        "title": "Перевірте свою поштову скриньку",
+        "description": "На вашу поточну електронну адресу надіслано посилання для зміни адреси. Натисніть на нього, щоб завершити дію.",
+        "timeLimit": "Посилання дійсне протягом 10 хвилин.",
+        "backButton": "Повернутися"
       },
       "form": {
-        "title": "Zmień swój adres e-mail",
-        "subtitle": "Zmiana adresu e-mail wymaga weryfikacji dwuetapowej poprzez link wysłany na obecną skrzynkę.",
-        "description1": "Po kliknięciu przycisku, system wyśle na Twój ",
-        "descriptionBold": "obecny adres e-mail",
-        "description2": "link do zmiany adresu.",
-        "submitButton": "Wyślij link do zmiany adresu e-mail"
+        "title": "Змініть свою електронну адресу",
+        "subtitle": "Зміна електронної адреси вимагає двоетапної перевірки за допомогою посилання, надісланого на поточну скриньку.",
+        "description1": "Після натискання кнопки система надішле на вашу ",
+        "descriptionBold": "поточну електронну адресу",
+        "description2": "посилання для зміни адреси.",
+        "submitButton": "Надіслати посилання для зміни електронної адреси"
       },
       "error": {
-        "default": "Wystąpił błąd podczas próby zmiany adresu e-mail.",
-        "unexpected": "Wystąpił nieoczekiwany błąd."
+        "default": "Сталася помилка під час спроби змінити електронну адресу.",
+        "unexpected": "Сталася непередбачена помилка."
       }
     },
     "confirm": {
       "invalidLink": {
-        "title": "Link jest nieprawidłowy",
-        "description": "Link jest nieprawidłowy lub wygasł spróbuj ponownie."
+        "title": "Недійсне посилання",
+        "description": "Посилання недійсне або минув його термін дії, спробуйте ще раз."
       },
       "success": {
-        "title": "E-mail został zmieniony zmieniony",
-        "description": "Twój adres e-mail został pomyślnie zaktualizowany."
+        "title": "Електронну адресу змінено",
+        "description": "Вашу електронну адресу успішно оновлено."
       },
       "form": {
-        "title": "Wprowadź nowy adres e-mail",
-        "subtitle": "W celu zmiany adresu e-mail wprowadź nowy adres oraz potwierdź operację aktualnym hasłem do konta.",
-        "newEmailLabel": "Nowy adres E-mail",
-        "passwordLabel": "Obecne hasło",
-        "submitButton": "Potwierdź zmianę adresu e-mail"
+        "title": "Введіть нову електронну адресу",
+        "subtitle": "Щоб змінити електронну адресу, введіть нову адресу та підтвердьте операцію поточним паролем від облікового запису.",
+        "newEmailLabel": "Нова електронна адреса",
+        "passwordLabel": "Поточний пароль",
+        "submitButton": "Підтвердити зміну електронної адреси"
       },
-      "backButton": "Powrót",
+      "backButton": "Повернутися",
       "error": {
-        "wrongCredentials": "Nieprawidłowe poświadczenia do konta.",
-        "expired": "Link wygasł lub jest nieprawidłowy.",
-        "unexpected": "Wystąpił nieoczekiwany błąd."
+        "wrongCredentials": "Неправильні облікові дані.",
+        "expired": "Посилання недійсне або минув його термін дії.",
+        "unexpected": "Сталася непередбачена помилка."
       }
     }
   }

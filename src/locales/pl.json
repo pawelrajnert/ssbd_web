@@ -53,6 +53,8 @@
     "subtitle": "Skutecznie zarządzaj dostępem instytucjonalnym, definiuj role akademickie i monitoruj aktywność badaczy w repozytorium uniwersyteckim.",
     "refresh": "Odśwież",
     "filterPlaceholder": "Filtruj po imieniu, e-mailu...",
+    "noResults": "Brak wyników",
+    "changePassword": "Zmień hasło",
     "table": {
       "role": "Rola",
       "firstName": "Imię",
@@ -68,7 +70,10 @@
       "showing": "Wyświetlanie",
       "to": "do",
       "of": "z",
-      "users": "użytkowników"
+      "users": "użytkowników",
+      "page": "Strona",
+      "prev": "Poprzednia",
+      "next": "Następna"
     }
   },
   "userEdit": {
