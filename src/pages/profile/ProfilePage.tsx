@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { getAccountByLogin } from '../../services/accountService';
 import { ChangeOwnPasswordForm } from './ChangeOwnPasswordForm';
+import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
+import {PATHS} from "../../routes/paths.ts";
 
 export const ProfilePage: React.FC = () => {
     const { userLogin, token } = useAuth();
@@ -50,6 +52,9 @@ export const ProfilePage: React.FC = () => {
                             <p className="font-medium">{user.account.login}</p>
                         </div>
                     </div>
+                    <LinkButton to={PATHS.USER_EDIT_ME} className={"max-w-40"}>
+                        Edytuj
+                    </LinkButton>
                 </div>
 
                 <div className="p-6 bg-gray-50">
