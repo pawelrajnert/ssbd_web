@@ -80,7 +80,8 @@
     "personal": {
       "firstName": "Imię",
       "surname": "Nazwisko",
-      "email": "Adres e-mail"
+      "email": "Adres e-mail",
+      "emailError": "Podaj poprawny adres e-mail."
     },
     "blockStatus": {
       "title": "Blokada konta użytkownika",
