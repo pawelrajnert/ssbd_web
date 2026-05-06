@@ -16,8 +16,15 @@ export const emailChangeService = {
         return response.data;
     },
 
-    changeEmailByAdmin: async (id:string ,dto: ChangeEmailDTO): Promise<AccountDTO> => {
-        const response = await axiosInstance.patch(`/account/${id}/email`, dto);
+    changeEmailByAdmin: async (id: string, dto: ChangeEmailDTO, versionHash: string): Promise<AccountDTO> => {
+        const response = await axiosInstance.patch(`/account/${id}/email`,
+            dto,
+            {
+                headers: {
+                    "If-Match": versionHash
+                }
+            }
+        );
         return response.data;
     }
 };

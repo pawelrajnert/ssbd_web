@@ -6,7 +6,7 @@ const baseURL = '/api';
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
 });
 
 let isRefreshing = false;
@@ -36,10 +36,12 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 &&
+            !originalRequest._retry &&
+            !originalRequest.url?.includes('/auth/login')) {
             if (isRefreshing) {
-                return new Promise(function(resolve, reject) {
-                    failedQueue.push({ resolve, reject });
+                return new Promise(function (resolve, reject) {
+                    failedQueue.push({resolve, reject});
                 }).then(token => {
                     originalRequest.headers['Authorization'] = 'Bearer ' + token;
                     return axiosInstance(originalRequest);
@@ -50,19 +52,18 @@ axiosInstance.interceptors.response.use(
 
             originalRequest._retry = true;
             isRefreshing = true;
-            const refToken = sessionStorage.getItem('refresh_token');
-
+            const refToken = sessionStorage.getItem('refreshToken');
             if (refToken) {
                 try {
-                    const res = await axios.post(`${baseURL}/auth/refresh`, {
+                    const res = await axios.post(`/auth/refresh`, {
                         refreshToken: refToken
                     });
 
                     if (res.status === 200) {
-                        const { accessToken, refreshToken: newRefreshToken } = res.data;
+                        const {accessToken, refreshToken: newRefreshToken} = res.data;
 
                         sessionStorage.setItem('access_token', accessToken);
-                        sessionStorage.setItem('refresh_token', newRefreshToken);
+                        sessionStorage.setItem('refreshToken', newRefreshToken);
 
                         processQueue(null, accessToken);
 

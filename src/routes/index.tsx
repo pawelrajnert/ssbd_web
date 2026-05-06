@@ -24,6 +24,10 @@ const routes: RouteObject[] = [
         element: <AuthLayout/>,
         children: [
             {
+                index: true,
+                element: <LoginPage/>
+            },
+            {
                 path: PATHS.LOGIN,
                 element: <LoginPage/>
             },
@@ -79,6 +83,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.OWN_EMAIL_CHANGE_MAIN,
                         element: <EmailChangeInitPage/>
+                    },
+                    {
+                        path: PATHS.USER_EDIT_ME,
+                        element: <UserEditPage/>
                     }
                 ]
             }

@@ -12,7 +12,7 @@ export interface AccountDTO {
     lastLoginSuccessDateTime?: string | null;
     version: number;
     versionHash: string;
-    active: boolean;
+    isBlocked: boolean;
     verified?: boolean;
 }
 
@@ -29,4 +29,11 @@ export interface Page<T> {
     number: number;
 }
 
-export interface ChangeEmailDTO { email: string, version: string }
+export interface ChangeEmailDTO {
+    email: string
+}
+
+export interface UpdateAccountDTO {
+    name: string;
+    surname: string;
+}

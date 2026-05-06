@@ -42,7 +42,7 @@ export default function EmailChangeMainPage() {
         <div className="min-h-screen bg-gray-50 p-8">
             <div className="max-w-2xl mx-auto">
                 <button
-                    onClick={() => navigate(PATHS.PROFILE)}
+                    onClick={() => navigate(PATHS.USER_EDIT_ME)}
                     className="flex items-center text-sm font-bold text-gray-500 hover:text-[#7A1014] transition-colors mb-6"
                 >
                     <ArrowLeft size={16} className="mr-2"/>

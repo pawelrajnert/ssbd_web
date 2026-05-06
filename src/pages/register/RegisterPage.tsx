@@ -41,13 +41,19 @@ export default function RegisterPage() {
         setIsLoading(true);
 
         try {
-            const { confirmPassword, termsAccepted, ...payload } = data;
+            const {...payload } = data;
 
             await axiosInstance.post("/account/register", payload);
             setIsSuccess(true);
         } catch (err: any) {
-            setGlobalError(err.response?.data || "An error occurred during registration.");
-        } finally {
+            const errorData = err.response?.data;
+
+            if (errorData?.violations) {
+                const messages = errorData.violations.map((v: any) => v.message).join(", ");
+                setGlobalError(messages);
+            } else {
+                setGlobalError("An unexpected error occurred.");
+            }
             setIsLoading(false);
         }
     };

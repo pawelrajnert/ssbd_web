@@ -12,14 +12,21 @@ import { authService } from "../../services/authService.ts";
 import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
 import { loginSchema, type LoginFormData } from "../../shared/validators/loginSchema.ts";
 
+import { useEffect } from "react";
+
 export default function LoginPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const { setTokens } = useAuth();
-
+    const { isAuthenticated, setTokens } = useAuth();
     const [globalError, setGlobalError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(PATHS.USER_LIST, { replace: true });
+        }
+    }, [isAuthenticated, navigate]);
 
     const { register, handleSubmit, control, formState: { errors } } = useForm<LoginFormData>({
         resolver: yupResolver(loginSchema),
@@ -52,6 +59,9 @@ export default function LoginPage() {
             setIsLoading(false);
         }
     };
+
+
+
 
     return (
         <div className="flex flex-col w-full px-4 animate-in fade-in duration-500">
