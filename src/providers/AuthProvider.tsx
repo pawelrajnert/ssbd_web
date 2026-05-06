@@ -9,8 +9,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { userRole, userLogin } = useMemo(() => {
         if (token && token !== "undefined" && token !== "null") {
             try {
-                const decoded = jwtDecode<JwtPayload>(token);
-                return { userRole: decoded.role, userLogin: decoded.sub };
+                const decoded = jwtDecode<JwtPayload>(token as string);
+                return { userRole: decoded.roles?.[0] || null, userLogin: decoded.sub };
             } catch (e) {
                 console.error("JWT Decode Error:", e);
                 return { userRole: null, userLogin: null };
