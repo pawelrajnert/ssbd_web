@@ -2,13 +2,16 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Eye, Lock} from "lucide-react";
 import axios from "axios";
-import {useTranslation} from "react-i18next";
-import {userService} from "../../services/userService";
-import type {AccountWithAccessLevelsDTO} from "../../types/user.types";
-import {RoleEnum} from "../../types/role.types";
-import {PATHS} from "../../routes/paths";
+import * as yup from "yup";
+import { useTranslation } from "react-i18next";
+import { userService } from "../../services/userService";
+import type {AccountWithAccessLevelsDTO, ChangeEmailDTO} from "../../types/user.types";
+import { RoleEnum } from "../../types/role.types";
+import { PATHS } from "../../routes/paths";
 import SubmitButton from "../../shared/components/buttons/SubmitButton";
-import {useBreadcrumb} from "../../contexts/BreadcrumbContext";
+import { useBreadcrumb } from "../../contexts/BreadcrumbContext";
+import {emailChangeService} from "../../services/emailChangeService.ts";
+import {emailSchema} from "../../shared/validators/emailSchema.ts";
 
 export default function UserEditPage() {
     const {id} = useParams<{ id: string }>();
@@ -21,6 +24,8 @@ export default function UserEditPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [isBlocking, setIsBlocking] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [emailValue, setEmailValue] = useState('');
+    const [emailError, setEmailError] = useState<boolean>(false);
 
     useEffect(() => {
         if (id) {
@@ -40,6 +45,7 @@ export default function UserEditPage() {
             const data = await userService.getAccountById(userId);
             setUser(data);
             setLocalRoles(data.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
+            setEmailValue(data.account.email);
         } catch (err) {
             console.error(err);
             navigate(PATHS.USER_LIST);
@@ -77,7 +83,19 @@ export default function UserEditPage() {
         setError(null);
 
         try {
+            await emailSchema.validate({email: emailValue});
+
             let currentHash = user.account.versionHash;
+
+            if (user.account.email !== emailValue) {
+                const emailDTO: ChangeEmailDTO = {email: emailValue, version: user.account.versionHash}
+                await emailChangeService.changeEmailByAdmin(user.account.id, emailDTO);
+
+                const updatedUser = await userService.getAccountById(user.account.id);
+                setUser(updatedUser);
+                currentHash = updatedUser.account.versionHash;
+            }
+
             const initialRoles = user.accessLevels.filter(al => al.active).map(al => al.accessLevelName);
             const rolesToGrant = localRoles.filter(r => !initialRoles.includes(r));
             const rolesToRevoke = initialRoles.filter(r => !localRoles.includes(r));
@@ -98,14 +116,17 @@ export default function UserEditPage() {
             setLocalRoles(latestUser.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
         } catch (err) {
             console.error(err);
-            if (axios.isAxiosError(err)) {
+            if (yup.ValidationError.isError(err)) {
+                setError(err.message);
+                setEmailError(true);
+            } else if (axios.isAxiosError(err)) {
                 setError(err.response?.data || t('userEdit.messages.updateError'));
             } else if (err instanceof Error) {
                 setError(err.message);
             } else {
                 setError(t('userEdit.messages.updateError'));
             }
-            if (id) fetchUser(id);
+            //if (id) fetchUser(id); Może lepiej, to wyrzucić? Użytkownik pewnie będzie chciał poprawić nieprawidłowe dane.
         } finally {
             setIsSaving(false);
         }
@@ -114,8 +135,20 @@ export default function UserEditPage() {
     const handleDiscard = () => {
         if (user) {
             setLocalRoles(user.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
+            setEmailValue(user.account.email);
         }
     };
+
+    const handleEmailOnBlur = async () => {
+        try {
+            await emailSchema.validate({email: emailValue});
+            setEmailError(false);
+        } catch (err) {
+            if (yup.ValidationError.isError(err)) {
+                setEmailError(true);
+            }
+        }
+    }
 
     const toggleRole = (role: string) => {
         setLocalRoles(prev =>
@@ -248,10 +281,19 @@ export default function UserEditPage() {
                                 className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.email')}</label>
                             <input
                                 type="email"
-                                value={user.account.email}
-                                readOnly
-                                className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none cursor-not-allowed focus:border-gray-300"
+                                value={emailValue}
+                                required={true}
+                                onChange={(e) => setEmailValue(e.target.value)}
+                                onBlur={handleEmailOnBlur}
+                                className={`w-full border rounded-md p-3 text-sm font-medium transition-colors outline-none ${
+                                    emailError ? "border-[#7A1014] focus:border-[#7A1014]" : "border-gray-200 focus:border-gray-300"
+                                }`}
                             />
+                            {emailError && (
+                                <p className="text-xs text-[#7A1014] font-semibold mt-2">
+                                    {t('userEdit.personal.emailError')}
+                                </p>
+                            )}
                         </div>
 
                         <hr className="border-gray-100 mb-8"/>
