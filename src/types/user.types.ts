@@ -28,3 +28,5 @@ export interface Page<T> {
     size: number;
     number: number;
 }
+
+export interface ChangeEmailDTO { email: string, version: string }
