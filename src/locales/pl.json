@@ -1,4 +1,7 @@
 {
+  "common": {
+  "goToLogin": "Przejdź do logowania"
+},
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
     "subtitle": "Analiza wkładu naukowego z precyzją i prestiżowym autorytetem na Politechnice Łódzkiej.",
@@ -166,7 +169,9 @@
       "error": {
         "default": "Wystąpił błąd podczas próby zmiany adresu e-mail.",
         "unexpected": "Wystąpił nieoczekiwany błąd."
-      }
+      },
+      "resendButton": "Wyślij ponownie",
+      "resendSuccess": "Wysłano ponownie"
     },
     "confirm": {
       "invalidLink": {
@@ -174,7 +179,7 @@
         "description": "Link jest nieprawidłowy lub wygasł spróbuj ponownie."
       },
       "success": {
-        "title": "E-mail został zmieniony zmieniony",
+        "title": "E-mail został zmieniony",
         "description": "Twój adres e-mail został pomyślnie zaktualizowany."
       },
       "form": {
@@ -189,6 +194,17 @@
         "wrongCredentials": "Nieprawidłowe poświadczenia do konta.",
         "expired": "Link wygasł lub jest nieprawidłowy.",
         "unexpected": "Wystąpił nieoczekiwany błąd."
+      }
+    },
+    "revert": {
+      "loading": "Przywracanie adresu e-mail",
+      "success": {
+        "title": "Poprzedni adres e-mail przywrócony",
+        "description": "Poprzedni adres e-mail został pomyślnie przywrócony do konta."
+      },
+      "error": {
+        "title": "Błąd podczas przywracania adresu email",
+        "description": "Link przywracający jest nieważny, został już użyty lub wygasł."
       }
     }
   }

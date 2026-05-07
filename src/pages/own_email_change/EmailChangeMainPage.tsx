@@ -15,6 +15,7 @@ export default function EmailChangeMainPage() {
     const [apiError, setApiError] = useState("");
     const navigate = useNavigate();
     const {setDynamicBreadcrumb} = useBreadcrumb();
+    const [resendStatus, setResendStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
     useEffect(() => {
         setDynamicBreadcrumb(t('emailChange.main.breadcrumb'));
@@ -31,10 +32,22 @@ export default function EmailChangeMainPage() {
             console.error("Failed to request email change", error);
             setStatus('error');
             if (axios.isAxiosError(error)) {
-                setApiError(error.response?.data?.message || t('emailChange.main.error.default'));
+                const msg = error.response?.data?.message;
+                setApiError(msg ? t(msg) : t('emailChange.main.error.default'));
             } else {
                 setApiError(t('emailChange.main.error.unexpected'));
             }
+        }
+    };
+
+    const handleResend = async () => {
+        setResendStatus('loading');
+        try {
+            await emailChangeService.resendEmailChangeRequest();
+            setResendStatus('success');
+        } catch (error) {
+            console.error("Failed to resend email change token", error);
+            setResendStatus('error');
         }
     };
 
@@ -64,12 +77,29 @@ export default function EmailChangeMainPage() {
                                 {t('emailChange.main.success.description')} <br/>
                                 <strong>{t('emailChange.main.success.timeLimit')}</strong>
                             </p>
-                            <button
-                                onClick={() => navigate(PATHS.PROFILE)}
-                                className="px-8 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold tracking-widest uppercase rounded-md transition-colors"
-                            >
-                                {t('emailChange.main.success.backButton')}
-                            </button>
+
+                            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                                <button
+                                    onClick={() => navigate(PATHS.PROFILE)}
+                                    className="px-8 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold tracking-widest uppercase rounded-md transition-colors"
+                                >
+                                    {t('emailChange.main.success.backButton')}
+                                </button>
+
+                                <button
+                                    onClick={handleResend}
+                                    disabled={resendStatus === 'loading' || resendStatus === 'success'}
+                                    className="px-8 py-3 bg-[#7A1014] hover:bg-[#5a0c0f] text-white text-xs font-bold tracking-widest uppercase rounded-md transition-colors disabled:opacity-50"
+                                >
+                                    {resendStatus === 'loading' ? t('common.loading') :
+                                        resendStatus === 'success' ? t('emailChange.main.resendSuccess') :
+                                            t('emailChange.main.resendButton')}
+                                </button>
+                            </div>
+
+                            {resendStatus === 'error' && (
+                                <p className="text-red-500 text-xs mt-4">{t('emailChange.main.error.unexpected')}</p>
+                            )}
                         </div>
                     ) : (
                         <div className="animate-in fade-in duration-500">

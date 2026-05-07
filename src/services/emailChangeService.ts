@@ -26,5 +26,15 @@ export const emailChangeService = {
             }
         );
         return response.data;
+    },
+
+    resendEmailChangeRequest: async () => {
+        const response = await axiosInstance.post('/account/email/change/resend');
+        return response.data;
+    },
+
+    revertEmailChange: async (token: string) => {
+        const response = await axiosInstance.post(`/account/email/revert?token=${token}`);
+        return response.data;
     }
 };
