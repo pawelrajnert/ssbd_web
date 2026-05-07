@@ -19,7 +19,9 @@
       "createAccount": "Utwórz konto",
       "errorInvalid": "Nieprawidłowy login lub hasło.",
       "errorBlocked": "Twoje konto zostało zablokowane. Skontaktuj się z administratorem.",
-      "errorGeneric": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później."
+      "errorGeneric": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.",
+      "errorGoogle": "Logowanie przez Google nie powiodło się. Spróbuj ponownie.",
+      "orLoginWith": "Lub zaloguj się przez"
     },
     "register": {
       "heading": "Utwórz Konto",
