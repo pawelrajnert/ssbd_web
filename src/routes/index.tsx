@@ -14,6 +14,7 @@ import PasswordResetConfirmPage from "../pages/auth/password_reset/PasswordReset
 
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
+import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPage.tsx";
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
 
 const routes: RouteObject[] = [
@@ -55,6 +56,10 @@ const routes: RouteObject[] = [
                 path: PATHS.OWN_EMAIL_CHANGE_CONFIRM,
                 element: <EmailChangeConfirmPage/>
             },
+            {
+                path: PATHS.OWN_EMAIL_CHANGE_REVERT,
+                element: <EmailChangeRevertPage/>
+            }
         ]
     },
     // {
@@ -80,6 +85,14 @@ const routes: RouteObject[] = [
             {
                 element: <Layout/>,
                 children: [
+                    // {
+                    //     path: PATHS.PROFILE,
+                    //     element: <ProfilePage/>
+                    // },
+                    // {
+                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+                    //     element: <EmailChangeInitPage/>
+                    // },
                     {
                         path: PATHS.PROFILE,
                         element: <UserEditPage/>
