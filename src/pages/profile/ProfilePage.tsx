@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { getAccountByLogin } from '../../services/accountService';
-import { ChangeOwnPasswordForm } from './ChangeOwnPasswordForm';
+import React, {useState, useEffect} from 'react';
+import {useAuth} from '../../hooks/useAuth';
+import {getAccountByLogin} from '../../services/accountService';
+import {ChangeOwnPasswordForm} from './ChangeOwnPasswordForm';
 import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
 import {PATHS} from "../../routes/paths.ts";
+import type {AccountWithAccessLevelsDTO} from "../../types/user.types.ts";
 
 export const ProfilePage: React.FC = () => {
-    const { userLogin, token } = useAuth();
+    const {userLogin, token} = useAuth();
     console.log("Token w sesji:", token);
     console.log("Zdekodowany login:", userLogin);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<AccountWithAccessLevelsDTO>();
     const [loading, setLoading] = useState(true);
     const [showPasswordForm, setShowPasswordForm] = useState(false);
 
@@ -24,6 +25,7 @@ export const ProfilePage: React.FC = () => {
                     console.error("Błąd pobierania profilu:", err);
                     setLoading(false);
                 });
+
         }
     }, [userLogin]);
 
@@ -65,7 +67,8 @@ export const ProfilePage: React.FC = () => {
                         <div className="flex justify-between items-center">
                             <div>
                                 <h3 className="font-medium text-gray-800">Bezpieczeństwo</h3>
-                                <p className="text-sm text-gray-500">Ostatnia zmiana hasła może zwiększyć bezpieczeństwo Twojego konta.</p>
+                                <p className="text-sm text-gray-500">Ostatnia zmiana hasła może zwiększyć bezpieczeństwo
+                                    Twojego konta.</p>
                             </div>
                             <button
                                 onClick={() => setShowPasswordForm(true)}
@@ -86,7 +89,7 @@ export const ProfilePage: React.FC = () => {
                                 </button>
                             </div>
                             <ChangeOwnPasswordForm
-                                version={user.account.version}
+                                version={user.account.versionHash}
                                 onSuccess={() => {
                                     alert('Hasło zmienione pomyślnie!');
                                     setShowPasswordForm(false);

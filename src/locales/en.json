@@ -112,7 +112,8 @@
       "firstName": "First Name",
       "surname": "Surname",
       "email": "Email Address",
-      "emailError": "Please enter a valid email address."
+      "emailError": "Please enter a valid email address.",
+      "changeEmail": "Change email"
     },
     "blockStatus": {
       "title": "Block user account",
@@ -139,7 +140,22 @@
     "oldPassword": "Old password",
     "newPassword": "New password",
     "confirmNewPassword": "Confirm new password",
-    "applyChanges": "Apply Changes"
+    "applyChanges": "Apply Changes",
+    "loading": "Loading profile...",
+    "errorLoad": "Failed to load user data.",
+    "accountSettings": "Account Settings",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "login": "Login",
+    "edit": "Edit",
+    "userList": "User List",
+    "security": "Security",
+    "securityDesc": "Changing your password regularly can increase the security of your account.",
+    "changeOwnPassword": "Change own password",
+    "changePassword": "Change password",
+    "cancel": "Cancel",
+    "passwordChangedSuccess": "Password changed successfully!"
   },
   "error": {
     "changePasswordFailed": "Failed to change the password. Check if the old password and data version are correct."
@@ -161,7 +177,7 @@
         "description1": "After clicking a button below at ",
         "descriptionBold": "your current e-mail address",
         "description2": "link for changing e-mail address would be sent.",
-        "submitButton": "Send link to change an e-mail"
+        "submitButton": "Send request to change my e-mail"
       },
       "error": {
         "default": "Error occurred while trying to change an e-mail address.",
@@ -190,6 +206,79 @@
         "expired": "The link has expired or is invalid.",
         "unexpected": "An unexpected error occurred."
       }
+    }
+  },
+  "passwordReset": {
+    "confirm": {
+      "invalidLinkTitle": "Invalid Link",
+      "invalidLinkDesc": "This password reset link is invalid or missing the required security token.",
+      "requestNewLink": "Request a new link",
+      "successTitle": "Password Updated",
+      "successDesc": "Your password has been successfully changed. You can now log in with your new credentials.",
+      "returnToLogin": "Return to Login",
+      "title": "Create New Password",
+      "subtitle": "Please enter your new password below.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Reset Password",
+      "backToLogin": "Back to Login",
+      "errorExpired": "Failed to reset password. The link may have expired or already been used.",
+      "errorUnexpected": "An unexpected error occurred."
+    },
+    "init": {
+      "successTitle": "Check your email",
+      "successDesc1": "We've sent a password reset link to ",
+      "successDesc2": ". Please check your inbox and spam folder.",
+      "returnToLogin": "Return to Login",
+      "title": "Reset Password",
+      "subtitle": "Enter your email address and we'll send you a link to securely reset your password.",
+      "email": "Email",
+      "submit": "Send Reset Link",
+      "backToLogin": "Back to Login",
+      "errorSend": "An error occurred while sending the reset link.",
+      "errorUnexpected": "An unexpected error occurred."
+    }
+  },
+  "header": {
+    "title": "Academic Curator",
+    "subtitle": "Lodz University of Technology",
+    "dashboard": "Dashboard",
+    "userManagement": "User Management",
+    "defaultUser": "User",
+    "defaultGuest": "Guest",
+    "logout": "Logout"
+  },
+  "about": {
+    "title": "aleikum asalam"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": {
+      "invalid": "Please enter a valid email address (e.g., name@domain.com)"
+    },
+    "password": {
+      "minLength": "Password must be at least 12 characters long",
+      "maxLength": "Password can be up to 64 characters long",
+      "uppercase": "Password must contain at least one uppercase letter",
+      "lowercase": "Password must contain at least one lowercase letter",
+      "number": "Password must contain at least one number",
+      "specialChar": "Password must contain at least one uppercase letter and a special symbol",
+      "confirmRequired": "Please confirm your password",
+      "mismatch": "Passwords do not match"
+    },
+    "user": {
+      "nameMin": "Name must be at least 3 characters",
+      "nameMax": "Name cannot exceed 32 characters",
+      "nameFormat": "Name must start with a letter and contain only letters, spaces, hyphens, and apostrophes",
+      "surnameMin": "Surname must be at least 3 characters",
+      "surnameMax": "Surname cannot exceed 32 characters",
+      "surnameFormat": "Surname must start with a letter and contain only letters, spaces, hyphens, and apostrophes",
+      "loginMin": "Login must be at least 3 characters",
+      "loginMax": "Login cannot exceed 32 characters",
+      "loginFormat": "Login can only contain letters and numbers"
+    },
+    "terms": {
+      "required": "You must accept the terms and conditions"
     }
   }
 }

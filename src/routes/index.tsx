@@ -11,7 +11,7 @@ import RegisterPage from "../pages/register/RegisterPage.tsx";
 import ActivatePage from "../pages/activate/ActivatePage.tsx";
 import PasswordResetInitPage from "../pages/password_reset/PasswordResetInitPage.tsx";
 import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfirmPage.tsx";
-import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
+// import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
 import EmailChangeInitPage from "../pages/own_email_change/EmailChangeMainPage.tsx";
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
@@ -81,16 +81,16 @@ const routes: RouteObject[] = [
             {
                 element: <Layout/>,
                 children: [
-                    {
-                        path: PATHS.PROFILE,
-                        element: <ProfilePage/>
-                    },
+                    // {
+                    //     path: PATHS.PROFILE,
+                    //     element: <ProfilePage/>
+                    // },
                     {
                         path: PATHS.OWN_EMAIL_CHANGE_MAIN,
                         element: <EmailChangeInitPage/>
                     },
                     {
-                        path: PATHS.USER_EDIT_ME,
+                        path: PATHS.PROFILE,
                         element: <UserEditPage/>
                     }
                 ]
