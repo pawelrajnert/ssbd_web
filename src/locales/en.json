@@ -1,4 +1,7 @@
 {
+  "common": {
+    "goToLogin": "Return to login"
+  },
   "auth": {
     "title": "Preserving Academic Integrity",
     "subtitle": "Analyzing scholarly contributions with precision and prestigious authority at the Technical University of Lodz.",
@@ -205,6 +208,19 @@
         "wrongCredentials": "Invalid account credentials.",
         "expired": "The link has expired or is invalid.",
         "unexpected": "An unexpected error occurred."
+      },
+      "resendButton": "Send again",
+      "resendSuccess": "Link was sent again"
+    },
+    "revert": {
+      "loading": "Reverting an email address",
+      "success": {
+        "title": "Email address has been reverted",
+        "description": "Your previous email address is reverted."
+      },
+      "error": {
+        "title": "Error while reverting old email address",
+        "description": "Link reverting old email address has expired or has been used."
       }
     }
   },
