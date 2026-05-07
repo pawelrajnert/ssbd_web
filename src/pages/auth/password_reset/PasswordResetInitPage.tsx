@@ -4,13 +4,15 @@ import {Mail, ArrowLeft, CheckCircle2, AlertCircle} from "lucide-react";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import axios from "axios";
-import {PATHS} from "../../routes/paths.ts";
-import {passwordResetService} from "../../services/passwordResetService.ts";
-import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
-import {emailSchema, type EmailFormData} from "../../shared/validators/emailSchema.ts";
-import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
+import {useTranslation} from "react-i18next";
+import {PATHS} from "../../../routes/paths.ts";
+import {passwordResetService} from "../../../services/passwordResetService.ts";
+import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
+import {emailSchema, type EmailFormData} from "../../../shared/validators/emailSchema.ts";
+import LinkButton from "../../../shared/components/buttons/LinkButton.tsx";
 
 export default function PasswordResetInitPage() {
+    const {t} = useTranslation();
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [apiError, setApiError] = useState("");
 
@@ -33,9 +35,9 @@ export default function PasswordResetInitPage() {
             console.error("Failed to request password reset", error);
             setStatus('error');
             if (axios.isAxiosError(error)) {
-                setApiError(error.response?.data?.message || "An error occurred while sending the reset link.");
+                setApiError(error.response?.data?.message || t("passwordReset.init.errorSend"));
             } else {
-                setApiError("An unexpected error occurred.");
+                setApiError(t("passwordReset.init.errorUnexpected"));
             }
         }
     };
@@ -47,28 +49,27 @@ export default function PasswordResetInitPage() {
                 <div className="flex justify-center mb-4 text-green-600">
                     <CheckCircle2 size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">Check your email</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.init.successTitle")}</h2>
                 <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
-                    We've sent a password reset link to <span
-                    className="font-bold text-gray-800">{getValues("email")}</span>.
-                    Please check your inbox and spam folder.
+                    {t("passwordReset.init.successDesc1")}
+                    <span className="font-bold text-gray-800">{getValues("email")}</span>
+                    {t("passwordReset.init.successDesc2")}
                 </p>
                 <Link
                     to={PATHS.LOGIN}
                     className="inline-block w-full bg-[#7A1014] text-white font-bold py-3 rounded-md hover:bg-red-900 transition-colors shadow-sm"
                 >
-                    Return to Login
+                    {t("passwordReset.init.returnToLogin")}
                 </Link>
             </div>
         );
     }
 
-    //TODO: i18n
     return (
         <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Reset Password</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.init.title")}</h2>
             <p className="text-sm text-gray-500 mb-8">
-                Enter your email address and we'll send you a link to securely reset your password.
+                {t("passwordReset.init.subtitle")}
             </p>
 
             {status === 'error' && (
@@ -83,7 +84,7 @@ export default function PasswordResetInitPage() {
                 <div className="mb-8">
                     <label htmlFor="email"
                            className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        Email
+                        {t("passwordReset.init.email")}
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
@@ -92,7 +93,7 @@ export default function PasswordResetInitPage() {
                         <input
                             id="email"
                             type="text"
-                            placeholder="E.g. Jan_Kowalski@edu.p.lodz.pl"
+                            placeholder={t("passwordReset.init.emailPlaceholder", "E.g. Jan_Kowalski@edu.p.lodz.pl")}
                             {...register("email")}
                             className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50
                                 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
@@ -100,7 +101,7 @@ export default function PasswordResetInitPage() {
                         />
                     </div>
                     {errors.email && (
-                        <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                        <p className="text-red-500 text-xs mt-1">{t(errors.email.message as string)}</p>
                     )}
                 </div>
 
@@ -108,14 +109,14 @@ export default function PasswordResetInitPage() {
                     type="submit"
                     isLoading={status === 'loading'}
                 >
-                    Send Reset Link
+                    {t("passwordReset.init.submit")}
                 </SubmitButton>
             </form>
 
             <div className="mt-8 text-center max-w-sm">
                 <LinkButton to={PATHS.LOGIN} variant="ghost">
                     <ArrowLeft size={16} className="mr-2"/>
-                    Back to Login
+                    {t("passwordReset.init.backToLogin")}
                 </LinkButton>
             </div>
         </div>

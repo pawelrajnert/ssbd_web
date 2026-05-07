@@ -4,8 +4,8 @@ const strictEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const emailSchema = yup.object({
     email: yup.string()
-        .required("Email is required")
-        .matches(strictEmailRegex, "Please enter a valid email address (e.g., name@domain.com)")
+        .required("validation.required")
+        .matches(strictEmailRegex, "validation.email.invalid")
 }).required();
 
 export type EmailFormData = yup.InferType<typeof emailSchema>;

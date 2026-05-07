@@ -2,40 +2,40 @@ import * as yup from "yup";
 
 export const registerSchema = yup.object({
     name: yup.string()
-        .required("Name is required")
-        .min(3, "Name must be at least 3 characters")
-        .max(32, "Name cannot exceed 32 characters")
-        .matches(/^[\p{L}][\p{L}\s\-']+$/u, "Name must start with a letter and contain only letters, spaces, hyphens, and apostrophes"),
+        .required("validation.required")
+        .min(3, "validation.user.nameMin")
+        .max(32, "validation.user.nameMax")
+        .matches(/^[\p{L}][\p{L}\s\-']+$/u, "validation.user.nameFormat"),
 
     surname: yup.string()
-        .required("Surname is required")
-        .min(3, "Surname must be at least 3 characters")
-        .max(32, "Surname cannot exceed 32 characters")
-        .matches(/^[\p{L}][\p{L}\s\-']+$/u, "Surname must start with a letter and contain only letters, spaces, hyphens, and apostrophes"),
+        .required("validation.required")
+        .min(3, "validation.user.surnameMin")
+        .max(32, "validation.user.surnameMax")
+        .matches(/^[\p{L}][\p{L}\s\-']+$/u, "validation.user.surnameFormat"),
 
     login: yup.string()
-        .required("Login is required")
-        .min(3, "Login must be at least 3 characters")
-        .max(32, "Login cannot exceed 32 characters")
-        .matches(/^[a-zA-Z0-9]+$/, "Login can only contain letters and numbers"),
+        .required("validation.required")
+        .min(3, "validation.user.loginMin")
+        .max(32, "validation.user.loginMax")
+        .matches(/^[a-zA-Z0-9]+$/, "validation.user.loginFormat"),
 
     email: yup.string()
-        .required("Email is required")
-        .email("Must be a valid email address"),
+        .required("validation.required")
+        .email("validation.email.invalid"),
 
     password: yup.string()
-        .required("Password is required")
-        .min(12, "Password must be at least 8 characters long")
-        .max(64, "Password can be up to 64 characters long")
-        .matches(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$/, "Password must contain at least one uppercase letter and a special symbol"),
+        .required("validation.required")
+        .min(12, "validation.password.minLength")
+        .max(64, "validation.password.maxLength")
+        .matches(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$/, "validation.password.specialChar"),
 
     confirmPassword: yup.string()
-        .required("Please confirm your password")
-        .oneOf([yup.ref('password')], "Passwords do not match"),
+        .required("validation.password.confirmRequired")
+        .oneOf([yup.ref('password')], "validation.password.mismatch"),
 
     termsAccepted: yup.boolean()
-        .required("You must accept the terms and conditions")
-        .oneOf([true], "You must accept the terms and conditions")
+        .required("validation.terms.required")
+        .oneOf([true], "validation.terms.required")
 }).required();
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;

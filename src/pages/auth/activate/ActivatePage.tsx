@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { PATHS } from "../../routes/paths.ts";
-import axiosInstance from "../../api/auth/middleware.ts";
+import { PATHS } from "../../../routes/paths.ts";
+import axiosInstance from "../../../api/auth/middleware.ts";
 
 export default function ActivatePage() {
     const { t } = useTranslation();

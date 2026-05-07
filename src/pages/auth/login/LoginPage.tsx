@@ -7,11 +7,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { GoogleLogin } from '@react-oauth/google';
 
-import { PATHS } from "../../routes/paths.ts";
-import { useAuth } from "../../hooks/useAuth.ts";
-import { authService, loginWithGoogle } from "../../services/authService.ts";
-import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
-import { loginSchema, type LoginFormData } from "../../shared/validators/loginSchema.ts";
+import { PATHS } from "../../../routes/paths.ts";
+import { useAuth } from "../../../hooks/useAuth.ts";
+import {authService, loginWithGoogle} from "../../../services/authService.ts";
+import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
+import { loginSchema, type LoginFormData } from "../../../shared/validators/loginSchema.ts";
 
 export default function LoginPage() {
     const { t } = useTranslation();
@@ -38,7 +38,7 @@ export default function LoginPage() {
         try {
             const response = await authService.login(data.login, data.password);
 
-            if (response.message === "mfa.required") {
+            if (response?.message === "mfa.required") {
                 navigate(PATHS._2FA_VERIFY, {
                     state: {
                         login: data.login,
@@ -49,6 +49,12 @@ export default function LoginPage() {
                 setTokens(response.token, response.refreshToken);
                 const from = location.state?.from?.pathname || PATHS.PROFILE;
                 navigate(from, { replace: true });
+            } else {
+                if (typeof response === 'string') {
+                    setGlobalError(response);
+                } else {
+                    setGlobalError(t('auth.login.errorInvalid'));
+                }
             }
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -113,7 +119,7 @@ export default function LoginPage() {
                             {...register("login")}
                         />
                     </div>
-                    {errors.login && <p className="text-red-500 text-[10px] mt-1">{errors.login.message}</p>}
+                    {errors.login?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.login.message)}</p>}
                 </div>
 
                 <div>
@@ -129,7 +135,7 @@ export default function LoginPage() {
                             {...register("password")}
                         />
                     </div>
-                    {errors.password && <p className="text-red-500 text-[10px] mt-1">{errors.password.message}</p>}
+                    {errors.password?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.password.message)}</p>}
                 </div>
 
                 <div className="flex items-center justify-between pt-2 pb-2">

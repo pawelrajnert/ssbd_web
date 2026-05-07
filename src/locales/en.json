@@ -78,6 +78,8 @@
     "filterPlaceholder": "Filter by name, email...",
     "noResults": "No results found",
     "changePassword": "Change password",
+    "changePasswordFor": "Change password for",
+    "cancel": "Cancel",
     "table": {
       "role": "Role",
       "firstName": "First Name",
