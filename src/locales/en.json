@@ -16,7 +16,9 @@
       "createAccount": "Create an account",
       "errorInvalid": "Invalid login or password.",
       "errorBlocked": "Your account has been blocked. Please contact the administrator.",
-      "errorGeneric": "An unexpected error occurred. Please try again later."
+      "errorGeneric": "An unexpected error occurred. Please try again later.",
+      "errorGoogle": "Google login failed. Please try again.",
+      "orLoginWith": "Or log in with"
     },
     "2fa": {
       "heading": "Verification",

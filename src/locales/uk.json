@@ -7,7 +7,9 @@
       "heading": "Вхід",
       "button": "Увійти",
       "noAccount": "Немає акаунту?",
-      "createAccount": "Зареєструватись"
+      "createAccount": "Зареєструватись",
+      "errorGoogle": "Помилка входу через Google. Спробуйте ще раз.",
+      "orLoginWith": "Або увійдіть через"
     }
   },
   "userList": {
