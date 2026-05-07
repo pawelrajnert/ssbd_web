@@ -39,11 +39,19 @@ export default function LoginPage() {
         try {
             const response = await authService.login(data.login, data.password);
 
-            setTokens(response.token, response.refreshToken);
-
-            const from = location.state?.from?.pathname || PATHS.PROFILE;
-            navigate(from, { replace: true });
-        } catch (err: any) {
+            if (response.message === "mfa.required") {
+                navigate(PATHS._2FA_VERIFY, {
+                    state: {
+                        login: data.login,
+                        from: location.state?.from
+                    }
+                });
+            } else if (response?.token) {
+                setTokens(response.token, response.refreshToken);
+                const from = location.state?.from?.pathname || PATHS.PROFILE;
+                navigate(from, { replace: true });
+            }
+        } catch (err) {
             if (axios.isAxiosError(err)) {
                 if (err.response?.status === 401) {
                     setGlobalError(t('auth.login.errorInvalid'));
