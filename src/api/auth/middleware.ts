@@ -54,7 +54,7 @@ axiosInstance.interceptors.response.use(
 
             originalRequest._retry = true;
             isRefreshing = true;
-            const refToken = sessionStorage.getItem('refreshToken');
+            const refToken = sessionStorage.getItem('refresh_token');
             if (refToken) {
                 try {
                     const res = await axios.post(`/auth/refresh`, {
@@ -62,10 +62,10 @@ axiosInstance.interceptors.response.use(
                     });
 
                     if (res.status === 200) {
-                        const {accessToken, refreshToken: newRefreshToken} = res.data;
+                        const {token: accessToken, refreshToken: newRefreshToken} = res.data;
 
                         sessionStorage.setItem('access_token', accessToken);
-                        sessionStorage.setItem('refreshToken', newRefreshToken);
+                        sessionStorage.setItem('refresh_token', newRefreshToken);
 
                         processQueue(null, accessToken);
 

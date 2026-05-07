@@ -2,21 +2,20 @@ import type {RouteObject} from "react-router-dom";
 import {createBrowserRouter} from "react-router-dom";
 import {PATHS} from "./paths.ts";
 import UserListPage from "../pages/UserList/UserListPage.tsx";
-import LoginPage from "../pages/login/LoginPage.tsx";
+import LoginPage from "../pages/auth/login/LoginPage.tsx";
 import Layout from "../layout.tsx";
 import {RoleEnum} from "../types/role.types.ts";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import AuthLayout from "../shared/layouts/AuthLayout.tsx";
-import RegisterPage from "../pages/register/RegisterPage.tsx";
-import ActivatePage from "../pages/activate/ActivatePage.tsx";
-import PasswordResetInitPage from "../pages/password_reset/PasswordResetInitPage.tsx";
-import PasswordResetConfirmPage from "../pages/password_reset/PasswordResetConfirmPage.tsx";
-// import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
-import EmailChangeInitPage from "../pages/own_email_change/EmailChangeMainPage.tsx";
+import RegisterPage from "../pages/auth/register/RegisterPage.tsx";
+import ActivatePage from "../pages/auth/activate/ActivatePage.tsx";
+import PasswordResetInitPage from "../pages/auth/password_reset/PasswordResetInitPage.tsx";
+import PasswordResetConfirmPage from "../pages/auth/password_reset/PasswordResetConfirmPage.tsx";
+
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
-import TwoFactorVerifyPage from "../pages/login/TwoFactorAuthorizationPage.tsx";
 import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPage.tsx";
+import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
 
 const routes: RouteObject[] = [
     {
