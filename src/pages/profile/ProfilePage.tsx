@@ -55,6 +55,9 @@ export const ProfilePage: React.FC = () => {
                     <LinkButton to={PATHS.USER_EDIT_ME} className={"max-w-40"}>
                         Edytuj
                     </LinkButton>
+                    <LinkButton to={PATHS.USER_LIST} className={"max-w-40"}>
+                        Lista użytkowników
+                    </LinkButton>
                 </div>
 
                 <div className="p-6 bg-gray-50">
