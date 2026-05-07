@@ -13,7 +13,7 @@ import {useBreadcrumb} from "../../contexts/BreadcrumbContext";
 import {emailChangeService} from "../../services/emailChangeService.ts";
 import {emailSchema} from "../../shared/validators/emailSchema.ts";
 import {useAuth} from "../../hooks/useAuth.ts";
-import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
+import { ChangeOwnPasswordForm } from "../profile/ChangeOwnPasswordForm";
 
 export default function UserEditPage() {
     const {id} = useParams<{ id: string }>();
@@ -32,6 +32,8 @@ export default function UserEditPage() {
     const [emailError, setEmailError] = useState<boolean>(false);
     const [nameValue, setNameValue] = useState('');
     const [surnameValue, setSurnameValue] = useState('');
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [emailSuccess, setEmailSuccess] = useState(false);
 
     const fetchUser = useCallback(async (userId: string) => {
         try {
@@ -178,6 +180,16 @@ export default function UserEditPage() {
         }
     };
 
+    const onEmailSubmit = async () => {
+        try {
+            await emailChangeService.requestEmailChange();
+        } catch (error) {
+            console.error("Failed to initiate email change:", error);
+            alert(t('emailChange.error', 'Failed to change email. Please try again.'));
+        }
+        setEmailSuccess(true);
+    };
+
     const handleDiscard = () => {
         if (user) {
             setLocalRoles(user.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
@@ -294,6 +306,43 @@ export default function UserEditPage() {
                                 </div>
                             </div>
                         </div>
+                        {!isAdmin && (
+                            <div className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-100">
+                                {!showPasswordForm ? (
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-medium text-gray-800">{t('profile.security', 'Security')}</h3>
+                                            <p className="text-sm text-gray-500">{t('profile.securityDesc', 'Changing your password regularly can increase the security of your account.')}</p>
+                                        </div>
+                                        <button
+                                            onClick={() => setShowPasswordForm(true)}
+                                            className="bg-[#7A1014] hover:bg-red-900 text-white font-bold px-4 py-2 rounded-md transition-colors text-xs tracking-widest uppercase"
+                                        >
+                                            {t('profile.changeOwnPassword', 'Change own password')}
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="animate-in fade-in duration-300">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="font-medium text-gray-800">{t('profile.changePassword', 'Change password')}</h3>
+                                            <button
+                                                onClick={() => setShowPasswordForm(false)}
+                                                className="text-gray-400 hover:text-gray-600 font-bold text-sm"
+                                            >
+                                                {t('profile.cancel', 'Cancel')}
+                                            </button>
+                                        </div>
+                                        <ChangeOwnPasswordForm
+                                            version={user.account.versionHash}
+                                            onSuccess={() => {
+                                                alert(t('profile.passwordChangedSuccess', 'Password changed successfully!'));
+                                                setShowPasswordForm(false);
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <hr className="border-gray-100 mb-8"/>
 
@@ -337,9 +386,9 @@ export default function UserEditPage() {
                             />
                             {!isAdmin && (
                                 <>
-                                    <LinkButton to={PATHS.OWN_EMAIL_CHANGE_MAIN}>
-                                        Change email
-                                    </LinkButton>
+                                    <SubmitButton onClick={onEmailSubmit} className={"mt-8"} >
+                                        {t('emailChange.main.form.submitButton')}
+                                    </SubmitButton>
                                 </>
                             )}
                             {emailError && (
@@ -347,9 +396,20 @@ export default function UserEditPage() {
                                     {t('userEdit.personal.emailError')}
                                 </p>
                             )}
+                            {emailSuccess && (
+                                <>
+                                    <p className={"mt-8"}>
+                                        {t('emailChange.main.success.description')}
+                                    </p>
+                                    <p>
+                                        {t('emailChange.main.success.timeLimit')}
+                                    </p>
+                                </>
+                            )}
                         </div>
 
                         <hr className="border-gray-100 mb-8"/>
+
                         {isAdmin && (
                             <>
                                 <div

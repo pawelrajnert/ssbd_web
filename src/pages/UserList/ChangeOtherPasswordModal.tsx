@@ -29,7 +29,7 @@ export default function ChangeOtherPasswordModal({ user, onClose, onSuccess }: P
     const onSubmit = async (data: FormValues) => {
         setApiError(null);
         try {
-            await changeOtherPassword(user.id, { newPassword: data.newPassword }, user.version);
+            await changeOtherPassword(user.id, { newPassword: data.newPassword }, user.versionHash);
             onSuccess();
         } catch (err: any) {
             setApiError('error.changePasswordFailed');
