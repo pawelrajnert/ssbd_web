@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import Header from "./shared/components/header/Header.tsx";
 import { BreadcrumbContext } from "./contexts/BreadcrumbContext.tsx";
+import Sidebar from "./shared/components/sidebar/Sidebar.tsx";
 
 const Layout = () => {
     const [dynamicBreadcrumb, setDynamicBreadcrumb] = useState<string | null>(null);
@@ -10,7 +11,12 @@ const Layout = () => {
         <BreadcrumbContext.Provider value={{ dynamicBreadcrumb, setDynamicBreadcrumb }}>
             <main>
                 <Header />
-                <Outlet />
+                <div className="flex flex-1 overflow-hidden">
+                    <Sidebar />
+                    <main className="flex-1 overflow-y-auto">
+                        <Outlet />
+                    </main>
+                </div>
             </main>
         </BreadcrumbContext.Provider>
     );

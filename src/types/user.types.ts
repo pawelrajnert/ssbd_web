@@ -12,8 +12,8 @@ export interface AccountDTO {
     lastLoginSuccessDateTime?: string | null;
     // version: string;
     versionHash: string;
-    isBlocked: boolean; //może jak dodam komentarz to się zmienią
-    verified?: boolean; // te pola na prodzie? Bo kurwa nie zmieniają się co bym nie robił
+    isBlocked: boolean;
+    verified?: boolean;
 }
 
 export interface AccountWithAccessLevelsDTO {
