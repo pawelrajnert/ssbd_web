@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { RefreshCw, Filter } from "lucide-react";
+import { useEffect, useState, type KeyboardEvent } from "react";
+import { RefreshCw, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/userService";
@@ -13,26 +13,18 @@ export default function UserListPage() {
 
     const [data, setData] = useState<Page<AccountWithAccessLevelsDTO> | null>(null);
     const [page, setPage] = useState(0);
-    const [size] = useState(5);
+    const [size] = useState(10);
+
     const [phrase, setPhrase] = useState("");
-    const [debouncedPhrase, setDebouncedPhrase] = useState("");
+    const [searchPhrase, setSearchPhrase] = useState("");
+
     const [isLoading, setIsLoading] = useState(false);
-
     const [selectedUser, setSelectedUser] = useState<AccountDTO | null>(null);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setDebouncedPhrase(phrase);
-            setPage(0);
-        }, 500);
-
-        return () => clearTimeout(timer);
-    }, [phrase]);
 
     const fetchUsers = async () => {
         setIsLoading(true);
         try {
-            const result = await userService.getUsers(page, size, debouncedPhrase);
+            const result = await userService.getUsers(page, size, searchPhrase);
             setData(result);
         } catch (error) {
             console.error(error);
@@ -43,10 +35,33 @@ export default function UserListPage() {
 
     useEffect(() => {
         fetchUsers();
-    }, [page, size, debouncedPhrase]);
+    }, [page, size, searchPhrase]);
 
     const handleRefresh = () => {
-        fetchUsers();
+        setSearchPhrase(phrase);
+        if (page !== 0) {
+            setPage(0);
+        } else {
+            fetchUsers();
+        }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleRefresh();
+        }
+    };
+
+    const handleNextPage = () => {
+        if (data && !data.last) {
+            setPage(prev => prev + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (page > 0) {
+            setPage(prev => prev - 1);
+        }
     };
 
     const formatDate = (dateString?: string | null) => {
@@ -56,16 +71,15 @@ export default function UserListPage() {
     };
 
     const renderRoleBadge = (roleName: string) => {
-        // Define styles and labels outside the JSX for clarity
-        const isAdmin = roleName === "ADMINISTRATOR";
+        const isAdmin = roleName === "ROLE_ADMIN" || roleName === "ADMINISTRATOR";
         const colors = isAdmin
             ? "bg-red-100 text-[#7A1014]"
             : "bg-teal-100 text-teal-800";
 
         const getLabel = () => {
-            if (roleName === "ADMINISTRATOR") return t('userEdit.roles.adminBadge');
-            if (roleName === "TEACHER") return t('userEdit.roles.teacher').toUpperCase();
-            if (roleName === "STUDENT") return t('userEdit.roles.student').toUpperCase();
+            if (roleName === "ROLE_ADMIN" || roleName === "ADMINISTRATOR") return t('userEdit.roles.adminBadge');
+            if (roleName === "ROLE_TEACHER" || roleName === "TEACHER") return t('userEdit.roles.teacher').toUpperCase();
+            if (roleName === "ROLE_STUDENT" || roleName === "STUDENT") return t('userEdit.roles.student').toUpperCase();
             return roleName;
         };
 
@@ -74,8 +88,8 @@ export default function UserListPage() {
                 key={roleName}
                 className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}
             >
-            {getLabel()}
-        </span>
+                {getLabel()}
+            </span>
         );
     };
 
@@ -88,7 +102,11 @@ export default function UserListPage() {
                         <p className="text-gray-500 text-sm max-w-2xl">{t('userList.subtitle')}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button onClick={handleRefresh} className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-sm font-bold text-gray-700 transition-colors">
+                        <button
+                            onClick={handleRefresh}
+                            disabled={isLoading}
+                            className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 rounded-md text-sm font-bold text-gray-700 transition-colors"
+                        >
                             <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
                             {t('userList.refresh')}
                         </button>
@@ -101,6 +119,7 @@ export default function UserListPage() {
                                 placeholder={t('userList.filterPlaceholder')}
                                 value={phrase}
                                 onChange={(e) => setPhrase(e.target.value)}
+                                onKeyDown={handleKeyDown}
                                 className="pl-10 pr-4 py-2 bg-gray-200 border-none rounded-md text-sm font-semibold text-gray-700 focus:ring-2 focus:ring-[#7A1014] outline-none w-64 transition-all"
                             />
                         </div>
@@ -109,7 +128,12 @@ export default function UserListPage() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                        <table className="w-full text-left border-collapse relative">
+                            {isLoading && (
+                                <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10">
+                                    <RefreshCw className="animate-spin text-[#7A1014]" size={32} />
+                                </div>
+                            )}
                             <thead>
                             <tr className="border-b border-gray-100">
                                 <th className="py-6 px-8 text-xs font-bold text-gray-700 uppercase tracking-widest">{t('userList.table.role')}</th>
@@ -122,36 +146,68 @@ export default function UserListPage() {
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                            {data?.content?.map((row) => (
-                                <tr key={row.account.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="py-4 px-8 align-middle">
-                                        <div className="flex flex-col items-start">
-                                            {row.accessLevels.filter(al => al.active).map(al => renderRoleBadge(al.accessLevelName))}
-                                        </div>
-                                    </td>
-                                    <td className="py-4 px-6 text-sm text-gray-800 font-medium">{row.account.name}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-800 font-medium">{row.account.surname}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-500">{row.account.login}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-500">{row.account.email}</td>
-                                    <td className="py-4 px-6 text-sm text-gray-500">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
-                                    <td
-                                        className="py-4 px-8 text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors"
-                                        onClick={() => navigate(PATHS.USER_EDIT.replace(':id', row.account.id))}
-                                    >
-                                        {t('userList.table.edit')}
-                                    </td>
-                                    <td className="py-4 px-8">
-                                        <button
-                                            onClick={() => setSelectedUser(row.account)}
-                                            className="text-sm font-bold text-[#7A1014] hover:text-red-900 transition-colors"
-                                        >
-                                            {t('userList.changePassword')}
-                                        </button>
+                            {data?.content?.length === 0 ? (
+                                <tr>
+                                    <td colSpan={7} className="py-8 text-center text-gray-500 font-medium">
+                                        {t('userList.noResults', 'Brak wyników')}
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                data?.content?.map((row) => (
+                                    <tr key={row.account.id} className="hover:bg-gray-50 transition-colors">
+                                        <td className="py-4 px-8 align-middle">
+                                            <div className="flex flex-col items-start">
+                                                {row.accessLevels.filter(al => al.active).map(al => renderRoleBadge(al.accessLevelName))}
+                                            </div>
+                                        </td>
+                                        <td className="py-4 px-6 text-sm text-gray-800 font-medium">{row.account.name}</td>
+                                        <td className="py-4 px-6 text-sm text-gray-800 font-medium">{row.account.surname}</td>
+                                        <td className="py-4 px-6 text-sm text-gray-500">{row.account.login}</td>
+                                        <td className="py-4 px-6 text-sm text-gray-500">{row.account.email}</td>
+                                        <td className="py-4 px-6 text-sm text-gray-500">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
+                                        <td className="py-4 px-8 flex gap-4">
+                                            <button
+                                                className="text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors"
+                                                onClick={() => navigate(PATHS.USER_EDIT.replace(':id', row.account.id))}
+                                            >
+                                                {t('userList.table.edit')}
+                                            </button>
+                                            <button
+                                                onClick={() => setSelectedUser(row.account)}
+                                                className="text-sm font-bold text-[#7A1014] hover:text-red-900 transition-colors"
+                                            >
+                                                {t('userList.changePassword')}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                             </tbody>
                         </table>
+                    </div>
+
+                    <div className="flex items-center justify-between px-8 py-4 border-t border-gray-100 bg-gray-50/50">
+                        <span className="text-sm text-gray-600 font-medium">
+                            {t('userList.pagination.page', 'Strona')} {data ? (data.number + 1) : 0} z {data ? data.totalPages : 0}
+                        </span>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={handlePrevPage}
+                                disabled={page === 0 || isLoading}
+                                className="flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-md text-sm font-bold text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                <ChevronLeft size={16} />
+                                {t('userList.pagination.prev', 'Poprzednia')}
+                            </button>
+                            <button
+                                onClick={handleNextPage}
+                                disabled={!data || data.last || isLoading}
+                                className="flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-md text-sm font-bold text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {t('userList.pagination.next', 'Następna')}
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -71,6 +71,8 @@
     "subtitle": "Efficiently manage institutional access, define academic roles, and monitor investigator activity across the university repository.",
     "refresh": "Refresh",
     "filterPlaceholder": "Filter by name, email...",
+    "noResults": "No results found",
+    "changePassword": "Change password",
     "table": {
       "role": "Role",
       "firstName": "First Name",
@@ -86,7 +88,10 @@
       "showing": "Showing",
       "to": "to",
       "of": "of",
-      "users": "users"
+      "users": "users",
+      "page": "Page",
+      "prev": "Previous",
+      "next": "Next"
     }
   },
   "userEdit": {
