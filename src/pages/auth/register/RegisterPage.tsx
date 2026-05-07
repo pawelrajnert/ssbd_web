@@ -5,12 +5,12 @@ import { User, Mail, Lock, CheckSquare, Square, IdCard, MailCheck } from "lucide
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { PATHS } from "../../routes/paths.ts";
-import axiosInstance from "../../api/auth/middleware.ts";
-import LinkButton from "../../shared/components/buttons/LinkButton";
-import SubmitButton from "../../shared/components/buttons/SubmitButton";
+import { PATHS } from "../../../routes/paths.ts";
+import axiosInstance from "../../../api/auth/middleware.ts";
+import LinkButton from "../../../shared/components/buttons/LinkButton.tsx";
+import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
 
-import { registerSchema, type RegisterFormData } from "../../shared/validators/registerSchema.ts";
+import { registerSchema, type RegisterFormData } from "../../../shared/validators/registerSchema.ts";
 
 export default function RegisterPage() {
     const { t } = useTranslation();

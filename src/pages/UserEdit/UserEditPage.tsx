@@ -13,7 +13,9 @@ import {useBreadcrumb} from "../../contexts/BreadcrumbContext";
 import {emailChangeService} from "../../services/emailChangeService.ts";
 import {emailSchema} from "../../shared/validators/emailSchema.ts";
 import {useAuth} from "../../hooks/useAuth.ts";
-import { ChangeOwnPasswordForm } from "../profile/ChangeOwnPasswordForm";
+import {ChangeOwnPasswordForm} from "./ChangeOwnPasswordForm.tsx";
+import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.tsx";
+import ChangeOtherPasswordModal from "../UserList/ChangeOtherPasswordModal.tsx";
 
 export default function UserEditPage() {
     const {id} = useParams<{ id: string }>();
@@ -34,6 +36,9 @@ export default function UserEditPage() {
     const [surnameValue, setSurnameValue] = useState('');
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [emailSuccess, setEmailSuccess] = useState(false);
+    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+    const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
+    const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
 
     const fetchUser = useCallback(async (userId: string) => {
         try {
@@ -64,15 +69,13 @@ export default function UserEditPage() {
     }, [navigate, setLocalRoles]);
 
     useEffect(() => {
-        const effectiveId = id || "me"
-        // const isAdmin = userRole?.includes(RoleEnum.ADMINISTRATOR);
+        const effectiveId = id || "me";
         if (effectiveId !== "me" && !isAdmin) {
+            // It's best to use the PATHS constant if you have one mapped to '/users/me'
             navigate('/users/me', {replace: true});
             return;
         }
-        console.log(userLogin)
-        console.log(userRole)
-        console.log(effectiveId)
+
         if (effectiveId === "me" && userLogin) {
             fetchUserByLogin(userLogin);
         } else if (effectiveId && effectiveId !== "me") {
@@ -87,7 +90,6 @@ export default function UserEditPage() {
         return () => setDynamicBreadcrumb(null);
     }, [user, setDynamicBreadcrumb]);
 
-
     const handleBlock = async () => {
         if (!user || isBlocking) return;
 
@@ -100,7 +102,8 @@ export default function UserEditPage() {
             } else {
                 await userService.unblockUser(user.account.id, user.account.versionHash);
             }
-            if (id) await fetchUser(id);
+            await fetchUser(user.account.id);
+            setIsBlockModalOpen(false);
         } catch (err) {
             console.error(err);
             if (axios.isAxiosError(err)) {
@@ -110,6 +113,7 @@ export default function UserEditPage() {
             }
         } finally {
             setIsBlocking(false);
+            setIsBlockModalOpen(false)
         }
     };
 
@@ -125,7 +129,7 @@ export default function UserEditPage() {
             let latestUser = user;
 
             if (latestUser.account.email !== emailValue && isAdmin) {
-                const emailDTO: ChangeEmailDTO = {email: emailValue}
+                const emailDTO: ChangeEmailDTO = {email: emailValue};
                 await emailChangeService.changeEmailByAdmin(latestUser.account.id, emailDTO, currentHash);
 
                 latestUser = await userService.getAccountById(latestUser.account.id);
@@ -136,16 +140,16 @@ export default function UserEditPage() {
                     name: nameValue,
                     surname: surnameValue,
                 };
-                if (isAdmin){
+                if (isAdmin) {
                     await userService.updateUserDetails(latestUser.account.id, accountUpdateDTO, currentHash);
                     latestUser = await userService.getAccountById(latestUser.account.id);
-                }else{
+                } else {
                     latestUser = await userService.updateMyDetails(accountUpdateDTO, currentHash);
                     latestUser = await userService.getAccountByLogin(latestUser.account.login);
                 }
             }
             currentHash = latestUser.account.versionHash;
-            if(isAdmin) {
+            if (isAdmin) {
                 const initialRoles = user.accessLevels.filter(al => al.active).map(al => al.accessLevelName);
                 const rolesToGrant = localRoles.filter(r => !initialRoles.includes(r));
                 const rolesToRevoke = initialRoles.filter(r => !localRoles.includes(r));
@@ -162,7 +166,7 @@ export default function UserEditPage() {
             }
             setUser(latestUser);
             setLocalRoles(latestUser.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
-
+            setIsSaveModalOpen(false);
         } catch (err) {
             console.error(err);
             if (yup.ValidationError.isError(err)) {
@@ -177,17 +181,18 @@ export default function UserEditPage() {
             }
         } finally {
             setIsSaving(false);
+            setIsSaveModalOpen(false);
         }
     };
 
     const onEmailSubmit = async () => {
         try {
             await emailChangeService.requestEmailChange();
+            setEmailSuccess(true);
         } catch (error) {
             console.error("Failed to initiate email change:", error);
-            alert(t('emailChange.error', 'Failed to change email. Please try again.'));
+            alert(t('emailChange.main.error.default'));
         }
-        setEmailSuccess(true);
     };
 
     const handleDiscard = () => {
@@ -206,7 +211,7 @@ export default function UserEditPage() {
                 setEmailError(true);
             }
         }
-    }
+    };
 
     const toggleRole = (role: string) => {
         setLocalRoles(prev =>
@@ -216,11 +221,23 @@ export default function UserEditPage() {
 
     const renderRoleBadge = (roleName: string) => {
         if (roleName === RoleEnum.ADMINISTRATOR) {
-            return <span key={roleName}
-                         className="px-3 py-1 bg-red-100 text-[#7A1014] text-[10px] font-bold rounded-full tracking-wider">{t('userEdit.roles.adminBadge')}</span>;
+            return (
+                <span key={roleName}
+                      className="px-3 py-1 bg-red-100 text-[#7A1014] text-[10px] font-bold rounded-full tracking-wider">
+                    {t('userEdit.roles.adminBadge')}
+                </span>
+            );
         }
-        return <span key={roleName}
-                     className="px-3 py-1 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-full tracking-wider">{roleName === "TEACHER" ? t('userEdit.roles.teacher').toUpperCase() : roleName === "STUDENT" ? t('userEdit.roles.student').toUpperCase() : roleName}</span>;
+        return (
+            <span key={roleName}
+                  className="px-3 py-1 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-full tracking-wider">
+                {roleName === "TEACHER"
+                    ? t('userEdit.roles.teacher').toUpperCase()
+                    : roleName === "STUDENT"
+                        ? t('userEdit.roles.student').toUpperCase()
+                        : roleName}
+            </span>
+        );
     };
 
     const formatDate = (dateString?: string | null) => {
@@ -303,39 +320,51 @@ export default function UserEditPage() {
                                             className="w-full bg-transparent p-3 text-sm font-medium text-gray-600 outline-none pr-10 cursor-not-allowed"
                                         />
                                     </div>
+                                    {isAdmin && (
+                                        <div className="mt-2 text-right">
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsChangePasswordModalOpen(true)}
+                                                className="text-[10px] font-bold text-[#7A1014] hover:text-red-900 tracking-widest uppercase transition-colors"
+                                            >
+                                                {t('userList.changePassword')}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
+
                         {!isAdmin && (
                             <div className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-100">
                                 {!showPasswordForm ? (
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <h3 className="font-medium text-gray-800">{t('profile.security', 'Security')}</h3>
-                                            <p className="text-sm text-gray-500">{t('profile.securityDesc', 'Changing your password regularly can increase the security of your account.')}</p>
+                                            <h3 className="font-medium text-gray-800">{t('profile.security')}</h3>
+                                            <p className="text-sm text-gray-500">{t('profile.securityDesc')}</p>
                                         </div>
                                         <button
                                             onClick={() => setShowPasswordForm(true)}
                                             className="bg-[#7A1014] hover:bg-red-900 text-white font-bold px-4 py-2 rounded-md transition-colors text-xs tracking-widest uppercase"
                                         >
-                                            {t('profile.changeOwnPassword', 'Change own password')}
+                                            {t('profile.changeOwnPassword')}
                                         </button>
                                     </div>
                                 ) : (
                                     <div className="animate-in fade-in duration-300">
                                         <div className="flex justify-between items-center mb-4">
-                                            <h3 className="font-medium text-gray-800">{t('profile.changePassword', 'Change password')}</h3>
+                                            <h3 className="font-medium text-gray-800">{t('profile.changePassword')}</h3>
                                             <button
                                                 onClick={() => setShowPasswordForm(false)}
                                                 className="text-gray-400 hover:text-gray-600 font-bold text-sm"
                                             >
-                                                {t('profile.cancel', 'Cancel')}
+                                                {t('profile.cancel')}
                                             </button>
                                         </div>
                                         <ChangeOwnPasswordForm
                                             version={user.account.versionHash}
                                             onSuccess={() => {
-                                                alert(t('profile.passwordChangedSuccess', 'Password changed successfully!'));
+                                                alert(t('profile.passwordChangedSuccess'));
                                                 setShowPasswordForm(false);
                                             }}
                                         />
@@ -385,11 +414,9 @@ export default function UserEditPage() {
                                 ${isAdmin ? "" : "text-gray-600 bg-gray-50 cursor-not-allowed"}`}
                             />
                             {!isAdmin && (
-                                <>
-                                    <SubmitButton onClick={onEmailSubmit} className={"mt-8"} >
-                                        {t('emailChange.main.form.submitButton')}
-                                    </SubmitButton>
-                                </>
+                                <SubmitButton onClick={onEmailSubmit} className={"mt-8"}>
+                                    {t('emailChange.main.form.submitButton')}
+                                </SubmitButton>
                             )}
                             {emailError && (
                                 <p className="text-xs text-[#7A1014] font-semibold mt-2">
@@ -397,14 +424,14 @@ export default function UserEditPage() {
                                 </p>
                             )}
                             {emailSuccess && (
-                                <>
-                                    <p className={"mt-8"}>
+                                <div className="mt-4 p-4 bg-green-50 border border-green-100 rounded-md">
+                                    <p className="text-sm text-green-800 font-medium mb-1">
                                         {t('emailChange.main.success.description')}
                                     </p>
-                                    <p>
+                                    <p className="text-xs text-green-600">
                                         {t('emailChange.main.success.timeLimit')}
                                     </p>
-                                </>
+                                </div>
                             )}
                         </div>
 
@@ -420,22 +447,20 @@ export default function UserEditPage() {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div
-                                            onClick={handleBlock}
+                                            onClick={() => !isBlocking && setIsBlockModalOpen(true)}
                                             className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.isBlocked ? "bg-[#7A1014]" : "bg-gray-300"}`}
                                         >
                                             <div
-                                                className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}>
-                                            </div>
+                                                className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}></div>
                                         </div>
                                         <span className="text-sm font-bold text-gray-800">
-                                    {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
-        </span>
+                                            {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
+                                        </span>
                                     </div>
                                 </div>
 
-                                < div className="mb-10">
-                                    <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.roles.title')}
-                                    </h3>
+                                <div className="mb-10">
+                                    <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.roles.title')}</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         {[
                                             {id: RoleEnum.STUDENT, label: t('userEdit.roles.student')},
@@ -453,8 +478,7 @@ export default function UserEditPage() {
                                                         className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#7A1014] border-[#7A1014]' : 'bg-white border-gray-300'}`}>
                                                         {isChecked && (
                                                             <svg className="w-3 h-3 text-white" fill="none"
-                                                                 viewBox="0 0 24 24"
-                                                                 stroke="currentColor">
+                                                                 viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path strokeLinecap="round" strokeLinejoin="round"
                                                                       strokeWidth={3} d="M5 13l4 4L19 7"/>
                                                             </svg>
@@ -462,16 +486,16 @@ export default function UserEditPage() {
                                                     </div>
                                                     <span
                                                         className={`text-sm font-bold ${isChecked ? 'text-[#7A1014]' : 'text-gray-700'}`}>
-                                                {role.label}
-                                            </span>
+                                                        {role.label}
+                                                    </span>
                                                 </div>
                                             )
                                         })}
-
                                     </div>
                                 </div>
-                            </>)}
-                        < div className="flex items-center justify-end gap-4 pt-6">
+                            </>
+                        )}
+                        <div className="flex items-center justify-end gap-4 pt-6">
                             <button
                                 onClick={handleDiscard}
                                 disabled={isSaving}
@@ -480,7 +504,7 @@ export default function UserEditPage() {
                                 {t('userEdit.actions.discard')}
                             </button>
                             <SubmitButton
-                                onClick={handleSave}
+                                onClick={() => setIsSaveModalOpen(true)}
                                 isLoading={isSaving}
                                 className="w-auto mt-0 px-8 py-3 text-xs tracking-widest uppercase"
                             >
@@ -491,7 +515,41 @@ export default function UserEditPage() {
                     </div>
                 </div>
             </div>
+
+            <ConfirmationModal
+                isOpen={isSaveModalOpen}
+                title={t('common.confirmSaveTitle', 'Save Changes?')}
+                description={t('common.confirmSaveDesc', 'Are you sure you want to save these changes? This will permanently update the user\'s profile and system access levels.')}
+                confirmText={t('userEdit.actions.save')}
+                onConfirm={handleSave}
+                onCancel={() => setIsSaveModalOpen(false)}
+                isLoading={isSaving}
+            />
+
+            <ConfirmationModal
+                isOpen={isBlockModalOpen}
+                title={user.account.isBlocked ? t('common.confirmUnblockTitle', 'Unblock User?') : t('common.confirmBlockTitle', 'Block User?')}
+                description={
+                    user.account.isBlocked
+                        ? t('common.confirmUnblockDesc', 'Are you sure you want to unblock this user? They will immediately regain access to the system.')
+                        : t('common.confirmBlockDesc', 'Are you sure you want to block this user? They will be immediately disconnected and prevented from logging in.')
+                }
+                confirmText={user.account.isBlocked ? t('common.unblock', 'Unblock') : t('common.block', 'Block')}
+                onConfirm={handleBlock}
+                onCancel={() => setIsBlockModalOpen(false)}
+                isLoading={isBlocking}
+            />
+            {isAdmin && user && (
+                <ChangeOtherPasswordModal
+                    isOpen={isChangePasswordModalOpen}
+                    onClose={() => setIsChangePasswordModalOpen(false)}
+                    user={user.account}
+                    onSuccess={() => {
+                        setIsChangePasswordModalOpen(false);
+                        alert(t('profile.passwordChangedSuccess', 'Password changed successfully!'));
+                    }}
+                />
+            )}
         </div>
-    )
-        ;
+    );
 }

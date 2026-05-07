@@ -12,6 +12,7 @@ import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
 import LinkButton from "../../shared/components/buttons/LinkButton.tsx";
 import {type EmailChangeFormData, emailChangeSchema} from "../../shared/validators/emailChangeSchema.ts";
 import {useAuth} from "../../hooks/useAuth.ts";
+import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.tsx";
 
 export default function EmailChangeConfirmPage() {
     const {t} = useTranslation();
@@ -22,6 +23,9 @@ export default function EmailChangeConfirmPage() {
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState("");
 
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+    const [pendingData, setPendingData] = useState<EmailChangeFormData | null>(null);
+
     const {
         register,
         handleSubmit,
@@ -30,13 +34,21 @@ export default function EmailChangeConfirmPage() {
         resolver: yupResolver(emailChangeSchema)
     });
 
-    const onSubmit = async (data: EmailChangeFormData) => {
+    const onFormSubmit = (data: EmailChangeFormData) => {
+        setPendingData(data);
+        setIsConfirmModalOpen(true);
+    };
+
+    const handleConfirmChange = async () => {
+        if (!pendingData) return;
+
         setStatus('loading');
         setErrorMessage("");
 
         try {
-            await emailChangeService.confirmEmailChange(token!, data.password, data.newEmail);
+            await emailChangeService.confirmEmailChange(token!, pendingData.password, pendingData.newEmail);
             setStatus('success');
+            setIsConfirmModalOpen(false);
             logout();
         } catch (error) {
             console.error("Failed to change email", error);
@@ -50,6 +62,7 @@ export default function EmailChangeConfirmPage() {
             } else {
                 setErrorMessage(t('emailChange.confirm.error.unexpected'));
             }
+            setIsConfirmModalOpen(false);
         }
     };
 
@@ -104,7 +117,7 @@ export default function EmailChangeConfirmPage() {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-sm mx-auto">
+            <form onSubmit={handleSubmit(onFormSubmit)} className="w-full max-w-sm mx-auto">
                 <div className="mb-6">
                     <label htmlFor="newEmail"
                            className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
@@ -165,6 +178,16 @@ export default function EmailChangeConfirmPage() {
                     {t('emailChange.confirm.backButton')}
                 </LinkButton>
             </div>
+
+            <ConfirmationModal
+                isOpen={isConfirmModalOpen}
+                title={t('common.confirmEmailChangeTitle', 'Confirm Email Change?')}
+                description={t('common.confirmEmailChangeDesc', 'Are you sure you want to change your email address? You will be logged out and required to log back in using your new email address.')}
+                confirmText={t('emailChange.confirm.form.submitButton')}
+                onConfirm={handleConfirmChange}
+                onCancel={() => setIsConfirmModalOpen(false)}
+                isLoading={status === 'loading'}
+            />
         </div>
     );
 }

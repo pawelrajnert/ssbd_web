@@ -6,11 +6,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 
-import { PATHS } from "../../routes/paths.ts";
-import { useAuth } from "../../hooks/useAuth.ts";
-import { authService } from "../../services/authService.ts";
-import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
-import { _2faSchema, type _2faFormData } from "../../shared/validators/2FASchema.ts";
+import { PATHS } from "../../../routes/paths.ts";
+import { useAuth } from "../../../hooks/useAuth.ts";
+import { authService } from "../../../services/authService.ts";
+import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
+import { _2faSchema, type _2faFormData } from "../../../shared/validators/2FASchema.ts";
 
 export default function TwoFactorVerifyPage() {
     const { t } = useTranslation();

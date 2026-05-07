@@ -112,7 +112,8 @@
       "firstName": "Imię",
       "surname": "Nazwisko",
       "email": "Adres e-mail",
-      "emailError": "Podaj poprawny adres e-mail."
+      "emailError": "Podaj poprawny adres e-mail.",
+      "changeEmail": "Zmień e-mail"
     },
     "blockStatus": {
       "title": "Blokada konta użytkownika",
@@ -139,7 +140,22 @@
     "oldPassword": "Stare hasło",
     "newPassword": "Nowe hasło",
     "confirmNewPassword": "Potwierdź nowe hasło",
-    "applyChanges": "Zapisz zmiany"
+    "applyChanges": "Zapisz zmiany",
+    "loading": "Wczytywanie profilu...",
+    "errorLoad": "Nie udało się wczytać danych użytkownika.",
+    "accountSettings": "Ustawienia Konta",
+    "personalInfo": "Informacje osobiste",
+    "fullName": "Imię i Nazwisko",
+    "email": "E-mail",
+    "login": "Login",
+    "edit": "Edytuj",
+    "userList": "Lista Użytkowników",
+    "security": "Bezpieczeństwo",
+    "securityDesc": "Regularna zmiana hasła zwiększa bezpieczeństwo Twojego konta.",
+    "changeOwnPassword": "Zmień własne hasło",
+    "changePassword": "Zmień hasło",
+    "cancel": "Anuluj",
+    "passwordChangedSuccess": "Hasło zostało pomyślnie zmienione!"
   },
   "error": {
     "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne."
@@ -190,6 +206,79 @@
         "expired": "Link wygasł lub jest nieprawidłowy.",
         "unexpected": "Wystąpił nieoczekiwany błąd."
       }
+    }
+  },
+  "passwordReset": {
+    "confirm": {
+      "invalidLinkTitle": "Nieprawidłowy link",
+      "invalidLinkDesc": "Ten link do zresetowania hasła jest nieprawidłowy lub nie zawiera wymaganego tokenu bezpieczeństwa.",
+      "requestNewLink": "Poproś o nowy link",
+      "successTitle": "Hasło zostało zaktualizowane",
+      "successDesc": "Twoje hasło zostało pomyślnie zmienione. Możesz teraz zalogować się używając nowych danych.",
+      "returnToLogin": "Wróć do logowania",
+      "title": "Utwórz nowe hasło",
+      "subtitle": "Proszę wprowadzić poniżej nowe hasło.",
+      "newPassword": "Nowe hasło",
+      "confirmPassword": "Potwierdź hasło",
+      "submit": "Zresetuj hasło",
+      "backToLogin": "Powrót do logowania",
+      "errorExpired": "Nie udało się zresetować hasła. Link mógł wygasnąć lub został już użyty.",
+      "errorUnexpected": "Wystąpił nieoczekiwany błąd."
+    },
+    "init": {
+      "successTitle": "Sprawdź swoją skrzynkę",
+      "successDesc1": "Wysłaliśmy link do zresetowania hasła na adres ",
+      "successDesc2": ". Proszę sprawdź swoją skrzynkę odbiorczą oraz folder SPAM.",
+      "returnToLogin": "Wróć do logowania",
+      "title": "Zresetuj hasło",
+      "subtitle": "Wprowadź swój adres e-mail, a my wyślemy Ci bezpieczny link do zresetowania hasła.",
+      "email": "E-mail",
+      "submit": "Wyślij link resetujący",
+      "backToLogin": "Powrót do logowania",
+      "errorSend": "Wystąpił błąd podczas wysyłania linku resetującego.",
+      "errorUnexpected": "Wystąpił nieoczekiwany błąd."
+    }
+  },
+  "header": {
+    "title": "Kustosz Akademicki",
+    "subtitle": "Politechnika Łódzka",
+    "dashboard": "Panel Główny",
+    "userManagement": "Zarządzanie Użytkownikami",
+    "defaultUser": "Użytkownik",
+    "defaultGuest": "Gość",
+    "logout": "Wyloguj się"
+  },
+  "about": {
+    "title": "aleikum asalam"
+  },
+  "validation": {
+    "required": "To pole jest wymagane",
+    "email": {
+      "invalid": "Proszę podać poprawny adres e-mail (np. nazwa@domena.pl)"
+    },
+    "password": {
+      "minLength": "Hasło musi zawierać co najmniej 12 znaków",
+      "maxLength": "Hasło może zawierać maksymalnie 64 znaki",
+      "uppercase": "Hasło musi zawierać co najmniej jedną wielką literę",
+      "lowercase": "Hasło musi zawierać co najmniej jedną małą literę",
+      "number": "Hasło musi zawierać co najmniej jedną cyfrę",
+      "specialChar": "Hasło musi zawierać co najmniej jedną wielką literę i znak specjalny",
+      "confirmRequired": "Proszę potwierdzić swoje hasło",
+      "mismatch": "Hasła nie są identyczne"
+    },
+    "user": {
+      "nameMin": "Imię musi zawierać co najmniej 3 znaki",
+      "nameMax": "Imię nie może przekraczać 32 znaków",
+      "nameFormat": "Imię musi zaczynać się od litery i może zawierać tylko litery, spacje, myślniki i apostrofy",
+      "surnameMin": "Nazwisko musi zawierać co najmniej 3 znaki",
+      "surnameMax": "Nazwisko nie może przekraczać 32 znaków",
+      "surnameFormat": "Nazwisko musi zaczynać się od litery i może zawierać tylko litery, spacje, myślniki i apostrofy",
+      "loginMin": "Login musi zawierać co najmniej 3 znaki",
+      "loginMax": "Login nie może przekraczać 32 znaków",
+      "loginFormat": "Login może zawierać tylko litery i cyfry"
+    },
+    "terms": {
+      "required": "Musisz zaakceptować regulamin i warunki"
     }
   }
 }

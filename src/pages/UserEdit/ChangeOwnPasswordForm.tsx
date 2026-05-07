@@ -1,0 +1,150 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
+import { changeOwnPassword } from '../../services/accountService.ts';
+import SubmitButton from '../../shared/components/buttons/SubmitButton.tsx';
+import axios from "axios";
+import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.tsx";
+
+const passwordChangeSchema = yup.object({
+    oldPassword: yup.string()
+        .required("validation.required"),
+    newPassword: yup.string()
+        .required("validation.required")
+        .min(12, "validation.password.minLength")
+        .matches(/[A-Z]/, "validation.password.uppercase")
+        .matches(/[a-z]/, "validation.password.lowercase")
+        .matches(/[0-9]/, "validation.password.number"),
+    confirmPassword: yup.string()
+        .required("validation.password.confirmRequired")
+        .oneOf([yup.ref('newPassword')], "validation.password.mismatch")
+}).required();
+
+type PasswordChangeFormData = yup.InferType<typeof passwordChangeSchema>;
+
+export interface ChangeOwnPasswordFormProps {
+    version: string;
+    onSuccess: () => void;
+}
+
+export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordFormProps) {
+    const { t } = useTranslation();
+
+    const [pendingData, setPendingData] = useState<PasswordChangeFormData | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [apiError, setApiError] = useState<string | null>(null);
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm<PasswordChangeFormData>({
+        resolver: yupResolver(passwordChangeSchema)
+    });
+
+    const onFormSubmit = (data: PasswordChangeFormData) => {
+        setPendingData(data);
+        setIsModalOpen(true);
+    };
+
+    // const onSubmit = async (data: FormValues) => {
+    //     setApiError(null);
+    //     try {
+    //         await changeOwnPassword({
+    //             oldPassword: data.oldPassword,
+    //             newPassword: data.newPassword
+    //         }, version);
+    //         reset();
+    //         onSuccess();
+    //     } catch (err: any) {
+    //         setApiError('error.changePasswordFailed');
+    //     }
+    // };
+    const handleConfirmChange = async () => {
+        if (!pendingData) return;
+
+        setIsLoading(true);
+        setApiError(null);
+
+        try {
+            // Note: Update this method name if your accountService uses a different name
+            await changeOwnPassword({
+                oldPassword: pendingData.oldPassword,
+                newPassword: pendingData.newPassword},
+                version
+            );
+
+            reset();
+            setIsModalOpen(false);
+            onSuccess();
+        } catch (error) {
+            console.error("Failed to change password", error);
+            if (axios.isAxiosError(error)) {
+                setApiError(error.response?.data?.message || error.response?.data || t('error.changePasswordFailed'));
+            } else {
+                setApiError(t('error.changePasswordFailed'));
+            }
+        } finally {
+            setIsLoading(false);
+            setIsModalOpen(false);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4 max-w-sm">
+            {apiError && (
+                <div className="p-3 bg-red-50 text-red-700 rounded-md text-sm">
+                    {t(apiError)}
+                </div>
+            )}
+
+            <div>
+                <input
+                    type="password"
+                    placeholder={t('profile.oldPassword')}
+                    className={`w-full border p-2 rounded ${errors.oldPassword ? 'border-red-500' : 'border-gray-300'}`}
+                    {...register('oldPassword')}
+                />
+                {errors.oldPassword && <p className="text-red-500 text-xs mt-1">{t(errors.oldPassword.message as string)}</p>}
+            </div>
+
+            <div>
+                <input
+                    type="password"
+                    placeholder={t('profile.newPassword')}
+                    className={`w-full border p-2 rounded ${errors.newPassword ? 'border-red-500' : 'border-gray-300'}`}
+                    {...register('newPassword')}
+                />
+                {errors.newPassword && <p className="text-red-500 text-xs mt-1">{t(errors.newPassword.message as string)}</p>}
+            </div>
+
+            <div>
+                <input
+                    type="password"
+                    placeholder={t('profile.confirmNewPassword')}
+                    className={`w-full border p-2 rounded ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                    {...register('confirmPassword')}
+                />
+                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{t(errors.confirmPassword.message as string)}</p>}
+            </div>
+
+            <SubmitButton type="submit" className="w-auto px-6 py-2 text-xs tracking-widest uppercase">
+                {t('profile.applyChanges')}
+            </SubmitButton>
+
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                title={t('common.confirmPasswordChangeTitle', 'Change Password?')}
+                description={t('common.confirmPasswordChangeDesc', 'Are you sure you want to change your password? You will be required to use this new password the next time you log in.')}
+                confirmText={t('profile.applyChanges')}
+                onConfirm={handleConfirmChange}
+                onCancel={() => setIsModalOpen(false)}
+                isLoading={isLoading}
+            />
+        </form>
+    );
+};

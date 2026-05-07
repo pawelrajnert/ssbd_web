@@ -6,11 +6,11 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 
-import { PATHS } from "../../routes/paths.ts";
-import { useAuth } from "../../hooks/useAuth.ts";
-import { authService } from "../../services/authService.ts";
-import SubmitButton from "../../shared/components/buttons/SubmitButton.tsx";
-import { loginSchema, type LoginFormData } from "../../shared/validators/loginSchema.ts";
+import { PATHS } from "../../../routes/paths.ts";
+import { useAuth } from "../../../hooks/useAuth.ts";
+import { authService } from "../../../services/authService.ts";
+import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
+import { loginSchema, type LoginFormData } from "../../../shared/validators/loginSchema.ts";
 
 import { useEffect } from "react";
 
