@@ -214,6 +214,7 @@ export default function UserListPage() {
 
             {selectedUser && (
                 <ChangePasswordModal
+                    isOpen={true}
                     user={selectedUser}
                     onClose={() => setSelectedUser(null)}
                     onSuccess={() => {
