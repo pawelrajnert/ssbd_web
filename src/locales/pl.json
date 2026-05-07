@@ -46,6 +46,24 @@
       "error": "Aktywacja Nie Powiodła Się",
       "errorSub": "Link aktywacyjny jest nieprawidłowy, wygasł lub Twoje konto jest już aktywne.",
       "back": "WRÓĆ DO LOGOWANIA"
+    },
+    "2fa": {
+      "heading": "Weryfikacja",
+      "description": "Na Twój adres e-mail przypisany do konta przesłaliśmy 8-cyfrowy kod uwierzytelniający. Wprowadź go poniżej.",
+      "inputLabel": "Kod autoryzacyjny (8 cyfr)",
+      "submit": "Zaloguj się",
+      "resend": "Nie otrzymałeś kodu? Wyślij ponownie",
+      "cancel": "Anuluj i wróć do logowania",
+      "code": {
+        "required": "Kod autoryzacyjny jest wymagany",
+        "validationError": "Kod musi składać się dokładnie z 8 cyfr",
+        "invalid": "Nieprawidłowy kod weryfikacyjny.",
+        "retry": {
+          "success": "Nowy kod został wysłany! Sprawdź swoją skrzynkę.",
+          "fail": "Nie udało się wysłać kodu ponownie."
+        },
+        "unexpectedError": "Wystąpił nieoczekiwany błąd."
+      }
     }
   },
   "userList": {

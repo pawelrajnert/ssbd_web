@@ -18,6 +18,24 @@
       "errorBlocked": "Your account has been blocked. Please contact the administrator.",
       "errorGeneric": "An unexpected error occurred. Please try again later."
     },
+    "2fa": {
+      "heading": "Verification",
+      "description": "We have sent an 8-digit authentication code to the email address associated with your account. Enter it below.",
+      "inputLabel": "Authentication code (8 digits)",
+      "submit": "Log In",
+      "resend": "Didn't receive the code? Resend",
+      "cancel": "Cancel and return to login",
+      "code": {
+        "required": "Authentication code is required",
+        "validationError": "The code must consist of exactly 8 digits",
+        "invalid": "Invalid verification code.",
+        "retry": {
+          "success": "A new code has been sent! Check your inbox.",
+          "fail": "Failed to resend the code."
+        },
+        "unexpectedError": "An unexpected error occurred."
+      }
+    },
     "register": {
       "heading": "Create Account",
       "subheading": "Institutional access for faculty and researchers",
