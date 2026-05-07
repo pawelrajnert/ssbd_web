@@ -9,9 +9,13 @@ export const authService = {
         const response = await axiosInstance.post('/auth/check2FA', { login, auth2F });
         return response.data;
     },
-    
     resend2FA: async (login: string) => {
         const response = await axiosInstance.post('/auth/resend2FA', { login });
         return response.data;
     }
+};
+
+export const loginWithGoogle = async (idToken: string) => {
+    const response = await axiosInstance.post('/auth/google', { idToken });
+    return response.data;
 };

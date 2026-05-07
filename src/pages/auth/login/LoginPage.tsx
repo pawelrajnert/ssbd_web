@@ -1,18 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { User, Lock, CheckSquare, Square } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { GoogleLogin } from '@react-oauth/google';
 
 import { PATHS } from "../../../routes/paths.ts";
 import { useAuth } from "../../../hooks/useAuth.ts";
-import { authService } from "../../../services/authService.ts";
+import {authService, loginWithGoogle} from "../../../services/authService.ts";
 import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
 import { loginSchema, type LoginFormData } from "../../../shared/validators/loginSchema.ts";
-
-import { useEffect } from "react";
 
 export default function LoginPage() {
     const { t } = useTranslation();
@@ -74,8 +73,22 @@ export default function LoginPage() {
         }
     };
 
-
-
+    const handleGoogleLogin = async (credential: string) => {
+        setGlobalError(null);
+        setIsLoading(true);
+        try {
+            const response = await loginWithGoogle(credential);
+            if (response?.token) {
+                setTokens(response.token, response.refreshToken);
+                const from = location.state?.from?.pathname || PATHS.PROFILE;
+                navigate(from, { replace: true });
+            }
+        } catch {
+            setGlobalError(t('auth.login.errorGoogle'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="flex flex-col w-full px-4 animate-in fade-in duration-500">
@@ -148,6 +161,35 @@ export default function LoginPage() {
                 <SubmitButton type="submit" isLoading={isLoading} className="mt-2 tracking-wide">
                     {t('auth.login.button')}
                 </SubmitButton>
+
+                <div className="mt-6">
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-gray-500">
+                                {t('auth.login.orLoginWith')}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 flex justify-center">
+                        <GoogleLogin
+                            onSuccess={(credentialResponse) => {
+                                if (credentialResponse.credential) {
+                                    handleGoogleLogin(credentialResponse.credential);
+                                }
+                            }}
+                            onError={() => {
+                                setGlobalError(t('auth.login.errorGoogle'));
+                            }}
+                            useOneTap
+                            shape="pill"
+                            theme="outline"
+                        />
+                    </div>
+                </div>
 
                 <div className="text-center mt-6">
                     <Link to={PATHS.FORGOT_PASSWORD} className="text-xs font-bold text-[#7A1014] hover:underline">
