@@ -11,6 +11,7 @@ export const PATHS = {
     PROFILE: "/profile",
     OWN_EMAIL_CHANGE_MAIN: "/email/change",
     OWN_EMAIL_CHANGE_CONFIRM: "/change-email",
+    OWN_EMAIL_CHANGE_REVERT: "/revert-email",
     _2FA_VERIFY: "/login/2fa"
 } as const;
 
