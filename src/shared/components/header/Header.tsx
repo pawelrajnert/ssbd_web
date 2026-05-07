@@ -1,14 +1,14 @@
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { Bell, Settings } from "lucide-react";
-import { useAuth } from "../../../hooks/useAuth";
-import { PATHS } from "../../../routes/paths";
-import { useBreadcrumb } from "../../../contexts/BreadcrumbContext";
+import {useLocation, useNavigate, Link} from "react-router-dom";
+import {Bell, Settings} from "lucide-react";
+import {useAuth} from "../../../hooks/useAuth";
+import {PATHS} from "../../../routes/paths";
+import {useBreadcrumb} from "../../../contexts/BreadcrumbContext";
 
 export default function Header() {
-    const { logout, userRole, userLogin } = useAuth();
+    const {logout, userRole, userLogin} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    const { dynamicBreadcrumb } = useBreadcrumb();
+    const {dynamicBreadcrumb} = useBreadcrumb();
 
     const handleLogout = () => {
         logout();
@@ -17,7 +17,7 @@ export default function Header() {
 
     const generateBreadcrumbs = () => {
         const paths = location.pathname.split('/').filter(p => p !== '');
-        if (paths.length === 0) return [{ name: "Dashboard", path: "/", isLast: true }];
+        if (paths.length === 0) return [{name: "Dashboard", path: "/", isLast: true}];
 
         let currentPath = "";
         return paths.map((path, index) => {
@@ -33,7 +33,7 @@ export default function Header() {
                 formattedName = dynamicBreadcrumb;
             }
 
-            return { name: formattedName, path: currentPath, isLast };
+            return {name: formattedName, path: currentPath, isLast};
         });
     };
 
@@ -42,14 +42,16 @@ export default function Header() {
     return (
         <header className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200">
             <div className="flex items-center gap-8">
-                <div>
-                    <h1 className="text-xl font-bold text-gray-900 leading-tight">
-                        Academic Curator
-                    </h1>
-                    <p className="text-xs text-gray-500 font-semibold tracking-wider uppercase">
-                        Lodz University of Technology
-                    </p>
-                </div>
+                <Link to={"/"}>
+                    <div>
+                        <h1 className="text-xl font-bold text-gray-900 leading-tight">
+                            Academic Curator
+                        </h1>
+                        <p className="text-xs text-gray-500 font-semibold tracking-wider uppercase">
+                            Lodz University of Technology
+                        </p>
+                    </div>
+                </Link>
                 <div className="h-8 w-px bg-red-100 hidden md:block"></div>
                 <nav className="hidden md:flex items-center gap-2 text-sm font-medium">
                     {breadcrumbs.map((crumb, index) => (
@@ -71,10 +73,10 @@ export default function Header() {
             <div className="flex items-center gap-6">
                 <div className="flex items-center gap-4 text-gray-600">
                     <button className="hover:text-[#7A1014] transition-colors">
-                        <Bell size={20} />
+                        <Bell size={20}/>
                     </button>
                     <button className="hover:text-[#7A1014] transition-colors">
-                        <Settings size={20} />
+                        <Settings size={20}/>
                     </button>
                 </div>
                 <div className="h-8 w-px bg-gray-200"></div>
@@ -83,16 +85,20 @@ export default function Header() {
                         <p className="text-sm font-bold text-gray-900">{userLogin || "User"}</p>
                         <p className="text-xs text-gray-500 tracking-wider uppercase">{userRole || "Guest"}</p>
                     </div>
-                    <div className="relative">
-                        <div className="w-10 h-10 bg-red-500 rounded-md overflow-hidden flex items-center justify-center">
-                            <img
-                                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userLogin || 'default'}`}
-                                alt="Avatar"
-                                className="w-full h-full object-cover"
-                            />
+                    <Link to={PATHS.PROFILE}>
+                        <div className="relative">
+                            <div
+                                className="w-10 h-10 bg-red-500 rounded-md overflow-hidden flex items-center justify-center">
+                                <img
+                                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userLogin || 'default'}`}
+                                    alt="Avatar"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <span
+                                className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
                         </div>
-                        <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
-                    </div>
+                    </Link>
                 </div>
                 <button
                     onClick={handleLogout}
