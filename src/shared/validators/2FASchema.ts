@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const _2faSchema = yup.object({
-    Auth2F: yup.string()
+    auth2F: yup.string()
         .required("auth.2fa.code.required")
         .matches(/^[0-9]{8}$/, "auth.2fa.code.validationError")
 }).required();

@@ -27,7 +27,7 @@ export default function TwoFactorVerifyPage() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<_2faFormData>({
         resolver: yupResolver(_2faSchema),
-        defaultValues: { Auth2F: "" }
+        defaultValues: { auth2F: "" }
     });
 
     if (!userLogin) {
@@ -39,7 +39,7 @@ export default function TwoFactorVerifyPage() {
         setSuccessMessage(null);
         setIsLoading(true);
         try {
-            const response = await authService.verify2FA(userLogin, data.Auth2F);
+            const response = await authService.verify2FA(userLogin, data.auth2F);
 
             setTokens(response.token, response.refreshToken);
 
@@ -113,15 +113,15 @@ export default function TwoFactorVerifyPage() {
                             maxLength={8}
                             pattern="[0-9]*"
                             autoComplete="one-time-code"
-                            className={`w-full pl-8 py-1 outline-none text-xl tracking-[0.3em] font-mono bg-transparent ${errors.Auth2F ? "text-red-500" : "text-gray-800"}`}
-                            {...register("Auth2F", {
+                            className={`w-full pl-8 py-1 outline-none text-xl tracking-[0.3em] font-mono bg-transparent ${errors.auth2F ? "text-red-500" : "text-gray-800"}`}
+                            {...register("auth2F", {
                                 onChange: (e) => {
                                     e.target.value = e.target.value.replace(/[^0-9]/g, '');
                                 }
                             })}
                         />
                     </div>
-                    {errors.Auth2F && <p className="text-red-500 text-[10px] mt-1">{errors.Auth2F.message}</p>}
+                    {errors.auth2F && <p className="text-red-500 text-[10px] mt-1">{errors.auth2F.message}</p>}
                 </div>
 
                 <SubmitButton type="submit" isLoading={isLoading} className="mt-6 tracking-wide w-full">

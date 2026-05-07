@@ -5,8 +5,8 @@ export const authService = {
         const response = await axiosInstance.post('/auth/login', { login, password });
         return response.data;
     },
-    verify2FA: async (login: string, Auth2F: string) => {
-        const response = await axiosInstance.post('/auth/check2FA', { login, Auth2F });
+    verify2FA: async (login: string, auth2F: string) => {
+        const response = await axiosInstance.post('/auth/check2FA', { login, auth2F });
         return response.data;
     },
     
