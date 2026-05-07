@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { User, Mail, Lock, CheckSquare, Square, IdCard, MailCheck } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
+import { User, Mail, Lock,  IdCard, MailCheck } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { PATHS } from "../../../routes/paths.ts";
@@ -21,7 +21,6 @@ export default function RegisterPage() {
     const {
         register,
         handleSubmit,
-        control,
         formState: { errors }
     } = useForm<RegisterFormData>({
         resolver: yupResolver(registerSchema),
@@ -113,7 +112,7 @@ export default function RegisterPage() {
                                 {...register("name")}
                             />
                         </div>
-                        {errors.name && <p className="text-red-500 text-[10px] mt-1">{errors.name.message}</p>}
+                        {errors.name?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.name.message)}</p>}
                     </div>
 
                     <div className="w-1/2">
@@ -128,7 +127,7 @@ export default function RegisterPage() {
                                 {...register("surname")}
                             />
                         </div>
-                        {errors.surname && <p className="text-red-500 text-[10px] mt-1">{errors.surname.message}</p>}
+                        {errors.surname?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.surname.message)}</p>}
                     </div>
                 </div>
 
@@ -145,7 +144,7 @@ export default function RegisterPage() {
                             {...register("login")}
                         />
                     </div>
-                    {errors.login && <p className="text-red-500 text-[10px] mt-1">{errors.login.message}</p>}
+                    {errors.login?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.login.message)}</p>}
                 </div>
 
                 <div>
@@ -161,7 +160,7 @@ export default function RegisterPage() {
                             {...register("email")}
                         />
                     </div>
-                    {errors.email && <p className="text-red-500 text-[10px] mt-1">{errors.email.message}</p>}
+                    {errors.email?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.email.message)}</p>}
                 </div>
 
                 <div className="flex gap-4">
@@ -178,8 +177,8 @@ export default function RegisterPage() {
                                 {...register("password")}
                             />
                         </div>
-                        {errors.password ?
-                            <p className="text-red-500 text-[10px] mt-1">{errors.password.message}</p> :
+                        {errors.password?.message ?
+                            <p className="text-red-500 text-[10px] mt-1">{t(errors.password.message)}</p> :
                             <p className="text-[10px] text-gray-400 mt-1">{t('auth.register.passwordHelper')}</p>
                         }
                     </div>
@@ -196,32 +195,32 @@ export default function RegisterPage() {
                                 {...register("confirmPassword")}
                             />
                         </div>
-                        {errors.confirmPassword && <p className="text-red-500 text-[10px] mt-1">{errors.confirmPassword.message}</p>}
+                        {errors.confirmPassword?.message && <p className="text-red-500 text-[10px] mt-1">{t(errors.confirmPassword.message)}</p>}
                     </div>
                 </div>
 
-                <div className="mt-6">
-                    <Controller
-                        name="termsAccepted"
-                        control={control}
-                        render={({ field }) => (
-                            <div>
-                                <div
-                                    className="flex items-start gap-3 cursor-pointer"
-                                    onClick={() => field.onChange(!field.value)}
-                                >
-                                    <div className="mt-0.5 text-red-800">
-                                        {field.value ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}
-                                    </div>
-                                    <p className="text-xs text-gray-600 leading-tight select-none">
-                                        {t('auth.register.terms')}
-                                    </p>
-                                </div>
-                                {errors.termsAccepted && <p className="text-red-500 text-[10px] mt-1">{errors.termsAccepted.message}</p>}
-                            </div>
-                        )}
-                    />
-                </div>
+                {/*<div className="mt-6">*/}
+                {/*    <Controller*/}
+                {/*        name="termsAccepted"*/}
+                {/*        control={control}*/}
+                {/*        render={({ field }) => (*/}
+                {/*            <div>*/}
+                {/*                <div*/}
+                {/*                    className="flex items-start gap-3 cursor-pointer"*/}
+                {/*                    onClick={() => field.onChange(!field.value)}*/}
+                {/*                >*/}
+                {/*                    <div className="mt-0.5 text-red-800">*/}
+                {/*                        {field.value ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}*/}
+                {/*                    </div>*/}
+                {/*                    <p className="text-xs text-gray-600 leading-tight select-none">*/}
+                {/*                        {t('auth.register.terms')}*/}
+                {/*                    </p>*/}
+                {/*                </div>*/}
+                {/*                {errors.termsAccepted?.message && <p className="text-red-500 text-[10px] mt-1">{(errors.termsAccepted.message)}</p>}*/}
+                {/*            </div>*/}
+                {/*        )}*/}
+                {/*    />*/}
+                {/*</div>*/}
 
                 <SubmitButton
                     type="submit"

@@ -147,4 +147,4 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
             />
         </form>
     );
-};
+}

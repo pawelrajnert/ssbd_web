@@ -136,8 +136,8 @@ export default function EmailChangeConfirmPage() {
                             disabled={status === 'loading'}
                         />
                     </div>
-                    {errors.newEmail && (
-                        <p className="text-red-500 text-xs mt-1">{errors.newEmail.message}</p>
+                    {errors.newEmail?.message && (
+                        <p className="text-red-500 text-xs mt-1">{t(errors.newEmail.message)}</p>
                     )}
                 </div>
 
@@ -159,8 +159,8 @@ export default function EmailChangeConfirmPage() {
                             disabled={status === 'loading'}
                         />
                     </div>
-                    {errors.password && (
-                        <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                    {errors.password?.message && (
+                        <p className="text-red-500 text-xs mt-1">{t(errors.password.message)}</p>
                     )}
                 </div>
 

@@ -126,8 +126,8 @@ export default function PasswordResetConfirmPage() {
                             disabled={status === 'loading'}
                         />
                     </div>
-                    {errors.newPassword && (
-                        <p className="text-red-500 text-xs mt-1">{errors.newPassword.message}</p>
+                    {errors.newPassword?.message && (
+                        <p className="text-red-500 text-xs mt-1">{t(errors.newPassword.message)}</p>
                     )}
                 </div>
 
@@ -149,8 +149,8 @@ export default function PasswordResetConfirmPage() {
                             disabled={status === 'loading'}
                         />
                     </div>
-                    {errors.confirmPassword && (
-                        <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
+                    {errors.confirmPassword?.message && (
+                        <p className="text-red-500 text-xs mt-1">{t(errors.confirmPassword.message)}</p>
                     )}
                 </div>
 
