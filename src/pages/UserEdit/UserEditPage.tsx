@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Lock} from "lucide-react";
+import {CheckCircle2, Lock} from "lucide-react";
 import axios from "axios";
 import * as yup from "yup";
 import {useTranslation} from "react-i18next";
@@ -18,11 +18,11 @@ import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.
 import ChangeOtherPasswordModal from "../UserList/ChangeOtherPasswordModal.tsx";
 
 export default function UserEditPage() {
-    const {id} = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const {t} = useTranslation();
-    const {setDynamicBreadcrumb} = useBreadcrumb();
-    const {userLogin, userRole} = useAuth();
+    const { t } = useTranslation();
+    const { setDynamicBreadcrumb } = useBreadcrumb();
+    const { userLogin, userRole } = useAuth();
     const isAdmin = userRole?.includes(RoleEnum.ADMINISTRATOR);
 
     const [user, setUser] = useState<AccountWithAccessLevelsDTO | null>(null);
@@ -30,16 +30,21 @@ export default function UserEditPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [isBlocking, setIsBlocking] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
     const [emailValue, setEmailValue] = useState('');
     const [emailError, setEmailError] = useState<boolean>(false);
+    const [isEmailRequesting, setIsEmailRequesting] = useState(false);
+    const [emailRequestError, setEmailRequestError] = useState<string | null>(null);
+    const [emailSuccess, setEmailSuccess] = useState(false);
+    const [resendStatus, setResendStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
     const [nameValue, setNameValue] = useState('');
     const [surnameValue, setSurnameValue] = useState('');
     const [showPasswordForm, setShowPasswordForm] = useState(false);
-    const [emailSuccess, setEmailSuccess] = useState(false);
+
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
     const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
     const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
-
     const fetchUser = useCallback(async (userId: string) => {
         try {
             const data = await userService.getAccountById(userId);
@@ -71,7 +76,6 @@ export default function UserEditPage() {
     useEffect(() => {
         const effectiveId = id || "me";
         if (effectiveId !== "me" && !isAdmin) {
-            // It's best to use the PATHS constant if you have one mapped to '/users/me'
             navigate('/users/me', {replace: true});
             return;
         }
@@ -186,12 +190,32 @@ export default function UserEditPage() {
     };
 
     const onEmailSubmit = async () => {
+        setIsEmailRequesting(true);
+        setEmailRequestError(null);
         try {
             await emailChangeService.requestEmailChange();
             setEmailSuccess(true);
         } catch (error) {
             console.error("Failed to initiate email change:", error);
-            alert(t('emailChange.main.error.default'));
+            if (axios.isAxiosError(error)) {
+                const msg = error.response?.data?.message;
+                setEmailRequestError(msg ? t(msg) : t('emailChange.main.error.default'));
+            } else {
+                setEmailRequestError(t('emailChange.main.error.unexpected'));
+            }
+        } finally {
+            setIsEmailRequesting(false);
+        }
+    };
+
+    const handleResend = async () => {
+        setResendStatus('loading');
+        try {
+            await emailChangeService.resendEmailChangeRequest();
+            setResendStatus('success');
+        } catch (error) {
+            console.error("Failed to resend email change token", error);
+            setResendStatus('error');
         }
     };
 
@@ -259,16 +283,14 @@ export default function UserEditPage() {
                 <h1 className="text-3xl font-bold text-gray-900 mb-8">{t('userEdit.title')}</h1>
 
                 {error && (
-                    <div
-                        className="mb-4 p-4 bg-red-50 text-[#7A1014] rounded-md border border-red-200 text-sm font-semibold">
+                    <div className="mb-4 p-4 bg-red-50 text-[#7A1014] rounded-md border border-red-200 text-sm font-semibold">
                         {error}
                     </div>
                 )}
 
                 <div className="flex flex-col md:flex-row gap-8 items-start">
                     <div className="w-full md:w-1/3 space-y-6">
-                        <div
-                            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center">
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center">
                             <h2 className="text-2xl font-extrabold text-gray-900 text-center">{user.account.name} {user.account.surname}</h2>
                             <div className="flex flex-wrap gap-2 justify-center mt-4">
                                 {localRoles.length > 0
@@ -281,10 +303,8 @@ export default function UserEditPage() {
                         <div className="bg-gray-100/50 rounded-r-2xl border-l-4 border-red-200 p-6">
                             <h3 className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-4">{t('userEdit.stats.title')}</h3>
                             <div className="flex justify-between items-center">
-                                <span
-                                    className="text-sm font-semibold text-gray-600">{t('userEdit.stats.lastLogin')}</span>
-                                <span
-                                    className="text-sm font-bold text-gray-900">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
+                                <span className="text-sm font-semibold text-gray-600">{t('userEdit.stats.lastLogin')}</span>
+                                <span className="text-sm font-bold text-gray-900">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
                             </div>
                         </div>
                     </div>
@@ -295,8 +315,7 @@ export default function UserEditPage() {
                             <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.credentials.title')}</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label
-                                        className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.credentials.login')}</label>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.credentials.login')}</label>
                                     <div className="relative bg-gray-50 border border-gray-200 rounded-md">
                                         <input
                                             type="text"
@@ -304,14 +323,12 @@ export default function UserEditPage() {
                                             readOnly
                                             className="w-full bg-transparent p-3 text-sm font-medium text-gray-600 outline-none pr-10 cursor-not-allowed"
                                         />
-                                        <Lock size={16}
-                                              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+                                        <Lock size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
                                     </div>
                                     <p className="text-[10px] text-gray-400 mt-2">{t('userEdit.credentials.loginHint')}</p>
                                 </div>
                                 <div>
-                                    <label
-                                        className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.credentials.password')}</label>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.credentials.password')}</label>
                                     <div className="relative bg-gray-50 border border-gray-200 rounded-md">
                                         <input
                                             type="password"
@@ -373,12 +390,11 @@ export default function UserEditPage() {
                             </div>
                         )}
 
-                        <hr className="border-gray-100 mb-8"/>
+                        <hr className="border-gray-100 mb-8" />
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label
-                                    className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.firstName')}</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.firstName')}</label>
                                 <input
                                     type="text"
                                     value={nameValue}
@@ -387,8 +403,7 @@ export default function UserEditPage() {
                                 />
                             </div>
                             <div>
-                                <label
-                                    className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.surname')}</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.surname')}</label>
                                 <input
                                     type="text"
                                     value={surnameValue}
@@ -398,9 +413,11 @@ export default function UserEditPage() {
                             </div>
                         </div>
 
+                        {/* --- UPDATED EMAIL SECTION --- */}
                         <div className="mb-8">
-                            <label
-                                className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.email')}</label>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                {t('userEdit.personal.email')}
+                            </label>
                             <input
                                 type="email"
                                 value={emailValue}
@@ -410,37 +427,71 @@ export default function UserEditPage() {
                                 onBlur={handleEmailOnBlur}
                                 className={`w-full border rounded-md p-3 text-sm font-medium transition-colors outline-none ${
                                     emailError ? "border-[#7A1014] focus:border-[#7A1014]" : "border-gray-200 focus:border-gray-300"
-                                }
-                                ${isAdmin ? "" : "text-gray-600 bg-gray-50 cursor-not-allowed"}`}
+                                } ${isAdmin ? "" : "text-gray-600 bg-gray-50 cursor-not-allowed"}`}
                             />
-                            {!isAdmin && (
-                                <SubmitButton onClick={onEmailSubmit} className={"mt-8"}>
-                                    {t('emailChange.main.form.submitButton')}
-                                </SubmitButton>
-                            )}
+
                             {emailError && (
                                 <p className="text-xs text-[#7A1014] font-semibold mt-2">
                                     {t('userEdit.personal.emailError')}
                                 </p>
                             )}
-                            {emailSuccess && (
-                                <div className="mt-4 p-4 bg-green-50 border border-green-100 rounded-md">
-                                    <p className="text-sm text-green-800 font-medium mb-1">
-                                        {t('emailChange.main.success.description')}
-                                    </p>
-                                    <p className="text-xs text-green-600">
-                                        {t('emailChange.main.success.timeLimit')}
-                                    </p>
+
+                            {emailRequestError && (
+                                <p className="text-xs text-[#7A1014] font-semibold mt-2">
+                                    {emailRequestError}
+                                </p>
+                            )}
+
+                            {!isAdmin && !emailSuccess && (
+                                <SubmitButton
+                                    onClick={onEmailSubmit}
+                                    isLoading={isEmailRequesting}
+                                    className="mt-6"
+                                >
+                                    {t('emailChange.main.form.submitButton')}
+                                </SubmitButton>
+                            )}
+
+                            {!isAdmin && emailSuccess && (
+                                <div className="mt-6 p-5 bg-green-50 border border-green-100 rounded-xl animate-in fade-in duration-300">
+                                    <div className="flex items-start gap-3">
+                                        <CheckCircle2 className="text-green-600 mt-0.5 flex-shrink-0" size={20} />
+                                        <div className="flex-1">
+                                            <p className="text-sm text-green-800 font-medium mb-1">
+                                                {t('emailChange.main.success.description')}
+                                            </p>
+                                            <p className="text-xs text-green-600 mb-4 font-semibold">
+                                                {t('emailChange.main.success.timeLimit')}
+                                            </p>
+
+                                            <div className="flex items-center gap-4">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleResend}
+                                                    disabled={resendStatus === 'loading' || resendStatus === 'success'}
+                                                    className="px-4 py-2 bg-white border border-green-200 hover:bg-green-100 text-green-700 text-xs font-bold tracking-widest uppercase rounded-md transition-colors disabled:opacity-50"
+                                                >
+                                                    {resendStatus === 'loading' ? t('common.loading', 'LOADING...') :
+                                                        resendStatus === 'success' ? t('emailChange.main.resendSuccess', 'SENT!') :
+                                                            t('emailChange.main.resendButton', 'RESEND EMAIL')}
+                                                </button>
+                                                {resendStatus === 'error' && (
+                                                    <span className="text-red-500 text-xs font-semibold">
+                                                        {t('emailChange.main.error.unexpected')}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
 
-                        <hr className="border-gray-100 mb-8"/>
+                        <hr className="border-gray-100 mb-8" />
 
                         {isAdmin && (
                             <>
-                                <div
-                                    className={`bg-gray-50 border border-gray-100 rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>
+                                <div className={`bg-gray-50 border border-gray-100 rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>
                                     <div>
                                         <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-1">{t('userEdit.blockStatus.title')}</h3>
                                         <p className="text-xs text-gray-500">{t('userEdit.blockStatus.hint')}</p>
@@ -450,8 +501,7 @@ export default function UserEditPage() {
                                             onClick={() => !isBlocking && setIsBlockModalOpen(true)}
                                             className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.isBlocked ? "bg-[#7A1014]" : "bg-gray-300"}`}
                                         >
-                                            <div
-                                                className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}></div>
+                                            <div className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}></div>
                                         </div>
                                         <span className="text-sm font-bold text-gray-800">
                                             {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
@@ -463,9 +513,9 @@ export default function UserEditPage() {
                                     <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.roles.title')}</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         {[
-                                            {id: RoleEnum.STUDENT, label: t('userEdit.roles.student')},
-                                            {id: RoleEnum.TEACHER, label: t('userEdit.roles.teacher')},
-                                            {id: RoleEnum.ADMINISTRATOR, label: t('userEdit.roles.admin')}
+                                            { id: RoleEnum.STUDENT, label: t('userEdit.roles.student') },
+                                            { id: RoleEnum.TEACHER, label: t('userEdit.roles.teacher') },
+                                            { id: RoleEnum.ADMINISTRATOR, label: t('userEdit.roles.admin') }
                                         ].map((role) => {
                                             const isChecked = localRoles.includes(role.id);
                                             return (
@@ -474,18 +524,14 @@ export default function UserEditPage() {
                                                     onClick={() => toggleRole(role.id)}
                                                     className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${isChecked ? 'bg-red-50 border-[#7A1014]' : 'bg-gray-50 border-transparent hover:border-gray-200'}`}
                                                 >
-                                                    <div
-                                                        className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#7A1014] border-[#7A1014]' : 'bg-white border-gray-300'}`}>
+                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#7A1014] border-[#7A1014]' : 'bg-white border-gray-300'}`}>
                                                         {isChecked && (
-                                                            <svg className="w-3 h-3 text-white" fill="none"
-                                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path strokeLinecap="round" strokeLinejoin="round"
-                                                                      strokeWidth={3} d="M5 13l4 4L19 7"/>
+                                                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                                             </svg>
                                                         )}
                                                     </div>
-                                                    <span
-                                                        className={`text-sm font-bold ${isChecked ? 'text-[#7A1014]' : 'text-gray-700'}`}>
+                                                    <span className={`text-sm font-bold ${isChecked ? 'text-[#7A1014]' : 'text-gray-700'}`}>
                                                         {role.label}
                                                     </span>
                                                 </div>
@@ -495,6 +541,7 @@ export default function UserEditPage() {
                                 </div>
                             </>
                         )}
+
                         <div className="flex items-center justify-end gap-4 pt-6">
                             <button
                                 onClick={handleDiscard}
@@ -539,6 +586,7 @@ export default function UserEditPage() {
                 onCancel={() => setIsBlockModalOpen(false)}
                 isLoading={isBlocking}
             />
+
             {isAdmin && user && (
                 <ChangeOtherPasswordModal
                     isOpen={isChangePasswordModalOpen}
