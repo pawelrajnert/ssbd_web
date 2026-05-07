@@ -14,18 +14,18 @@ export const getAccountByLogin = async (login: string) => {
     return response.data;
 };
 
-export const changeOwnPassword = async (data: ChangeOwnPasswordPayload, version: number) => {
+export const changeOwnPassword = async (data: ChangeOwnPasswordPayload, version: string) => {
     return await api.post('/account/security/password', data, {
         headers: {
-            'If-Match': version.toString()
+            'If-Match': version
         }
     });
 };
 
-export const changeOtherPassword = async (id: string, data: ChangeOtherPasswordPayload, version: number) => {
+export const changeOtherPassword = async (id: string, data: ChangeOtherPasswordPayload, version: string) => {
     return await api.post(`/account/${id}/password`, data, {
         headers: {
-            'If-Match': version.toString()
+            'If-Match': version
         }
     });
 };

@@ -8,7 +8,7 @@ import SubmitButton from '../../shared/components/buttons/SubmitButton';
 import { passwordSchema } from '../../shared/validators/passwordSchema';
 
 interface Props {
-    version: number;
+    version: string;
     onSuccess: () => void;
 }
 

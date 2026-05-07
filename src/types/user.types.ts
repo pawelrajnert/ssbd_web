@@ -10,10 +10,10 @@ export interface AccountDTO {
     login: string;
     email: string;
     lastLoginSuccessDateTime?: string | null;
-    version: number;
+    // version: string;
     versionHash: string;
-    isBlocked: boolean;
-    verified?: boolean;
+    isBlocked: boolean; //może jak dodam komentarz to się zmienią
+    verified?: boolean; // te pola na prodzie? Bo kurwa nie zmieniają się co bym nie robił
 }
 
 export interface AccountWithAccessLevelsDTO {
