@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { ShieldCheck, KeyRound, AlertCircle, RefreshCw } from "lucide-react";
@@ -24,11 +24,22 @@ export default function TwoFactorVerifyPage() {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isResending, setIsResending] = useState(false);
+    const [countdown, setCountdown] = useState(60);
 
     const { register, handleSubmit, formState: { errors } } = useForm<_2faFormData>({
         resolver: yupResolver(_2faSchema),
         defaultValues: { auth2F: "" }
     });
+
+    useEffect(() => {
+        if (countdown <= 0) return;
+
+        const timer = setInterval(() => {
+            setCountdown((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [countdown]);
 
     if (!userLogin) {
         return <Navigate to={PATHS.LOGIN} replace />;
@@ -40,9 +51,7 @@ export default function TwoFactorVerifyPage() {
         setIsLoading(true);
         try {
             const response = await authService.verify2FA(userLogin, data.auth2F);
-
             setTokens(response.token, response.refreshToken);
-
             const from = location.state?.from?.pathname || PATHS.PROFILE;
             navigate(from, { replace: true });
         } catch (err) {
@@ -63,6 +72,7 @@ export default function TwoFactorVerifyPage() {
         try {
             await authService.resend2FA(userLogin);
             setSuccessMessage(t("auth.2fa.code.retry.success"));
+            setCountdown(60);
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 setGlobalError(t("auth.2fa.code.retry.fail"));
@@ -115,7 +125,7 @@ export default function TwoFactorVerifyPage() {
                             autoComplete="one-time-code"
                             className={`w-full pl-8 py-1 outline-none text-xl tracking-[0.3em] font-mono bg-transparent ${errors.auth2F ? "text-red-500" : "text-gray-800"}`}
                             {...register("auth2F", {
-                                onChange: (e) => {
+                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                                     e.target.value = e.target.value.replace(/[^0-9]/g, '');
                                 }
                             })}
@@ -132,11 +142,11 @@ export default function TwoFactorVerifyPage() {
                     <button
                         type="button"
                         onClick={handleResendCode}
-                        disabled={isResending}
-                        className="text-sm font-semibold text-gray-600 hover:text-[#7A1014] transition-colors flex items-center gap-2 disabled:opacity-50"
+                        disabled={isResending || countdown > 0}
+                        className="text-sm font-semibold text-gray-600 hover:text-[#7A1014] transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-gray-600"
                     >
                         <RefreshCw size={14} className={isResending ? "animate-spin" : ""} />
-                        {t("auth.2fa.resend")}
+                        {countdown > 0 ? `${t("auth.2fa.resend")} (${countdown}s)` : t("auth.2fa.resend")}
                     </button>
 
                     <button
