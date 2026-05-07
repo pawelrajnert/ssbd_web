@@ -15,6 +15,7 @@ import {ProfilePage} from "../pages/profile/ProfilePage.tsx";
 import EmailChangeInitPage from "../pages/own_email_change/EmailChangeMainPage.tsx";
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
+import TwoFactorVerifyPage from "../pages/login/TwoFactorAuthorizationPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -30,6 +31,10 @@ const routes: RouteObject[] = [
             {
                 path: PATHS.LOGIN,
                 element: <LoginPage/>
+            },
+            {
+                path: PATHS._2FA_VERIFY,
+                element: <TwoFactorVerifyPage />
             },
             {
                 path: PATHS.REGISTER,
@@ -50,7 +55,7 @@ const routes: RouteObject[] = [
             {
                 path: PATHS.OWN_EMAIL_CHANGE_CONFIRM,
                 element: <EmailChangeConfirmPage/>
-            }
+            },
         ]
     },
     // {

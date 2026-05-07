@@ -10,7 +10,8 @@ export const PATHS = {
     RESET_PASSWORD: "/reset-password",
     PROFILE: "/profile",
     OWN_EMAIL_CHANGE_MAIN: "/email/change",
-    OWN_EMAIL_CHANGE_CONFIRM: "/change-email"
+    OWN_EMAIL_CHANGE_CONFIRM: "/change-email",
+    _2FA_VERIFY: "/login/2fa"
 } as const;
 
 export type AppPaths = typeof PATHS[keyof typeof PATHS];
