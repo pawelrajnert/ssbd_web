@@ -33,9 +33,6 @@ export const registerSchema = yup.object({
         .required("validation.password.confirmRequired")
         .oneOf([yup.ref('password')], "validation.password.mismatch"),
 
-    termsAccepted: yup.boolean()
-        .required("validation.terms.required")
-        .oneOf([true], "validation.terms.required")
 }).required();
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
