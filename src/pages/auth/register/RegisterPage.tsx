@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { User, Mail, Lock,  IdCard, MailCheck } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { PATHS } from "../../../routes/paths.ts";
@@ -30,8 +30,7 @@ export default function RegisterPage() {
             login: "",
             email: "",
             password: "",
-            confirmPassword: "",
-            termsAccepted: false
+            confirmPassword: ""
         }
     });
 
@@ -199,28 +198,28 @@ export default function RegisterPage() {
                     </div>
                 </div>
 
-                {/*<div className="mt-6">*/}
-                {/*    <Controller*/}
-                {/*        name="termsAccepted"*/}
-                {/*        control={control}*/}
-                {/*        render={({ field }) => (*/}
-                {/*            <div>*/}
-                {/*                <div*/}
-                {/*                    className="flex items-start gap-3 cursor-pointer"*/}
-                {/*                    onClick={() => field.onChange(!field.value)}*/}
-                {/*                >*/}
-                {/*                    <div className="mt-0.5 text-red-800">*/}
-                {/*                        {field.value ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}*/}
-                {/*                    </div>*/}
-                {/*                    <p className="text-xs text-gray-600 leading-tight select-none">*/}
-                {/*                        {t('auth.register.terms')}*/}
-                {/*                    </p>*/}
-                {/*                </div>*/}
-                {/*                {errors.termsAccepted?.message && <p className="text-red-500 text-[10px] mt-1">{(errors.termsAccepted.message)}</p>}*/}
-                {/*            </div>*/}
-                {/*        )}*/}
-                {/*    />*/}
-                {/*</div>*/}
+                {/*<div className="mt-6">
+                    <Controller
+                        name="termsAccepted"
+                        control={control}
+                        render={({ field }) => (
+                            <div>
+                                <div
+                                    className="flex items-start gap-3 cursor-pointer"
+                                    onClick={() => field.onChange(!field.value)}
+                                >
+                                    <div className="mt-0.5 text-red-800">
+                                        {field.value ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-300" />}
+                                    </div>
+                                    <p className="text-xs text-gray-600 leading-tight select-none">
+                                        {t('auth.register.terms')}
+                                    </p>
+                                </div>
+                                {errors.termsAccepted?.message && <p className="text-red-500 text-[10px] mt-1">{(errors.termsAccepted.message)}</p>}
+                            </div>
+                        )}
+                    />
+                </div>*/}
 
                 <SubmitButton
                     type="submit"

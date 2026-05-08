@@ -1,6 +1,7 @@
 {
   "common": {
-    "goToLogin": "Przejdź do logowania"
+    "goToLogin": "Перейти до логіну",
+    "cancel": "Скасувати"
   },
   "auth": {
     "title": "Охорона академічної доброчесності",
