@@ -172,12 +172,6 @@ export default function UserListPage() {
                                             >
                                                 {t('userList.table.edit')}
                                             </button>
-                                            <button
-                                                onClick={() => setSelectedUser(row.account)}
-                                                className="text-sm font-bold text-[#7A1014] hover:text-red-900 transition-colors"
-                                            >
-                                                {t('userList.changePassword')}
-                                            </button>
                                         </td>
                                     </tr>
                                 ))
