@@ -1,6 +1,7 @@
 {
   "common": {
-    "goToLogin": "Return to login"
+    "goToLogin": "Return to login",
+    "cancel": "Cancel"
   },
   "auth": {
     "title": "Preserving Academic Integrity",

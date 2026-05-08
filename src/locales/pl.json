@@ -1,6 +1,7 @@
 {
   "common": {
-  "goToLogin": "Przejdź do logowania"
+    "goToLogin": "Przejdź do logowania",
+    "cancel": "Anuluj"
 },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
