@@ -26,7 +26,7 @@
     },
     "register": {
       "heading": "Utwórz Konto",
-      "subheading": "Dostęp instytucjonalny dla wykładowców i badaczy",
+      "subheading": "Dostęp instytucjonalny dla prowadzących",
       "name": "IMIĘ",
       "surname": "NAZWISKO",
       "login": "LOGIN",
@@ -130,7 +130,7 @@
     "roles": {
       "title": "Przypisane role",
       "student": "Student",
-      "teacher": "Wykładowca",
+      "teacher": "Prowadzący",
       "admin": "Administrator",
       "adminBadge": "ADMIN"
     },
@@ -259,7 +259,7 @@
     }
   },
   "header": {
-    "title": "Kustosz Akademicki",
+    "title": "Kurator Akademicki",
     "subtitle": "Politechnika Łódzka",
     "dashboard": "Panel Główny",
     "userManagement": "Zarządzanie Użytkownikami",
@@ -299,5 +299,9 @@
     "terms": {
       "required": "Musisz zaakceptować regulamin i warunki"
     }
+  },
+  "sidebar": {
+    "userManagement": "Zarządzanie użytkownikami",
+    "subjectList": "Moje przedmioty"
   }
 }

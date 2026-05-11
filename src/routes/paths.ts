@@ -12,7 +12,9 @@ export const PATHS = {
     OWN_EMAIL_CHANGE_MAIN: "/email/change",
     OWN_EMAIL_CHANGE_CONFIRM: "/change-email",
     OWN_EMAIL_CHANGE_REVERT: "/revert-email",
-    _2FA_VERIFY: "/login/2fa"
+    _2FA_VERIFY: "/login/2fa",
+    STUDENT_SUBJECT_LIST: "/my-subjects",
+    TEACHER_SUBJECT_LIST: "/subjects"
 } as const;
 
 export type AppPaths = typeof PATHS[keyof typeof PATHS];

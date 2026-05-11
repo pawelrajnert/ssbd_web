@@ -22,8 +22,8 @@ export default function UserEditPage() {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { setDynamicBreadcrumb } = useBreadcrumb();
-    const { userLogin, userRole } = useAuth();
-    const isAdmin = userRole?.includes(RoleEnum.ADMINISTRATOR);
+    const { userLogin, activeRole } = useAuth();
+    const isAdmin = activeRole?.includes(RoleEnum.ADMINISTRATOR);
 
     const [user, setUser] = useState<AccountWithAccessLevelsDTO | null>(null);
     const [localRoles, setLocalRoles] = useState<string[]>([]);
@@ -85,7 +85,7 @@ export default function UserEditPage() {
         } else if (effectiveId && effectiveId !== "me") {
             fetchUser(effectiveId);
         }
-    }, [id, userLogin, userRole, isAdmin, navigate, fetchUser, fetchUserByLogin]);
+    }, [id, userLogin, activeRole, isAdmin, navigate, fetchUser, fetchUserByLogin]);
 
     useEffect(() => {
         if (user) {

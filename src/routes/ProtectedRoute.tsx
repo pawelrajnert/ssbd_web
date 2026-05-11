@@ -1,4 +1,4 @@
-import { Navigate, useLocation, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { PATHS } from './paths.ts';
 import { useAuth } from "../hooks/useAuth";
 import {type Role, RoleEnum} from "../types/role.types.ts";
@@ -8,23 +8,23 @@ interface HandleProtectionProperties {
 }
 
 const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
-    const { isAuthenticated, userRole } = useAuth();
-    const location = useLocation();
+    const { isAuthenticated, activeRole } = useAuth();
 
     if (!isAuthenticated) {
-        return <Navigate to={PATHS.LOGIN} state={{ from: location }} replace />;
+        return <Navigate to={PATHS.LOGIN} replace />;
     }
 
-    const hasPermission = !allowedRoles || allowedRoles.includes(userRole as Role);
+    const hasPermission = !allowedRoles || allowedRoles.includes(activeRole as Role);
 
     if (!hasPermission) {
-        console.warn("Access Denied. User Role:", userRole, "Allowed:", allowedRoles);
+        console.warn("Access Denied. User Role:", activeRole, "Allowed:", allowedRoles);
 
-        //TODO: Zmienić na strony na które będziemy robić redirect w przypadku odmowy przejścia na jakąś stronę
-        if (userRole === RoleEnum.ADMINISTRATOR) {
+        if (activeRole === RoleEnum.ADMINISTRATOR) {
             return <Navigate to={PATHS.USER_LIST} replace />;
-        } else if (userRole === RoleEnum.STUDENT) {
-            return <Navigate to={PATHS.PROFILE} replace />;
+        } else if (activeRole === RoleEnum.STUDENT) {
+            return <Navigate to={PATHS.STUDENT_SUBJECT_LIST} replace />;
+        } else if (activeRole === RoleEnum.TEACHER){
+            return <Navigate to={PATHS.TEACHER_SUBJECT_LIST} replace/>
         }
     }
 

@@ -10,7 +10,9 @@ export interface AuthContextType {
     token: string | null;
     refreshToken: string | null;
     setTokens: (accessToken: string | null, refreshToken: string | null) => void;
-    userRole: string | null;
+    activeRole: string | null;
+    availableRoles: string[];
+    changeActiveRole: (role: string) => void;
     userLogin: string | null;
     isAuthenticated: boolean;
     logout: () => void;
