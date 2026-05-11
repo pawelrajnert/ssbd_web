@@ -57,16 +57,16 @@ export default function PasswordResetConfirmPage() {
         return (
             <div
                 className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
-                <div className="flex justify-center mb-4 text-red-500">
+                <div className="flex justify-center mb-4 text-danger">
                     <AlertCircle size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.confirm.invalidLinkTitle")}</h2>
-                <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                <h2 className="text-3xl font-bold text-primary mb-2">{t("passwordReset.confirm.invalidLinkTitle")}</h2>
+                <p className="text-sm text-secondary mb-8 max-w-sm mx-auto">
                     {t("passwordReset.confirm.invalidLinkDesc")}
                 </p>
                 <Link
                     to={PATHS.RESET_PASSWORD}
-                    className="inline-block w-full max-w-sm bg-[#7A1014] text-white font-bold py-3 rounded-md hover:bg-red-900 transition-colors shadow-sm"
+                    className="inline-block w-full max-w-sm bg-brand text-white font-bold py-3 rounded-md hover:bg-brand-hover transition-colors shadow-sm"
                 >
                     {t("passwordReset.confirm.requestNewLink")}
                 </Link>
@@ -78,11 +78,11 @@ export default function PasswordResetConfirmPage() {
         return (
             <div
                 className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
-                <div className="flex justify-center mb-4 text-green-600">
+                <div className="flex justify-center mb-4 text-green-600 dark:text-green-500">
                     <CheckCircle2 size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.confirm.successTitle")}</h2>
-                <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                <h2 className="text-3xl font-bold text-primary mb-2">{t("passwordReset.confirm.successTitle")}</h2>
+                <p className="text-sm text-secondary mb-8 max-w-sm mx-auto">
                     {t("passwordReset.confirm.successDesc")}
                 </p>
                 <LinkButton to={PATHS.LOGIN} className="max-w-sm">
@@ -94,14 +94,14 @@ export default function PasswordResetConfirmPage() {
 
     return (
         <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.confirm.title")}</h2>
-            <p className="text-sm text-gray-500 mb-8">
+            <h2 className="text-3xl font-bold text-primary mb-2">{t("passwordReset.confirm.title")}</h2>
+            <p className="text-sm text-secondary mb-8">
                 {t("passwordReset.confirm.subtitle")}
             </p>
 
             {status === 'error' && (
                 <div
-                    className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-md flex items-start gap-2 border border-red-100">
+                    className="mb-6 p-3 bg-danger-subtle text-danger text-sm rounded-md flex items-start gap-2 border border-danger-border">
                     <AlertCircle size={16} className="mt-0.5 flex-shrink-0"/>
                     <span>{errorMessage}</span>
                 </div>
@@ -110,11 +110,12 @@ export default function PasswordResetConfirmPage() {
             <form onSubmit={handleSubmit(onFormSubmit)} className="w-full max-w-sm">
                 <div className="mb-6">
                     <label htmlFor="newPassword"
-                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                           className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                         {t("passwordReset.confirm.newPassword")}
                     </label>
                     <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
+                        <div
+                            className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-secondary opacity-70">
                             <Lock size={18}/>
                         </div>
                         <input
@@ -122,22 +123,23 @@ export default function PasswordResetConfirmPage() {
                             type="password"
                             placeholder="••••••••••••"
                             {...register("newPassword")}
-                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50 ${errors.newPassword ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
+                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-primary disabled:opacity-50 ${errors.newPassword ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'}`}
                             disabled={status === 'loading'}
                         />
                     </div>
                     {errors.newPassword?.message && (
-                        <p className="text-red-500 text-xs mt-1">{t(errors.newPassword.message)}</p>
+                        <p className="text-danger text-xs mt-1">{t(errors.newPassword.message)}</p>
                     )}
                 </div>
 
                 <div className="mb-8">
                     <label htmlFor="confirmPassword"
-                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                           className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                         {t("passwordReset.confirm.confirmPassword")}
                     </label>
                     <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
+                        <div
+                            className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-secondary opacity-70">
                             <Lock size={18}/>
                         </div>
                         <input
@@ -145,12 +147,12 @@ export default function PasswordResetConfirmPage() {
                             type="password"
                             placeholder="••••••••••••"
                             {...register("confirmPassword")}
-                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50 ${errors.confirmPassword ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
+                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-primary disabled:opacity-50 ${errors.confirmPassword ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'}`}
                             disabled={status === 'loading'}
                         />
                     </div>
                     {errors.confirmPassword?.message && (
-                        <p className="text-red-500 text-xs mt-1">{t(errors.confirmPassword.message)}</p>
+                        <p className="text-danger text-xs mt-1">{t(errors.confirmPassword.message)}</p>
                     )}
                 </div>
 
