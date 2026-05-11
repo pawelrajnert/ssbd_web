@@ -13,9 +13,9 @@ export interface SidebarItemProps {
 
 export default function SidebarItem({to, icon: Icon, label, allowedRoles}: SidebarItemProps) {
     const location = useLocation();
-    const {userRole} = useAuth();
+    const {activeRole} = useAuth();
 
-    const isAllowed = !allowedRoles || (userRole && allowedRoles.includes(userRole as Role));
+    const isAllowed = !allowedRoles || (activeRole && allowedRoles.includes(activeRole as Role));
 
     if (!isAllowed) {
         return null;

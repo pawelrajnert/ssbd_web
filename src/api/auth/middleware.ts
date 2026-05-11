@@ -2,7 +2,7 @@ import axios from 'axios';
 import type {FailedQueueItem} from "../../types/failed_query.type.ts";
 
 
-//const baseURL = 'http://localhost:8081/api';
+// const baseURL = 'http://localhost:8081/api';
 const baseURL = '/api';
 // przed wrzucaniem na produkcję podmienić :)
 
@@ -57,7 +57,7 @@ axiosInstance.interceptors.response.use(
             const refToken = sessionStorage.getItem('refresh_token');
             if (refToken) {
                 try {
-                    const res = await axios.post(`/auth/refresh`, {
+                    const res = await axiosInstance.post(`/auth/refresh`, {
                         refreshToken: refToken
                     });
 

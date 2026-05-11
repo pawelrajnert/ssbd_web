@@ -94,5 +94,9 @@ export const userService = {
                 }
             });
         return response.data;
+    },
+
+    updateActiveRole: async (data: string) => {
+        return await axiosInstance.post(`/account/role/change`, data);
     }
 };

@@ -121,7 +121,7 @@ export default function ChangeOtherPasswordModal({ isOpen, user, onClose, onSucc
 
             <ConfirmationModal
                 isOpen={isConfirmModalOpen}
-                title={t('common.confirmPasswordChangeTitle', 'Change User Password?')}
+                title={t('common.confirmPasswordChangeTitle')}
                 description={t('common.confirmPasswordChangeAdminDesc', `Are you sure you want to forcibly change the password for ${user.login}? They will lose access using their current credentials.`)}
                 confirmText={t('profile.applyChanges')}
                 onConfirm={handleConfirmChange}

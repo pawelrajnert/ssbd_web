@@ -16,12 +16,11 @@ import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirm
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
 import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPage.tsx";
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
+import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
+import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
 
 const routes: RouteObject[] = [
     {
-        //odkomentować jeżeli chcecie zobaczyć header na login page
-        // element: <Layout />,
-        // children: [{
         element: <AuthLayout/>,
         children: [
             {
@@ -96,6 +95,34 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.PROFILE,
                         element: <UserEditPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        element:<ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
+        children:[
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.STUDENT_SUBJECT_LIST,
+                        element: <StudentSubjectListPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        element:<ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
+        children:[
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.TEACHER_SUBJECT_LIST,
+                        element: <TeacherSubjectListPage/>
                     }
                 ]
             }

@@ -36,8 +36,7 @@ export default function LoginPage() {
         setGlobalError(null);
         setIsLoading(true);
         try {
-            const response = await authService.login(data.login, data.password);
-
+            const {response, status} = await authService.login(data.login, data.password);
             if (response?.message === "mfa.required") {
                 navigate(PATHS._2FA_VERIFY, {
                     state: {
@@ -50,7 +49,9 @@ export default function LoginPage() {
                 const from = location.state?.from?.pathname || PATHS.PROFILE;
                 navigate(from, { replace: true });
             } else {
-                if (typeof response === 'string') {
+                if (status === 202){
+                    setGlobalError(t('auth.login.errorInvalid'));
+                }else if (typeof response === 'string') {
                     setGlobalError(response);
                 } else {
                     setGlobalError(t('auth.login.errorInvalid'));
@@ -58,7 +59,7 @@ export default function LoginPage() {
             }
         } catch (err) {
             if (axios.isAxiosError(err)) {
-                if (err.response?.status === 401) {
+                if (err.response?.status === 202) {
                     setGlobalError(t('auth.login.errorInvalid'));
                 } else if (err.response?.status === 409) {
                     setGlobalError(t('auth.login.errorBlocked'));

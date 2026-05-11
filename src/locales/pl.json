@@ -1,8 +1,23 @@
 {
   "common": {
     "goToLogin": "Przejdź do logowania",
-    "cancel": "Anuluj"
-},
+    "cancel": "Anuluj",
+    "confirmPasswordChangeTitle": "Zmienić hasło?",
+    "confirmPasswordChangeDesc": "Czy napewno chcesz zmienić hasło? Przy następnym uwierzytelnieniu musisz wykorzystać nowe hasło.",
+    "confirmSaveDesc": "Czy napewno chcesz zapisać zmiany?",
+    "confirmSaveTitle": "Save changes?",
+    "confirmUnblockTitle": "Odblokować użytkownika?",
+    "confirmBlockTitle": "Zablokować użytkownika?",
+    "confirmUnblockDesc": "Czy napewno chcesz odblokować użytkownika?",
+    "confirmBlockDesc": "Czy napewno chcesz zablokować użytkownika?",
+    "unblock": "Odblokuj",
+    "block": "Zablokuj",
+    "confirmPasswordChangeAdminDesc": "Czy napewno chcesz zmienić hasło tego użytkownika? Utraci dostęp do swoich poświadczeń.",
+    "confirmPasswordResetTitle": "Potwierdzasz reset hasła?",
+    "confirmPasswordResetDesc": "Czy napewno chcesz zresetować hasło?  Przy następnym uwierzytelnieniu musisz wykorzystać nowe hasło.",
+    "confirmEmailChangeTitle": "Potwierdzasz zmianę adresu email?",
+    "confirmEmailChangeDesc": "Czy napewno chcesz zmienić adres email?"
+  },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
     "subtitle": "Analiza wkładu naukowego z precyzją i prestiżowym autorytetem na Politechnice Łódzkiej.",
@@ -26,7 +41,7 @@
     },
     "register": {
       "heading": "Utwórz Konto",
-      "subheading": "Dostęp instytucjonalny dla wykładowców i badaczy",
+      "subheading": "Dostęp instytucjonalny dla prowadzących",
       "name": "IMIĘ",
       "surname": "NAZWISKO",
       "login": "LOGIN",
@@ -130,7 +145,7 @@
     "roles": {
       "title": "Przypisane role",
       "student": "Student",
-      "teacher": "Wykładowca",
+      "teacher": "Prowadzący",
       "admin": "Administrator",
       "adminBadge": "ADMIN"
     },
@@ -259,13 +274,18 @@
     }
   },
   "header": {
-    "title": "Kustosz Akademicki",
+    "title": "Kurator Akademicki",
     "subtitle": "Politechnika Łódzka",
     "dashboard": "Panel Główny",
     "userManagement": "Zarządzanie Użytkownikami",
     "defaultUser": "Użytkownik",
     "defaultGuest": "Gość",
-    "logout": "Wyloguj się"
+    "logout": "Wyloguj się",
+    "settings": {
+      "name": "Ustawienia systemowe",
+      "language": "Język",
+      "activeRole": "Aktywna rola"
+    }
   },
   "about": {
     "title": "aleikum asalam"
@@ -299,5 +319,9 @@
     "terms": {
       "required": "Musisz zaakceptować regulamin i warunki"
     }
+  },
+  "sidebar": {
+    "userManagement": "Zarządzanie użytkownikami",
+    "subjectList": "Moje przedmioty"
   }
 }
