@@ -1,5 +1,5 @@
 import {useLocation, useNavigate, Link} from "react-router-dom";
-import {Bell, Globe, Moon, Palette, Settings, Shield, Sun} from "lucide-react";
+import {Bell, Globe, Settings, Shield} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../../../hooks/useAuth";
 import {PATHS} from "../../../routes/paths";
@@ -15,9 +15,7 @@ export default function Header() {
     const {t} = useTranslation();
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-    const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-        return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
-    });
+
     const settingsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -29,16 +27,6 @@ export default function Header() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-
-    const handleThemeChange = (newTheme: 'light' | 'dark') => {
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        if (newTheme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    };
 
     const handleLogout = () => {
         logout();
@@ -140,31 +128,12 @@ export default function Header() {
 
                         {isSettingsOpen && (
                             <div className="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 p-5 z-50">
-                                <h3 className="text-base font-bold text-gray-900 mb-5">System Settings</h3>
+                                <h3 className="text-base font-bold text-gray-900 mb-5">{t("header.settings.name")}</h3>
+
 
                                 <div className="mb-5">
                                     <p className="text-[11px] font-bold text-gray-500 mb-2 tracking-wider flex items-center gap-2 uppercase">
-                                        <Palette size={14} /> Appearance
-                                    </p>
-                                    <div className="flex bg-gray-50 border border-gray-100 rounded-lg p-1">
-                                        <button
-                                            onClick={() => handleThemeChange('light')}
-                                            className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-md transition-all ${theme === 'light' ? 'bg-white shadow-sm text-gray-900 border border-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
-                                        >
-                                            <Sun size={16} /> Light
-                                        </button>
-                                        <button
-                                            onClick={() => handleThemeChange('dark')}
-                                            className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold rounded-md transition-all ${theme === 'dark' ? 'bg-white shadow-sm text-gray-900 border border-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
-                                        >
-                                            <Moon size={16} /> Dark
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="mb-5">
-                                    <p className="text-[11px] font-bold text-gray-500 mb-2 tracking-wider flex items-center gap-2 uppercase">
-                                        <Globe size={14} /> Language
+                                        <Globe size={14} /> {t("header.settings.language")}
                                     </p>
                                     <select
                                         value={i18n.language}
@@ -180,7 +149,7 @@ export default function Header() {
                                 {availableRoles.length > 1 && (
                                     <div className="mb-6">
                                         <p className="text-[11px] font-bold text-gray-500 mb-2 tracking-wider flex items-center gap-2 uppercase">
-                                            <Shield size={14} /> Active Role
+                                            <Shield size={14} /> {t("header.settings.activeRole")}
                                         </p>
                                         <select
                                             value={activeRole || ""}
@@ -188,7 +157,7 @@ export default function Header() {
                                             className="w-full bg-transparent text-sm font-semibold text-gray-800 border-b border-gray-200 py-2 outline-none cursor-pointer hover:border-[#7A1014] transition-colors appearance-none"
                                         >
                                             {availableRoles.map(role => (
-                                                <option key={role} value={role}>{role}</option>
+                                                <option key={role} value={role}>{t("userEdit.roles." + role.toLowerCase())}</option>
                                             ))}
                                         </select>
                                     </div>
@@ -201,7 +170,7 @@ export default function Header() {
                 <div className="flex items-center gap-4">
                     <div className="text-right hidden sm:block">
                         <p className="text-sm font-bold text-gray-900">{userLogin || t('header.defaultUser')}</p>
-                        <p className="text-xs text-gray-500 tracking-wider uppercase">{activeRole || t('header.defaultGuest')}</p>
+                        <p className="text-xs text-gray-500 tracking-wider uppercase">{t("userEdit.roles." + activeRole?.toLowerCase())}</p>
                     </div>
                     <Link to={PATHS.PROFILE}>
                         <div className="relative">

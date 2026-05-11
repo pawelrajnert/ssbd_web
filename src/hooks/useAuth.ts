@@ -18,10 +18,8 @@ export interface AuthContextType {
     logout: () => void;
 }
 
-// 1. Create the Context
 export const AuthContext = createContext<AuthContextType | null>(null);
 
-// 2. Export the Hook
 export const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) throw new Error("useAuth must be used within AuthProvider");

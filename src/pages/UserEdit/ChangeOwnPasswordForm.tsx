@@ -138,8 +138,8 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
 
             <ConfirmationModal
                 isOpen={isModalOpen}
-                title={t('common.confirmPasswordChangeTitle', 'Change Password?')}
-                description={t('common.confirmPasswordChangeDesc', 'Are you sure you want to change your password? You will be required to use this new password the next time you log in.')}
+                title={t('common.confirmPasswordChangeTitle')}
+                description={t('common.confirmPasswordChangeDesc')}
                 confirmText={t('profile.applyChanges')}
                 onConfirm={handleConfirmChange}
                 onCancel={() => setIsModalOpen(false)}

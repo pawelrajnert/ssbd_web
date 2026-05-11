@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 export interface ConfirmationModalProps {
     isOpen: boolean;
     title: string;
-    description: React.ReactNode; // Accepts string or elements (so you can bold specific words)
+    description: React.ReactNode;
     confirmText: string;
     cancelText?: string;
     onConfirm: () => void;

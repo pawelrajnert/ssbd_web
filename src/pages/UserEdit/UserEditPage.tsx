@@ -565,8 +565,8 @@ export default function UserEditPage() {
 
             <ConfirmationModal
                 isOpen={isSaveModalOpen}
-                title={t('common.confirmSaveTitle', 'Save Changes?')}
-                description={t('common.confirmSaveDesc', 'Are you sure you want to save these changes? This will permanently update the user\'s profile and system access levels.')}
+                title={t('common.confirmSaveTitle')}
+                description={t('common.confirmSaveDesc')}
                 confirmText={t('userEdit.actions.save')}
                 onConfirm={handleSave}
                 onCancel={() => setIsSaveModalOpen(false)}
@@ -575,11 +575,11 @@ export default function UserEditPage() {
 
             <ConfirmationModal
                 isOpen={isBlockModalOpen}
-                title={user.account.isBlocked ? t('common.confirmUnblockTitle', 'Unblock User?') : t('common.confirmBlockTitle', 'Block User?')}
+                title={user.account.isBlocked ? t('common.confirmUnblockTitle') : t('common.confirmBlockTitle')}
                 description={
                     user.account.isBlocked
-                        ? t('common.confirmUnblockDesc', 'Are you sure you want to unblock this user? They will immediately regain access to the system.')
-                        : t('common.confirmBlockDesc', 'Are you sure you want to block this user? They will be immediately disconnected and prevented from logging in.')
+                        ? t('common.confirmUnblockDesc')
+                        : t('common.confirmBlockDesc')
                 }
                 confirmText={user.account.isBlocked ? t('common.unblock', 'Unblock') : t('common.block', 'Block')}
                 onConfirm={handleBlock}

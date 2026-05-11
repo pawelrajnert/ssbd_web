@@ -1,6 +1,7 @@
 import {type ReactNode, useMemo, useState} from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext, type JwtPayload } from "../hooks/useAuth.ts";
+import {userService} from "../services/userService.ts";
 
 const determineActiveRole = (roles: string[]): string | null => {
     if (!roles || roles.length === 0) return null;
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (availableRoles.includes(role)) {
             setActiveRole(role);
             sessionStorage.setItem("active_role", role);
+            userService.updateActiveRole(role);
         } else {
             console.warn(`Attempted to set unauthorized role: ${role}`);
         }
