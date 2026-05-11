@@ -2,6 +2,7 @@ import {type ReactNode, useMemo, useState} from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext, type JwtPayload } from "../hooks/useAuth.ts";
 import {userService} from "../services/userService.ts";
+import {authService} from "../services/authService.ts";
 
 const determineActiveRole = (roles: string[]): string | null => {
     if (!roles || roles.length === 0) return null;
@@ -78,6 +79,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setRefreshToken(null);
     };
 
+    const extendSession = async () => {
+        if (refreshToken) {
+            try {
+                const data = await authService.refreshSession(refreshToken);
+                setTokens(data.token, data.refreshToken);
+            } catch (error) {
+                console.error("Failed to extend session", error);
+                logout();
+            }
+        }
+    };
+
+
     const contextValue = useMemo(() => ({
         token,
         refreshToken,
@@ -88,7 +102,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userLogin,
         isAuthenticated: !!token,
         logout,
-    }), [token, refreshToken, activeRole, availableRoles, userLogin]);
+        extendSession
+    }), [token, refreshToken, activeRole, availableRoles, userLogin, extendSession]);
 
     return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
