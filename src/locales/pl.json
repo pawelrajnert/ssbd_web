@@ -320,6 +320,13 @@
       "required": "Musisz zaakceptować regulamin i warunki"
     }
   },
+  "sessionModal": {
+    "title": "Sesja wkrótce wygaśnie",
+    "desc1": "Ze względów bezpieczeństwa zostaniesz wylogowany za ",
+    "desc2": " sekund. Czy chcesz przedłużyć swoją sesję?",
+    "logout": "Wyloguj",
+    "extend": "Przedłuż sesję"
+  },
   "sidebar": {
     "userManagement": "Zarządzanie użytkownikami",
     "subjectList": "Moje przedmioty"
