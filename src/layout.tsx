@@ -3,6 +3,7 @@ import { useState } from "react";
 import Header from "./shared/components/header/Header.tsx";
 import { BreadcrumbContext } from "./contexts/BreadcrumbContext.tsx";
 import Sidebar from "./shared/components/sidebar/Sidebar.tsx";
+import {Footer} from "./shared/components/Footer.tsx";
 
 const Layout = () => {
     const [dynamicBreadcrumb, setDynamicBreadcrumb] = useState<string | null>(null);
@@ -17,6 +18,7 @@ const Layout = () => {
                         <Outlet />
                     </main>
                 </div>
+                <Footer/>
             </main>
         </BreadcrumbContext.Provider>
     );

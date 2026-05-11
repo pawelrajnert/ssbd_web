@@ -60,15 +60,15 @@ export default function PasswordResetConfirmPage() {
                 <div className="flex justify-center mb-4 text-red-500">
                     <AlertCircle size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwrodReset.confirm.invalidLinkTitle")}</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.confirm.invalidLinkTitle")}</h2>
                 <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
-                    {t("passwrodReset.confirm.invalidLinkDesc")}
+                    {t("passwordReset.confirm.invalidLinkDesc")}
                 </p>
                 <Link
                     to={PATHS.RESET_PASSWORD}
                     className="inline-block w-full max-w-sm bg-[#7A1014] text-white font-bold py-3 rounded-md hover:bg-red-900 transition-colors shadow-sm"
                 >
-                    {t("passwrodReset.confirm.requestNewLink")}
+                    {t("passwordReset.confirm.requestNewLink")}
                 </Link>
             </div>
         );
@@ -81,12 +81,12 @@ export default function PasswordResetConfirmPage() {
                 <div className="flex justify-center mb-4 text-green-600">
                     <CheckCircle2 size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwrodReset.confirm.successTitle")}</h2>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.confirm.successTitle")}</h2>
                 <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
-                    {t("passwrodReset.confirm.successDesc")}
+                    {t("passwordReset.confirm.successDesc")}
                 </p>
                 <LinkButton to={PATHS.LOGIN} className="max-w-sm">
-                    {t("passwrodReset.confirm.returnToLogin")}
+                    {t("passwordReset.confirm.returnToLogin")}
                 </LinkButton>
             </div>
         );
@@ -94,9 +94,9 @@ export default function PasswordResetConfirmPage() {
 
     return (
         <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwrodReset.confirm.title")}</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t("passwordReset.confirm.title")}</h2>
             <p className="text-sm text-gray-500 mb-8">
-                {t("passwrodReset.confirm.subtitle")}
+                {t("passwordReset.confirm.subtitle")}
             </p>
 
             {status === 'error' && (
@@ -111,7 +111,7 @@ export default function PasswordResetConfirmPage() {
                 <div className="mb-6">
                     <label htmlFor="newPassword"
                            className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        {t("passwrodReset.confirm.newPassword")}
+                        {t("passwordReset.confirm.newPassword")}
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
@@ -134,7 +134,7 @@ export default function PasswordResetConfirmPage() {
                 <div className="mb-8">
                     <label htmlFor="confirmPassword"
                            className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
-                        {t("passwrodReset.confirm.confirmPassword")}
+                        {t("passwordReset.confirm.confirmPassword")}
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
@@ -158,14 +158,14 @@ export default function PasswordResetConfirmPage() {
                     type="submit"
                     isLoading={status === 'loading'}
                 >
-                    {t("passwrodReset.confirm.submit")}
+                    {t("passwordReset.confirm.submit")}
                 </SubmitButton>
             </form>
 
             <div className="mt-8 text-center max-w-sm">
                 <LinkButton to={PATHS.LOGIN} variant="ghost">
                     <ArrowLeft size={16} className="mr-2"/>
-                    {t("passwrodReset.confirm.BackToLogin")}
+                    {t("passwordReset.confirm.backToLogin")}
                 </LinkButton>
             </div>
 

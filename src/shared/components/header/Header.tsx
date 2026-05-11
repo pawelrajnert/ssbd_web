@@ -1,17 +1,32 @@
 import {useLocation, useNavigate, Link} from "react-router-dom";
-import {Bell, Globe, Settings} from "lucide-react";
+import {Bell, Globe, Settings, Shield} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../../../hooks/useAuth";
 import {PATHS} from "../../../routes/paths";
 import {useBreadcrumb} from "../../../contexts/BreadcrumbContext";
 import i18n from "i18next";
+import {useEffect, useRef, useState} from "react";
 
 export default function Header() {
-    const {logout, userRole, userLogin} = useAuth();
+    const {logout, availableRoles, changeActiveRole, activeRole, userLogin} = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const {dynamicBreadcrumb} = useBreadcrumb();
     const {t} = useTranslation();
+
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+    const settingsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+                setIsSettingsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -42,10 +57,35 @@ export default function Header() {
 
     const breadcrumbs = generateBreadcrumbs();
 
+    const getRoleIndicatorColor = (role: string | null) => {
+        switch (role?.toUpperCase()) {
+            case 'ADMIN':
+                return 'bg-blue-500';
+            case 'TEACHER':
+                return 'bg-red-500';
+            case 'STUDENT':
+                return 'bg-green-500';
+            default:
+                return 'bg-transparent';
+        }
+    };
+    const getDefaultLocationPath = (role: string | null) => {
+        switch (role?.toUpperCase()) {
+            case 'ADMIN':
+                return PATHS.USER_LIST;
+            case 'TEACHER':
+                return PATHS.TEACHER_SUBJECT_LIST
+            case 'STUDENT':
+                return PATHS.STUDENT_SUBJECT_LIST;
+            default:
+                return '/';
+        }
+    };
+
     return (
-        <header className="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200">
+        <header className="relative flex items-center justify-between px-8 py-4 bg-white border-b border-gray-200">
             <div className="flex items-center gap-8">
-                <Link to={"/"}>
+                <Link to={getDefaultLocationPath(activeRole)}>
                     <div>
                         <h1 className="text-xl font-bold text-gray-900 leading-tight">
                             {t('header.title')}
@@ -75,38 +115,62 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-6">
                 <div className="flex items-center gap-4 text-gray-600">
-                    <div
-                        className="relative flex items-center gap-2 group bg-gray-50/80 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors border border-gray-100">
-                        <Globe size={18} className="text-gray-400 group-hover:text-[#7A1014] transition-colors"/>
-                        <select
-                            value={i18n.language}
-                            onChange={(e) => i18n.changeLanguage(e.target.value)}
-                            className="bg-transparent text-sm font-bold text-gray-600 outline-none cursor-pointer hover:text-[#7A1014] transition-colors appearance-none pr-2"
-                        >
-                            <option value="en">EN</option>
-                            <option value="pl">PL</option>
-                            <option value="uk">UK</option>
-                        </select>
-                        <div className="pointer-events-none text-gray-400 group-hover:text-[#7A1014]">
-                            <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
-                                <path
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clipRule="evenodd" fillRule="evenodd"></path>
-                            </svg>
-                        </div>
-                    </div>
                     <button className="hover:text-[#7A1014] transition-colors">
                         <Bell size={20}/>
                     </button>
-                    <button className="hover:text-[#7A1014] transition-colors">
-                        <Settings size={20}/>
-                    </button>
+                    <div className="relative" ref={settingsRef}>
+                        <button
+                            className={`p-2 rounded-full transition-colors ${isSettingsOpen ? 'bg-red-50 text-[#7A1014]' : 'hover:text-[#7A1014]'}`}
+                            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                        >
+                            <Settings size={20} />
+                        </button>
+
+                        {isSettingsOpen && (
+                            <div className="absolute right-0 mt-3 w-72 bg-white rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 p-5 z-50">
+                                <h3 className="text-base font-bold text-gray-900 mb-5">{t("header.settings.name")}</h3>
+
+
+                                <div className="mb-5">
+                                    <p className="text-[11px] font-bold text-gray-500 mb-2 tracking-wider flex items-center gap-2 uppercase">
+                                        <Globe size={14} /> {t("header.settings.language")}
+                                    </p>
+                                    <select
+                                        value={i18n.language}
+                                        onChange={(e) => i18n.changeLanguage(e.target.value)}
+                                        className="w-full bg-transparent text-sm font-semibold text-gray-800 border-b border-gray-200 py-2 outline-none cursor-pointer hover:border-[#7A1014] transition-colors appearance-none"
+                                    >
+                                        <option value="en">🇺🇸 English (US)</option>
+                                        <option value="pl">🇵🇱 Polish (PL)</option>
+                                        <option value="uk">🇺🇦 Ukrainian (UK)</option>
+                                    </select>
+                                </div>
+
+                                {availableRoles.length > 1 && (
+                                    <div className="mb-6">
+                                        <p className="text-[11px] font-bold text-gray-500 mb-2 tracking-wider flex items-center gap-2 uppercase">
+                                            <Shield size={14} /> {t("header.settings.activeRole")}
+                                        </p>
+                                        <select
+                                            value={activeRole || ""}
+                                            onChange={(e) => changeActiveRole(e.target.value)}
+                                            className="w-full bg-transparent text-sm font-semibold text-gray-800 border-b border-gray-200 py-2 outline-none cursor-pointer hover:border-[#7A1014] transition-colors appearance-none"
+                                        >
+                                            {availableRoles.map(role => (
+                                                <option key={role} value={role}>{t("userEdit.roles." + role.toLowerCase())}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className="h-8 w-px bg-gray-200"></div>
                 <div className="flex items-center gap-4">
                     <div className="text-right hidden sm:block">
                         <p className="text-sm font-bold text-gray-900">{userLogin || t('header.defaultUser')}</p>
-                        <p className="text-xs text-gray-500 tracking-wider uppercase">{userRole || t('header.defaultGuest')}</p>
+                        <p className="text-xs text-gray-500 tracking-wider uppercase">{t("userEdit.roles." + activeRole?.toLowerCase())}</p>
                     </div>
                     <Link to={PATHS.PROFILE}>
                         <div className="relative">
@@ -130,6 +194,9 @@ export default function Header() {
                     {t('header.logout')}
                 </button>
             </div>
+            <div
+                className={`absolute bottom-0 left-0 w-full h-[3px] transition-colors duration-300 ${getRoleIndicatorColor(activeRole)}`}
+            />
         </header>
     );
 }

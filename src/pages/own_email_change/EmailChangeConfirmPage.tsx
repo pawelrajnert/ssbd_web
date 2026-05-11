@@ -181,8 +181,8 @@ export default function EmailChangeConfirmPage() {
 
             <ConfirmationModal
                 isOpen={isConfirmModalOpen}
-                title={t('common.confirmEmailChangeTitle', 'Confirm Email Change?')}
-                description={t('common.confirmEmailChangeDesc', 'Are you sure you want to change your email address? You will be logged out and required to log back in using your new email address.')}
+                title={t('common.confirmEmailChangeTitle')}
+                description={t('common.confirmEmailChangeDesc')}
                 confirmText={t('emailChange.confirm.form.submitButton')}
                 onConfirm={handleConfirmChange}
                 onCancel={() => setIsConfirmModalOpen(false)}

@@ -128,12 +128,12 @@ export default function UserListPage() {
 
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
                     <div className="overflow-x-auto">
+                        {isLoading && (
+                            <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10">
+                                <RefreshCw className="animate-spin text-[#7A1014]" size={32} />
+                            </div>
+                        )}
                         <table className="w-full text-left border-collapse relative">
-                            {isLoading && (
-                                <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10">
-                                    <RefreshCw className="animate-spin text-[#7A1014]" size={32} />
-                                </div>
-                            )}
                             <thead>
                             <tr className="border-b border-gray-100">
                                 <th className="py-6 px-8 text-xs font-bold text-gray-700 uppercase tracking-widest">{t('userList.table.role')}</th>
@@ -165,7 +165,7 @@ export default function UserListPage() {
                                         <td className="py-4 px-6 text-sm text-gray-500">{row.account.login}</td>
                                         <td className="py-4 px-6 text-sm text-gray-500">{row.account.email}</td>
                                         <td className="py-4 px-6 text-sm text-gray-500">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
-                                        <td className="py-4 px-8 flex gap-4">
+                                        <td className="py-4 px-8 gap-4">
                                             <button
                                                 className="text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors"
                                                 onClick={() => navigate(PATHS.USER_EDIT.replace(':id', row.account.id))}

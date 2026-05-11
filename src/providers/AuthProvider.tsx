@@ -1,33 +1,68 @@
 import {type ReactNode, useMemo, useState} from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext, type JwtPayload } from "../hooks/useAuth.ts";
+import {userService} from "../services/userService.ts";
+
+const determineActiveRole = (roles: string[]): string | null => {
+    if (!roles || roles.length === 0) return null;
+
+    const storedRole = sessionStorage.getItem("active_role");
+    if (storedRole && roles.includes(storedRole)) {
+        return storedRole;
+    }
+
+    const defaultRole = roles.includes("ADMIN") ? "ADMIN" : roles[0];
+    sessionStorage.setItem("active_role", defaultRole);
+    return defaultRole;
+};
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [token, setToken] = useState<string | null>(() => sessionStorage.getItem("access_token"));
     const [refreshToken, setRefreshToken] = useState<string | null>(() => sessionStorage.getItem("refresh_token"));
 
-    const { userRole, userLogin } = useMemo(() => {
+    const { availableRoles, userLogin } = useMemo<{ availableRoles: string[], userLogin: string | null }>(() => {
         if (token && token !== "undefined" && token !== "null") {
             try {
-                const decoded = jwtDecode<JwtPayload>(token as string);
-                return { userRole: decoded.roles?.[0] || null, userLogin: decoded.sub };
+                const decoded = jwtDecode<JwtPayload>(token);
+                return {
+                    availableRoles: decoded.roles || [],
+                    userLogin: decoded.sub
+                };
             } catch (e) {
                 console.error("JWT Decode Error:", e);
-                return { userRole: null, userLogin: null };
+                return { availableRoles: [], userLogin: null };
             }
         }
-        return { userRole: null, userLogin: null };
+        return { availableRoles: [], userLogin: null };
     }, [token]);
+
+    const [activeRole, setActiveRole] = useState<string | null>(() => determineActiveRole(availableRoles));
+
+    const changeActiveRole = (role: string) => {
+        if (availableRoles.includes(role)) {
+            setActiveRole(role);
+            sessionStorage.setItem("active_role", role);
+            userService.updateActiveRole(role);
+        } else {
+            console.warn(`Attempted to set unauthorized role: ${role}`);
+        }
+        //TODO: wysyłąć żądanie żeby logować że ktoś zmieńił rolę???
+    };
 
     const setTokens = (accessToken: string | null, rToken: string | null) => {
         if (accessToken) {
             sessionStorage.setItem('access_token', accessToken);
+            try {
+                const decoded = jwtDecode<JwtPayload>(accessToken);
+                setActiveRole(determineActiveRole(decoded.roles || []));
+            } catch {
+                setActiveRole(null);
+            }
         } else {
             sessionStorage.removeItem('access_token');
+            setActiveRole(null);
         }
         setToken(accessToken);
-
-        //TODO: Zastanowić się czy nie przechowywać refresh token w cookies, task najprawdopodobniej dla Karola :)
         if (rToken) {
             sessionStorage.setItem('refresh_token', rToken);
         } else {
@@ -47,11 +82,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         token,
         refreshToken,
         setTokens,
-        userRole,
+        activeRole,
+        availableRoles,
+        changeActiveRole,
         userLogin,
         isAuthenticated: !!token,
         logout,
-    }), [token, refreshToken, userRole, userLogin]);
+    }), [token, refreshToken, activeRole, availableRoles, userLogin]);
 
     return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };

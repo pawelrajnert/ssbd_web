@@ -3,7 +3,7 @@ import axiosInstance from "../api/auth/middleware";
 export const authService = {
     login: async (login: string, password: string) => {
         const response = await axiosInstance.post('/auth/login', { login, password });
-        return response.data;
+        return {response: response.data, status: response.status};
     },
     verify2FA: async (login: string, auth2F: string) => {
         const response = await axiosInstance.post('/auth/check2FA', { login, auth2F });
