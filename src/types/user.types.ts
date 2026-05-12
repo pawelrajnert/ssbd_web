@@ -24,6 +24,13 @@ export interface AccountWithAccessLevelsDTO {
     accessLevels: AccessLevelDTO[];
 }
 
+export interface SortObject {
+    property: string;
+    direction: string;
+    ascending: boolean;
+    descending: boolean;
+}
+
 export interface Page<T> {
     content: T[];
     totalElements: number;
