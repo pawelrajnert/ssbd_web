@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useState} from 'react';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useTranslation } from 'react-i18next';
-import { changeOwnPassword } from '../../services/accountService.ts';
+import {useTranslation} from 'react-i18next';
+import {changeOwnPassword} from '../../services/accountService.ts';
 import SubmitButton from '../../shared/components/buttons/SubmitButton.tsx';
 import axios from "axios";
 import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.tsx";
@@ -29,8 +29,8 @@ export interface ChangeOwnPasswordFormProps {
     onSuccess: () => void;
 }
 
-export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordFormProps) {
-    const { t } = useTranslation();
+export function ChangeOwnPasswordForm({version, onSuccess}: ChangeOwnPasswordFormProps) {
+    const {t} = useTranslation();
 
     const [pendingData, setPendingData] = useState<PasswordChangeFormData | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +41,7 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
         register,
         handleSubmit,
         reset,
-        formState: { errors }
+        formState: {errors}
     } = useForm<PasswordChangeFormData>({
         resolver: yupResolver(passwordChangeSchema)
     });
@@ -51,19 +51,6 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
         setIsModalOpen(true);
     };
 
-    // const onSubmit = async (data: FormValues) => {
-    //     setApiError(null);
-    //     try {
-    //         await changeOwnPassword({
-    //             oldPassword: data.oldPassword,
-    //             newPassword: data.newPassword
-    //         }, version);
-    //         reset();
-    //         onSuccess();
-    //     } catch (err: any) {
-    //         setApiError('error.changePasswordFailed');
-    //     }
-    // };
     const handleConfirmChange = async () => {
         if (!pendingData) return;
 
@@ -71,10 +58,10 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
         setApiError(null);
 
         try {
-            // Note: Update this method name if your accountService uses a different name
             await changeOwnPassword({
-                oldPassword: pendingData.oldPassword,
-                newPassword: pendingData.newPassword},
+                    oldPassword: pendingData.oldPassword,
+                    newPassword: pendingData.newPassword
+                },
                 version
             );
 
@@ -97,7 +84,7 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
     return (
         <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4 max-w-sm">
             {apiError && (
-                <div className="p-3 bg-red-50 text-red-700 rounded-md text-sm">
+                <div className="p-3 bg-danger-subtle text-danger border border-danger-border rounded-md text-sm">
                     {t(apiError)}
                 </div>
             )}
@@ -106,30 +93,33 @@ export function ChangeOwnPasswordForm({ version, onSuccess }: ChangeOwnPasswordF
                 <input
                     type="password"
                     placeholder={t('profile.oldPassword')}
-                    className={`w-full border p-2 rounded ${errors.oldPassword ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full bg-surface text-primary border p-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-brand transition-colors ${errors.oldPassword ? 'border-danger' : 'border-border'}`}
                     {...register('oldPassword')}
                 />
-                {errors.oldPassword && <p className="text-red-500 text-xs mt-1">{t(errors.oldPassword.message as string)}</p>}
+                {errors.oldPassword &&
+                    <p className="text-danger text-xs mt-1">{t(errors.oldPassword.message as string)}</p>}
             </div>
 
             <div>
                 <input
                     type="password"
                     placeholder={t('profile.newPassword')}
-                    className={`w-full border p-2 rounded ${errors.newPassword ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full bg-surface text-primary border p-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-brand transition-colors ${errors.newPassword ? 'border-danger' : 'border-border'}`}
                     {...register('newPassword')}
                 />
-                {errors.newPassword && <p className="text-red-500 text-xs mt-1">{t(errors.newPassword.message as string)}</p>}
+                {errors.newPassword &&
+                    <p className="text-danger text-xs mt-1">{t(errors.newPassword.message as string)}</p>}
             </div>
 
             <div>
                 <input
                     type="password"
                     placeholder={t('profile.confirmNewPassword')}
-                    className={`w-full border p-2 rounded ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full bg-surface text-primary border p-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-brand transition-colors ${errors.confirmPassword ? 'border-danger' : 'border-border'}`}
                     {...register('confirmPassword')}
                 />
-                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{t(errors.confirmPassword.message as string)}</p>}
+                {errors.confirmPassword &&
+                    <p className="text-danger text-xs mt-1">{t(errors.confirmPassword.message as string)}</p>}
             </div>
 
             <SubmitButton type="submit" className="w-auto px-6 py-2 text-xs tracking-widest uppercase">
