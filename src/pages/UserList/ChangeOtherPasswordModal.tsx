@@ -55,7 +55,12 @@ export default function ChangeOtherPasswordModal({ isOpen, user, onClose, onSucc
         } catch (err: any) {
             console.error("Failed to change password for user", err);
             if (axios.isAxiosError(err)) {
-                setApiError(err.response?.data?.message || err.response?.data || t('error.changePasswordFailed'));
+                const backendMsg = err.response?.data?.message || err.response?.data;
+                if (err.response?.status === 409 && backendMsg === 'error.password.already.used') {
+                    setApiError(t('error.password.already.used'));
+                } else {
+                    setApiError(backendMsg || t('error.changePasswordFailed'));
+                }
             } else {
                 setApiError(t('error.changePasswordFailed'));
             }
