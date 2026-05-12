@@ -1,16 +1,17 @@
-import React, {useState, useEffect} from "react";
-import {useTranslation} from "react-i18next";
-import {useNavigate, useLocation, Navigate} from "react-router-dom";
-import {ShieldCheck, KeyRound, AlertCircle, RefreshCw} from "lucide-react";
-import {useForm} from "react-hook-form";
-import {yupResolver} from "@hookform/resolvers/yup";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { ShieldCheck, KeyRound, AlertCircle, RefreshCw } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 
-import {PATHS} from "../../../routes/paths.ts";
-import {useAuth} from "../../../hooks/useAuth.ts";
+import {getDashboardPath, PATHS} from "../../../routes/paths.ts";
+import {type JwtPayload, useAuth} from "../../../hooks/useAuth.ts";
 import {authService} from "../../../services/authService.ts";
 import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
 import {_2faSchema, type _2faFormData} from "../../../shared/validators/2FASchema.ts";
+import {jwtDecode} from "jwt-decode";
 
 export default function TwoFactorVerifyPage() {
     const {t} = useTranslation();
@@ -52,9 +53,11 @@ export default function TwoFactorVerifyPage() {
         try {
             const response = await authService.verify2FA(userLogin, data.auth2F);
             setTokens(response.token, response.refreshToken);
-            const from = location.state?.from?.pathname || PATHS.PROFILE;
-            navigate(from, {replace: true});
-        } catch (err) {
+            const decoded = jwtDecode<JwtPayload>(response.token);
+            const newRole = decoded.roles?.includes("ADMIN") ? "ADMIN" : decoded.roles?.[0];
+            const targetPath = location.state?.from?.pathname || getDashboardPath(newRole);
+            navigate(targetPath, {replace: true});
+        }catch (err) {
             if (axios.isAxiosError(err)) {
                 setGlobalError(t("auth.2fa.code.invalid"));
             } else {

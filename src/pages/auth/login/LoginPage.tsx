@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Link, useNavigate, useLocation} from "react-router-dom";
 import {User, Lock, CheckSquare, Square} from "lucide-react";
@@ -7,25 +7,21 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import axios from "axios";
 import {GoogleLogin} from '@react-oauth/google';
 
-import {PATHS} from "../../../routes/paths.ts";
+import {getDashboardPath, PATHS} from "../../../routes/paths.ts";
 import {useAuth} from "../../../hooks/useAuth.ts";
 import {authService, loginWithGoogle} from "../../../services/authService.ts";
 import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
 import {loginSchema, type LoginFormData} from "../../../shared/validators/loginSchema.ts";
+import {jwtDecode} from "jwt-decode";
+import type { JwtPayload } from "../../../hooks/useAuth.ts";
 
 export default function LoginPage() {
     const {t} = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const {isAuthenticated, setTokens} = useAuth();
+    const {setTokens} = useAuth();
     const [globalError, setGlobalError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            navigate(PATHS.USER_LIST, {replace: true});
-        }
-    }, [isAuthenticated, navigate]);
 
     const {register, handleSubmit, control, formState: {errors}} = useForm<LoginFormData>({
         resolver: yupResolver(loginSchema),
@@ -44,10 +40,14 @@ export default function LoginPage() {
                         from: location.state?.from
                     }
                 });
-            } else if (response?.token) {
-                setTokens(response.token, response.refreshToken);
-                const from = location.state?.from?.pathname || PATHS.PROFILE;
-                navigate(from, {replace: true});
+            // } else if (response?.token) {
+            //     setTokens(response.token, response.refreshToken);
+            //     const decoded = jwtDecode<JwtPayload>(response.token);
+            //     const newRole = decoded.roles?.includes("ADMIN") ? "ADMIN" : decoded.roles?.[0];
+            //
+            //     const targetPath = location.state?.from?.pathname || getDashboardPath(newRole);
+            //     navigate(targetPath, {replace: true});
+                //to w sumie nigdy nie wystąpi bo mamy 2fa
             } else {
                 if (status === 202) {
                     setGlobalError(t('auth.login.errorInvalid'));
@@ -81,8 +81,12 @@ export default function LoginPage() {
             const response = await loginWithGoogle(credential);
             if (response?.token) {
                 setTokens(response.token, response.refreshToken);
-                const from = location.state?.from?.pathname || PATHS.PROFILE;
-                navigate(from, {replace: true});
+
+                const decoded = jwtDecode<JwtPayload>(response.token);
+                const newRole = decoded.roles?.includes("ADMIN") ? "ADMIN" : decoded.roles?.[0];
+
+                const targetPath = location.state?.from?.pathname || getDashboardPath(newRole);
+                navigate(targetPath, {replace: true});
             }
         } catch {
             setGlobalError(t('auth.login.errorGoogle'));
