@@ -6,7 +6,7 @@ import {PATHS} from "../../../routes/paths";
 import {useBreadcrumb} from "../../../contexts/BreadcrumbContext";
 import i18n from "i18next";
 import {useEffect, useRef, useState} from "react";
-import { useTheme } from "../../../providers/ThemeProvider.tsx";
+import {useTheme} from "../../../hooks/useTheme.ts";
 
 export default function Header() {
     const {logout, availableRoles, changeActiveRole, activeRole, userLogin} = useAuth();
