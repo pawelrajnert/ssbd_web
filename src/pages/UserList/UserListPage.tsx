@@ -148,7 +148,7 @@ export default function UserListPage() {
                             {data?.content?.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="py-8 text-center text-secondary font-medium">
-                                        {t('userList.noResults', 'Brak wynikÃ³w')}
+                                        {t('userList.noResults', 'Brak wyników')}
                                     </td>
                                 </tr>
                             ) : (
@@ -197,7 +197,7 @@ export default function UserListPage() {
                                 disabled={!data || data.last || isLoading}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                {t('userList.pagination.next', 'NastÄ™pna')}
+                                {t('userList.pagination.next', 'Następna')}
                                 <ChevronRight size={16} />
                             </button>
                         </div>
