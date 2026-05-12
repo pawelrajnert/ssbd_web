@@ -44,6 +44,8 @@ export interface Page<T> {
     first: boolean;
     last: boolean;
     empty: boolean;
+    sort?: SortObject[];
+    pageable?: PageableObject;
 }
 
 export interface ChangeEmailDTO {
