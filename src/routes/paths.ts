@@ -17,4 +17,17 @@ export const PATHS = {
     TEACHER_SUBJECT_LIST: "/subjects"
 } as const;
 
+export const getDashboardPath = (role: string | null): string => {
+    switch (role?.toUpperCase()) {
+        case 'ADMIN':
+            return PATHS.USER_LIST;
+        case 'TEACHER':
+            return PATHS.TEACHER_SUBJECT_LIST;
+        case 'STUDENT':
+            return PATHS.STUDENT_SUBJECT_LIST;
+        default:
+            return PATHS.PROFILE;
+    }
+};
+
 export type AppPaths = typeof PATHS[keyof typeof PATHS];
