@@ -43,18 +43,18 @@ export default function EmailChangeRevertPage() {
 
             {status === 'loading' && (
                 <>
-                    <Loader2 size={48} className="animate-spin text-[#7A1014] mb-4"/>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.revert.loading')}</h2>
+                    <Loader2 size={48} className="animate-spin text-brand mb-4"/>
+                    <h2 className="text-3xl font-bold text-primary mb-2">{t('emailChange.revert.loading')}</h2>
                 </>
             )}
 
             {status === 'success' && (
                 <>
-                    <div className="flex justify-center mb-4 text-green-600">
+                    <div className="flex justify-center mb-4 text-green-600 dark:text-green-500">
                         <CheckCircle2 size={48}/>
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.revert.success.title')}</h2>
-                    <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                    <h2 className="text-3xl font-bold text-primary mb-2">{t('emailChange.revert.success.title')}</h2>
+                    <p className="text-sm text-secondary mb-8 max-w-sm mx-auto">
                         {t('emailChange.revert.success.description')}
                     </p>
                     <LinkButton to={PATHS.LOGIN} className="max-w-sm mx-auto">
@@ -65,11 +65,11 @@ export default function EmailChangeRevertPage() {
 
             {status === 'error' && (
                 <>
-                    <div className="flex justify-center mb-4 text-red-500">
+                    <div className="flex justify-center mb-4 text-danger">
                         <AlertCircle size={48}/>
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.revert.error.title')}</h2>
-                    <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                    <h2 className="text-3xl font-bold text-primary mb-2">{t('emailChange.revert.error.title')}</h2>
+                    <p className="text-sm text-secondary mb-8 max-w-sm mx-auto">
                         {t('emailChange.revert.error.description')}
                     </p>
                     <LinkButton to={PATHS.LOGIN} className="max-w-sm mx-auto">

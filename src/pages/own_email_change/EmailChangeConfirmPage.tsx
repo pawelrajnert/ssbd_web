@@ -70,11 +70,11 @@ export default function EmailChangeConfirmPage() {
         return (
             <div
                 className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
-                <div className="flex justify-center mb-4 text-red-500">
+                <div className="flex justify-center mb-4 text-danger">
                     <AlertCircle size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.confirm.invalidLink.title')}</h2>
-                <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                <h2 className="text-3xl font-bold text-primary mb-2">{t('emailChange.confirm.invalidLink.title')}</h2>
+                <p className="text-sm text-secondary mb-8 max-w-sm mx-auto">
                     {t('emailChange.confirm.invalidLink.description')}
                 </p>
                 <LinkButton to={PATHS.OWN_EMAIL_CHANGE_MAIN} className="max-w-sm mx-auto">
@@ -88,11 +88,11 @@ export default function EmailChangeConfirmPage() {
         return (
             <div
                 className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
-                <div className="flex justify-center mb-4 text-green-600">
+                <div className="flex justify-center mb-4 text-green-600 dark:text-green-500">
                     <CheckCircle2 size={48}/>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.confirm.success.title')}</h2>
-                <p className="text-sm text-gray-500 mb-8 max-w-sm mx-auto">
+                <h2 className="text-3xl font-bold text-primary mb-2">{t('emailChange.confirm.success.title')}</h2>
+                <p className="text-sm text-secondary mb-8 max-w-sm mx-auto">
                     {t('emailChange.confirm.success.description')}
                 </p>
                 <LinkButton to={PATHS.LOGIN} className="max-w-sm mx-auto">
@@ -104,14 +104,14 @@ export default function EmailChangeConfirmPage() {
 
     return (
         <div className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">{t('emailChange.confirm.form.title')}</h2>
-            <p className="text-sm text-gray-500 mb-8">
+            <h2 className="text-3xl font-bold text-primary mb-2">{t('emailChange.confirm.form.title')}</h2>
+            <p className="text-sm text-secondary mb-8">
                 {t('emailChange.confirm.form.subtitle')}
             </p>
 
             {status === 'error' && (
                 <div
-                    className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-md flex items-start gap-2 border border-red-100">
+                    className="mb-6 p-3 bg-danger-subtle text-danger text-sm rounded-md flex items-start gap-2 border border-danger-border">
                     <AlertCircle size={16} className="mt-0.5 flex-shrink-0"/>
                     <span>{errorMessage}</span>
                 </div>
@@ -120,11 +120,12 @@ export default function EmailChangeConfirmPage() {
             <form onSubmit={handleSubmit(onFormSubmit)} className="w-full max-w-sm mx-auto">
                 <div className="mb-6">
                     <label htmlFor="newEmail"
-                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                           className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                         {t('emailChange.confirm.form.newEmailLabel')}
                     </label>
                     <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
+                        <div
+                            className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-secondary opacity-70">
                             <Mail size={18}/>
                         </div>
                         <input
@@ -132,22 +133,23 @@ export default function EmailChangeConfirmPage() {
                             type="email"
                             placeholder="6sigma7@edu.p.lodz.pl"
                             {...register("newEmail")}
-                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50 ${errors.newEmail ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
+                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-primary disabled:opacity-50 ${errors.newEmail ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'}`}
                             disabled={status === 'loading'}
                         />
                     </div>
                     {errors.newEmail?.message && (
-                        <p className="text-red-500 text-xs mt-1">{t(errors.newEmail.message)}</p>
+                        <p className="text-danger text-xs mt-1">{t(errors.newEmail.message)}</p>
                     )}
                 </div>
 
                 <div className="mb-8">
                     <label htmlFor="password"
-                           className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                           className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                         {t('emailChange.confirm.form.passwordLabel')}
                     </label>
                     <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-gray-400">
+                        <div
+                            className="absolute inset-y-0 left-0 flex items-center pointer-events-none text-secondary opacity-70">
                             <Lock size={18}/>
                         </div>
                         <input
@@ -155,12 +157,12 @@ export default function EmailChangeConfirmPage() {
                             type="password"
                             placeholder="••••••••"
                             {...register("password")}
-                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-gray-800 disabled:opacity-50 ${errors.password ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#7A1014]'}`}
+                            className={`w-full border-b py-2 pl-8 focus:outline-none transition-colors bg-transparent text-sm text-primary disabled:opacity-50 ${errors.password ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'}`}
                             disabled={status === 'loading'}
                         />
                     </div>
                     {errors.password?.message && (
-                        <p className="text-red-500 text-xs mt-1">{t(errors.password.message)}</p>
+                        <p className="text-danger text-xs mt-1">{t(errors.password.message)}</p>
                     )}
                 </div>
 
