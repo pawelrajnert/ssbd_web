@@ -31,6 +31,10 @@ export interface SortObject {
     descending: boolean;
 }
 
+export interface PageableObject {
+    sort?: SortObject[];
+}
+
 export interface Page<T> {
     content: T[];
     totalElements: number;
