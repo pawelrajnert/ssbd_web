@@ -16,6 +16,7 @@ export interface AuthContextType {
     userLogin: string | null;
     isAuthenticated: boolean;
     logout: () => void;
+    extendSession: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);

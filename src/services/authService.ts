@@ -12,6 +12,10 @@ export const authService = {
     resend2FA: async (login: string) => {
         const response = await axiosInstance.post('/auth/resend2FA', { login });
         return response.data;
+    },
+    refreshSession: async (refreshToken: string) => {
+        const response = await axiosInstance.post('/auth/refresh', { refreshToken });
+        return response.data;
     }
 };
 
