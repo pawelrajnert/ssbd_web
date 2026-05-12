@@ -1,4 +1,3 @@
-// src/shared/components/sidebar/Sidebar.tsx
 import {Users, LucideGraduationCap} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {PATHS} from "../../../routes/paths.ts";
@@ -9,7 +8,7 @@ export default function Sidebar() {
     const {t} = useTranslation();
     return (
         <aside
-            className="w-64 bg-[#f8f9fa] border-r border-gray-100 flex flex-col justify-between hidden md:flex shrink-0">
+            className="w-64 bg-base border-r border-border flex flex-col justify-between hidden md:flex shrink-0">
             <div className="py-6 px-3 space-y-1">
                 {/** Elementy dla admina */}
                 <SidebarItem
