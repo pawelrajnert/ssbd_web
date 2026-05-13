@@ -18,6 +18,7 @@ import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPa
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
 import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
 import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
+import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePasswordChangePage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -58,6 +59,15 @@ const routes: RouteObject[] = [
             {
                 path: PATHS.OWN_EMAIL_CHANGE_REVERT,
                 element: <EmailChangeRevertPage/>
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.FORCE_PASSWORD_CHANGE]}/>,
+        children: [
+            {
+                path: PATHS.FORCE_PASSWORD_CHANGE,
+                element: <ForcePasswordChangePage/>
             }
         ]
     },
