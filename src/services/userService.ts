@@ -1,17 +1,16 @@
 import axiosInstance from "../api/auth/middleware";
-import type {AccountWithAccessLevelsDTO, Page, UpdateAccountDTO} from "../types/user.types";
+import type {AccountWithAccessLevelsDTO, UpdateAccountDTO} from "../types/user.types";
 
 export const userService = {
-    getUsers: async (page: number, size: number, phrase: string = "") => {
-        const params = new URLSearchParams({
-            page: page.toString(),
-            size: size.toString(),
-        });
-        if (phrase.trim() !== "") {
-            params.append('phrase', phrase.trim());
-        }
+    getUsers: async (page: number, size?: number, phrase?: string, sortBy?: string, sortDesc?: boolean) => {
+        const params = new URLSearchParams();
+        if (phrase) params.append('phrase', phrase);
+        if (page !== undefined) params.append('page', page.toString());
+        if (size !== undefined) params.append('size', size.toString());
+        if (sortBy !== undefined) params.append('sortBy', sortBy);
+        if (sortDesc !== undefined) params.append('sortDesc', sortDesc.toString());
 
-        const response = await axiosInstance.get<Page<AccountWithAccessLevelsDTO>>('/account', {params});
+        const response = await axiosInstance.get(`/account?${params.toString()}`);
         return response.data;
     },
 
