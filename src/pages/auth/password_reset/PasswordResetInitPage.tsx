@@ -118,7 +118,7 @@ export default function PasswordResetInitPage() {
                     onClick={() => navigate(PATHS.LOGIN_EMAIL)}
                     disabled={status === 'loading'}
                 >
-                    Zaloguj jednorazowym kodem
+                    {t("passwordReset.init.codeLogin")}
                 </SubmitButton>
 
             </form>
