@@ -181,7 +181,8 @@
     "passwordChangedSuccess": "Password changed successfully!"
   },
   "error": {
-    "changePasswordFailed": "Failed to change the password. Check if the old password and data version are correct."
+    "changePasswordFailed": "Failed to change the password. Check if the old password and data version are correct.",
+    "password.already.used": "The proposed password has already been used for this account in the past."
   },
   "emailChange": {
     "main": {

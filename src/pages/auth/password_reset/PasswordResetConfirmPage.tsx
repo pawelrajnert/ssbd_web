@@ -44,7 +44,12 @@ export default function PasswordResetConfirmPage() {
         } catch (error) {
             setStatus('error');
             if (axios.isAxiosError(error)) {
-                setErrorMessage(error.response?.data?.message || t("passwordReset.confirm.errorExpired"));
+                const backendMsg = error.response?.data?.message || error.response?.data;
+                if (error.response?.status === 409 && backendMsg === 'error.password.already.used') {
+                    setErrorMessage(t('error.password.already.used'));
+                } else {
+                    setErrorMessage(backendMsg || t("passwordReset.confirm.errorExpired"));
+                }
             } else if (error instanceof Error) {
                 setErrorMessage(error.message);
             } else {
