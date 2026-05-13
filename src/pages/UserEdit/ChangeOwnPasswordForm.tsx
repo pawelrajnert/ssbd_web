@@ -71,9 +71,14 @@ export function ChangeOwnPasswordForm({version, onSuccess}: ChangeOwnPasswordFor
         } catch (error) {
             console.error("Failed to change password", error);
             if (axios.isAxiosError(error)) {
-                setApiError(error.response?.data?.message || error.response?.data || t('error.changePasswordFailed'));
+                const backendMsg = error.response?.data?.message || error.response?.data;
+                if (error.response?.status === 409 && backendMsg === 'error.password.already.used') {
+                    setApiError('error.password.already.used');
+                } else {
+                    setApiError(backendMsg || 'error.changePasswordFailed');
+                }
             } else {
-                setApiError(t('error.changePasswordFailed'));
+                setApiError('error.changePasswordFailed');
             }
         } finally {
             setIsLoading(false);

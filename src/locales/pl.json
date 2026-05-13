@@ -179,7 +179,8 @@
     "passwordChangedSuccess": "Hasło zostało pomyślnie zmienione!"
   },
   "error": {
-    "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne."
+    "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne.",
+    "password.already.used": "Zaproponowane hasło było już używane na tym koncie w przeszłości."
   },
   "emailChange": {
     "main": {
