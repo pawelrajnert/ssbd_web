@@ -86,6 +86,19 @@
       "errorSub": "The activation link is invalid, expired, or your account is already active.",
       "back": "BACK TO LOGIN"
     },
+    "unblock": {
+      "heading": "Unblock your account after inactivity",
+      "description": "Click the button to unblock an account after an inactivity.",
+      "button": "UNBLOCK ACCOUNT",
+      "loading": "Unblocking account",
+      "loadingSub": "Unblocking account is processed by a system.",
+      "success": "Account Unblocked!",
+      "successSub": "Your account has been successfully unblocked. You can now log in.",
+      "proceed": "RETURN TO LOGIN",
+      "error": "Unblocking Failed",
+      "errorSub": "The link is invalid, expired, or your account does not require unblocking.",
+      "back": "RETURN TO LOGIN"
+    },
     "emailLogin": {
       "heading": "Login with Email",
       "subheading": "Enter your email address to receive a one-time login code.",

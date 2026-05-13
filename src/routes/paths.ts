@@ -15,6 +15,7 @@ export const PATHS = {
     _2FA_VERIFY: "/login/2fa",
     STUDENT_SUBJECT_LIST: "/my-subjects",
     TEACHER_SUBJECT_LIST: "/subjects",
+    UNBLOCK_ACCOUNT: "/unblock-account",
     FORCE_PASSWORD_CHANGE: "/force-password-change",
     LOGIN_EMAIL: "/login/email",
     LOGIN_EMAIL_VERIFY: "/login/email/verify"
