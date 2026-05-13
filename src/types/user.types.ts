@@ -10,9 +10,14 @@ export interface AccountDTO {
     login: string;
     email: string;
     lastLoginSuccessDateTime?: string | null;
+    lastLoginFailureDateTime?: string | null;
     versionHash: string;
     isBlocked: boolean;
     verified?: boolean;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    createdBy?: string | null;
+    modifiedBy?: string | null;
 
     listPageSize?: number | null;
     listSortBy?: string | null;

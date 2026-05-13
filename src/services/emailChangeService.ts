@@ -16,8 +16,8 @@ export const emailChangeService = {
         return response.data;
     },
 
-    changeEmailByAdmin: async (id: string, dto: ChangeEmailDTO, versionHash: string): Promise<AccountDTO> => {
-        const response = await axiosInstance.patch(`/account/${id}/email`,
+    changeEmailByAdmin: async (login: string, dto: ChangeEmailDTO, versionHash: string): Promise<AccountDTO> => {
+        const response = await axiosInstance.patch(`/account/${login}/email`,
             dto,
             {
                 headers: {
