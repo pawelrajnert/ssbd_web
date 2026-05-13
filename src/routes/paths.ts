@@ -14,7 +14,9 @@ export const PATHS = {
     OWN_EMAIL_CHANGE_REVERT: "/revert-email",
     _2FA_VERIFY: "/login/2fa",
     STUDENT_SUBJECT_LIST: "/my-subjects",
-    TEACHER_SUBJECT_LIST: "/subjects"
+    TEACHER_SUBJECT_LIST: "/subjects",
+    LOGIN_EMAIL: "/login/email",
+    LOGIN_EMAIL_VERIFY: "/login/email/verify"
 } as const;
 
 export const getDashboardPath = (role: string | null): string => {
