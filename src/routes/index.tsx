@@ -18,6 +18,7 @@ import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPa
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
 import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
 import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
+import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -58,7 +59,11 @@ const routes: RouteObject[] = [
             {
                 path: PATHS.OWN_EMAIL_CHANGE_REVERT,
                 element: <EmailChangeRevertPage/>
-            }
+            },
+            {
+                path: PATHS.UNBLOCK_ACCOUNT,
+                element: <UnblockAccountPage/>
+            },
         ]
     },
     // {

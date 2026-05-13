@@ -85,6 +85,19 @@
         },
         "unexpectedError": "Wystąpił nieoczekiwany błąd."
       }
+    },
+    "unblock": {
+      "heading": "Odblokowanie konta po nieaktywności",
+      "description": "Kliknij przycisk, aby odblokować swoje konto z powodu nieaktywności.",
+      "button": "ODBLOKUJ KONTO",
+      "loading": "Odblokowywanie konta",
+      "loadingSub": "Proces odblokowywania konta jest przetwarzany przez system.",
+      "success": "Konto odblokowane",
+      "successSub": "Twoje konto zostało pomyślnie odblokowane. Możesz się teraz zalogować.",
+      "proceed": "PRZEJDŹ DO LOGOWANIA",
+      "error": "Odblokowanie nie powiodło się",
+      "errorSub": "Link jest nieprawidłowy, wygasł lub Twoje konto nie wymaga odblokowania.",
+      "back": "WRÓĆ DO LOGOWANIA"
     }
   },
   "userList": {
