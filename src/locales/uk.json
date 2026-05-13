@@ -108,7 +108,12 @@
     "stats": {
       "title": "Статистика облікового запису",
       "lastLogin": "Останній вхід",
-      "never": "Ніколи"
+      "lastLoginFail": "Останній невдалий вхід",
+      "never": "Ніколи",
+      "createdAt": "Створено",
+      "createdBy": "Ким",
+      "updatedAt": "Змінено",
+      "modifiedBy": "Ким"
     },
     "credentials": {
       "title": "Облікові дані",

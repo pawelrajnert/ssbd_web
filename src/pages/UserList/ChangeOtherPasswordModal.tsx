@@ -48,7 +48,7 @@ export default function ChangeOtherPasswordModal({ isOpen, user, onClose, onSucc
         setIsSubmittingApi(true);
 
         try {
-            await changeOtherPassword(user.id, { newPassword: pendingData.newPassword }, user.versionHash);
+            await changeOtherPassword(user.login, { newPassword: pendingData.newPassword }, user.versionHash);
             reset();
             setIsConfirmModalOpen(false);
             onSuccess();

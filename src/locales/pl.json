@@ -121,7 +121,12 @@
     "stats": {
       "title": "Statystyki konta",
       "lastLogin": "Ostatnie logowanie",
-      "never": "Nigdy"
+      "lastLoginFail": "Ostatnie nieudane logowanie",
+      "never": "Nigdy",
+      "createdAt": "Utworzono",
+      "createdBy": "Przez",
+      "updatedAt": "Zmodyfikowano",
+      "modifiedBy": "Przez"
     },
     "credentials": {
       "title": "Dane uwierzytelniające",

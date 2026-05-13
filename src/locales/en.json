@@ -123,7 +123,12 @@
     "stats": {
       "title": "Account Statistics",
       "lastLogin": "Last Login Date",
-      "never": "Never"
+      "lastLoginFail": "Last Login fail Date",
+      "never": "Never",
+      "createdAt": "Created At",
+      "createdBy": "By",
+      "updatedAt": "Modified At",
+      "modifiedBy": "By"
     },
     "credentials": {
       "title": "User Credentials",

@@ -10,10 +10,14 @@ export interface AccountDTO {
     login: string;
     email: string;
     lastLoginSuccessDateTime?: string | null;
-    // version: string;
+    lastLoginFailureDateTime?: string | null;
     versionHash: string;
     isBlocked: boolean;
     verified?: boolean;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    createdBy?: string | null;
+    modifiedBy?: string | null;
 }
 
 export interface AccountWithAccessLevelsDTO {
