@@ -30,13 +30,13 @@ export default function UserEditPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [isBlocking, setIsBlocking] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
     const [emailValue, setEmailValue] = useState('');
     const [emailError, setEmailError] = useState<boolean>(false);
     const [isEmailRequesting, setIsEmailRequesting] = useState(false);
     const [emailRequestError, setEmailRequestError] = useState<string | null>(null);
     const [emailSuccess, setEmailSuccess] = useState(false);
     const [resendStatus, setResendStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [isMyself, setIsMyself] = useState(true);
 
     const [nameValue, setNameValue] = useState('');
     const [surnameValue, setSurnameValue] = useState('');
@@ -53,11 +53,12 @@ export default function UserEditPage() {
             setNameValue(data.account.name);
             setSurnameValue(data.account.surname);
             setEmailValue(data.account.email);
+            setIsMyself(data.account.login === userLogin)
         } catch (err) {
             console.error(err);
             navigate(PATHS.USER_LIST);
         }
-    }, [navigate, setLocalRoles]);
+    }, [navigate, userLogin]);
 
     const fetchUserByLogin = useCallback(async (login: string) => {
         try {
@@ -67,23 +68,18 @@ export default function UserEditPage() {
             setNameValue(data.account.name);
             setSurnameValue(data.account.surname);
             setEmailValue(data.account.email);
+            setIsMyself(data.account.login === userLogin)
         } catch (err) {
             console.error(err);
             navigate(PATHS.USER_LIST);
         }
-    }, [navigate, setLocalRoles]);
+    }, [navigate, userLogin]);
 
     useEffect(() => {
-        const effectiveId = id || "me";
-        if (effectiveId !== "me" && !isAdmin) {
-            navigate('/users/me', {replace: true});
-            return;
-        }
-
-        if (effectiveId === "me" && userLogin) {
+        if (!id && userLogin) {
             fetchUserByLogin(userLogin);
-        } else if (effectiveId && effectiveId !== "me") {
-            fetchUser(effectiveId);
+        } else if (id) {
+            fetchUser(id);
         }
     }, [id, userLogin, activeRole, isAdmin, navigate, fetchUser, fetchUserByLogin]);
 
@@ -134,7 +130,7 @@ export default function UserEditPage() {
 
             if (latestUser.account.email !== emailValue && isAdmin) {
                 const emailDTO: ChangeEmailDTO = {email: emailValue};
-                await emailChangeService.changeEmailByAdmin(latestUser.account.id, emailDTO, currentHash);
+                await emailChangeService.changeEmailByAdmin(latestUser.account.login, emailDTO, currentHash);
 
                 latestUser = await userService.getAccountById(latestUser.account.id);
                 currentHash = latestUser.account.versionHash;
@@ -255,9 +251,9 @@ export default function UserEditPage() {
         return (
             <span key={roleName}
                   className="px-3 py-1 bg-teal-100 text-teal-800 text-[10px] font-bold rounded-full tracking-wider">
-                {roleName === "TEACHER"
+                {roleName === RoleEnum.TEACHER
                     ? t('userEdit.roles.teacher').toUpperCase()
-                    : roleName === "STUDENT"
+                    : roleName === RoleEnum.STUDENT
                         ? t('userEdit.roles.student').toUpperCase()
                         : roleName}
             </span>
@@ -303,11 +299,41 @@ export default function UserEditPage() {
 
                         <div className="bg-base rounded-r-2xl border-l-4 border-brand/50 p-6">
                             <h3 className="text-xs font-bold tracking-widest text-secondary uppercase mb-4">{t('userEdit.stats.title')}</h3>
-                            <div className="flex justify-between items-center">
-                                <span
-                                    className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLogin')}</span>
-                                <span
-                                    className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
+
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLogin')}</span>
+                                    <span className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLoginFail')}</span>
+                                    <span className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginFailureDateTime)}</span>
+                                </div>
+
+                                <div className="flex justify-between items-start">
+                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.createdAt')}</span>
+                                    <div className="text-right">
+                                        <p className="text-sm font-bold text-primary">{formatDate(user.account.createdAt)}</p>
+                                        {user.account.createdBy && (
+                                            <p className="text-[10px] text-secondary font-medium tracking-wide mt-0.5">
+                                                {t('userEdit.stats.createdBy')}: <span className="text-brand">{user.account.createdBy}</span>
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between items-start">
+                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.updatedAt')}</span>
+                                    <div className="text-right">
+                                        <p className="text-sm font-bold text-primary">{formatDate(user.account.updatedAt)}</p>
+                                        {user.account.modifiedBy && (
+                                            <p className="text-[10px] text-secondary font-medium tracking-wide mt-0.5">
+                                                {t('userEdit.stats.modifiedBy')}: <span className="text-brand">{user.account.modifiedBy}</span>
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -343,7 +369,7 @@ export default function UserEditPage() {
                                             className="w-full bg-transparent p-3 text-sm font-medium text-secondary outline-none pr-10 cursor-not-allowed"
                                         />
                                     </div>
-                                    {isAdmin && (
+                                    {isAdmin && !isMyself && (
                                         <div className="mt-2 text-right">
                                             <button
                                                 type="button"
@@ -358,7 +384,7 @@ export default function UserEditPage() {
                             </div>
                         </div>
 
-                        {!isAdmin && (
+                        {!isAdmin || isMyself && (
                             <div className="mb-8 p-6 bg-base rounded-xl border border-border">
                                 {!showPasswordForm ? (
                                     <div className="flex justify-between items-center">
@@ -429,12 +455,12 @@ export default function UserEditPage() {
                                 type="email"
                                 value={emailValue}
                                 required={true}
-                                readOnly={!isAdmin}
+                                readOnly={!isAdmin || isMyself}
                                 onChange={(e) => setEmailValue(e.target.value)}
                                 onBlur={handleEmailOnBlur}
                                 className={`w-full rounded-md p-3 text-sm font-medium transition-colors outline-none border ${
                                     emailError ? "border-danger focus:border-danger" : "border-border focus:border-brand"
-                                } ${isAdmin ? "bg-surface text-primary" : "text-secondary bg-base cursor-not-allowed"}`}
+                                } ${isAdmin && !isMyself ? "bg-surface text-primary" : "text-secondary bg-base cursor-not-allowed"}`}
                             />
 
                             {emailError && (
@@ -449,7 +475,7 @@ export default function UserEditPage() {
                                 </p>
                             )}
 
-                            {!isAdmin && !emailSuccess && (
+                            {(!isAdmin || isMyself) && !emailSuccess && (
                                 <SubmitButton
                                     onClick={onEmailSubmit}
                                     isLoading={isEmailRequesting}
@@ -459,7 +485,7 @@ export default function UserEditPage() {
                                 </SubmitButton>
                             )}
 
-                            {!isAdmin && emailSuccess && (
+                            {(!isAdmin || isMyself) && emailSuccess && (
                                 <div
                                     className="mt-6 p-5 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/50 rounded-xl animate-in fade-in duration-300">
                                     <div className="flex items-start gap-3">
@@ -499,7 +525,7 @@ export default function UserEditPage() {
 
                         <hr className="border-border mb-8"/>
 
-                        {isAdmin && (
+                        {isAdmin && !isMyself && (
                             <>
                                 <div
                                     className={`bg-base border border-border rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>

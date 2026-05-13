@@ -5,7 +5,7 @@
     "confirmPasswordChangeTitle": "Zmienić hasło?",
     "confirmPasswordChangeDesc": "Czy napewno chcesz zmienić hasło? Przy następnym uwierzytelnieniu musisz wykorzystać nowe hasło.",
     "confirmSaveDesc": "Czy napewno chcesz zapisać zmiany?",
-    "confirmSaveTitle": "Save changes?",
+    "confirmSaveTitle": "Zapisać zmiany?",
     "confirmUnblockTitle": "Odblokować użytkownika?",
     "confirmBlockTitle": "Zablokować użytkownika?",
     "confirmUnblockDesc": "Czy napewno chcesz odblokować użytkownika?",
@@ -156,7 +156,12 @@
     "stats": {
       "title": "Statystyki konta",
       "lastLogin": "Ostatnie logowanie",
-      "never": "Nigdy"
+      "lastLoginFail": "Ostatnie nieudane logowanie",
+      "never": "Nigdy",
+      "createdAt": "Utworzono",
+      "createdBy": "Przez",
+      "updatedAt": "Zmodyfikowano",
+      "modifiedBy": "Przez"
     },
     "credentials": {
       "title": "Dane uwierzytelniające",

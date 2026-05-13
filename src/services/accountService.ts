@@ -22,8 +22,8 @@ export const changeOwnPassword = async (data: ChangeOwnPasswordPayload, version:
     });
 };
 
-export const changeOtherPassword = async (id: string, data: ChangeOtherPasswordPayload, version: string) => {
-    return await api.post(`/account/${id}/password`, data, {
+export const changeOtherPassword = async (login: string, data: ChangeOtherPasswordPayload, version: string) => {
+    return await api.post(`/account/${login}/password`, data, {
         headers: {
             'If-Match': version
         }

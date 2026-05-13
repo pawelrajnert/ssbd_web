@@ -1,5 +1,5 @@
 import { useEffect, useState, type KeyboardEvent } from "react";
-import { RefreshCw, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { RefreshCw, Filter, ChevronLeft, ChevronRight, ChevronsUpDownIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/userService";
@@ -203,24 +203,50 @@ export default function UserListPage() {
                             <thead>
                             <tr className="border-b border-border  cursor-pointer select-none">
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('accessLevel')}>
-                                    {t('userList.table.role')}
+                                    <div className="flex items-center gap-2">
+                                        {t('userList.table.role')}
+                                        <ChevronsUpDownIcon className="h-4 w-4"/>
+                                    </div>
                                 </th>
+
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('name')}>
-                                    {t('userList.table.firstName')}
+                                    <div className="flex items-center gap-2">
+                                        {t('userList.table.firstName')}
+                                        <ChevronsUpDownIcon className="h-4 w-4"/>
+                                    </div>
                                 </th>
+
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('surname')}>
-                                    {t('userList.table.surname')}
+                                    <div className="flex items-center gap-2">
+                                        {t('userList.table.surname')}
+                                        <ChevronsUpDownIcon className="h-4 w-4"/>
+                                    </div>
                                 </th>
+
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('login')}>
-                                    {t('userList.table.login')}
+                                    <div className="flex items-center gap-2">
+                                        {t('userList.table.login')}
+                                        <ChevronsUpDownIcon className="h-4 w-4"/>
+                                    </div>
                                 </th>
+
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('email')}>
-                                    {t('userList.table.email')}
+                                    <div className="flex items-center gap-2">
+                                        {t('userList.table.email')}
+                                        <ChevronsUpDownIcon className="h-4 w-4"/>
+                                    </div>
                                 </th>
+
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('lastLoginSuccessDateTime')}>
-                                    {t('userList.table.lastLogin')}
+                                    <div className="flex items-center gap-2">
+                                        {t('userList.table.lastLogin')}
+                                        <ChevronsUpDownIcon className="h-4 w-4"/>
+                                    </div>
                                 </th>
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest">{t('userList.table.actions')}</th>
+
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest">
+                                    {t('userList.table.actions')}
+                                </th>
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
