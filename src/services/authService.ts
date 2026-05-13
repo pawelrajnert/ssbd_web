@@ -16,6 +16,14 @@ export const authService = {
     refreshSession: async (refreshToken: string) => {
         const response = await axiosInstance.post('/auth/refresh', { refreshToken });
         return response.data;
+    },
+    loginWithEmail: async (email: string) => {
+        const response = await axiosInstance.post('/auth/loginEmail', { email });
+        return { response: response.data, status: response.status };
+    },
+    verifyEmailCode: async (token: string, email: string) => {
+        const response = await axiosInstance.post('/auth/checkEmail', { token, email });
+        return response.data;
     }
 };
 
