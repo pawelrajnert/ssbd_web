@@ -85,6 +85,41 @@
         },
         "unexpectedError": "Wystąpił nieoczekiwany błąd."
       }
+    },
+    "unblock": {
+      "heading": "Odblokowanie konta po nieaktywności",
+      "description": "Kliknij przycisk, aby odblokować swoje konto z powodu nieaktywności.",
+      "button": "ODBLOKUJ KONTO",
+      "loading": "Odblokowywanie konta",
+      "loadingSub": "Proces odblokowywania konta jest przetwarzany przez system.",
+      "success": "Konto odblokowane",
+      "successSub": "Twoje konto zostało pomyślnie odblokowane. Możesz się teraz zalogować.",
+      "proceed": "PRZEJDŹ DO LOGOWANIA",
+      "error": "Odblokowanie nie powiodło się",
+      "errorSub": "Link jest nieprawidłowy, wygasł lub Twoje konto nie wymaga odblokowania.",
+      "back": "WRÓĆ DO LOGOWANIA"
+    },
+    "emailLogin": {
+      "heading": "Logowanie kodem",
+      "subheading": "Wprowadź swój adres e-mail, aby otrzymać jednorazowy kod logowania.",
+      "errorBlocked": "Twoje konto zostało zablokowane.",
+      "errorNotFound": "Konto z podanym adresem e-mail nie istnieje.",
+      "errorGeneric": "Wystąpił nieoczekiwany błąd.",
+      "emailLabel": "ADRES E-MAIL",
+      "emailPlaceholder": "nazwa@domena.pl",
+      "submitButton": "Wyślij kod",
+      "backToLogin": "Wróć do logowania",
+      "verify": {
+        "heading": "Wprowadź kod",
+        "subheading": "Wysłaliśmy kod weryfikacyjny na adres",
+        "subheadingTime": "Kod jest ważny przez 5 minut.",
+        "errorInvalid": "Nieprawidłowy lub wygasły kod.",
+        "errorGeneric": "Wystąpił nieoczekiwany błąd.",
+        "codeLabel": "KOD JEDNORAZOWY",
+        "codePlaceholder": "np. A1B2C3D4E5",
+        "submitButton": "Zweryfikuj i zaloguj",
+        "backToLogin": "Wstecz"
+      }
     }
   },
   "userList": {
@@ -162,6 +197,16 @@
       "updateError": "Wystąpił błąd podczas aktualizacji ról."
     }
   },
+  "force_password_change": {
+    "title": "Wymuszona zmiana hasła",
+    "description": "Ze względów bezpieczeństwa musisz ustalić nowe hasło przed wejściem do aplikacji."
+  },
+  "password": {
+    "old": "Stare hasło",
+    "new": "Nowe hasło",
+    "confirm": "Potwierdź nowe hasło",
+    "change_button": "Zmień hasło i odblokuj dostęp"
+  },
   "profile": {
     "oldPassword": "Stare hasło",
     "newPassword": "Nowe hasło",
@@ -184,7 +229,11 @@
     "passwordChangedSuccess": "Hasło zostało pomyślnie zmienione!"
   },
   "error": {
-    "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne."
+    "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne.",
+    "concurrent.update": "Dane zostały zmodyfikowane w tle. Spróbuj ponownie.",
+    "password.same.as.old": "Nowe hasło nie może być takie samo jak stare!",
+    "password.invalid.old": "Podane stare hasło jest nieprawidłowe.",
+    "password.already.used": "Zaproponowane hasło było już używane na tym koncie w przeszłości."
   },
   "emailChange": {
     "main": {
@@ -243,7 +292,7 @@
       },
       "error": {
         "title": "Błąd podczas przywracania adresu email",
-        "description": "Link przywracający jest nieważny, został już użyty lub wygasł."
+        "description": "Link przywracający jest nieważny, został użyty lub wygasł."
       }
     }
   },
@@ -275,7 +324,8 @@
       "submit": "Wyślij link resetujący",
       "backToLogin": "Powrót do logowania",
       "errorSend": "Wystąpił błąd podczas wysyłania linku resetującego.",
-      "errorUnexpected": "Wystąpił nieoczekiwany błąd."
+      "errorUnexpected": "Wystąpił nieoczekiwany błąd.",
+      "codeLogin": "Zaloguj się jednorazowym kodem"
     }
   },
   "header": {
@@ -323,6 +373,11 @@
     },
     "terms": {
       "required": "Musisz zaakceptować regulamin i warunki"
+    },
+    "emailCode": {
+      "required": "Kod jest wymagany",
+      "length": "Kod musi składać się dokładnie z 10 znaków",
+      "format": "Kod może zawierać tylko litery i cyfry"
     }
   },
   "sessionModal": {

@@ -18,11 +18,26 @@ export interface AccountDTO {
     updatedAt?: string | null;
     createdBy?: string | null;
     modifiedBy?: string | null;
+
+    listPageSize?: number | null;
+    listSortBy?: string | null;
+    listSortDesc?: boolean | null;
 }
 
 export interface AccountWithAccessLevelsDTO {
     account: AccountDTO;
     accessLevels: AccessLevelDTO[];
+}
+
+export interface SortObject {
+    property: string;
+    direction: string;
+    ascending: boolean;
+    descending: boolean;
+}
+
+export interface PageableObject {
+    sort?: SortObject[];
 }
 
 export interface Page<T> {
@@ -34,6 +49,8 @@ export interface Page<T> {
     first: boolean;
     last: boolean;
     empty: boolean;
+    sort?: SortObject[];
+    pageable?: PageableObject;
 }
 
 export interface ChangeEmailDTO {

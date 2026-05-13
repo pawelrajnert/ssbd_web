@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { PATHS } from './paths.ts';
 import { useAuth } from "../hooks/useAuth";
 import {type Role, RoleEnum} from "../types/role.types.ts";
@@ -9,12 +9,21 @@ interface HandleProtectionProperties {
 
 const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
     const { isAuthenticated, activeRole } = useAuth();
+    const location = useLocation();
 
     if (!isAuthenticated) {
         return <Navigate to={PATHS.LOGIN} replace />;
     }
 
+    if (activeRole === RoleEnum.FORCE_PASSWORD_CHANGE) {
+        if (location.pathname !== PATHS.FORCE_PASSWORD_CHANGE) {
+            return <Navigate to={PATHS.FORCE_PASSWORD_CHANGE} replace />;
+        }
+        return <Outlet />;
+    }
+
     const hasPermission = !allowedRoles || allowedRoles.includes(activeRole as Role);
+
 
     if (!hasPermission) {
         console.warn("Access Denied. User Role:", activeRole, "Allowed:", allowedRoles);
