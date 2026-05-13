@@ -159,6 +159,16 @@
       "updateError": "An error occurred while updating roles."
     }
   },
+  "force_password_change": {
+    "title": "Wymuszona zmiana hasła",
+    "description": "Ze względów bezpieczeństwa musisz ustalić nowe hasło przed wejściem do aplikacji."
+  },
+  "password": {
+    "old": "Old password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "change_button": "Change password and unlock access"
+  },
   "profile": {
     "oldPassword": "Old password",
     "newPassword": "New password",
@@ -182,6 +192,9 @@
   },
   "error": {
     "changePasswordFailed": "Failed to change the password. Check if the old password and data version are correct.",
+    "concurrent.update": "Data was modified in the background. Please try again.",
+    "password.same.as.old": "New password cannot be the same as the old password!",
+    "password.invalid.old": "Invalid old password provided.",
     "password.already.used": "The proposed password has already been used for this account in the past."
   },
   "emailChange": {
