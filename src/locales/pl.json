@@ -85,6 +85,28 @@
         },
         "unexpectedError": "Wystąpił nieoczekiwany błąd."
       }
+    },
+    "emailLogin": {
+      "heading": "Logowanie kodem",
+      "subheading": "Wprowadź swój adres e-mail, aby otrzymać jednorazowy kod logowania.",
+      "errorBlocked": "Twoje konto zostało zablokowane.",
+      "errorNotFound": "Konto z podanym adresem e-mail nie istnieje.",
+      "errorGeneric": "Wystąpił nieoczekiwany błąd.",
+      "emailLabel": "ADRES E-MAIL",
+      "emailPlaceholder": "nazwa@domena.pl",
+      "submitButton": "Wyślij kod",
+      "backToLogin": "Wróć do logowania",
+      "verify": {
+        "heading": "Wprowadź kod",
+        "subheading": "Wysłaliśmy kod weryfikacyjny na adres",
+        "subheadingTime": "Kod jest ważny przez 5 minut.",
+        "errorInvalid": "Nieprawidłowy lub wygasły kod.",
+        "errorGeneric": "Wystąpił nieoczekiwany błąd.",
+        "codeLabel": "KOD JEDNORAZOWY",
+        "codePlaceholder": "np. A1B2C3D4E5",
+        "submitButton": "Zweryfikuj i zaloguj",
+        "backToLogin": "Wstecz"
+      }
     }
   },
   "userList": {
@@ -284,7 +306,8 @@
       "submit": "Wyślij link resetujący",
       "backToLogin": "Powrót do logowania",
       "errorSend": "Wystąpił błąd podczas wysyłania linku resetującego.",
-      "errorUnexpected": "Wystąpił nieoczekiwany błąd."
+      "errorUnexpected": "Wystąpił nieoczekiwany błąd.",
+      "codeLogin": "Zaloguj się jednorazowym kodem"
     }
   },
   "header": {
@@ -332,6 +355,11 @@
     },
     "terms": {
       "required": "Musisz zaakceptować regulamin i warunki"
+    },
+    "emailCode": {
+      "required": "Kod jest wymagany",
+      "length": "Kod musi składać się dokładnie z 10 znaków",
+      "format": "Kod może zawierać tylko litery i cyfry"
     }
   },
   "sessionModal": {
