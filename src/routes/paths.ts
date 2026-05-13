@@ -14,20 +14,8 @@ export const PATHS = {
     OWN_EMAIL_CHANGE_REVERT: "/revert-email",
     _2FA_VERIFY: "/login/2fa",
     STUDENT_SUBJECT_LIST: "/my-subjects",
-    TEACHER_SUBJECT_LIST: "/subjects"
+    TEACHER_SUBJECT_LIST: "/subjects",
+    FORCE_PASSWORD_CHANGE: "/force-password-change"
 } as const;
-
-export const getDashboardPath = (role: string | null): string => {
-    switch (role?.toUpperCase()) {
-        case 'ADMIN':
-            return PATHS.USER_LIST;
-        case 'TEACHER':
-            return PATHS.TEACHER_SUBJECT_LIST;
-        case 'STUDENT':
-            return PATHS.STUDENT_SUBJECT_LIST;
-        default:
-            return PATHS.PROFILE;
-    }
-};
 
 export type AppPaths = typeof PATHS[keyof typeof PATHS];
