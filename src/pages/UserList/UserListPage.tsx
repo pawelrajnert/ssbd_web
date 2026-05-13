@@ -201,7 +201,7 @@ export default function UserListPage() {
                         )}
                         <table className="w-full text-left border-collapse relative">
                             <thead>
-                            <tr className="border-b border-gray-100 cursor-pointer select-none">
+                            <tr className="border-b border-border  cursor-pointer select-none">
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('accessLevel')}>
                                     {t('userList.table.role')}
                                 </th>
@@ -257,18 +257,18 @@ export default function UserListPage() {
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 border-t border-gray-100 bg-gray-50/50 gap-4">
+                    <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 border-t border-border bg-surface gap-4">
                         <div className="flex items-center gap-4">
-                            <span className="text-sm text-gray-600 font-medium">
+                            <span className="text-sm text-primary font-medium">
                                 {t('userList.pagination.page')} {data ? (data.number + 1) : 0} {t('userList.pagination.of')} {data ? data.totalPages : 0}
                             </span>
-                            <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                            <div className="flex items-center gap-2 text-sm text-primary font-medium">
                                 <label htmlFor="pageSize">{t('userList.pagination.showing')}</label>
                                 <select
                                     id="pageSize"
                                     value={currentSize}
                                     onChange={(e) => handleSizeChange(Number(e.target.value))}
-                                    className="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#7A1014]"
+                                    className="border border-border rounded-md px-2 py-1 text-sm bg-surface focus:outline-none focus:ring-2 focus:ring-[#7A1014]"
                                 >
                                     {availableSizes.map(s => (
                                         <option key={s} value={s}>{s}</option>
