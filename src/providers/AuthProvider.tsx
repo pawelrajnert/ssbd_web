@@ -2,6 +2,8 @@ import {type ReactNode, useMemo, useState} from "react";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext, type JwtPayload } from "../hooks/useAuth.ts";
 import {userService} from "../services/userService.ts";
+import {authService} from "../services/authService.ts";
+import {RoleEnum} from "../types/role.types.ts";
 
 const determineActiveRole = (roles: string[]): string | null => {
     if (!roles || roles.length === 0) return null;
@@ -11,7 +13,7 @@ const determineActiveRole = (roles: string[]): string | null => {
         return storedRole;
     }
 
-    const defaultRole = roles.includes("ADMIN") ? "ADMIN" : roles[0];
+    const defaultRole = roles.includes(RoleEnum.ADMINISTRATOR) ? RoleEnum.ADMINISTRATOR : roles[0];
     sessionStorage.setItem("active_role", defaultRole);
     return defaultRole;
 };
@@ -46,7 +48,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
             console.warn(`Attempted to set unauthorized role: ${role}`);
         }
-        //TODO: wysyłąć żądanie żeby logować że ktoś zmieńił rolę???
     };
 
     const setTokens = (accessToken: string | null, rToken: string | null) => {
@@ -74,9 +75,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = () => {
         sessionStorage.removeItem('access_token');
         sessionStorage.removeItem('refresh_token');
+        sessionStorage.removeItem('active_role');
         setToken(null);
         setRefreshToken(null);
+        setActiveRole(null);
     };
+
+    const extendSession = async () => {
+        if (refreshToken) {
+            try {
+                const data = await authService.refreshSession(refreshToken);
+                setTokens(data.token, data.refreshToken);
+            } catch (error) {
+                console.error("Failed to extend session", error);
+                logout();
+            }
+        }
+    };
+
 
     const contextValue = useMemo(() => ({
         token,
@@ -88,6 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         userLogin,
         isAuthenticated: !!token,
         logout,
+        extendSession
     }), [token, refreshToken, activeRole, availableRoles, userLogin]);
 
     return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;

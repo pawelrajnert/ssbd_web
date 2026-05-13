@@ -125,7 +125,6 @@ export default function UserListPage() {
         const date = new Date(dateString);
         return date.toISOString().replace('T', ' ').substring(0, 16);
     };
-
     const renderRoleBadge = (roleName: string) => {
         const isAdmin = roleName === "ROLE_ADMIN" || roleName === "ADMINISTRATOR";
         const colors = isAdmin ? "bg-red-100 text-[#7A1014]" : "bg-teal-100 text-teal-800";
@@ -136,9 +135,12 @@ export default function UserListPage() {
             return roleName;
         };
         return (
-            <span key={roleName} className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}>
-                {getLabel()}
-            </span>
+        <span
+                key={roleName}
+                className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}
+            >
+            {getLabel()}
+        </span>
         );
     };
 
@@ -159,20 +161,24 @@ export default function UserListPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
+        <div className="min-h-screen bg-base p-8">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('userList.title')}</h1>
-                        <p className="text-gray-500 text-sm max-w-2xl">{t('userList.subtitle')}</p>
+                        <h1 className="text-3xl font-bold text-primary mb-2">{t('userList.title')}</h1>
+                        <p className="text-secondary text-sm max-w-2xl">{t('userList.subtitle')}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button onClick={handleRefresh} disabled={isLoading} className="flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 disabled:opacity-50 rounded-md text-sm font-bold text-gray-700 transition-colors">
+                        <button
+                            onClick={handleRefresh}
+                            disabled={isLoading}
+                            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border hover:bg-active disabled:opacity-50 rounded-md text-sm font-bold text-primary transition-colors"
+                        >
                             <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
                             {t('userList.refresh')}
                         </button>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-500">
+                            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-secondary">
                                 <Filter size={16} />
                             </div>
                             <input
@@ -181,66 +187,65 @@ export default function UserListPage() {
                                 value={phrase}
                                 onChange={(e) => setPhrase(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="pl-10 pr-4 py-2 bg-gray-200 border-none rounded-md text-sm font-semibold text-gray-700 focus:ring-2 focus:ring-[#7A1014] outline-none w-64 transition-all"
+                                className="pl-10 pr-4 py-2 bg-surface border border-border rounded-md text-sm font-semibold text-primary focus:ring-2 focus:ring-brand outline-none w-64 transition-all"
                             />
                         </div>
                     </div>
                 </div>
-
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden flex flex-col">
                     <div className="overflow-x-auto relative">
                         {isLoading && (
-                            <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10">
-                                <RefreshCw className="animate-spin text-[#7A1014]" size={32} />
+                            <div className="absolute inset-0 bg-surface/50 backdrop-blur-[1px] flex items-center justify-center z-10">
+                                <RefreshCw className="animate-spin text-brand" size={32} />
                             </div>
                         )}
                         <table className="w-full text-left border-collapse relative">
                             <thead>
                             <tr className="border-b border-gray-100 cursor-pointer select-none">
-                                <th className="py-6 px-8 text-xs font-bold text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition-colors" onClick={() => handleSort('accessLevel')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('accessLevel')}>
                                     {t('userList.table.role')}
                                 </th>
-                                <th className="py-6 px-6 text-xs font-bold text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition-colors" onClick={() => handleSort('name')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('name')}>
                                     {t('userList.table.firstName')}
                                 </th>
-                                <th className="py-6 px-6 text-xs font-bold text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition-colors" onClick={() => handleSort('surname')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('surname')}>
                                     {t('userList.table.surname')}
                                 </th>
-                                <th className="py-6 px-6 text-xs font-bold text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition-colors" onClick={() => handleSort('login')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('login')}>
                                     {t('userList.table.login')}
                                 </th>
-                                <th className="py-6 px-6 text-xs font-bold text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition-colors" onClick={() => handleSort('email')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('email')}>
                                     {t('userList.table.email')}
                                 </th>
-                                <th className="py-6 px-6 text-xs font-bold text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition-colors" onClick={() => handleSort('lastLoginSuccessDateTime')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('lastLoginSuccessDateTime')}>
                                     {t('userList.table.lastLogin')}
                                 </th>
-                                <th className="py-6 px-8 text-xs font-bold text-gray-700 uppercase tracking-widest">{t('userList.table.actions')}</th>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest">{t('userList.table.actions')}</th>
                             </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-50">
+                            <tbody className="divide-y divide-border">
                             {data?.content?.length === 0 ? (
                                 <tr>
-                                    <td colSpan={7} className="py-8 text-center text-gray-500 font-medium">
+                                    <td colSpan={7} className="py-8 text-center text-secondary font-medium">
                                         {t('userList.noResults', 'Brak wyników')}
                                     </td>
                                 </tr>
                             ) : (
                                 data?.content?.map((row) => (
-                                    <tr key={row.account.id} className="hover:bg-gray-50 transition-colors">
+                                    <tr key={row.account.id} className="hover:bg-base transition-colors">
                                         <td className="py-4 px-8 align-middle">
                                             <div className="flex flex-col items-start">
                                                 {row.accessLevels.filter(al => al.active).sort((a, b) => a.accessLevelName.localeCompare(b.accessLevelName)).map(al => renderRoleBadge(al.accessLevelName))}
                                             </div>
                                         </td>
-                                        <td className="py-4 px-6 text-sm text-gray-800 font-medium">{row.account.name}</td>
-                                        <td className="py-4 px-6 text-sm text-gray-800 font-medium">{row.account.surname}</td>
-                                        <td className="py-4 px-6 text-sm text-gray-500">{row.account.login}</td>
-                                        <td className="py-4 px-6 text-sm text-gray-500">{row.account.email}</td>
-                                        <td className="py-4 px-6 text-sm text-gray-500">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
+                                        <td className="py-4 px-6 text-sm text-primary font-medium">{row.account.name}</td>
+                                        <td className="py-4 px-6 text-sm text-primary font-medium">{row.account.surname}</td>
+                                        <td className="py-4 px-6 text-sm text-secondary">{row.account.login}</td>
+                                        <td className="py-4 px-6 text-sm text-secondary">{row.account.email}</td>
+                                        <td className="py-4 px-6 text-sm text-secondary">{formatDate(row.account.lastLoginSuccessDateTime)}</td>
                                         <td className="py-4 px-8 gap-4">
                                             <button
-                                                className="text-sm font-bold text-[#7A1014] hover:text-red-900 cursor-pointer transition-colors"
+                                                className="text-sm font-bold text-brand hover:text-brand-hover cursor-pointer transition-colors"
                                                 onClick={() => navigate(PATHS.USER_EDIT.replace(':id', row.account.id))}
                                             >
                                                 {t('userList.table.edit')}
@@ -252,7 +257,6 @@ export default function UserListPage() {
                             </tbody>
                         </table>
                     </div>
-
                     <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 border-t border-gray-100 bg-gray-50/50 gap-4">
                         <div className="flex items-center gap-4">
                             <span className="text-sm text-gray-600 font-medium">
@@ -272,12 +276,11 @@ export default function UserListPage() {
                                 </select>
                             </div>
                         </div>
-
                         <div className="flex gap-2">
                             <button
                                 onClick={handlePrevPage}
                                 disabled={page === 0 || isLoading}
-                                className="flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-md text-sm font-bold text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 <ChevronLeft size={16} />
                                 {t('userList.pagination.prev', 'Poprzednia')}
@@ -285,7 +288,7 @@ export default function UserListPage() {
                             <button
                                 onClick={handleNextPage}
                                 disabled={!data || data.last || isLoading}
-                                className="flex items-center gap-1 px-3 py-1.5 bg-white border border-gray-200 rounded-md text-sm font-bold text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 {t('userList.pagination.next', 'Następna')}
                                 <ChevronRight size={16} />

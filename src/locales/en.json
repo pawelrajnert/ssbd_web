@@ -318,5 +318,12 @@
     "terms": {
       "required": "You must accept the terms and conditions"
     }
+  },
+  "sessionModal": {
+    "title": "Session is expiring soon",
+    "desc1": "For security reasons, you will be logged out in ",
+    "desc2": " seconds. Do you want to extend your session?",
+    "logout": "Logout",
+    "extend": "Extend session"
   }
 }

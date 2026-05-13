@@ -18,11 +18,11 @@ import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.
 import ChangeOtherPasswordModal from "../UserList/ChangeOtherPasswordModal.tsx";
 
 export default function UserEditPage() {
-    const { id } = useParams<{ id: string }>();
+    const {id} = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { t } = useTranslation();
-    const { setDynamicBreadcrumb } = useBreadcrumb();
-    const { userLogin, activeRole } = useAuth();
+    const {t} = useTranslation();
+    const {setDynamicBreadcrumb} = useBreadcrumb();
+    const {userLogin, activeRole} = useAuth();
     const isAdmin = activeRole?.includes(RoleEnum.ADMINISTRATOR);
 
     const [user, setUser] = useState<AccountWithAccessLevelsDTO | null>(null);
@@ -268,73 +268,79 @@ export default function UserEditPage() {
         if (!dateString) return t('userEdit.stats.never');
         return new Date(dateString).toLocaleString();
     };
-
     if (!user) {
         return (
-            <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-                <div className="w-8 h-8 border-4 border-[#7A1014] border-t-transparent rounded-full animate-spin"></div>
+            <div className="min-h-screen bg-base flex justify-center items-center">
+                <div className="w-8 h-8 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
+        <div className="min-h-screen bg-base p-8 transition-colors duration-300">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">{t('userEdit.title')}</h1>
+                <h1 className="text-3xl font-bold text-primary mb-8">{t('userEdit.title')}</h1>
 
                 {error && (
-                    <div className="mb-4 p-4 bg-red-50 text-[#7A1014] rounded-md border border-red-200 text-sm font-semibold">
+                    <div
+                        className="mb-4 p-4 bg-danger-subtle text-danger rounded-md border border-danger-border text-sm font-semibold">
                         {error}
                     </div>
                 )}
 
                 <div className="flex flex-col md:flex-row gap-8 items-start">
                     <div className="w-full md:w-1/3 space-y-6">
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center justify-center">
-                            <h2 className="text-2xl font-extrabold text-gray-900 text-center">{user.account.name} {user.account.surname}</h2>
+                        <div
+                            className="bg-surface rounded-2xl shadow-sm border border-border p-8 flex flex-col items-center justify-center">
+                            <h2 className="text-2xl font-extrabold text-primary text-center">{user.account.name} {user.account.surname}</h2>
                             <div className="flex flex-wrap gap-2 justify-center mt-4">
                                 {localRoles.length > 0
                                     ? localRoles.map(renderRoleBadge)
-                                    : <span className="text-xs text-gray-400">{t('userEdit.noRoles')}</span>
+                                    : <span className="text-xs text-secondary">{t('userEdit.noRoles')}</span>
                                 }
                             </div>
                         </div>
 
-                        <div className="bg-gray-100/50 rounded-r-2xl border-l-4 border-red-200 p-6">
-                            <h3 className="text-xs font-bold tracking-widest text-gray-400 uppercase mb-4">{t('userEdit.stats.title')}</h3>
+                        <div className="bg-base rounded-r-2xl border-l-4 border-brand/50 p-6">
+                            <h3 className="text-xs font-bold tracking-widest text-secondary uppercase mb-4">{t('userEdit.stats.title')}</h3>
                             <div className="flex justify-between items-center">
-                                <span className="text-sm font-semibold text-gray-600">{t('userEdit.stats.lastLogin')}</span>
-                                <span className="text-sm font-bold text-gray-900">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
+                                <span
+                                    className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLogin')}</span>
+                                <span
+                                    className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="w-full md:w-2/3 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                    <div className="w-full md:w-2/3 bg-surface rounded-2xl shadow-sm border border-border p-8">
 
                         <div className="mb-8">
-                            <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.credentials.title')}</h3>
+                            <h3 className="text-xs font-bold text-brand tracking-widest uppercase mb-4">{t('userEdit.credentials.title')}</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.credentials.login')}</label>
-                                    <div className="relative bg-gray-50 border border-gray-200 rounded-md">
+                                    <label
+                                        className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">{t('userEdit.credentials.login')}</label>
+                                    <div className="relative bg-base border border-border rounded-md">
                                         <input
                                             type="text"
                                             value={user.account.login}
                                             readOnly
-                                            className="w-full bg-transparent p-3 text-sm font-medium text-gray-600 outline-none pr-10 cursor-not-allowed"
+                                            className="w-full bg-transparent p-3 text-sm font-medium text-secondary outline-none pr-10 cursor-not-allowed"
                                         />
-                                        <Lock size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                        <Lock size={16}
+                                              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary opacity-50"/>
                                     </div>
-                                    <p className="text-[10px] text-gray-400 mt-2">{t('userEdit.credentials.loginHint')}</p>
+                                    <p className="text-[10px] text-secondary mt-2">{t('userEdit.credentials.loginHint')}</p>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.credentials.password')}</label>
-                                    <div className="relative bg-gray-50 border border-gray-200 rounded-md">
+                                    <label
+                                        className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">{t('userEdit.credentials.password')}</label>
+                                    <div className="relative bg-base border border-border rounded-md">
                                         <input
                                             type="password"
                                             value="••••••••"
                                             readOnly
-                                            className="w-full bg-transparent p-3 text-sm font-medium text-gray-600 outline-none pr-10 cursor-not-allowed"
+                                            className="w-full bg-transparent p-3 text-sm font-medium text-secondary outline-none pr-10 cursor-not-allowed"
                                         />
                                     </div>
                                     {isAdmin && (
@@ -342,7 +348,7 @@ export default function UserEditPage() {
                                             <button
                                                 type="button"
                                                 onClick={() => setIsChangePasswordModalOpen(true)}
-                                                className="text-[10px] font-bold text-[#7A1014] hover:text-red-900 tracking-widest uppercase transition-colors"
+                                                className="text-[10px] font-bold text-brand hover:text-brand-hover tracking-widest uppercase transition-colors"
                                             >
                                                 {t('userList.changePassword')}
                                             </button>
@@ -353,16 +359,16 @@ export default function UserEditPage() {
                         </div>
 
                         {!isAdmin && (
-                            <div className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-100">
+                            <div className="mb-8 p-6 bg-base rounded-xl border border-border">
                                 {!showPasswordForm ? (
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <h3 className="font-medium text-gray-800">{t('profile.security')}</h3>
-                                            <p className="text-sm text-gray-500">{t('profile.securityDesc')}</p>
+                                            <h3 className="font-medium text-primary">{t('profile.security')}</h3>
+                                            <p className="text-sm text-secondary">{t('profile.securityDesc')}</p>
                                         </div>
                                         <button
                                             onClick={() => setShowPasswordForm(true)}
-                                            className="bg-[#7A1014] hover:bg-red-900 text-white font-bold px-4 py-2 rounded-md transition-colors text-xs tracking-widest uppercase"
+                                            className="bg-brand hover:bg-brand-hover text-white font-bold px-4 py-2 rounded-md transition-colors text-xs tracking-widest uppercase"
                                         >
                                             {t('profile.changeOwnPassword')}
                                         </button>
@@ -370,10 +376,10 @@ export default function UserEditPage() {
                                 ) : (
                                     <div className="animate-in fade-in duration-300">
                                         <div className="flex justify-between items-center mb-4">
-                                            <h3 className="font-medium text-gray-800">{t('profile.changePassword')}</h3>
+                                            <h3 className="font-medium text-primary">{t('profile.changePassword')}</h3>
                                             <button
                                                 onClick={() => setShowPasswordForm(false)}
-                                                className="text-gray-400 hover:text-gray-600 font-bold text-sm"
+                                                className="text-secondary hover:text-primary font-bold text-sm"
                                             >
                                                 {t('profile.cancel')}
                                             </button>
@@ -390,32 +396,33 @@ export default function UserEditPage() {
                             </div>
                         )}
 
-                        <hr className="border-gray-100 mb-8" />
+                        <hr className="border-border mb-8"/>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.firstName')}</label>
+                                <label
+                                    className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">{t('userEdit.personal.firstName')}</label>
                                 <input
                                     type="text"
                                     value={nameValue}
                                     onChange={(e) => setNameValue(e.target.value)}
-                                    className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none focus:border-gray-300"
+                                    className="w-full bg-surface border border-border rounded-md p-3 text-sm font-medium text-primary outline-none focus:border-brand"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{t('userEdit.personal.surname')}</label>
+                                <label
+                                    className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">{t('userEdit.personal.surname')}</label>
                                 <input
                                     type="text"
                                     value={surnameValue}
                                     onChange={(e) => setSurnameValue(e.target.value)}
-                                    className="w-full border border-gray-200 rounded-md p-3 text-sm font-medium text-gray-900 outline-none focus:border-gray-300"
+                                    className="w-full bg-surface border border-border rounded-md p-3 text-sm font-medium text-primary outline-none focus:border-brand"
                                 />
                             </div>
                         </div>
 
-                        {/* --- UPDATED EMAIL SECTION --- */}
                         <div className="mb-8">
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                            <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                                 {t('userEdit.personal.email')}
                             </label>
                             <input
@@ -425,19 +432,19 @@ export default function UserEditPage() {
                                 readOnly={!isAdmin}
                                 onChange={(e) => setEmailValue(e.target.value)}
                                 onBlur={handleEmailOnBlur}
-                                className={`w-full border rounded-md p-3 text-sm font-medium transition-colors outline-none ${
-                                    emailError ? "border-[#7A1014] focus:border-[#7A1014]" : "border-gray-200 focus:border-gray-300"
-                                } ${isAdmin ? "" : "text-gray-600 bg-gray-50 cursor-not-allowed"}`}
+                                className={`w-full rounded-md p-3 text-sm font-medium transition-colors outline-none border ${
+                                    emailError ? "border-danger focus:border-danger" : "border-border focus:border-brand"
+                                } ${isAdmin ? "bg-surface text-primary" : "text-secondary bg-base cursor-not-allowed"}`}
                             />
 
                             {emailError && (
-                                <p className="text-xs text-[#7A1014] font-semibold mt-2">
+                                <p className="text-xs text-danger font-semibold mt-2">
                                     {t('userEdit.personal.emailError')}
                                 </p>
                             )}
 
                             {emailRequestError && (
-                                <p className="text-xs text-[#7A1014] font-semibold mt-2">
+                                <p className="text-xs text-danger font-semibold mt-2">
                                     {emailRequestError}
                                 </p>
                             )}
@@ -453,14 +460,17 @@ export default function UserEditPage() {
                             )}
 
                             {!isAdmin && emailSuccess && (
-                                <div className="mt-6 p-5 bg-green-50 border border-green-100 rounded-xl animate-in fade-in duration-300">
+                                <div
+                                    className="mt-6 p-5 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/50 rounded-xl animate-in fade-in duration-300">
                                     <div className="flex items-start gap-3">
-                                        <CheckCircle2 className="text-green-600 mt-0.5 flex-shrink-0" size={20} />
+                                        <CheckCircle2
+                                            className="text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0"
+                                            size={20}/>
                                         <div className="flex-1">
-                                            <p className="text-sm text-green-800 font-medium mb-1">
+                                            <p className="text-sm text-green-800 dark:text-green-400 font-medium mb-1">
                                                 {t('emailChange.main.success.description')}
                                             </p>
-                                            <p className="text-xs text-green-600 mb-4 font-semibold">
+                                            <p className="text-xs text-green-600 dark:text-green-500/80 mb-4 font-semibold">
                                                 {t('emailChange.main.success.timeLimit')}
                                             </p>
 
@@ -469,16 +479,16 @@ export default function UserEditPage() {
                                                     type="button"
                                                     onClick={handleResend}
                                                     disabled={resendStatus === 'loading' || resendStatus === 'success'}
-                                                    className="px-4 py-2 bg-white border border-green-200 hover:bg-green-100 text-green-700 text-xs font-bold tracking-widest uppercase rounded-md transition-colors disabled:opacity-50"
+                                                    className="px-4 py-2 bg-white dark:bg-green-900/40 border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900/60 text-green-700 dark:text-green-400 text-xs font-bold tracking-widest uppercase rounded-md transition-colors disabled:opacity-50"
                                                 >
                                                     {resendStatus === 'loading' ? t('common.loading', 'LOADING...') :
                                                         resendStatus === 'success' ? t('emailChange.main.resendSuccess', 'SENT!') :
                                                             t('emailChange.main.resendButton', 'RESEND EMAIL')}
                                                 </button>
                                                 {resendStatus === 'error' && (
-                                                    <span className="text-red-500 text-xs font-semibold">
-                                                        {t('emailChange.main.error.unexpected')}
-                                                    </span>
+                                                    <span className="text-danger text-xs font-semibold">
+                                                    {t('emailChange.main.error.unexpected')}
+                                                </span>
                                                 )}
                                             </div>
                                         </div>
@@ -487,53 +497,59 @@ export default function UserEditPage() {
                             )}
                         </div>
 
-                        <hr className="border-gray-100 mb-8" />
+                        <hr className="border-border mb-8"/>
 
                         {isAdmin && (
                             <>
-                                <div className={`bg-gray-50 border border-gray-100 rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>
+                                <div
+                                    className={`bg-base border border-border rounded-xl p-4 flex items-center justify-between mb-8 transition-opacity ${isBlocking ? 'opacity-50' : 'opacity-100'}`}>
                                     <div>
-                                        <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-1">{t('userEdit.blockStatus.title')}</h3>
-                                        <p className="text-xs text-gray-500">{t('userEdit.blockStatus.hint')}</p>
+                                        <h3 className="text-xs font-bold text-brand tracking-widest uppercase mb-1">{t('userEdit.blockStatus.title')}</h3>
+                                        <p className="text-xs text-secondary">{t('userEdit.blockStatus.hint')}</p>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div
                                             onClick={() => !isBlocking && setIsBlockModalOpen(true)}
-                                            className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.isBlocked ? "bg-[#7A1014]" : "bg-gray-300"}`}
+                                            className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.isBlocked ? "bg-brand" : "bg-border"}`}
                                         >
-                                            <div className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}></div>
+                                            <div
+                                                className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}></div>
                                         </div>
-                                        <span className="text-sm font-bold text-gray-800">
-                                            {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
-                                        </span>
+                                        <span className="text-sm font-bold text-primary">
+                                        {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
+                                    </span>
                                     </div>
                                 </div>
 
                                 <div className="mb-10">
-                                    <h3 className="text-xs font-bold text-[#7A1014] tracking-widest uppercase mb-4">{t('userEdit.roles.title')}</h3>
+                                    <h3 className="text-xs font-bold text-brand tracking-widest uppercase mb-4">{t('userEdit.roles.title')}</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         {[
-                                            { id: RoleEnum.STUDENT, label: t('userEdit.roles.student') },
-                                            { id: RoleEnum.TEACHER, label: t('userEdit.roles.teacher') },
-                                            { id: RoleEnum.ADMINISTRATOR, label: t('userEdit.roles.admin') }
+                                            {id: RoleEnum.STUDENT, label: t('userEdit.roles.student')},
+                                            {id: RoleEnum.TEACHER, label: t('userEdit.roles.teacher')},
+                                            {id: RoleEnum.ADMINISTRATOR, label: t('userEdit.roles.admin')}
                                         ].map((role) => {
                                             const isChecked = localRoles.includes(role.id);
                                             return (
                                                 <div
                                                     key={role.id}
                                                     onClick={() => toggleRole(role.id)}
-                                                    className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${isChecked ? 'bg-red-50 border-[#7A1014]' : 'bg-gray-50 border-transparent hover:border-gray-200'}`}
+                                                    className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${isChecked ? 'bg-active border-brand' : 'bg-base border-transparent hover:border-border'}`}
                                                 >
-                                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-[#7A1014] border-[#7A1014]' : 'bg-white border-gray-300'}`}>
+                                                    <div
+                                                        className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isChecked ? 'bg-brand border-brand' : 'bg-surface border-border'}`}>
                                                         {isChecked && (
-                                                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                            <svg className="w-3 h-3 text-white" fill="none"
+                                                                 viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path strokeLinecap="round" strokeLinejoin="round"
+                                                                      strokeWidth={3} d="M5 13l4 4L19 7"/>
                                                             </svg>
                                                         )}
                                                     </div>
-                                                    <span className={`text-sm font-bold ${isChecked ? 'text-[#7A1014]' : 'text-gray-700'}`}>
-                                                        {role.label}
-                                                    </span>
+                                                    <span
+                                                        className={`text-sm font-bold ${isChecked ? 'text-brand' : 'text-primary'}`}>
+                                                    {role.label}
+                                                </span>
                                                 </div>
                                             )
                                         })}
@@ -546,7 +562,7 @@ export default function UserEditPage() {
                             <button
                                 onClick={handleDiscard}
                                 disabled={isSaving}
-                                className="px-6 py-3 text-xs font-bold text-gray-500 tracking-widest uppercase hover:text-gray-800 transition-colors disabled:opacity-50"
+                                className="px-6 py-3 text-xs font-bold text-secondary tracking-widest uppercase hover:text-primary transition-colors disabled:opacity-50"
                             >
                                 {t('userEdit.actions.discard')}
                             </button>
