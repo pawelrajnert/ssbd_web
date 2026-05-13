@@ -192,6 +192,16 @@
       "updateError": "Wystąpił błąd podczas aktualizacji ról."
     }
   },
+  "force_password_change": {
+    "title": "Wymuszona zmiana hasła",
+    "description": "Ze względów bezpieczeństwa musisz ustalić nowe hasło przed wejściem do aplikacji."
+  },
+  "password": {
+    "old": "Stare hasło",
+    "new": "Nowe hasło",
+    "confirm": "Potwierdź nowe hasło",
+    "change_button": "Zmień hasło i odblokuj dostęp"
+  },
   "profile": {
     "oldPassword": "Stare hasło",
     "newPassword": "Nowe hasło",
@@ -215,6 +225,9 @@
   },
   "error": {
     "changePasswordFailed": "Nie udało się zmienić hasła. Sprawdź, czy stare hasło i wersja danych są poprawne.",
+    "concurrent.update": "Dane zostały zmodyfikowane w tle. Spróbuj ponownie.",
+    "password.same.as.old": "Nowe hasło nie może być takie samo jak stare!",
+    "password.invalid.old": "Podane stare hasło jest nieprawidłowe.",
     "password.already.used": "Zaproponowane hasło było już używane na tym koncie w przeszłości."
   },
   "emailChange": {
@@ -274,7 +287,7 @@
       },
       "error": {
         "title": "Błąd podczas przywracania adresu email",
-        "description": "Link przywracający jest nieważny, został już użyty lub wygasł."
+        "description": "Link przywracający jest nieważny, został użyty lub wygasł."
       }
     }
   },
