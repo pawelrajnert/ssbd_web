@@ -98,6 +98,28 @@
       "error": "Unblocking Failed",
       "errorSub": "The link is invalid, expired, or your account does not require unblocking.",
       "back": "RETURN TO LOGIN"
+    },
+    "emailLogin": {
+      "heading": "Login with Email",
+      "subheading": "Enter your email address to receive a one-time login code.",
+      "errorBlocked": "Your account has been blocked.",
+      "errorNotFound": "Account with this email does not exist.",
+      "errorGeneric": "An unexpected error occurred.",
+      "emailLabel": "EMAIL ADDRESS",
+      "emailPlaceholder": "name@domain.com",
+      "submitButton": "Send Code",
+      "backToLogin": "Back to Login",
+      "verify": {
+        "heading": "Enter Code",
+        "subheading": "We sent a verification code to",
+        "subheadingTime": "The code is valid for 5 minutes.",
+        "errorInvalid": "Invalid or expired code.",
+        "errorGeneric": "An unexpected error occurred.",
+        "codeLabel": "ONE-TIME CODE",
+        "codePlaceholder": "e.g. A1B2C3D4E5",
+        "submitButton": "Verify & Login",
+        "backToLogin": "Back"
+      }
     }
   },
   "userList": {
@@ -286,7 +308,8 @@
       "submit": "Send Reset Link",
       "backToLogin": "Back to Login",
       "errorSend": "An error occurred while sending the reset link.",
-      "errorUnexpected": "An unexpected error occurred."
+      "errorUnexpected": "An unexpected error occurred.",
+      "codeLogin": "Log in with a one-time code"
     }
   },
   "header": {
@@ -331,6 +354,11 @@
     },
     "terms": {
       "required": "You must accept the terms and conditions"
+    },
+    "emailCode": {
+      "required": "Code is required",
+      "length": "Code must be exactly 10 characters long",
+      "format": "Code can only contain letters and numbers"
     }
   },
   "sessionModal": {

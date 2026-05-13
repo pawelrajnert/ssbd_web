@@ -19,6 +19,8 @@ import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.
 import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
 import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
+import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
+import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -64,6 +66,14 @@ const routes: RouteObject[] = [
                 path: PATHS.UNBLOCK_ACCOUNT,
                 element: <UnblockAccountPage/>
             },
+            {
+                path: PATHS.LOGIN_EMAIL,
+                element: <LoginEmailInitialPage/>
+            },
+            {
+                path: PATHS.LOGIN_EMAIL_VERIFY,
+                element: <LoginEmailVerifyPage/>
+            }
         ]
     },
     // {
