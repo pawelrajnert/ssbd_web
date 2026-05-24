@@ -18,7 +18,8 @@ export const PATHS = {
     UNBLOCK_ACCOUNT: "/unblock-account",
     FORCE_PASSWORD_CHANGE: "/force-password-change",
     LOGIN_EMAIL: "/login/email",
-    LOGIN_EMAIL_VERIFY: "/login/email/verify"
+    LOGIN_EMAIL_VERIFY: "/login/email/verify",
+    TEACHER_SUBJECT_USERS: "/subjects/:subjectName/users"
 } as const;
 
 export const getDashboardPath = (role: string | null): string => {
