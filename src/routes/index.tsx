@@ -22,6 +22,7 @@ import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePa
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
+import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -37,7 +38,7 @@ const routes: RouteObject[] = [
             },
             {
                 path: PATHS._2FA_VERIFY,
-                element: <TwoFactorVerifyPage />
+                element: <TwoFactorVerifyPage/>
             },
             {
                 path: PATHS.REGISTER,
@@ -97,10 +98,14 @@ const routes: RouteObject[] = [
     //             path: PATHS.USER_EDIT,
     //             element: <UserEditPage/>
     //         },
-    //         {
-    //             path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-    //             element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
-    //         }
+    //         // {
+    //         //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+    //         //     element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
+    //         // },
+    // {
+    //     path: PATHS.TEACHER_SUBJECT_USERS,
+    //     element: <TeacherSubjectUsersPage/>
+    // }
     //     ]
     // }, //dla testu :)
     {
@@ -126,8 +131,8 @@ const routes: RouteObject[] = [
         ]
     },
     {
-        element:<ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
-        children:[
+        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
+        children: [
             {
                 element: <Layout/>,
                 children: [
@@ -140,14 +145,18 @@ const routes: RouteObject[] = [
         ]
     },
     {
-        element:<ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
-        children:[
+        element: <ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
+        children: [
             {
                 element: <Layout/>,
                 children: [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
                         element: <TeacherSubjectListPage/>
+                    },
+                    {
+                        path: PATHS.TEACHER_SUBJECT_USERS,
+                        element: <TeacherSubjectUsersPage/>
                     }
                 ]
             }

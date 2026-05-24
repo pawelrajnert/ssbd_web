@@ -390,5 +390,18 @@
   "sidebar": {
     "userManagement": "Zarządzanie użytkownikami",
     "subjectList": "Moje przedmioty"
+  },
+  "subjectUsers": {
+    "title": "Lista studentów dla przedmiotu",
+    "subtitle": "Przeglądaj listę studentów oraz należące do nich repozytoria i średni wskaźnik plagiatu.",
+    "searchPlaceholder": "Szukaj...",
+    "noResults": "Brak studentów przypisanych do tego przedmiotu.",
+    "table": {
+      "firstName": "Imię",
+      "surname": "Nazwisko",
+      "repoName": "Nazwa repozytorium",
+      "plagiarism": "Średnia wartość wskaźniku podobieństwa",
+      "noData": "Brak wyników skanowania"
+    }
   }
 }
