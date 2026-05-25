@@ -2,8 +2,8 @@ import axios from 'axios';
 import type {FailedQueueItem} from "../../types/failed_query.type.ts";
 
 
-//const baseURL = 'http://localhost:8081/api';
- const baseURL = '/api';
+// const baseURL = 'http://localhost:8081/api';
+const baseURL = '/api';
 // przed wrzucaniem na produkcję podmienić :)
 
 const axiosInstance = axios.create({

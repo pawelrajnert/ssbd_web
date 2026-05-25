@@ -22,6 +22,7 @@ import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePa
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
+import CreateSubjectPage from "../pages/teacher/CreateSubjectPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -148,6 +149,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
                         element: <TeacherSubjectListPage/>
+                    },
+                    {
+                        path: PATHS.CREATE_SUBJECT,
+                        element: <CreateSubjectPage/>
                     }
                 ]
             }
