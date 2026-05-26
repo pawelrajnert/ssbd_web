@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 import { createSubjectSchema, type CreateSubjectFormData } from '../../shared/validators/createSubjectSchema';
 import { subjectService } from '../../services/SubjectService';
 import SubmitButton from '../../shared/components/buttons/SubmitButton';
 import { PATHS } from '../../routes/paths';
 
-const CreateSubjectPage: React.FC = () => {
+const CreateSubjectPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [serverError, setServerError] = useState<string | null>(null);
@@ -30,6 +29,7 @@ const CreateSubjectPage: React.FC = () => {
         try {
             await subjectService.createSubject({
                 name: data.name,
+                organizationName: data.organizationName,
                 edition: data.edition,
                 giteaURL: data.giteaURL,
                 subjectDescription: data.subjectDescription
@@ -43,7 +43,7 @@ const CreateSubjectPage: React.FC = () => {
                 } else if (error.response?.status === 403) {
                     setServerError(t('error.unauthorized', 'Brak uprawnień.'));
                 } else if (error.response?.status === 409) {
-                    setServerError(t('error.subject.exists', 'Taki przedmiot już istnieje.'));
+                    setServerError(t('error.subject.exists', 'Naruszenie unikalności danych. Taki wpis już istnieje w bazie.'));
                 } else {
                     setServerError(t('error.server.internal', 'Błąd serwera.'));
                 }
@@ -55,12 +55,12 @@ const CreateSubjectPage: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center justify-center py-8 px-4 w-full animate-in fade-in duration-500">
-            <div className="w-full max-w-2xl bg-surface border border-border rounded-2xl shadow-sm p-8">
+            <div className="w-full max-w-3xl bg-surface border border-border rounded-2xl shadow-sm p-8">
                 <h1 className="text-3xl font-extrabold text-primary mb-2">
                     {t('subject.create.title', 'Utwórz nowy przedmiot')}
                 </h1>
                 <p className="text-sm text-secondary mb-8">
-                    {t('subject.create.subtitle', 'Wprowadź dane przedmiotu, aby dodać go do bazy MPP.')}
+                    {t('subject.create.subtitle', 'Wprowadź dane przedmiotu, aby dodać go do bazy.')}
                 </p>
 
                 {serverError && (
@@ -89,6 +89,24 @@ const CreateSubjectPage: React.FC = () => {
                             )}
                         </div>
 
+                        {/* NAZWA ORGANIZACJI */}
+                        <div>
+                            <label htmlFor="organizationName" className="block text-xs font-bold text-secondary tracking-wider mb-2 uppercase">
+                                {t('subject.organizationName', 'Nazwa organizacji (Gitea)')}
+                            </label>
+                            <input
+                                id="organizationName"
+                                type="text"
+                                {...register('organizationName')}
+                                className={`w-full bg-base border rounded-md p-3 text-sm font-medium text-primary outline-none transition-colors ${
+                                    errors.organizationName ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'
+                                }`}
+                            />
+                            {errors.organizationName && (
+                                <p className="mt-1 text-[10px] text-danger font-semibold">{t(errors.organizationName.message as string)}</p>
+                            )}
+                        </div>
+
                         {/* EDYCJA (ROK) */}
                         <div>
                             <label htmlFor="edition" className="block text-xs font-bold text-secondary tracking-wider mb-2 uppercase">
@@ -106,25 +124,25 @@ const CreateSubjectPage: React.FC = () => {
                                 <p className="mt-1 text-[10px] text-danger font-semibold">{t(errors.edition.message as string)}</p>
                             )}
                         </div>
-                    </div>
 
-                    {/* GITEA URL */}
-                    <div>
-                        <label htmlFor="giteaURL" className="block text-xs font-bold text-secondary tracking-wider mb-2 uppercase">
-                            {t('subject.giteaURL', 'URL repozytorium Gitea')}
-                        </label>
-                        <input
-                            id="giteaURL"
-                            type="text"
-                            placeholder="https://gitea.it.p.lodz.pl/..."
-                            {...register('giteaURL')}
-                            className={`w-full bg-base border rounded-md p-3 text-sm font-medium text-primary outline-none transition-colors ${
-                                errors.giteaURL ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'
-                            }`}
-                        />
-                        {errors.giteaURL && (
-                            <p className="mt-1 text-[10px] text-danger font-semibold">{t(errors.giteaURL.message as string)}</p>
-                        )}
+                        {/* GITEA URL */}
+                        <div>
+                            <label htmlFor="giteaURL" className="block text-xs font-bold text-secondary tracking-wider mb-2 uppercase">
+                                {t('subject.giteaURL', 'URL repozytorium Gitea')}
+                            </label>
+                            <input
+                                id="giteaURL"
+                                type="text"
+                                placeholder="https://gitea.it.p.lodz.pl/..."
+                                {...register('giteaURL')}
+                                className={`w-full bg-base border rounded-md p-3 text-sm font-medium text-primary outline-none transition-colors ${
+                                    errors.giteaURL ? 'border-danger focus:border-danger' : 'border-border focus:border-brand'
+                                }`}
+                            />
+                            {errors.giteaURL && (
+                                <p className="mt-1 text-[10px] text-danger font-semibold">{t(errors.giteaURL.message as string)}</p>
+                            )}
+                        </div>
                     </div>
 
                     {/* OPIS */}
