@@ -20,7 +20,9 @@
     "refresh": "Odśwież",
     "loading": "Ładowanie...",
     "yes": "Tak",
-    "no": "Nie"
+    "no": "Nie",
+    "saving": "Zapisywanie...",
+    "create": "Utwórz przedmiot"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -436,6 +438,31 @@
       "NOTHING": "Nic",
       "ONLY_PERCENTAGES": "Tylko procenty",
       "FULL_VIEW": "Pełny"
+    },
+    "subject": {
+      "create": {
+        "title": "Utwórz nowy przedmiot"
+      },
+      "name": "Nazwa przedmiotu",
+      "organizationName": "Nazwa organizacji na Gitea",
+      "edition": "Edycja (np. 2026)",
+      "giteaURL": "Adres URL Gitea",
+      "subjectDescription": "Opis przedmiotu",
+      "templateId": "Szablon reguł (opcjonalnie)",
+      "template": {
+        "none": "-- Brak (Własna konfiguracja poniżej) --"
+      },
+      "manualRules": {
+        "title": "Ręczna konfiguracja reguł"
+      },
+      "rules": {
+        "studentTicketCount": "Limit zgłoszeń na studenta",
+        "minimumTokensMatch": "Minimalne dopasowanie tokenów",
+        "enableNormalization": "Włącz normalizację kodu"
+      },
+      "info": {
+        "templateActive": "Reguły weryfikacji zostaną skopiowane automatycznie z wybranego szablonu."
+      }
     }
   }
 }

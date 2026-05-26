@@ -24,7 +24,8 @@ import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
-import CreateSubjectPage from "../pages/teacher/CreateSubjectPage.tsx";
+import { CreateSubjectPage } from "../pages/teacher/CreateSubjectPage";
+
 
 const routes: RouteObject[] = [
     {
