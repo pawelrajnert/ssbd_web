@@ -398,5 +398,31 @@
       "plagiarism": "Similarity rate",
       "noData": "No data provided"
     }
+  },
+  "sidebar": {
+    "userManagement": "Manage users",
+    "subjectList": "My subjects",
+    "reportList": "Report list"
+  },
+  "reportList": {
+    "title": "My reports",
+    "sub": "Review and manage academic integrity analysis across your assigned subjects.",
+    "refresh": "Refresh",
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "users": "users",
+      "page": "Page",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "list": {
+      "subject": "Subject",
+      "creation_date": "Created at",
+      "avg": "Average similarity",
+      "action": "Action",
+      "not_found": "No reports were found"
+    }
   }
 }

@@ -45,7 +45,7 @@ export default function RegisterPage() {
             setIsSuccess(true);
         } catch (err: any) {
             const errorData = err.response?.data;
-
+            //TODO: wyświetlać komunikat z backendu zamiast tegp unexpected error
             if (errorData?.violations) {
                 const messages = errorData.violations.map((v: any) => v.message).join(", ");
                 setGlobalError(messages);

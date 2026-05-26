@@ -23,6 +23,7 @@ import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
+import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -38,7 +39,7 @@ const routes: RouteObject[] = [
             },
             {
                 path: PATHS._2FA_VERIFY,
-                element: <TwoFactorVerifyPage/>
+                element: <TwoFactorVerifyPage />
             },
             {
                 path: PATHS.REGISTER,
@@ -157,6 +158,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.TEACHER_SUBJECT_USERS,
                         element: <TeacherSubjectUsersPage/>
+                    },
+                    {
+                        path: PATHS.REPORT_LIST,
+                        element: <ReportListPage/>
                     }
                 ]
             }

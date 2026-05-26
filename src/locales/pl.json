@@ -389,7 +389,8 @@
   },
   "sidebar": {
     "userManagement": "Zarządzanie użytkownikami",
-    "subjectList": "Moje przedmioty"
+    "subjectList": "Moje przedmioty",
+    "reportList": "Lista raportów"
   },
   "subjectUsers": {
     "title": "Lista studentów dla przedmiotu",
@@ -402,6 +403,23 @@
       "repoName": "Nazwa repozytorium",
       "plagiarism": "Średnia wartość wskaźniku podobieństwa",
       "noData": "Brak wyników skanowania"
+    }
+  },
+  "reportList": {
+    "title": "Moje raporty",
+    "sub": "Przeglądaj i zarządzaj raportami analiz akademickiej integralności z pośród wszystkich dostępnych przedmiotów.",
+    "refresh": "Odśwież",
+    "pagination": {
+      "showing": "pokazuje",
+      "to": "do",
+      "of": "z"
+    },
+    "list": {
+      "subject": "Przedmiot/Tag",
+      "creation_date": "Utworzono",
+      "avg": "Średnie podobieństwo",
+      "action": "Działanie",
+      "not_found": "Nie znaleziono raportów"
     }
   }
 }
