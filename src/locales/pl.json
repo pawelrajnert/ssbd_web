@@ -394,6 +394,7 @@
   "sidebar": {
     "userManagement": "Zarządzanie użytkownikami",
     "subjectList": "Moje przedmioty",
+    "reportList": "Lista raportów",
     "globalRules": "Globalne reguły"
   },
   "subjectUsers": {
@@ -436,6 +437,23 @@
       "NOTHING": "Nic",
       "ONLY_PERCENTAGES": "Tylko procenty",
       "FULL_VIEW": "Pełny"
+    }
+  },
+  "reportList": {
+    "title": "Moje raporty",
+    "sub": "Przeglądaj i zarządzaj raportami analiz akademickiej integralności z pośród wszystkich dostępnych przedmiotów.",
+    "refresh": "Odśwież",
+    "pagination": {
+      "showing": "pokazuje",
+      "to": "do",
+      "of": "z"
+    },
+    "list": {
+      "subject": "Przedmiot/Tag",
+      "creation_date": "Utworzono",
+      "avg": "Średnie podobieństwo",
+      "action": "Działanie",
+      "not_found": "Nie znaleziono raportów"
     }
   }
 }
