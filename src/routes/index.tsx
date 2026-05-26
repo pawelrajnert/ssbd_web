@@ -25,6 +25,8 @@ import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
 import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
+import { CreateSubjectPage } from "../pages/teacher/CreateSubjectPage";
+
 
 const routes: RouteObject[] = [
     {
@@ -155,6 +157,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
                         element: <TeacherSubjectListPage/>
+                    },
+                    {
+                        path: PATHS.CREATE_SUBJECT,
+                        element: <CreateSubjectPage/>
                     },
                     {
                         path: PATHS.TEACHER_SUBJECT_USERS,
