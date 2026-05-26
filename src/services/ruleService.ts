@@ -1,5 +1,5 @@
 import axiosInstance from "../api/auth/middleware";
-import type {CreateRulePresetDTO, RulePresetDTO} from "../types/rule.types";
+import type {CreateRulePresetDTO, RulePresetDTO, UpdateRulePresetDTO} from "../types/rule.types";
 
 export const ruleService = {
     getRulePresetsTemplates: async (): Promise<RulePresetDTO[]> => {
@@ -8,5 +8,8 @@ export const ruleService = {
     },
     createRulePreset: async (data: CreateRulePresetDTO): Promise<void> => {
         await axiosInstance.post('/rules/templates', data);
+    },
+    updateRulePreset: async (id: string, data: UpdateRulePresetDTO): Promise<void> => {
+        await axiosInstance.put(`/rules/${id}`, data);
     }
 };
