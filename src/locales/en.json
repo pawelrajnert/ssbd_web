@@ -410,7 +410,19 @@
   },
   "globalRules": {
     "error": {
-      "fetch": "Failed to fetch global rules"
+      "fetch": "Failed to fetch global rules",
+      "createFailed": "Failed to create a new rule. Please check the data.",
+      "invalidTokens": "Minimum tokens must be at least 1"
+    },
+    "add": {
+      "title": "Add New Global Rule",
+      "submit": "Create Rule"
+    },
+    "form": {
+      "raportLevelLabel": "Report visibility level",
+      "studentTicketsLabel": "Max student tickets allowed",
+      "minTokensLabel": "Minimum matching tokens threshold",
+      "normalizationLabel": "Enable normalization"
     },
     "table": {
       "raportLevel": "Report level",

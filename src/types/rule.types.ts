@@ -5,3 +5,10 @@ export interface RulePresetDTO {
     minimumTokensMatch: number;
     enableNormalization: boolean;
 }
+
+export interface CreateRulePresetDTO {
+    raportLevelName: string;
+    studentTicketCount: number;
+    minimumTokensMatch: number;
+    enableNormalization: boolean;
+}
