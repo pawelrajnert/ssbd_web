@@ -413,12 +413,17 @@
   "globalRules": {
     "error": {
       "fetch": "Nie udało się pobrać globalnych reguł",
-      "createFailed": "Nie udało się utworzyć nowej reguły. Sprawdź poprawność danych.",
-      "invalidTokens": "Minimalna liczba tokenów musi wynosić co najmniej 1"
+      "createFailed": "Akcja nie powiodła się. Sprawdź poprawność danych.",
+      "invalidTokens": "Minimalna liczba tokenów musi wynosić co najmniej 1",
+      "invalidTickets": "Liczba nie może być ujemna"
     },
     "add": {
       "title": "Dodaj nową regułę",
       "submit": "Utwórz regułę"
+    },
+    "edit": {
+      "title": "Edytuj regułę",
+      "submit": "Zapisz zmiany"
     },
     "form": {
       "raportLevelLabel": "Poziom widoczności raportu",
@@ -430,7 +435,8 @@
       "raportLevel": "Poziom widoczności raportu",
       "studentTickets": "Ilość zgłoszeń na studenta",
       "minTokens": "Min. dopasowanie tokenów (ziarno)",
-      "normalization": "Normalizacja"
+      "normalization": "Normalizacja",
+      "actions": "Akcje"
     },
     "noResults": "Brak globalnych reguł",
     "levels": {
