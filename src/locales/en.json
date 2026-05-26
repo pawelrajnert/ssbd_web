@@ -406,7 +406,8 @@
   "sidebar": {
     "userManagement": "User Management",
     "subjectList": "My subjects",
-    "globalRules": "Global rules"
+    "globalRules": "Global rules",
+    "reportList": "Report list"
   },
   "globalRules": {
     "error": {
@@ -435,6 +436,28 @@
       "NOTHING": "Nothing",
       "ONLY_PERCENTAGES": "Only percentages",
       "FULL_VIEW": "Full view"
+    }
+  },
+  "reportList": {
+    "title": "My reports",
+    "sub": "Review and manage academic integrity analysis across your assigned subjects.",
+    "refresh": "Refresh",
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "users": "users",
+      "page": "Page",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "list": {
+      "subject": "Subject",
+      "creation_date": "Created at",
+      "avg": "Average similarity",
+      "action": "Action",
+      "notFound": "No reports were found",
+      "delete": "Delete"
     }
   }
 }
