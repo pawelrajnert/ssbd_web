@@ -16,7 +16,11 @@
     "confirmPasswordResetTitle": "Potwierdzasz reset hasła?",
     "confirmPasswordResetDesc": "Czy napewno chcesz zresetować hasło?  Przy następnym uwierzytelnieniu musisz wykorzystać nowe hasło.",
     "confirmEmailChangeTitle": "Potwierdzasz zmianę adresu email?",
-    "confirmEmailChangeDesc": "Czy napewno chcesz zmienić adres email?"
+    "confirmEmailChangeDesc": "Czy napewno chcesz zmienić adres email?",
+    "refresh": "Odśwież",
+    "loading": "Ładowanie...",
+    "yes": "Tak",
+    "no": "Nie"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -389,7 +393,8 @@
   },
   "sidebar": {
     "userManagement": "Zarządzanie użytkownikami",
-    "subjectList": "Moje przedmioty"
+    "subjectList": "Moje przedmioty",
+    "globalRules": "Globalne reguły"
   },
   "subjectUsers": {
     "title": "Lista studentów dla przedmiotu",
@@ -402,6 +407,23 @@
       "repoName": "Nazwa repozytorium",
       "plagiarism": "Średnia wartość wskaźniku podobieństwa",
       "noData": "Brak wyników skanowania"
+    }
+  },
+  "globalRules": {
+    "error": {
+      "fetch": "Nie udało się pobrać globalnych reguł"
+    },
+    "table": {
+      "raportLevel": "Poziom widoczności raportu",
+      "studentTickets": "Ilość zgłoszeń na studenta",
+      "minTokens": "Min. dopasowanie tokenów (ziarno)",
+      "normalization": "Normalizacja"
+    },
+    "noResults": "Brak globalnych reguł",
+    "levels": {
+      "NOTHING": "Nic",
+      "ONLY_PERCENTAGES": "Tylko procenty",
+      "FULL_VIEW": "Pełny"
     }
   }
 }
