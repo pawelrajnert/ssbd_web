@@ -6,12 +6,14 @@ import {
     ChevronRight,
     ArrowUp,
     ArrowDown,
-    ArrowUpDown
+    ArrowUpDown,
+    Trash2
 } from "lucide-react";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {useEffect, useState, useCallback} from "react";
 import {reportService} from "../../services/reportService.ts";
 import {useTranslation} from "react-i18next";
+import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup";
 
 export default function ReportsPage() {
     const [reports, setReports] = useState<ReportDTO[]>([]);
@@ -24,6 +26,12 @@ export default function ReportsPage() {
 
     const [sortBy, setSortBy] = useState<string | undefined>(undefined);
     const [sortDesc, setSortDesc] = useState<boolean | undefined>(undefined);
+
+    const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [reportToDelete, setReportToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const [t] = useTranslation();
 
@@ -45,6 +53,11 @@ export default function ReportsPage() {
         fetchReports();
     }, [fetchReports]);
 
+    useEffect(() => {
+        const closeMenu = () => setOpenMenuId(null);
+        document.addEventListener("click", closeMenu);
+        return () => document.removeEventListener("click", closeMenu);
+    }, []);
 
     const handleSort = (column: string) => {
         if (sortBy === column) {
@@ -72,6 +85,39 @@ export default function ReportsPage() {
         setPage(0);
     };
 
+    const toggleMenu = (id: string, event: React.MouseEvent) => {
+        event.stopPropagation();
+        setOpenMenuId(openMenuId === id ? null : id);
+    };
+
+    const openDeleteConfirmation = (id: string) => {
+        setReportToDelete(id);
+        setIsDeleteModalOpen(true);
+        setOpenMenuId(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!reportToDelete) return;
+
+        setIsDeleting(true);
+        try {
+            await reportService.deleteReport(reportToDelete);
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            await fetchReports();
+        } catch (error) {
+            console.error("Failed to delete report", error);
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setReportToDelete(null);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setIsDeleteModalOpen(false);
+        setReportToDelete(null);
+    };
 
     const formatDate = (isoString: string) => {
         const date = new Date(isoString);
@@ -102,8 +148,7 @@ export default function ReportsPage() {
 
     const renderSortIcon = (column: string) => {
         if (sortBy !== column) {
-            return <ArrowUpDown size={14}
-                                className="text-secondary opacity-50 group-hover:opacity-100 transition-opacity"/>;
+            return <ArrowUpDown size={14} className="text-secondary opacity-50 group-hover:opacity-100 transition-opacity"/>;
         }
         return sortDesc ? (
             <ArrowDown size={14} className="text-primary"/>
@@ -135,8 +180,8 @@ export default function ReportsPage() {
                     </div>
                 </div>
 
-                <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden">
-                    <div className="overflow-x-auto">
+                <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-visible">
+                    <div className="overflow-x-visible">
                         <table className="w-full text-left border-collapse">
                             <thead>
                             <tr className="border-b border-border bg-surface select-none">
@@ -205,11 +250,24 @@ export default function ReportsPage() {
                                         <td className="py-5 px-8">
                                             {getSimilarityBadge(report.average_similarity * 100)}
                                         </td>
-                                        <td className="py-5 px-8 text-right">
+                                        <td className="py-5 px-8 text-right relative">
                                             <button
+                                                onClick={(e) => toggleMenu(report.id, e)}
                                                 className="text-secondary hover:text-primary transition-colors p-2 rounded-full hover:bg-border outline-none">
                                                 <MoreVertical size={20}/>
                                             </button>
+
+                                            {openMenuId === report.id && (
+                                                <div className="absolute right-8 top-12 w-40 bg-surface border border-border rounded-lg shadow-lg z-50 py-1 overflow-hidden">
+                                                    <button
+                                                        onClick={() => openDeleteConfirmation(report.id)}
+                                                        className="w-full text-left px-4 py-2 text-sm text-danger hover:bg-danger-subtle flex items-center gap-2 transition-colors"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                        {t("reportList.list.delete", "Delete")}
+                                                    </button>
+                                                </div>
+                                            )}
                                         </td>
                                     </tr>
                                 ))
@@ -218,7 +276,6 @@ export default function ReportsPage() {
                         </table>
                     </div>
 
-                    {/* Pagination Footer */}
                     <div
                         className="flex flex-col sm:flex-row items-center justify-between px-8 py-4 border-t border-border bg-surface gap-4">
                         <div className="flex items-center gap-3">
@@ -262,6 +319,16 @@ export default function ReportsPage() {
                 </div>
 
             </div>
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                title={t("reportList.delete.title", "Delete Report")}
+                description={t("reportList.delete.description", "Are you sure you want to delete this report? This action cannot be undone.")}
+                confirmText={t("reportList.delete.confirm", "Delete")}
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }

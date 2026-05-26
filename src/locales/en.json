@@ -462,7 +462,8 @@
       "creation_date": "Created at",
       "avg": "Average similarity",
       "action": "Action",
-      "not_found": "No reports were found"
+      "notFound": "No reports were found",
+      "delete": "Delete"
     }
   }
 }

@@ -459,7 +459,8 @@
       "creation_date": "Utworzono",
       "avg": "Średnie podobieństwo",
       "action": "Działanie",
-      "not_found": "Nie znaleziono raportów"
+      "not_found": "Nie znaleziono raportów",
+      "delete": "Usuń"
     }
   }
 }
