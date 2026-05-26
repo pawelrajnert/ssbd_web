@@ -22,8 +22,9 @@ import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePa
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
+import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
+import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
 import CreateSubjectPage from "../pages/teacher/CreateSubjectPage.tsx";
-import TeacherSubjectUsersPage from '../pages/teacher/TeacherSubjectUsersPage';
 
 const routes: RouteObject[] = [
     {
@@ -162,6 +163,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.TEACHER_SUBJECT_USERS,
                         element: <TeacherSubjectUsersPage/>
+                    },
+                    {
+                        path: PATHS.GLOBAL_RULES,
+                        element: <GlobalRulesPage/>
                     }
                 ]
             }
