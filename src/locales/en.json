@@ -406,17 +406,23 @@
   "sidebar": {
     "userManagement": "User Management",
     "subjectList": "My subjects",
-    "globalRules": "Global rules"
+    "globalRules": "Global rules",
+    "reportList": "Report list"
   },
   "globalRules": {
     "error": {
       "fetch": "Failed to fetch global rules",
-      "createFailed": "Failed to create a new rule. Please check the data.",
-      "invalidTokens": "Minimum tokens must be at least 1"
+      "createFailed": "Action failed. Please check the data.",
+      "invalidTokens": "Minimum tokens must be at least 1",
+      "invalidTickets": "Number cannot be negative"
     },
     "add": {
       "title": "Add New Global Rule",
       "submit": "Create Rule"
+    },
+    "edit": {
+      "title": "Edit Rule",
+      "submit": "Save Changes"
     },
     "form": {
       "raportLevelLabel": "Report visibility level",
@@ -428,13 +434,36 @@
       "raportLevel": "Report level",
       "studentTickets": "Student tickets count",
       "minTokens": "Min. tokens match",
-      "normalization": "Normalization"
+      "normalization": "Normalization",
+      "actions": "Actions"
     },
     "noResults": "No global rules found",
     "levels": {
       "NOTHING": "Nothing",
       "ONLY_PERCENTAGES": "Only percentages",
       "FULL_VIEW": "Full view"
+    }
+  },
+  "reportList": {
+    "title": "My reports",
+    "sub": "Review and manage academic integrity analysis across your assigned subjects.",
+    "refresh": "Refresh",
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "users": "users",
+      "page": "Page",
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "list": {
+      "subject": "Subject",
+      "creation_date": "Created at",
+      "avg": "Average similarity",
+      "action": "Action",
+      "notFound": "No reports were found",
+      "delete": "Delete"
     }
   }
 }
