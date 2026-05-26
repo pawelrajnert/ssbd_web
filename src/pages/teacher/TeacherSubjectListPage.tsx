@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Plus, BookOpen, RefreshCw } from 'lucide-react';
-import { subjectService } from '../../services/SubjectService';
+import { subjectService } from '../../services/subjectService.ts';
 import type { SubjectDTO } from '../../types/SubjectDTO';
 import { PATHS } from '../../routes/paths';
 

@@ -385,5 +385,18 @@
     "desc2": " seconds. Do you want to extend your session?",
     "logout": "Logout",
     "extend": "Extend session"
+  },
+  "subjectUsers": {
+    "title": "List of students in subject",
+    "subtitle": "Browse the list of students and their repositories with average similarity rate",
+    "searchPlaceholder": "Search...",
+    "noResults": "There are no students in this subject.",
+    "table": {
+      "firstName": "Name",
+      "surname": "Surname",
+      "repoName": "Name of the repository",
+      "plagiarism": "Similarity rate",
+      "noData": "No data provided"
+    }
   }
 }

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { createSubjectSchema, type CreateSubjectFormData } from '../../shared/validators/createSubjectSchema';
-import { subjectService } from '../../services/SubjectService';
+import { subjectService } from '../../services/subjectService.ts';
 import SubmitButton from '../../shared/components/buttons/SubmitButton';
 import { PATHS } from '../../routes/paths';
 

@@ -8,5 +8,9 @@ export const subjectService = {
     getSubjects: async (): Promise<SubjectDTO[]> => {
         const response = await axiosInstance.get('/subjects');
         return response.data;
+    },
+    getSubjectUsers: async (subjectId: string): Promise<any> => {
+        const response = await axiosInstance.get(`/subjects/${subjectId}/users`);
+        return response.data;
     }
 };

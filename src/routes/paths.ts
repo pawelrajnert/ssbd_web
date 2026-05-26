@@ -19,7 +19,8 @@ export const PATHS = {
     FORCE_PASSWORD_CHANGE: "/force-password-change",
     LOGIN_EMAIL: "/login/email",
     LOGIN_EMAIL_VERIFY: "/login/email/verify",
-    CREATE_SUBJECT: "/teacher/subjects/create"
+    CREATE_SUBJECT: "/teacher/subjects/create",
+    TEACHER_SUBJECT_USERS: "/subjects/:subjectName/users"
 } as const;
 
 export const getDashboardPath = (role: string | null): string => {
