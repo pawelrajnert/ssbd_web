@@ -27,10 +27,8 @@ export default function ReportsPage() {
     const [sortBy, setSortBy] = useState<string | undefined>(undefined);
     const [sortDesc, setSortDesc] = useState<boolean | undefined>(undefined);
 
-    // State for the context menu
     const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-    // State for Delete Confirmation Modal
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [reportToDelete, setReportToDelete] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);

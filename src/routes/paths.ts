@@ -20,6 +20,7 @@ export const PATHS = {
     LOGIN_EMAIL: "/login/email",
     LOGIN_EMAIL_VERIFY: "/login/email/verify",
     TEACHER_SUBJECT_USERS: "/subjects/:subjectName/users",
+    REPORT_LIST: "/reports",
     GLOBAL_RULES: "/global-rules"
 } as const;
 
