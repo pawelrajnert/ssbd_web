@@ -42,5 +42,11 @@ export const reportService = {
         );
 
         return response.data;
+    },
+    deleteReport: async(id: string) => {
+        const response = await axiosInstance.delete<Page<ReportDTO>>(
+            `/reports/${id}`
+        );
+        return response.data;
     }
 };
