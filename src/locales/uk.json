@@ -1,7 +1,11 @@
 {
   "common": {
     "goToLogin": "Перейти до логіну",
-    "cancel": "Скасувати"
+    "cancel": "Скасувати",
+    "refresh": "Оновити",
+    "loading": "Завантаження...",
+    "yes": "Так",
+    "no": "Ні"
   },
   "auth": {
     "title": "Охорона академічної доброчесності",
@@ -309,7 +313,12 @@
     "userManagement": "Управління користувачами",
     "defaultUser": "Користувач",
     "defaultGuest": "Гість",
-    "logout": "Вийти"
+    "logout": "Вийти",
+    "settings": {
+      "name": "Налаштування системи",
+      "language": "Мова",
+      "activeRole": "Активна роль"
+    }
   },
   "about": {
     "title": "aleikum asalam"
@@ -370,9 +379,40 @@
     }
   },
   "sidebar": {
-    "userManagement": "Керування користувачами",
+    "userManagement": "Управління користувачами",
     "subjectList": "Мої предмети",
+    "globalRules": "Глобальні правила",
     "reportList": "Список звітів"
+
+  },
+  "globalRules": {
+    "error": {
+      "fetch": "Не вдалося завантажити глобальні правила",
+      "createFailed": "Не вдалося створити нове правило. Перевірте введені дані.",
+      "invalidTokens": "Мінімальна кількість токенів має бути принаймні 1"
+    },
+    "add": {
+      "title": "Додати нове правило",
+      "submit": "Створити правило"
+    },
+    "form": {
+      "raportLevelLabel": "Рівень видимості звіту",
+      "studentTicketsLabel": "Максимальна кількість заявок на студента",
+      "minTokensLabel": "Мінімальний поріг збігу токенів",
+      "normalizationLabel": "Увімкнути нормалізацію"
+    },
+    "table": {
+      "raportLevel": "Рівень звіту",
+      "studentTickets": "Кількість заявок на студента",
+      "minTokens": "Мін. збіг токенів",
+      "normalization": "Нормалізація"
+    },
+    "noResults": "Глобальних правил не знайдено",
+    "levels": {
+      "NOTHING": "Нічого",
+      "ONLY_PERCENTAGES": "Тільки відсотки",
+      "FULL_VIEW": "Повний перегляд"
+    }
   },
   "reportList": {
     "title": "Мої звіти",

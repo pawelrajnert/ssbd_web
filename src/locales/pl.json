@@ -16,7 +16,11 @@
     "confirmPasswordResetTitle": "Potwierdzasz reset hasła?",
     "confirmPasswordResetDesc": "Czy napewno chcesz zresetować hasło?  Przy następnym uwierzytelnieniu musisz wykorzystać nowe hasło.",
     "confirmEmailChangeTitle": "Potwierdzasz zmianę adresu email?",
-    "confirmEmailChangeDesc": "Czy napewno chcesz zmienić adres email?"
+    "confirmEmailChangeDesc": "Czy napewno chcesz zmienić adres email?",
+    "refresh": "Odśwież",
+    "loading": "Ładowanie...",
+    "yes": "Tak",
+    "no": "Nie"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -390,7 +394,8 @@
   "sidebar": {
     "userManagement": "Zarządzanie użytkownikami",
     "subjectList": "Moje przedmioty",
-    "reportList": "Lista raportów"
+    "reportList": "Lista raportów",
+    "globalRules": "Globalne reguły"
   },
   "subjectUsers": {
     "title": "Lista studentów dla przedmiotu",
@@ -403,6 +408,35 @@
       "repoName": "Nazwa repozytorium",
       "plagiarism": "Średnia wartość wskaźniku podobieństwa",
       "noData": "Brak wyników skanowania"
+    }
+  },
+  "globalRules": {
+    "error": {
+      "fetch": "Nie udało się pobrać globalnych reguł",
+      "createFailed": "Nie udało się utworzyć nowej reguły. Sprawdź poprawność danych.",
+      "invalidTokens": "Minimalna liczba tokenów musi wynosić co najmniej 1"
+    },
+    "add": {
+      "title": "Dodaj nową regułę",
+      "submit": "Utwórz regułę"
+    },
+    "form": {
+      "raportLevelLabel": "Poziom widoczności raportu",
+      "studentTicketsLabel": "Maksymalna liczba zgłoszeń na studenta",
+      "minTokensLabel": "Minimalna liczba tokenów dopasowania",
+      "normalizationLabel": "Włącz normalizację"
+    },
+    "table": {
+      "raportLevel": "Poziom widoczności raportu",
+      "studentTickets": "Ilość zgłoszeń na studenta",
+      "minTokens": "Min. dopasowanie tokenów (ziarno)",
+      "normalization": "Normalizacja"
+    },
+    "noResults": "Brak globalnych reguł",
+    "levels": {
+      "NOTHING": "Nic",
+      "ONLY_PERCENTAGES": "Tylko procenty",
+      "FULL_VIEW": "Pełny"
     }
   },
   "reportList": {

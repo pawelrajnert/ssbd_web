@@ -1,4 +1,4 @@
-import {Users, LucideGraduationCap, ChartColumnIncreasing} from "lucide-react";
+import {Users, LucideGraduationCap, ChartColumnIncreasing, Settings} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {PATHS} from "../../../routes/paths.ts";
 import SidebarItem from "./SidebarItem.tsx";
@@ -37,6 +37,12 @@ export default function Sidebar() {
                     to={PATHS.REPORT_LIST}
                     icon={ChartColumnIncreasing}
                     label={t('sidebar.reportList', 'Report list')}
+                    allowedRoles={[RoleEnum.TEACHER]}
+                />
+                <SidebarItem
+                    to={PATHS.GLOBAL_RULES}
+                    icon={Settings}
+                    label={t('sidebar.globalRules', 'Global rules')}
                     allowedRoles={[RoleEnum.TEACHER]}
                 />
 
