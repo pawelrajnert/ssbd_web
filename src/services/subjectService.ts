@@ -1,10 +1,16 @@
-import axiosInstance from "../api/auth/middleware";
-import type { SubjectStudentStatsDTO } from "../types/subject.types";
+import type { SubjectDTO } from '../types/SubjectDTO';
+import axiosInstance from '../api/auth/middleware';
 
 export const subjectService = {
-    getSubjectUsers: async (subjectName: string) => {
-        const encodedName = encodeURIComponent(subjectName);
-        const response = await axiosInstance.get<SubjectStudentStatsDTO[]>(`/subject/${encodedName}/users`);
+    createSubject: async (data: SubjectDTO): Promise<void> => {
+        await axiosInstance.post('/subjects', data);
+    },
+    getSubjects: async (): Promise<SubjectDTO[]> => {
+        const response = await axiosInstance.get('/subjects');
+        return response.data;
+    },
+    getSubjectUsers: async (subjectId: string): Promise<any> => {
+        const response = await axiosInstance.get(`/subjects/${subjectId}/users`);
         return response.data;
     }
 };

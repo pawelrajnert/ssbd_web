@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {AlertCircle, ArrowLeft, RefreshCw, Search} from "lucide-react";
 import {useTranslation} from "react-i18next";
-import {subjectService} from "../../services/subjectService";
+import { subjectService } from '../../services/subjectService.ts';
 import type {SubjectStudentStatsDTO} from "../../types/subject.types";
 import {PATHS} from "../../routes/paths";
 
