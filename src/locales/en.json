@@ -16,7 +16,11 @@
     "confirmPasswordResetTitle": "Confirm Password Reset?",
     "confirmPasswordResetDesc": "Are you sure you want to change your password? Once changed, you must use the new password to log in.",
     "confirmEmailChangeTitle": "Confirm Email Change?",
-    "confirmEmailChangeDesc": "Are you sure you want to change your email address?"
+    "confirmEmailChangeDesc": "Are you sure you want to change your email address?",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "yes": "Yes",
+    "no": "No"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -397,6 +401,28 @@
       "repoName": "Name of the repository",
       "plagiarism": "Similarity rate",
       "noData": "No data provided"
+    }
+  },
+  "sidebar": {
+    "userManagement": "User Management",
+    "subjectList": "My subjects",
+    "globalRules": "Global rules"
+  },
+  "globalRules": {
+    "error": {
+      "fetch": "Failed to fetch global rules"
+    },
+    "table": {
+      "raportLevel": "Report level",
+      "studentTickets": "Student tickets count",
+      "minTokens": "Min. tokens match",
+      "normalization": "Normalization"
+    },
+    "noResults": "No global rules found",
+    "levels": {
+      "NOTHING": "Nothing",
+      "ONLY_PERCENTAGES": "Only percentages",
+      "FULL_VIEW": "Full view"
     }
   }
 }
