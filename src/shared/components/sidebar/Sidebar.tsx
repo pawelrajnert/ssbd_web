@@ -1,4 +1,4 @@
-import {Users, LucideGraduationCap} from "lucide-react";
+import {Users, LucideGraduationCap, Settings} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {PATHS} from "../../../routes/paths.ts";
 import SidebarItem from "./SidebarItem.tsx";
@@ -31,6 +31,12 @@ export default function Sidebar() {
                     to={PATHS.TEACHER_SUBJECT_LIST}
                     icon={LucideGraduationCap}
                     label={t('sidebar.subjectList', 'Subject list')}
+                    allowedRoles={[RoleEnum.TEACHER]}
+                />
+                <SidebarItem
+                    to={PATHS.GLOBAL_RULES}
+                    icon={Settings}
+                    label={t('sidebar.globalRules', 'Global rules')}
                     allowedRoles={[RoleEnum.TEACHER]}
                 />
 
