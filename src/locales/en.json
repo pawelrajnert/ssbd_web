@@ -20,7 +20,8 @@
     "refresh": "Refresh",
     "loading": "Loading...",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "delete": "Delete"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -442,7 +443,12 @@
       "NOTHING": "Nothing",
       "ONLY_PERCENTAGES": "Only percentages",
       "FULL_VIEW": "Full view"
-    }
+    },
+    "deleteTitle": "Delete rule template",
+    "deleteConfirmation": "Are you sure you want to delete this rule template? This will cancel and delete all associated scheduled checks.",
+    "deleteSuccess": "Rule template deleted successfully.",
+    "deleteError": "An error occurred while deleting the rule template.",
+    "conflictError": "Data has been modified by another user. Please refresh and try again."
   },
   "reportList": {
     "title": "My reports",

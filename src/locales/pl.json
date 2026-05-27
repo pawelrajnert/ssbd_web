@@ -22,7 +22,8 @@
     "yes": "Tak",
     "no": "Nie",
     "saving": "Zapisywanie...",
-    "create": "Utwórz przedmiot"
+    "create": "Utwórz",
+    "delete": "Usuń"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -470,23 +471,32 @@
       "info": {
         "templateActive": "Reguły weryfikacji zostaną skopiowane automatycznie z wybranego szablonu."
       }
-    }
+    },
+    "deleteTitle": "Usuń szablon reguł",
+    "deleteConfirmation": "Czy na pewno chcesz usunąć ten szablon reguł? Spowoduje to anulowanie i usunięcie wszystkich powiązanych zaplanowanych sprawdzeń.",
+    "deleteSuccess": "Szablon reguł został pomyślnie usunięty.",
+    "deleteError": "Wystąpił błąd podczas usuwania szablonu reguł.",
+    "conflictError": "Dane zostały zmodyfikowane przez innego użytkownika. Odśwież widok i spróbuj ponownie."
   },
   "reportList": {
     "title": "Moje raporty",
-    "sub": "Przeglądaj i zarządzaj raportami analiz akademickiej integralności z pośród wszystkich dostępnych przedmiotów.",
+    "sub": "Przeglądaj i zarządzaj raportami analiz akademickiej integralności spośród wszystkich dostępnych przedmiotów.",
     "refresh": "Odśwież",
     "pagination": {
-      "showing": "pokazuje",
+      "showing": "Pokazuje",
       "to": "do",
-      "of": "z"
+      "of": "z",
+      "users": "raportów",
+      "page": "Strona",
+      "prev": "Poprzednia",
+      "next": "Następna"
     },
     "list": {
-      "subject": "Przedmiot/Tag",
+      "subject": "Przedmiot",
       "creation_date": "Utworzono",
       "avg": "Średnie podobieństwo",
-      "action": "Działanie",
-      "not_found": "Nie znaleziono raportów",
+      "action": "Akcja",
+      "notFound": "Nie znaleziono żadnych raportów",
       "delete": "Usuń"
     }
   }
