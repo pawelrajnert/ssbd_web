@@ -25,7 +25,8 @@ import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
 import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
-import { CreateSubjectPage } from "../pages/teacher/CreateSubjectPage";
+import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
+import StudentScanPage from "../pages/student/StudentScanPage.tsx";
 
 
 const routes: RouteObject[] = [
@@ -42,7 +43,7 @@ const routes: RouteObject[] = [
             },
             {
                 path: PATHS._2FA_VERIFY,
-                element: <TwoFactorVerifyPage />
+                element: <TwoFactorVerifyPage/>
             },
             {
                 path: PATHS.REGISTER,
@@ -98,6 +99,10 @@ const routes: RouteObject[] = [
     //             path: PATHS.USER_LIST,
     //             element: <UserListPage/>
     //         },
+    // {
+    //     path: PATHS.STUDENT_SCAN,
+    //     element: <StudentScanPage/>
+    // },
     //         {
     //             path: PATHS.USER_EDIT,
     //             element: <UserEditPage/>
@@ -143,6 +148,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.STUDENT_SUBJECT_LIST,
                         element: <StudentSubjectListPage/>
+                    },
+                    {
+                        path: PATHS.STUDENT_SCAN,
+                        element: <StudentScanPage/>
                     }
                 ]
             }
