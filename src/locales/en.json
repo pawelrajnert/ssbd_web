@@ -407,7 +407,8 @@
     "userManagement": "User Management",
     "subjectList": "My subjects",
     "globalRules": "Global rules",
-    "reportList": "Report list"
+    "reportList": "Report list",
+    "studentScan": "Check your code"
   },
   "globalRules": {
     "error": {
@@ -464,6 +465,41 @@
       "action": "Action",
       "notFound": "No reports were found",
       "delete": "Delete"
+    }
+  },
+  "studentScan": {
+    "title": "Check your own code",
+    "sub": "Check your own code in case of possible plagiarism.",
+    "form": {
+      "tag": "Test tag",
+      "tagPlaceholder": "e.g. IAS64",
+      "submit": "Start scanning",
+      "scanning": "Scanning...",
+      "repository": "Repository",
+      "repositoryPlaceholder": "— check repository —",
+      "noRepositories": "No repositories found for such user.",
+      "scansUsed": "Amount of code scans"
+    },
+    "result": {
+      "title": "Result of a code scan",
+      "tag": "Tag",
+      "subject": "Subject",
+      "scannedAt": "Scanned",
+      "matches": "Matches",
+      "noMatches": "No matches found",
+      "similarity": "Similarity",
+      "matchedLines": "Matching lines of code"
+    },
+    "errors": {
+      "noTickets": "There are no possible code scans left.",
+      "accessDenied": "There is no access to such repository.",
+      "notFound": "Repository not found.",
+      "optimisticLock": "Optimistic lock exception — refresh a side and try again.",
+      "base": "There is an error while processing a code scan."
+    },
+    "history": {
+      "title": "Previous scans",
+      "empty": "There are no previous scans available."
     }
   }
 }

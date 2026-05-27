@@ -22,7 +22,8 @@ export const PATHS = {
     CREATE_SUBJECT: "/teacher/subjects/create",
     TEACHER_SUBJECT_USERS: "/subjects/:subjectName/users",
     REPORT_LIST: "/reports",
-    GLOBAL_RULES: "/global-rules"
+    GLOBAL_RULES: "/global-rules",
+    STUDENT_SCAN: "/student/scan"
 } as const;
 
 export const getDashboardPath = (role: string | null): string => {
