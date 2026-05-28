@@ -492,40 +492,77 @@
   },
   "subject": {
     "list": {
-      "title": "Przedmioty",
-      "name": "Nazwa przedmiotu",
-      "edition": "Edycja",
-      "organization": "Organizacja Gitea",
-      "status": "Status",
-      "active": "Aktywny",
-      "actions": "Akcje",
-      "btnDetails": "Szczegóły",
-      "fetchError": "Wystąpił błąd podczas pobierania listy przedmiotów.",
-      "empty": "Obecnie nie masz przypisanych żadnych przedmiotów."
+      "title": "Zarządzane Przedmioty",
+      "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",
+      "role": {
+        "student": "Panel Studenta / Moje Przedmioty",
+        "teacher": "Panel Prowadzącego / Moje Przedmioty"
+      },
+      "tabs": {
+        "active": "Aktywne Kursy",
+        "archived": "Zarchiwizowane"
+      },
+      "btn": {
+        "create": "Utwórz Przedmiot"
+      },
+      "empty": "Brak przedmiotów w tej kategorii.",
+      "card": {
+        "exampleImage": "[ Przykładowe zdjęcie ]",
+        "nextScan": "Następny skan:",
+        "status": {
+          "archived": "Zarchiwizowany",
+          "pending": "Oczekuje na uruchomienie"
+        },
+        "btn": {
+          "manage": "Zarządzaj kursem",
+          "stats": "Statystyki"
+        }
+      },
+      "noDescription": "Brak opisu przedmiotu.",
+      "fetchError": "Wystąpił błąd podczas pobierania."
     },
     "details": {
+      "fetchError": "Błąd pobierania danych.",
+      "notFound": "Nie znaleziono przedmiotu.",
+      "breadcrumb": "Zarządzanie Kursem",
       "edition": "Edycja",
       "organization": "Organizacja Gitea",
-      "description": "Opis przedmiotu",
-      "gitea": "Adres URL Gitea",
-      "archived": "Zarchiwizowany",
-      "notFound": "Nie znaleziono przedmiotu.",
-      "fetchError": "Wystąpił błąd podczas pobierania szczegółów przedmiotu.",
       "actions": {
-        "edit": "Edytuj",
-        "manageTeachers": "Zarządzaj kadrą"
+        "schedule": "Harmonogram",
+        "edit": "Edytuj Przedmiot",
+        "analyze": "Uruchom Analizę",
+        "statistics": "Statystyki"
       },
-      "statistics": {
-        "title": "Statystyki przedmiotu",
-        "placeholder": "Miejsce na przyszłe statystyki (wykresy, średnie dopasowanie itp.)."
+      "stats": {
+        "students": "LICZBA STUDENTÓW",
+        "repos": "AKTYWNE REPOZYTORIA",
+        "pending": "OCZEKUJĄCE ANALIZY",
+        "similarity": "ŚREDNIE PODOBIEŃSTWO"
       },
-      "rules": {
-        "title": "Konfiguracja reguł antyplagiatowych",
-        "raportLevel": "Poziom raportu",
-        "ticketCount": "Liczba zgłoszeń studenta",
-        "minTokens": "Minimalne dopasowanie tokenów",
-        "normalization": "Normalizacja kodu"
-      }
+      "reports": {
+        "title": "Ostatnie Raporty",
+        "viewAll": "Zobacz wszystkie →",
+        "report": "Raport",
+        "reposCount": "repozytoriów studenckich",
+        "modalTitle": "Wszystkie Raporty Antyplagiatowe",
+        "modalReposCount": "Repozytoria"
+      },
+      "repos": {
+        "title": "Aktywne Repozytoria Studenckie",
+        "refresh": "Odśwież",
+        "filter": "Filtruj",
+        "sort": "Sortuj po dacie",
+        "lastCommit": "Ostatni commit",
+        "contributors": "Użytkownicy",
+        "viewCode": "Podgląd Kodu",
+        "analyze": "Analizuj"
+      },
+      "status": {
+        "clean": "Kod czysty",
+        "alert": "Wykryto podobieństwo",
+        "pending": "Oczekuje na weryfikację"
+      },
+      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
     }
   }
 }
