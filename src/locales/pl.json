@@ -535,5 +535,80 @@
       "title": "Historia skanowań",
       "empty": "Brak poprzednich skanowań kodu."
     }
+  },
+  "subject": {
+    "list": {
+      "title": "Zarządzane Przedmioty",
+      "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",
+      "role": {
+        "student": "Panel Studenta / Moje Przedmioty",
+        "teacher": "Panel Prowadzącego / Moje Przedmioty"
+      },
+      "tabs": {
+        "active": "Aktywne Kursy",
+        "archived": "Zarchiwizowane"
+      },
+      "btn": {
+        "create": "Utwórz Przedmiot"
+      },
+      "empty": "Brak przedmiotów w tej kategorii.",
+      "card": {
+        "exampleImage": "[ Przykładowe zdjęcie ]",
+        "nextScan": "Następny skan:",
+        "status": {
+          "archived": "Zarchiwizowany",
+          "pending": "Oczekuje na uruchomienie"
+        },
+        "btn": {
+          "manage": "Zarządzaj kursem",
+          "stats": "Statystyki"
+        }
+      },
+      "noDescription": "Brak opisu przedmiotu.",
+      "fetchError": "Wystąpił błąd podczas pobierania."
+    },
+    "details": {
+      "fetchError": "Błąd pobierania danych.",
+      "notFound": "Nie znaleziono przedmiotu.",
+      "breadcrumb": "Zarządzanie Kursem",
+      "edition": "Edycja",
+      "organization": "Organizacja Gitea",
+      "actions": {
+        "schedule": "Harmonogram",
+        "edit": "Edytuj Przedmiot",
+        "analyze": "Uruchom Analizę",
+        "statistics": "Statystyki"
+      },
+      "stats": {
+        "students": "LICZBA STUDENTÓW",
+        "repos": "AKTYWNE REPOZYTORIA",
+        "pending": "OCZEKUJĄCE ANALIZY",
+        "similarity": "ŚREDNIE PODOBIEŃSTWO"
+      },
+      "reports": {
+        "title": "Ostatnie Raporty",
+        "viewAll": "Zobacz wszystkie →",
+        "report": "Raport",
+        "reposCount": "repozytoriów studenckich",
+        "modalTitle": "Wszystkie Raporty Antyplagiatowe",
+        "modalReposCount": "Repozytoria"
+      },
+      "repos": {
+        "title": "Aktywne Repozytoria Studenckie",
+        "refresh": "Odśwież",
+        "filter": "Filtruj",
+        "sort": "Sortuj po dacie",
+        "lastCommit": "Ostatni commit",
+        "contributors": "Użytkownicy",
+        "viewCode": "Podgląd Kodu",
+        "analyze": "Analizuj"
+      },
+      "status": {
+        "clean": "Kod czysty",
+        "alert": "Wykryto podobieństwo",
+        "pending": "Oczekuje na weryfikację"
+      },
+      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
+    }
   }
 }

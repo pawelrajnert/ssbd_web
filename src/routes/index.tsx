@@ -16,8 +16,8 @@ import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirm
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
 import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPage.tsx";
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
-import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
-import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
+// import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
+// import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
 import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePasswordChangePage.tsx";
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
@@ -27,7 +27,8 @@ import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
 import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
-
+import { SubjectListView } from "../pages/subject/SubjectListView.tsx";
+import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -134,6 +135,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.PROFILE,
                         element: <UserEditPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
                     }
                 ]
             }
@@ -147,7 +152,7 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: PATHS.STUDENT_SUBJECT_LIST,
-                        element: <StudentSubjectListPage/>
+                        element: <SubjectListView/>
                     },
                     {
                         path: PATHS.STUDENT_SCAN,
@@ -165,7 +170,7 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
-                        element: <TeacherSubjectListPage/>
+                        element: <SubjectListView/>
                     },
                     {
                         path: PATHS.CREATE_SUBJECT,

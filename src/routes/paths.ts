@@ -23,6 +23,7 @@ export const PATHS = {
     TEACHER_SUBJECT_USERS: "/subjects/:subjectName/users",
     REPORT_LIST: "/reports",
     GLOBAL_RULES: "/global-rules",
+    SUBJECT_DETAILS: "/subjects/:id",
     STUDENT_SCAN: "/student/scan"
 } as const;
 
