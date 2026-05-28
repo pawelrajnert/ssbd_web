@@ -88,25 +88,22 @@ export const SubjectListView: React.FC = () => {
                             key={sub.id}
                             className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group"
                         >
-                            {/* Część wizualna (Zdjęcie) */}
-                            <div className="h-44 bg-gray-200 dark:bg-gray-800 relative flex items-center justify-center overflow-hidden shrink-0">
-                                <span className="text-gray-400 dark:text-gray-500 font-medium tracking-wide">
+                            {/* Część wizualna (Zdjęcie oparte na Twoim bg-active) */}
+                            <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
+                                <span className="text-brand font-medium tracking-wide opacity-50">
                                     [ Przykładowe zdjęcie ]
                                 </span>
-                                {/* Edycja z odstępem w lewym górnym rogu */}
-                                <div className="absolute top-4 left-4 bg-white/95 dark:bg-gray-900/95 shadow border border-gray-100 dark:border-gray-700 text-primary text-xs font-bold px-2.5 py-1 rounded">
+                                {/* Edycja z użyciem Twoich zmiennych */}
+                                <div className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
                                     {sub.edition}
                                 </div>
                             </div>
 
-                            {/* Treść merytoryczna */}
                             <div className="p-6 flex-grow flex flex-col">
-                                {/* Pogrubiona nazwa */}
-                                <h3 className="text-xl font-bold text-primary mb-2 line-clamp-2 leading-snug group-hover:text-red-600 transition-colors cursor-pointer" onClick={() => sub.id && navigate(`/subjects/${sub.id}`)}>
+                                <h3 className="text-xl font-bold text-primary mb-2 line-clamp-2 leading-snug group-hover:text-brand transition-colors cursor-pointer" onClick={() => sub.id && navigate(`/subjects/${sub.id}`)}>
                                     {sub.name}
                                 </h3>
 
-                                {/* Opis mniejszymi literami */}
                                 <p className="text-secondary text-sm mb-5 line-clamp-3">
                                     Organizacja źródłowa w Gitea: <span className="font-semibold text-primary">{sub.organizationName}</span>. Analiza zgodności kodu i monitorowanie rzetelności akademickiej.
                                 </p>
@@ -116,22 +113,22 @@ export const SubjectListView: React.FC = () => {
                                         <span className="text-xs text-secondary font-semibold mb-1">
                                             Następny skan:
                                         </span>
-                                        <span className="text-sm font-medium text-primary">
+                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : 'text-blue-600 dark:text-blue-400'}`}>
                                             {sub.archived ? 'Zarchiwizowany' : 'Oczekuje na uruchomienie'}
                                         </span>
                                     </div>
                                 </div>
 
-                                {/* Przyciski akcji (Czerwony przycisk + kwadrat statystyk) */}
+                                {/* Przyciski akcji (używają Twojego bg-brand) */}
                                 <div className="flex gap-3">
                                     <button
                                         onClick={() => sub.id && navigate(`/subjects/${sub.id}`)}
-                                        className="flex-grow bg-red-600 text-white text-sm font-bold py-2.5 rounded-lg hover:bg-red-700 transition-colors shadow-sm"
+                                        className="flex-grow bg-brand text-white text-sm font-bold py-2.5 rounded-lg hover:bg-brand-hover transition-colors shadow-sm"
                                     >
                                         Zarządzaj kursem
                                     </button>
                                     <button
-                                        className="w-11 h-11 shrink-0 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-secondary hover:text-primary rounded-lg flex items-center justify-center transition-colors shadow-sm"
+                                        className="w-11 h-11 shrink-0 bg-surface border border-border hover:bg-active text-secondary hover:text-brand rounded-lg flex items-center justify-center transition-colors shadow-sm"
                                         title="Statystyki"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
