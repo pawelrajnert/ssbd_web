@@ -11,5 +11,12 @@ export const ruleService = {
     },
     updateRulePreset: async (id: string, data: UpdateRulePresetDTO): Promise<void> => {
         await axiosInstance.put(`/rules/${id}`, data);
+    },
+    deleteRulePreset: async (ruleId: string, versionHash: string): Promise<void> => {
+        await axiosInstance.delete(`/rules/${ruleId}`, {
+            headers: {
+                'If-Match': versionHash
+            }
+        });
     }
 };
