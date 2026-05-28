@@ -1,6 +1,7 @@
 import axiosInstance from "../api/auth/middleware";
-import type { Page } from "../types/user.types";
-import type { ReportDTO } from "../types/report.types";
+import type {Page} from "../types/user.types";
+import type {ReportDTO} from "../types/report.types";
+import type {StudentReportDetailsDTO} from "../types/studentScan.types.ts";
 
 export const reportService = {
     getAllReportsForSubject: async (
@@ -43,9 +44,26 @@ export const reportService = {
 
         return response.data;
     },
-    deleteReport: async(id: string) => {
+    deleteReport: async (id: string) => {
         const response = await axiosInstance.delete<Page<ReportDTO>>(
             `/reports/${id}`
+        );
+        return response.data;
+    },
+
+    getMyReports: async (): Promise<ReportDTO[]> => {
+        const response = await axiosInstance.get<ReportDTO[]>('/reports/my-reports');
+        return response.data;
+    },
+
+    generateStudentScan: async (
+        repositoryId: string,
+        tag: string
+    ): Promise<StudentReportDetailsDTO> => {
+        const response = await axiosInstance.post<StudentReportDetailsDTO>(
+            `/reports/student-scan/${repositoryId}`,
+            null,
+            {params: {tag}}
         );
         return response.data;
     }
