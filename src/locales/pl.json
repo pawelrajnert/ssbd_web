@@ -489,5 +489,43 @@
       "not_found": "Nie znaleziono raportów",
       "delete": "Usuń"
     }
+  },
+  "subject": {
+    "list": {
+      "title": "Przedmioty",
+      "name": "Nazwa przedmiotu",
+      "edition": "Edycja",
+      "organization": "Organizacja Gitea",
+      "status": "Status",
+      "active": "Aktywny",
+      "actions": "Akcje",
+      "btnDetails": "Szczegóły",
+      "fetchError": "Wystąpił błąd podczas pobierania listy przedmiotów.",
+      "empty": "Obecnie nie masz przypisanych żadnych przedmiotów."
+    },
+    "details": {
+      "edition": "Edycja",
+      "organization": "Organizacja Gitea",
+      "description": "Opis przedmiotu",
+      "gitea": "Adres URL Gitea",
+      "archived": "Zarchiwizowany",
+      "notFound": "Nie znaleziono przedmiotu.",
+      "fetchError": "Wystąpił błąd podczas pobierania szczegółów przedmiotu.",
+      "actions": {
+        "edit": "Edytuj",
+        "manageTeachers": "Zarządzaj kadrą"
+      },
+      "statistics": {
+        "title": "Statystyki przedmiotu",
+        "placeholder": "Miejsce na przyszłe statystyki (wykresy, średnie dopasowanie itp.)."
+      },
+      "rules": {
+        "title": "Konfiguracja reguł antyplagiatowych",
+        "raportLevel": "Poziom raportu",
+        "ticketCount": "Liczba zgłoszeń studenta",
+        "minTokens": "Minimalne dopasowanie tokenów",
+        "normalization": "Normalizacja kodu"
+      }
+    }
   }
 }
