@@ -335,7 +335,7 @@
     }
   },
   "header": {
-    "title": "Kurator Akademicki",
+    "title": "Kustosz Akademicki", "og nazwa wraca": "wielkie pozdro",
     "subtitle": "Politechnika Łódzka",
     "dashboard": "Panel Główny",
     "userManagement": "Zarządzanie Użytkownikami",
@@ -397,7 +397,8 @@
     "userManagement": "Zarządzanie użytkownikami",
     "subjectList": "Moje przedmioty",
     "reportList": "Lista raportów",
-    "globalRules": "Globalne reguły"
+    "globalRules": "Globalne reguły",
+    "studentScan": "Sprawdź swój kod"
   },
   "subjectUsers": {
     "title": "Lista studentów dla przedmiotu",
@@ -488,6 +489,41 @@
       "action": "Działanie",
       "not_found": "Nie znaleziono raportów",
       "delete": "Usuń"
+    }
+  },
+  "studentScan": {
+    "title": "Sprawdź swój kod",
+    "sub": "Sprawdź swój kod względem potencjalnego plagiatu.",
+    "form": {
+      "tag": "Tag testowy",
+      "tagPlaceholder": "np. IAS64",
+      "submit": "Rozpocznij skanowanie",
+      "scanning": "Skanowanie...",
+      "repository": "Repozytorium",
+      "repositoryPlaceholder": "— wybierz repozytorium —",
+      "noRepositories": "Brak przypisanych do użytkownika repozytoriów.",
+      "scansUsed": "Ilość wykonanych skanowań"
+    },
+    "result": {
+      "title": "Wynik skanowania",
+      "tag": "Tag",
+      "subject": "Przedmiot",
+      "scannedAt": "Zeskanowano",
+      "matches": "Dopasowania",
+      "noMatches": "Brak dopasowań",
+      "similarity": "Podobieństwo",
+      "matchedLines": "Pasujące linie kodu"
+    },
+    "errors": {
+      "noTickets": "Brak dostępnych skanowań kodu dla tego repozytorium.",
+      "accessDenied": "Brak dostępu do tego repozytorium.",
+      "notFound": "Nie znaleziono repozytorium.",
+      "optimisticLock": "Błąd blokady optymistycznej — odśwież stronę i spróbuj ponownie.",
+      "base": "Wystąpił błąd podczas skanowania."
+    },
+    "history": {
+      "title": "Historia skanowań",
+      "empty": "Brak poprzednich skanowań kodu."
     }
   }
 }
