@@ -25,7 +25,8 @@ import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
 import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
-import { CreateSubjectPage } from "../pages/teacher/CreateSubjectPage";
+import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
+import StudentScanPage from "../pages/student/StudentScanPage.tsx";
 import { SubjectListView } from "../pages/subject/SubjectListView.tsx";
 import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
 
@@ -43,7 +44,7 @@ const routes: RouteObject[] = [
             },
             {
                 path: PATHS._2FA_VERIFY,
-                element: <TwoFactorVerifyPage />
+                element: <TwoFactorVerifyPage/>
             },
             {
                 path: PATHS.REGISTER,
@@ -99,6 +100,10 @@ const routes: RouteObject[] = [
     //             path: PATHS.USER_LIST,
     //             element: <UserListPage/>
     //         },
+    // {
+    //     path: PATHS.STUDENT_SCAN,
+    //     element: <StudentScanPage/>
+    // },
     //         {
     //             path: PATHS.USER_EDIT,
     //             element: <UserEditPage/>
@@ -119,11 +124,18 @@ const routes: RouteObject[] = [
             {
                 element: <Layout/>,
                 children: [
+                    // {
+                    //     path: PATHS.PROFILE,
+                    //     element: <ProfilePage/>
+                    // },
+                    // {
+                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+                    //     element: <EmailChangeInitPage/>
+                    // },
                     {
                         path: PATHS.PROFILE,
                         element: <UserEditPage/>
                     },
-                    // NOWA ŚCIEŻKA DLA SZCZEGÓŁÓW PRZEDMIOTU
                     {
                         path: PATHS.SUBJECT_DETAILS,
                         element: <SubjectDetailsView/>
@@ -141,6 +153,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.STUDENT_SUBJECT_LIST,
                         element: <SubjectListView/>
+                    },
+                    {
+                        path: PATHS.STUDENT_SCAN,
+                        element: <StudentScanPage/>
                     }
                 ]
             }
@@ -154,7 +170,7 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
-                        element: <SubjectListView/> // <--- Zmiana komponentu
+                        element: <SubjectListView/>
                     },
                     {
                         path: PATHS.CREATE_SUBJECT,

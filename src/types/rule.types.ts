@@ -4,6 +4,8 @@ export interface RulePresetDTO {
     studentTicketCount: number;
     minimumTokensMatch: number;
     enableNormalization: boolean;
+    version: number;
+    versionHash: string;
 }
 
 export interface CreateRulePresetDTO {
