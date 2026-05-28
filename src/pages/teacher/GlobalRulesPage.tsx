@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ruleService } from "../../services/ruleService";
 import type { RulePresetDTO } from "../../types/rule.types";
-import { RefreshCw, AlertCircle, Plus, X, Pencil } from "lucide-react";
+import { RefreshCw, AlertCircle, Plus, X, Pencil, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
+import ConfirmationPopup from "../../shared/components/modals/ConfirmationPopup";
 
 const schema = yup.object({
     raportLevelName: yup.string().required("validation.required"),
@@ -29,8 +30,13 @@ export default function GlobalRulesPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [apiError, setApiError] = useState<string | null>(null);
+
     const [showModal, setShowModal] = useState(false);
     const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [ruleToDelete, setRuleToDelete] = useState<RulePresetDTO | null>(null);
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<RuleFormData>({
         resolver: yupResolver(schema),
@@ -104,6 +110,41 @@ export default function GlobalRulesPage() {
             } else {
                 setApiError(t('globalRules.error.createFailed'));
             }
+        }
+    };
+
+    const openDeleteModal = (rule: RulePresetDTO) => {
+        setRuleToDelete(rule);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!ruleToDelete) return;
+
+        setIsDeleting(true);
+        setError(null);
+
+        try {
+            const freshData = await ruleService.getRulePresetsTemplates();
+            const currentRule = freshData.find(r => r.id === ruleToDelete.id);
+
+            if (!currentRule) {
+                fetchRules();
+                throw new Error("Rule not found");
+            }
+
+            await ruleService.deleteRulePreset(currentRule.id, currentRule.versionHash);
+            fetchRules();
+        } catch (err: any) {
+            if (err.response?.status === 409) {
+                setError(t('globalRules.conflictError'));
+            } else if (err.message !== "Rule not found") {
+                setError(t('globalRules.deleteError'));
+            }
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setRuleToDelete(null);
         }
     };
 
@@ -229,8 +270,22 @@ export default function GlobalRulesPage() {
                     </div>
                 )}
 
+                <ConfirmationPopup
+                    isOpen={isDeleteModalOpen}
+                    onCancel={() => {
+                        setIsDeleteModalOpen(false);
+                        setRuleToDelete(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    title={t('globalRules.deleteTitle')}
+                    description={t('globalRules.deleteConfirmation')}
+                    confirmText={t('common.delete', 'Usuń')}
+                    cancelText={t('common.cancel', 'Anuluj')}
+                    isLoading={isDeleting}
+                />
+
                 {error && (
-                    <div className="mb-6 p-4 bg-danger-subtle border border-danger text-danger rounded-xl flex items-center gap-3 text-sm font-semibold">
+                    <div className="mb-6 p-4 bg-danger-subtle border border-danger text-danger rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in slide-in-from-top-4">
                         <AlertCircle size={20} />
                         {error}
                     </div>
@@ -265,13 +320,20 @@ export default function GlobalRulesPage() {
                                     <td className="py-4 px-8 text-sm text-primary">{rule.studentTicketCount}</td>
                                     <td className="py-4 px-8 text-sm text-primary">{rule.minimumTokensMatch}</td>
                                     <td className="py-4 px-8 text-sm text-primary">{rule.enableNormalization ? t('common.yes') : t('common.no')}</td>
-                                    <td className="py-4 px-8 text-sm text-primary text-right">
+                                    <td className="py-4 px-8 text-sm text-primary text-right space-x-2">
                                         <button
                                             onClick={() => openEditModal(rule)}
-                                            className="text-brand hover:text-brand-hover transition-colors inline-flex items-center"
+                                            className="text-brand hover:text-brand-hover dark:text-brand-300 dark:hover:text-brand-100 transition-colors inline-flex items-center p-2 rounded-full hover:bg-brand/10 dark:hover:bg-brand/20"
                                             title={t('globalRules.edit.title')}
                                         >
                                             <Pencil size={18} />
+                                        </button>
+                                        <button
+                                            onClick={() => openDeleteModal(rule)}
+                                            className="text-red-800 hover:text-red-600 dark:text-danger dark:hover:text-danger/80 transition-colors inline-flex items-center p-2 rounded-full hover:bg-red-800/10 dark:hover:bg-danger/10"
+                                            title={t('globalRules.deleteTitle')}
+                                        >
+                                            <Trash2 size={18} />
                                         </button>
                                     </td>
                                 </tr>
