@@ -4,6 +4,22 @@ import { getSubjectDetails } from '../../services/subjectService';
 import type { SubjectDTO } from '../../types/SubjectDTO';
 import { useTranslation } from 'react-i18next';
 
+// --- TYMCZASOWE DANE STRUKTURALNE (Usunąć, gdy backend będzie miał te pola w SubjectDTO) ---
+const MOCK_REPORTS = [
+    { id: 1, date: 'Paź 12, 2026', count: 32, status: 'CLEAN' },
+    { id: 2, date: 'Wrz 28, 2026', count: 28, status: 'ALERT' },
+    { id: 3, date: 'Wrz 14, 2026', count: 30, status: 'CLEAN' },
+    { id: 4, date: 'Cze 02, 2026', count: 31, status: 'CLEAN' },
+    { id: 5, date: 'Maj 15, 2026', count: 30, status: 'PENDING' },
+];
+
+const MOCK_REPOS = [
+    { id: 1, name: 'Projekt_Zaliczeniowy_01', date: 'Paź 24, 2026', msg: 'Kod czysty', status: 'clean', users: 'A. Kowalski, M. Nowak' },
+    { id: 2, name: 'Projekt_Zaliczeniowy_02', date: 'Paź 23, 2026', msg: 'Wykryto podobieństwo: 82%', status: 'alert', users: 'T. Wiśniewski, K. Zielińska' },
+    { id: 3, name: 'Projekt_Zaliczeniowy_03', date: 'Paź 21, 2026', msg: 'Oczekuje na weryfikację', status: 'pending', users: 'P. Mazur' },
+];
+// -----------------------------------------------------------------------------------------
+
 export const SubjectDetailsView: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -12,125 +28,170 @@ export const SubjectDetailsView: React.FC = () => {
     const [subject, setSubject] = useState<SubjectDTO | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [isReportsModalOpen, setIsReportsModalOpen] = useState<boolean>(false);
 
     useEffect(() => {
-        if (id) {
-            getSubjectDetails(id)
-                .then(data => {
-                    setSubject(data);
-                    setLoading(false);
-                })
-                .catch(() => {
-                    setError(t('subject.details.fetchError'));
-                    setLoading(false);
-                });
-        }
+        if (!id) return;
+        getSubjectDetails(id)
+            .then(data => {
+                setSubject(data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setError(t('subject.details.fetchError', 'Błąd pobierania danych.'));
+                setLoading(false);
+            });
     }, [id, t]);
 
-    if (loading) return <div className="p-6 text-center text-secondary">{t('common.loading')}</div>;
-    if (error) return <div className="p-6 text-center text-danger">{error}</div>;
-    if (!subject) return <div className="p-6 text-center text-secondary">{t('subject.details.notFound')}</div>;
+    if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading', 'Ładowanie...')}</div>;
+    if (error || !subject) return <div className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6 text-primary">{subject.name}</h1>
+        <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
 
-            <div className="bg-surface border border-border shadow rounded-lg p-6 mb-6 transition-colors duration-300">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <p className="text-secondary font-semibold text-sm uppercase tracking-wider mb-1">
-                            {t('subject.details.edition')}
-                        </p>
-                        <p className="text-primary text-base font-medium">{subject.edition}</p>
-                    </div>
-                    <div>
-                        <p className="text-secondary font-semibold text-sm uppercase tracking-wider mb-1">
-                            {t('subject.details.organization')}
-                        </p>
-                        <p className="text-primary text-base font-medium">{subject.organizationName}</p>
-                    </div>
-                    <div className="md:col-span-2">
-                        <p className="text-secondary font-semibold text-sm uppercase tracking-wider mb-1">
-                            {t('subject.details.description')}
-                        </p>
-                        <p className="text-primary text-base whitespace-pre-line">
-                            {subject.subjectDescription || t('common.none')}
-                        </p>
-                    </div>
-                    <div className="md:col-span-2">
-                        <p className="text-secondary font-semibold text-sm uppercase tracking-wider mb-1">
-                            {t('subject.details.gitea')}
-                        </p>
-                        <a
-                            href={subject.giteaURL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-brand hover:text-brand-hover hover:underline text-base font-medium transition-colors duration-300"
-                        >
-                            {subject.giteaURL}
-                        </a>
-                    </div>
+            {/* Header i Menu Akcji */}
+            <div className="mb-8 border-b border-border pb-6">
+                <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
+                    Zarządzanie Kursem / {subject.name}
                 </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">{subject.name}</h1>
+                <p className="text-secondary max-w-4xl text-sm md:text-base mb-6 leading-relaxed">
+                    Edycja: <span className="font-medium text-primary">{subject.edition}</span> | Organizacja Gitea: <a href={`https://gitea.com/${subject.organizationName}`} target="_blank" rel="noreferrer" className="font-medium text-brand hover:underline">{subject.organizationName}</a>
+                </p>
 
-                {subject.archived && (
-                    <div className="mt-6 inline-block bg-danger-subtle border border-danger-border text-danger px-4 py-1 rounded-full text-sm font-semibold transition-colors duration-300">
-                        {t('subject.details.archived')}
+                {/* Przyciski Akcji */}
+                {subject.canEdit && (
+                    <div className="flex flex-wrap gap-6">
+                        <button className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-primary transition-colors">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Harmonogram
+                        </button>
+                        <button onClick={() => navigate(`/subjects/${subject.id}/edit`)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-primary transition-colors">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                            Edytuj Przedmiot
+                        </button>
+                        <button className="flex items-center gap-2 text-sm font-semibold text-brand hover:text-brand-hover transition-colors">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" /></svg>
+                            Uruchom Analizę
+                        </button>
+                        <button className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-primary transition-colors">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                            Statystyki
+                        </button>
                     </div>
                 )}
             </div>
 
-            <div className="flex flex-wrap gap-4 mb-6">
-                {subject.canEdit && (
-                    <button
-                        onClick={() => navigate(`/subjects/${id}/edit`)}
-                        className="bg-brand text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-brand-hover shadow transition-colors duration-300 cursor-pointer"
-                    >
-                        {t('subject.details.actions.edit')}
-                    </button>
-                )}
-                {subject.canManageTeachers && (
-                    <button
-                        onClick={() => navigate(`/subjects/${id}/teachers`)}
-                        className="bg-surface text-brand border border-brand font-semibold px-5 py-2.5 rounded-lg hover:bg-active transition-colors duration-300 cursor-pointer"
-                    >
-                        {t('subject.details.actions.manageTeachers')}
-                    </button>
-                )}
-            </div>
+            {subject.canViewStats ? (
+                <div className="flex flex-col gap-10">
 
-            {subject.canViewStats && (
-                <div className="space-y-6">
-                    {subject.manualRules && (
-                        <div className="bg-surface border border-border shadow rounded-lg p-6 transition-colors duration-300">
-                            <h2 className="text-xl font-bold mb-4 text-primary">
-                                {t('subject.details.rules.title', 'Konfiguracja reguł antyplagiatowych')}
-                            </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="border border-border p-3 rounded-md bg-base">
-                                    <p className="text-xs text-secondary font-semibold uppercase">{t('subject.details.rules.raportLevel', 'Poziom raportu')}</p>
-                                    <p className="text-primary font-medium mt-0.5">{subject.manualRules.raportLevelName}</p>
+                    {/* Sekcja 1: Raporty (Góra, przesuwalne horyzontalnie) */}
+                    <div>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold text-primary">Ostatnie Raporty</h3>
+                            <button
+                                onClick={() => setIsReportsModalOpen(true)}
+                                className="text-sm font-bold text-brand hover:text-brand-hover transition-colors"
+                            >
+                                Zobacz wszystkie →
+                            </button>
+                        </div>
+
+                        {/* Kontener Horyzontalny */}
+                        <div className="flex overflow-x-auto gap-5 pb-4 snap-x">
+                            {MOCK_REPORTS.map((report) => (
+                                <div
+                                    key={report.id}
+                                    className="min-w-[280px] p-5 rounded-xl border border-border bg-surface shadow-sm snap-start shrink-0 cursor-pointer hover:border-brand transition-colors"
+                                >
+                                    <div className="flex justify-between items-start mb-3">
+                                        <h4 className="font-bold text-primary">Raport • {report.date}</h4>
+                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-sm ${
+                                            report.status === 'CLEAN' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                                report.status === 'ALERT' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                                                    'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+                                        }`}>
+                                            {report.status}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-secondary">{report.count} repozytoriów studenckich</p>
                                 </div>
-                                <div className="border border-border p-3 rounded-md bg-base">
-                                    <p className="text-xs text-secondary font-semibold uppercase">{t('subject.details.rules.ticketCount', 'Liczba zgłoszeń studenta')}</p>
-                                    <p className="text-primary font-medium mt-0.5">{subject.manualRules.studentTicketCount}</p>
-                                </div>
-                                <div className="border border-border p-3 rounded-md bg-base">
-                                    <p className="text-xs text-secondary font-semibold uppercase">{t('subject.details.rules.minTokens', 'Minimalne dopasowanie tokenów')}</p>
-                                    <p className="text-primary font-medium mt-0.5">{subject.manualRules.minimumTokensMatch}</p>
-                                </div>
-                                <div className="border border-border p-3 rounded-md bg-base">
-                                    <p className="text-xs text-secondary font-semibold uppercase">{t('subject.details.rules.normalization', 'Normalizacja kodu')}</p>
-                                    <p className="text-primary font-medium mt-0.5">
-                                        {subject.manualRules.enableNormalization ? t('common.yes', 'Tak') : t('common.no', 'Nie')}
-                                    </p>
-                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Sekcja 2: Repozytoria Studenckie (Kolorowe wiersze) */}
+                    <div>
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-primary">Aktywne Repozytoria Studenckie</h3>
+                            <div className="flex gap-3 text-sm font-semibold text-secondary">
+                                <button className="hover:text-primary transition-colors">Odśwież</button>
                             </div>
                         </div>
-                    )}
 
-                    <div className="bg-base border border-border rounded-lg p-6 transition-colors duration-300">
-                        <h2 className="text-xl font-bold mb-2 text-primary">{t('subject.details.statistics.title')}</h2>
-                        <p className="text-secondary text-sm">{t('subject.details.statistics.placeholder')}</p>
+                        <div className="flex flex-col gap-4">
+                            {MOCK_REPOS.map((repo) => {
+                                // Determinowanie kolorów karty na podstawie statusu
+                                let colors = "border-border bg-surface";
+                                if (repo.status === 'alert') colors = "border-red-300 bg-red-50 dark:border-red-900/50 dark:bg-red-900/10";
+                                if (repo.status === 'clean') colors = "border-green-300 bg-green-50 dark:border-green-900/50 dark:bg-green-900/10";
+
+                                return (
+                                    <div key={repo.id} className={`border rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 transition-colors ${colors}`}>
+                                        <div>
+                                            <h4 className="font-bold text-primary text-base mb-1">{repo.name}</h4>
+                                            <p className="text-sm text-secondary mb-1">
+                                                Ostatni commit: {repo.date} — <span className={repo.status === 'alert' ? 'text-red-600 font-bold' : repo.status === 'clean' ? 'text-green-600 font-medium' : 'text-primary'}>{repo.msg}</span>
+                                            </p>
+                                            <p className="text-xs text-secondary font-medium">Użytkownicy: {repo.users}</p>
+                                        </div>
+                                        <div className="flex gap-2 shrink-0 mt-2 sm:mt-0">
+                                            <button className="px-4 py-2 bg-white dark:bg-gray-800 border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary transition-colors">
+                                                Podgląd Kodu
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                </div>
+            ) : (
+                <div className="bg-surface border border-border rounded-xl p-12 text-center shadow-sm">
+                    <p className="text-secondary text-lg">Brak uprawnień do przeglądania szczegółowych danych kursu.</p>
+                </div>
+            )}
+
+            {/* Modal na całą stronę dla "View All Reports" */}
+            {isReportsModalOpen && (
+                <div className="fixed inset-0 z-50 bg-base flex flex-col p-6 md:p-10 overflow-y-auto">
+                    <div className="max-w-[1400px] w-full mx-auto">
+                        <div className="flex justify-between items-center mb-8 border-b border-border pb-4">
+                            <h2 className="text-3xl font-bold text-primary">Wszystkie Raporty Antyplagiatowe</h2>
+                            <button
+                                onClick={() => setIsReportsModalOpen(false)}
+                                className="text-secondary hover:text-primary font-bold text-2xl p-2"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {MOCK_REPORTS.map((report) => (
+                                <div key={report.id} className="p-5 rounded-xl border border-border bg-surface shadow-sm cursor-pointer hover:border-brand">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <h4 className="font-bold text-primary">{report.date}</h4>
+                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-sm ${
+                                            report.status === 'CLEAN' ? 'bg-green-100 text-green-700' :
+                                                report.status === 'ALERT' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
+                                        }`}>
+                                            {report.status}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-secondary">{report.count} repozytoriów</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
