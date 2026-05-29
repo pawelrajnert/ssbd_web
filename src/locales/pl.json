@@ -336,7 +336,8 @@
     }
   },
   "header": {
-    "title": "Kustosz Akademicki", "og nazwa wraca": "wielkie pozdro",
+    "title": "Kustosz Akademicki",
+    "og nazwa wraca": "wielkie pozdro",
     "subtitle": "Politechnika Łódzka",
     "dashboard": "Panel Główny",
     "userManagement": "Zarządzanie Użytkownikami",
@@ -582,7 +583,7 @@
       "stats": {
         "students": "LICZBA STUDENTÓW",
         "repos": "AKTYWNE REPOZYTORIA",
-        "pending": "OCZEKUJĄCE ANALIZY",
+        "pending": "PRZEPROWADZONO ANALIZ",
         "similarity": "ŚREDNIE PODOBIEŃSTWO"
       },
       "reports": {
@@ -609,6 +610,15 @@
         "pending": "Oczekuje na weryfikację"
       },
       "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
+    },
+    "analysis": {
+      "modal": {
+        "title": "Uruchom nową analizę",
+        "description": "Wprowadż odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
+        "tagLabel": "Tag gitea",
+        "tagPlaceholder": "n.p. v67",
+        "submit": "Rozpocznij analizę"
+      }
     }
   }
 }
