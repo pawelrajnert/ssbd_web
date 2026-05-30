@@ -1,219 +1,231 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { subjectService } from '../../services/subjectService';
 
-import { createSubjectSchema } from "../../shared/validators/createSubjectSchema";
-import { subjectService } from "../../services/subjectService";
-import { ruleService } from "../../services/ruleService";
-
-import type { CreateSubjectFormData } from "../../shared/validators/createSubjectSchema";
-import type { RulePresetDTO } from "../../types/rule.types";
-
-interface FormValues extends Omit<CreateSubjectFormData, "manualRules"> {
-    manualRules?: {
-        studentTicketCount: number;
-        minimumTokensMatch: number;
-        enableNormalization: boolean;
-    } | null;
-}
+import type { SubjectDTO } from '../../types/SubjectDTO';
+import { useBreadcrumb } from '../../contexts/BreadcrumbContext';
 
 export const CreateSubjectPage: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-
-    const [templates, setTemplates] = useState<RulePresetDTO[]>([]);
-    const [globalError, setGlobalError] = useState<string | null>(null);
-    const [fetchingTemplates, setFetchingTemplates] = useState<boolean>(true);
-
-    const {
-        register,
-        handleSubmit,
-        watch,
-        setValue,
-        clearErrors,
-        formState: { errors, isSubmitting }
-    } = useForm<FormValues>({
-        resolver: yupResolver(createSubjectSchema) as any,
-        defaultValues: {
-            name: "",
-            organizationName: "",
-            edition: "",
-            subjectDescription: null,
-            giteaURL: "",
-            templateId: null,
-            manualRules: null
-        }
-    });
-
-    const selectedTemplateId = watch("templateId");
+    const { setDynamicBreadcrumb } = useBreadcrumb();
 
     useEffect(() => {
-        ruleService.getRulePresetsTemplates()
-            .then((data: RulePresetDTO[]) => {
-                setTemplates(data);
-            })
-            .catch((err: unknown) => {
-                console.error("Nie udało się pobrać szablonów reguł:", err);
-            })
-            .finally(() => {
-                setFetchingTemplates(false);
-            });
+        setDynamicBreadcrumb('Utwórz Przedmiot');
+        return () => setDynamicBreadcrumb(null);
+    }, [setDynamicBreadcrumb]);
+
+    const [name, setName] = useState('');
+    const [organizationName, setOrganizationName] = useState('');
+    const [edition, setEdition] = useState('');
+    const [description, setDescription] = useState('');
+    const [giteaUrl, setGiteaUrl] = useState('');
+
+    const [usePreset, setUsePreset] = useState<boolean>(false);
+
+    const [templateId, setTemplateId] = useState<string>('');
+    const [availableTemplates, setAvailableTemplates] = useState<any[]>([]);
+
+    const [tickets, setTickets] = useState(10);
+    const [minTokens, setMinTokens] = useState(0);
+    const [normalization, setNormalization] = useState(false);
+
+    const [visibility, setVisibility] = useState('FULL');
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        // TODO: podpiac ruleService
+        // ruleService.getAllTemplates().then(setAvailableTemplates).catch(console.error);
+
+        setAvailableTemplates([
+            { id: '123e4567-e89b-12d3-a456-426614174001', name: 'Rygorystyczne (5 Tokenów, z Normalizacją)' },
+            { id: '123e4567-e89b-12d3-a456-426614174002', name: 'Luźne (20 Tokenów, bez Normalizacji)' }
+        ]);
     }, []);
 
-    useEffect(() => {
-        if (selectedTemplateId) {
-            setValue("manualRules", null);
-            clearErrors("manualRules");
+    const handleSubmit = async () => {
+        if (!name.trim() || !organizationName.trim() || !edition.trim() || !giteaUrl.trim()) {
+            setError(t('subjectCreate.errorEmpty', 'Wypełnij wszystkie wymagane pola (Nazwa, Organizacja, Edycja, URL).'));
+            return;
         }
-    }, [selectedTemplateId, setValue, clearErrors]);
 
-    const preventInvalidNumberInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (["-", "+", "e", "E", ".", ","].includes(e.key)) {
-            e.preventDefault();
+        if (usePreset && !templateId) {
+            setError('Wybierz szablon reguł z listy lub przełącz na konfigurację ręczną.');
+            return;
         }
-    };
 
-    const onSubmit = async (data: FormValues) => {
-        try {
-            setGlobalError(null);
+        setIsSubmitting(true);
+        setError(null);
 
-            const payload = { ...data };
 
-            // Jeśli wybrano szablon, usuwamy ręczne reguły, aby backend nie walidował pustych pól
-            if (payload.templateId) {
-                delete payload.manualRules;
+        const dto: SubjectDTO = {
+            name,
+            organizationName,
+            edition,
+            subjectDescription: description,
+            giteaURL: giteaUrl,
+            templateId: usePreset ? templateId : null,
+            manualRules: {
+                id: null as any,
+                raportLevelName: visibility,
+                studentTicketCount: usePreset ? 0 : tickets,
+                minimumTokensMatch: usePreset ? 0 : minTokens,
+                enableNormalization: usePreset ? false : normalization
             }
+        };
 
-            await subjectService.createSubject(payload as any);
-            navigate("/teacher/subjects");
+        try {
+            await subjectService.createSubject(dto);
+            navigate('/subjects');
         } catch (err: any) {
-            setGlobalError(err?.response?.data?.message || "error.generic");
+            setError(err.response?.data?.message || 'Wystąpił błąd podczas tworzenia przedmiotu.');
+            setIsSubmitting(false);
         }
     };
-
-    const inputClasses = "mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600";
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-surface shadow rounded-lg">
-            <h2 className="text-2xl font-bold mb-6 text-primary">
-                {t("globalRules.subject.create.title")}
-            </h2>
+        <div className="max-w-4xl mx-auto p-6 md:p-10 animate-fade-in flex flex-col h-full">
+            <div className="mb-8">
+                <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors mb-4">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Wróć
+                </button>
+                <h1 className="text-3xl font-bold text-primary">Utwórz Nowy Przedmiot</h1>
+                <p className="text-secondary mt-2">Wprowadź podstawowe informacje oraz skonfiguruj ustawienia analizy.</p>
+            </div>
 
-            {globalError && (
-                <div className="mb-4 p-3 bg-danger-subtle text-danger rounded border border-danger-border">
-                    {t(globalError)}
-                </div>
-            )}
+            <div className="bg-surface rounded-2xl shadow-sm border border-border flex flex-col flex-1">
+                <div className="p-6 md:p-8 flex flex-col gap-10">
+                    {error && <div className="p-4 bg-danger-subtle text-danger border border-danger-border rounded-lg text-sm">{error}</div>}
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div>
-                    <label className="block text-sm font-medium text-secondary">{t("globalRules.subject.name")}</label>
-                    <input type="text" {...register("name")} className={inputClasses} />
-                    {errors.name && <p className="mt-1 text-sm text-danger">{t(errors.name.message || "")}</p>}
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-secondary">{t("globalRules.subject.organizationName")}</label>
-                    <input type="text" {...register("organizationName")} className={inputClasses} />
-                    {errors.organizationName && <p className="mt-1 text-sm text-danger">{t(errors.organizationName.message || "")}</p>}
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-secondary">{t("globalRules.subject.edition")}</label>
-                        <input type="text" {...register("edition")} className={inputClasses} />
-                        {errors.edition && <p className="mt-1 text-sm text-danger">{t(errors.edition.message || "")}</p>}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-secondary">{t("globalRules.subject.giteaURL")}</label>
-                        <input type="text" {...register("giteaURL")} className={inputClasses} />
-                        {errors.giteaURL && <p className="mt-1 text-sm text-danger">{t(errors.giteaURL.message || "")}</p>}
-                    </div>
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-secondary">{t("globalRules.subject.subjectDescription")}</label>
-                    <textarea {...register("subjectDescription")} rows={3} className={inputClasses} />
-                    {errors.subjectDescription && <p className="mt-1 text-sm text-danger">{t(errors.subjectDescription.message || "")}</p>}
-                </div>
-
-                <hr className="border-border" />
-
-                <div>
-                    <label className="block text-sm font-medium text-secondary">
-                        {t("globalRules.subject.templateId")}
-                    </label>
-                    <select {...register("templateId")} className={inputClasses} disabled={fetchingTemplates}>
-                        <option value="">{t("globalRules.subject.template.none")}</option>
-                        {templates.map((template) => (
-                            <option key={template.id} value={template.id}>
-                                {template.raportLevelName} (Zgłoszenia: {template.studentTicketCount})
-                            </option>
-                        ))}
-                    </select>
-                    {errors.templateId && <p className="mt-1 text-sm text-danger">{t(errors.templateId.message || "")}</p>}
-                </div>
-
-                {!selectedTemplateId ? (
-                    <div className="p-4 bg-base rounded-md border border-border space-y-4">
-                        <h3 className="text-lg font-medium text-primary">
-                            {t("globalRules.subject.manualRules.title")}
-                        </h3>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-secondary">
-                                    {t("globalRules.subject.rules.studentTicketCount")}
-                                </label>
-                                <input type="number" min="1" onKeyDown={preventInvalidNumberInput} {...register("manualRules.studentTicketCount")} className={inputClasses} />
-                                {errors.manualRules?.studentTicketCount && (
-                                    <p className="mt-1 text-sm text-danger">{t(errors.manualRules.studentTicketCount.message || "")}</p>
-                                )}
+                    <section>
+                        <h3 className="text-xs font-bold text-secondary tracking-widest mb-5 uppercase">Informacje Ogólne</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-semibold text-primary mb-2">Nazwa Przedmiotu *</label>
+                                <input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" placeholder="np. Programowanie Obiektowe" />
                             </div>
-
                             <div>
-                                <label className="block text-sm font-medium text-secondary">
-                                    {t("globalRules.subject.rules.minimumTokensMatch")}
-                                </label>
-                                <input type="number" min="1" onKeyDown={preventInvalidNumberInput} {...register("manualRules.minimumTokensMatch")} className={inputClasses} />
-                                {errors.manualRules?.minimumTokensMatch && (
-                                    <p className="mt-1 text-sm text-danger">{t(errors.manualRules.minimumTokensMatch.message || "")}</p>
-                                )}
+                                <label className="block text-sm font-semibold text-primary mb-2">Nazwa Organizacji Gitea *</label>
+                                <input type="text" value={organizationName} onChange={e => setOrganizationName(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" placeholder="np. 2026-po-zaoczne" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold text-primary mb-2">Edycja (Rok/Semestr) *</label>
+                                <input type="text" value={edition} onChange={e => setEdition(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" placeholder="np. 2026L" />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-semibold text-primary mb-2">Opis Przedmiotu</label>
+                                <textarea rows={4} value={description} onChange={e => setDescription(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors resize-none" placeholder="Opcjonalny opis zawartości..." />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-semibold text-primary mb-2">Adres URL Gitea *</label>
+                                <input type="url" value={giteaUrl} onChange={e => setGiteaUrl(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" placeholder="https://gitea.com/..." />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div className="flex justify-between items-center mb-5">
+                            <h3 className="text-xs font-bold text-secondary tracking-widest uppercase">Reguły Oceniania i Analizy</h3>
+                        </div>
+
+                        <div className="bg-base p-6 rounded-xl border border-border mb-6">
+                            <label className="block text-sm font-semibold text-primary mb-3">Poziom Widoczności Raportu dla Studenta</label>
+                            <div className="flex flex-col gap-3">
+                                {[
+                                    { key: 'FULL', label: 'Pełny Raport - student widzi szczegółowe dopasowania kodu' },
+                                    { key: 'SCORE', label: 'Tylko Wynik - student widzi tylko procenty' },
+                                    { key: 'HIDDEN', label: 'Ukryty - student nie widzi żadnych wyników analizy' }
+                                ].map(level => (
+                                    <label key={level.key} className="flex items-center gap-3 cursor-pointer w-fit">
+                                        <input type="radio" name="visibility" value={level.key} checked={visibility === level.key} onChange={e => setVisibility(e.target.value)} className="w-4 h-4 accent-brand" />
+                                        <span className="text-sm text-primary">{level.label}</span>
+                                    </label>
+                                ))}
                             </div>
                         </div>
 
-                        <div className="flex items-center">
-                            <input id="enableNormalization" type="checkbox" {...register("manualRules.enableNormalization")} className="h-4 w-4 rounded border-border text-brand focus:ring-brand bg-surface" />
-                            <label htmlFor="enableNormalization" className="ml-2 block text-sm text-primary">
-                                {t("globalRules.subject.rules.enableNormalization")}
-                            </label>
+                        <label className="block text-sm font-semibold text-primary mb-3">Zaawansowane parametry skanera (JPlag)</label>
+                        <div className="flex p-1 bg-base border border-border rounded-lg mb-6 w-fit">
+                            <button
+                                type="button"
+                                onClick={() => setUsePreset(false)}
+                                className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${!usePreset ? 'bg-surface text-brand shadow-sm' : 'text-secondary hover:text-primary'}`}
+                            >
+                                Konfiguracja Ręczna
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setUsePreset(true)}
+                                className={`px-4 py-2 text-sm font-semibold rounded-md transition-colors ${usePreset ? 'bg-surface text-brand shadow-sm' : 'text-secondary hover:text-primary'}`}
+                            >
+                                Użyj Szablonu JPlag
+                            </button>
                         </div>
-                    </div>
-                ) : (
-                    <div className="p-4 bg-active rounded-md border border-brand text-sm text-brand font-medium">
-                        {t("globalRules.subject.info.templateActive")}
-                    </div>
-                )}
 
-                <div className="flex justify-end space-x-3 pt-4">
-                    <button
-                        type="button"
-                        onClick={() => navigate("/teacher/subjects")}
-                        className="px-4 py-2 border border-border rounded-md shadow-sm text-sm font-bold text-secondary bg-surface hover:text-primary hover:bg-base transition-colors"
-                    >
-                        {t("common.cancel")}
+                        {usePreset ? (
+                            <div className="bg-base p-6 rounded-xl border border-border animate-fade-in">
+                                <label className="block text-sm font-semibold text-primary mb-2">Wybierz zapisany szablon parametrów</label>
+                                <select
+                                    value={templateId}
+                                    onChange={(e) => setTemplateId(e.target.value)}
+                                    className="w-full bg-surface border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors"
+                                >
+                                    <option value="" disabled>-- Wybierz szablon z listy --</option>
+                                    {availableTemplates.map(t => (
+                                        <option key={t.id} value={t.id}>{t.name || t.id}</option>
+                                    ))}
+                                </select>
+                                <p className="text-xs text-secondary mt-3">
+                                    Wybranie szablonu spowoduje automatyczne zaaplikowanie zapisanej w nim liczby tokenów oraz ustawień normalizacji.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-6 animate-fade-in p-6 bg-base rounded-xl border border-border">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-primary mb-2">Początkowe Tokeny (długość analizowanych bloków)</label>
+                                        <input type="number" min="0" value={tickets} onChange={e => setTickets(Number(e.target.value))} className="w-full bg-surface border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-primary mb-2">Minimalna zgodność tokenów (%)</label>
+                                        <input type="number" min="0" value={minTokens} onChange={e => setMinTokens(Number(e.target.value))} className="w-full bg-surface border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" />
+                                    </div>
+                                </div>
+
+                                <label className="flex items-center gap-3 cursor-pointer w-fit">
+                                    <input type="checkbox" checked={normalization} onChange={e => setNormalization(e.target.checked)} className="w-5 h-5 accent-brand rounded border-border" />
+                                    <span className="text-sm font-semibold text-primary">Włącz normalizację kodu przed skanowaniem</span>
+                                </label>
+                            </div>
+                        )}
+                    </section>
+
+                    {/* HARMONOGRAM (ZAŚLEPKA) */}
+                    <section>
+                        <h3 className="text-xs font-bold text-secondary tracking-widest mb-5 uppercase">Harmonogram Skonowania</h3>
+                        <div className="p-8 bg-base border border-border border-dashed rounded-xl flex flex-col items-center justify-center text-center gap-3">
+                            <svg className="w-8 h-8 text-secondary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            <p className="text-primary font-semibold">Zarządzanie Harmonogramem</p>
+                            <p className="text-secondary text-sm max-w-sm">
+                                Opcje dodawania i konfiguracji automatycznych skanów w harmonogramie zostaną udostępnione w nadchodzących aktualizacjach systemu.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+
+                <div className="flex justify-end gap-4 p-6 md:p-8 border-t border-border bg-base/50 rounded-b-2xl mt-auto">
+                    <button type="button" onClick={() => navigate(-1)} disabled={isSubmitting} className="px-6 py-2.5 rounded-lg text-sm font-bold text-secondary border border-border hover:bg-surface transition-colors">
+                        Anuluj
                     </button>
-                    <button type="submit"
-                        disabled={isSubmitting}
-                        className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-brand hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand disabled:opacity-50 transition-colors"
-                    >
-                        {isSubmitting ? t("common.saving") : t("common.create")}
+                    <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="px-8 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
+                        {isSubmitting ? 'Tworzenie...' : 'Utwórz Przedmiot'}
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     );
 };
