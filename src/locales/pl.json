@@ -610,5 +610,37 @@
       },
       "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
     }
+  },
+  "subjectEdit": {
+    "title": "Edytuj Przedmiot",
+    "subtitle": "Zaktualizuj metadane przedmiotu i parametry analizy.",
+    "generalInfo": "INFORMACJE OGÓLNE",
+    "nameLabel": "Nazwa Przedmiotu",
+    "descLabel": "Opis",
+    "coTeachers": "WSPÓŁPROWADZĄCY I UPRAWNIENIA",
+    "addTeacher": "Dodaj Prowadzącego",
+    "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
+    "assignedStaff": "PRZYPISANA KADRA",
+    "roles": {
+      "OWNER": "Właściciel (Owner)",
+      "EDITOR": "Edytor (Edit Access)",
+      "VIEWER": "Obserwator (Read Only)"
+    },
+    "giteaAnalysis": "GITEA I ANALIZA",
+    "giteaUrl": "Adres URL Organizacji Gitea",
+    "tokens": "Tokeny dla Studentów",
+    "minTokens": "Minimalna zgodność tokenów",
+    "normalization": "Włącz normalizację (Normalization)",
+    "visibility": "Poziom Widoczności Raportu",
+    "levels": {
+      "FULL": "Pełny Raport",
+      "SCORE": "Tylko Wynik",
+      "HIDDEN": "Ukryty"
+    },
+    "cancel": "Anuluj",
+    "apply": "Zastosuj Zmiany",
+    "loading": "Zapisywanie...",
+    "errorEmpty": "Nazwa i URL nie mogą być puste.",
+    "success": "Przedmiot został zaktualizowany."
   }
 }

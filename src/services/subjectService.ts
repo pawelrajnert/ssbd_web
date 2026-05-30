@@ -1,4 +1,4 @@
-import type { SubjectDTO } from '../types/SubjectDTO';
+import type { SubjectDTO, UpdateSubjectDTO } from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
 
 export const subjectService = {
@@ -28,4 +28,12 @@ export const getSubjectDetails = async (id: string): Promise<SubjectDTO> => {
     }
 
     return response.data;
+};
+
+export const updateSubject = async (id: string, data: UpdateSubjectDTO, versionHash: string): Promise<void> => {
+    await axiosInstance.put(`/subjects/${id}`, data, {
+        headers: {
+            'If-Match': versionHash
+        }
+    });
 };
