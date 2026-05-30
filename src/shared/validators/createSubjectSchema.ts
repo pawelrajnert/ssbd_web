@@ -5,7 +5,9 @@ export const createSubjectSchema = yup.object({
     organizationName: yup.string().required("validation.required"),
     edition: yup.string().required("validation.required"),
     subjectDescription: yup.string().nullable().default(null),
-    giteaURL: yup.string().url("validation.url.invalid").required("validation.required"),
+    giteaURL: yup.string()
+        .matches(/^https?:\/\/.+/, "validation.url.invalid")
+        .required("validation.required"),
     templateId: yup.string().uuid("validation.uuid.invalid").nullable().default(null),
     manualRules: yup.object({
         studentTicketCount: yup.number()

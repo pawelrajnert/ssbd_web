@@ -23,7 +23,8 @@
     "no": "Nie",
     "saving": "Zapisywanie...",
     "create": "Utwórz",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "confirm": "Potwierdź"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -473,7 +474,7 @@
       "info": {
         "templateActive": "Reguły weryfikacji zostaną skopiowane automatycznie z wybranego szablonu."
       }
-    },
+  },
     "deleteTitle": "Usuń szablon reguł",
     "deleteConfirmation": "Czy na pewno chcesz usunąć ten szablon reguł? Spowoduje to anulowanie i usunięcie wszystkich powiązanych zaplanowanych sprawdzeń.",
     "deleteSuccess": "Szablon reguł został pomyślnie usunięty.",
@@ -619,6 +620,14 @@
         "tagPlaceholder": "n.p. v67",
         "submit": "Rozpocznij analizę"
       }
-    }
+    },
+    "delete": "Usuń przedmiot",
+    "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
+    "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
+    "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
+    "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
+    "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
+    "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
+    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu."
   }
 }
