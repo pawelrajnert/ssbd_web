@@ -22,7 +22,8 @@
     "yes": "Yes",
     "no": "No",
     "delete": "Delete",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "save": "Save"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -417,7 +418,8 @@
       "fetch": "Failed to fetch global rules",
       "createFailed": "Action failed. Please check the data.",
       "invalidTokens": "Minimum tokens must be at least 1",
-      "invalidTickets": "Number cannot be negative"
+      "invalidTickets": "Number cannot be negative",
+      "updateFailed": "Failed to update the rule. Please try again."
     },
     "add": {
       "title": "Add New Global Rule",
@@ -427,6 +429,8 @@
       "title": "Edit Rule",
       "submit": "Save Changes"
     },
+    "editConfirmTitle": "Confirm Edit",
+    "editConfirmDescription": "Are you sure you want to save the changes made to this rule?",
     "form": {
       "raportLevelLabel": "Report visibility level",
       "studentTicketsLabel": "Max student tickets allowed",
@@ -450,6 +454,7 @@
     "deleteConfirmation": "Are you sure you want to delete this rule template? This will cancel and delete all associated scheduled checks.",
     "deleteSuccess": "Rule template deleted successfully.",
     "deleteError": "An error occurred while deleting the rule template.",
+    "deleteErrorNotFound": "Rule not found. It might have been already deleted.",
     "conflictError": "Data has been modified by another user. Please refresh and try again."
   },
   "reportList": {
