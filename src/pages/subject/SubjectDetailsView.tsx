@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import {getSubjectDetails} from '../../services/subjectService';
+import {getSubjectDetails, deleteSubject} from '../../services/subjectService';
 import type {SubjectDTO} from '../../types/SubjectDTO';
 import {useTranslation} from 'react-i18next';
 import {formatDate, reportService} from "../../services/reportService.ts";
 import type {Page} from "../../types/user.types.ts";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {getSimilarityBadge} from "../../shared/components/similarity_badge/SimilarityBadge.tsx";
-import {Calendar, SquarePen, CirclePlay, BarChartBigIcon} from "lucide-react"
+import {Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2} from "lucide-react"
 
 export const SubjectDetailsView: React.FC = () => {
     const {id} = useParams<{ id: string }>();
@@ -17,12 +17,16 @@ export const SubjectDetailsView: React.FC = () => {
     const [subject, setSubject] = useState<SubjectDTO | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
     const [isReportsModalOpen, setIsReportsModalOpen] = useState<boolean>(false);
+    const [isStartAnalysisModalOpen, setIsStartAnalysisModalOpen] = useState<boolean>(false);
+    const [analysisTag, setAnalysisTag] = useState('');
 
     const [reports, setReports] = useState<Page<ReportDTO> | null>(null)
 
-    const [isStartAnalysisModalOpen, setIsStartAnalysisModalOpen] = useState(false);
-    const [analysisTag, setAnalysisTag] = useState('');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const [deleteGiteaOrg, setDeleteGiteaOrg] = useState<boolean>(false);
+    const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
     const MOCK_REPOS = [
         {
@@ -85,6 +89,36 @@ export const SubjectDetailsView: React.FC = () => {
         setAnalysisTag('');
     };
 
+    const handleDeleteSubject = async () => {
+        if (!id || !subject) return;
+
+        const currentHash = subject.versionHash;
+
+        if (!currentHash) {
+            setError("Błąd: Brak wersji przedmiotu (versionHash). Odśwież stronę.");
+            return;
+        }
+
+        setIsDeleting(true);
+        setError(null);
+
+        try {
+            await deleteSubject(id, currentHash, deleteGiteaOrg);
+            navigate('/subjects');
+        } catch (err: any) {
+            if (err.response?.status === 409) {
+                setError(t('subject.deleteConflict'));
+            } else if (err.response?.status === 403) {
+                setError(t('subject.deleteForbidden'));
+            } else {
+                setError(t('subject.deleteError'));
+            }
+            setIsDeleteModalOpen(false);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
     if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading', 'Ładowanie...')}</div>;
     if (error || !subject) return <div
         className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound')}</div>;
@@ -96,10 +130,10 @@ export const SubjectDetailsView: React.FC = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">{subject.name}</h1>
                 <p className="text-secondary max-w-4xl text-sm md:text-base mb-6 leading-relaxed">
                     {t('subject.details.edition')}: <span
-                    className="font-medium text-primary">{subject.edition}</span> | {t('subject.details.organization')}: <a
-                    href={`https://team-1.proj-sum.it.p.lodz.pl/git/${subject.organizationName}`} target="_blank" rel="noreferrer"
-                    className="font-medium text-brand hover:underline">{subject.organizationName}</a>
-                </p> { /*TODO: Zamienić link na jakiś sensowny */}
+                        className="font-medium text-primary">{subject.edition}</span> | {t('subject.details.organization')}: <a
+                href={subject.giteaURL || "#"} target="_blank" rel="noreferrer"
+                className="font-medium text-brand hover:underline">{subject.organizationName}</a>
+                </p>
 
                 <div className="flex flex-wrap gap-6">
                     <button
@@ -125,6 +159,14 @@ export const SubjectDetailsView: React.FC = () => {
                         <BarChartBigIcon/>
                         {t('subject.details.actions.statistics')}
                     </button>
+                    {subject.canEdit && (
+                        <button
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            className="flex items-center gap-2 text-sm font-semibold text-danger hover:text-red-700 dark:hover:text-red-400 transition-colors md:ml-auto">
+                            <Trash2 className="w-4 h-4"/>
+                            {t('subject.delete')}
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -272,7 +314,6 @@ export const SubjectDetailsView: React.FC = () => {
                     <div
                         className="bg-white dark:bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
 
-                        {/* Header */}
                         <div className="flex justify-between items-center p-6 pb-4">
                             <h2 className="text-[20px] font-bold text-[#2a2a2a] dark:text-primary">
                                 {t('subject.analysis.modal.title', 'Start New Analysis')}
@@ -288,7 +329,6 @@ export const SubjectDetailsView: React.FC = () => {
                             </button>
                         </div>
 
-                        {/* Body */}
                         <div className="px-6 pb-6">
                             <p className="text-[13px] text-gray-600 dark:text-secondary leading-relaxed mb-6">
                                 {t('subject.analysis.modal.description', 'Enter the tag to pull the corresponding code from all student repositories for this subject.')}
@@ -309,7 +349,6 @@ export const SubjectDetailsView: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Footer */}
                         <div className="px-6 pb-6 flex justify-end items-center gap-6">
                             <button
                                 onClick={() => setIsStartAnalysisModalOpen(false)}
@@ -328,7 +367,65 @@ export const SubjectDetailsView: React.FC = () => {
                     </div>
                 </div>
             )}
+            {isDeleteModalOpen && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+                    <div className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
 
+                        <div className="flex justify-between items-center p-6 pb-4 border-b border-border">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-danger-subtle rounded-full text-danger">
+                                    <Trash2 className="w-5 h-5"/>
+                                </div>
+                                <h2 className="text-xl font-bold text-primary">
+                                    {t('subject.deleteConfirmTitle')}
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div className="p-6">
+                            <p className="text-sm text-secondary leading-relaxed mb-6">
+                                {t('subject.deleteConfirmMessage')}
+                            </p>
+
+                            <div className="flex items-center gap-3 mt-5">
+                                <input
+                                    id="gitea-delete-checkbox"
+                                    type="checkbox"
+                                    checked={deleteGiteaOrg}
+                                    onChange={(e) => setDeleteGiteaOrg(e.target.checked)}
+                                    className="w-4 h-4 rounded border-border text-danger focus:ring-danger cursor-pointer"
+                                />
+                                <label
+                                    htmlFor="gitea-delete-checkbox"
+                                    className="text-sm font-bold text-primary cursor-pointer select-none"
+                                >
+                                    {t('subject.deleteGiteaOption')}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="px-6 pb-6 pt-2 flex justify-end items-center gap-4">
+                            <button
+                                onClick={() => setIsDeleteModalOpen(false)}
+                                disabled={isDeleting}
+                                className="text-sm font-bold text-secondary hover:text-primary transition-colors disabled:opacity-50"
+                            >
+                                {t('common.cancel')}
+                            </button>
+                            <button
+                                onClick={handleDeleteSubject}
+                                disabled={isDeleting}
+                                className="px-6 py-2.5 bg-danger hover:bg-red-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center disabled:opacity-50"
+                            >
+                                {isDeleting ? (
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                ) : null}
+                                {t('common.delete')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
