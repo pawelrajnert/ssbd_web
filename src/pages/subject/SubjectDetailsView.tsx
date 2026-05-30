@@ -7,7 +7,7 @@ import {formatDate, reportService} from "../../services/reportService.ts";
 import type {Page} from "../../types/user.types.ts";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {getSimilarityBadge} from "../../shared/components/similarity_badge/SimilarityBadge.tsx";
-import {Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2} from "lucide-react"
+import {Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2} from "lucide-react"
 
 export const SubjectDetailsView: React.FC = () => {
     const {id} = useParams<{ id: string }>();
@@ -162,8 +162,8 @@ export const SubjectDetailsView: React.FC = () => {
                     {subject.canEdit && (
                         <button
                             onClick={() => setIsDeleteModalOpen(true)}
-                            className="flex items-center gap-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors md:ml-auto">
-                            <Trash2 className="w-5 h-5"/>
+                            className="flex items-center gap-2 text-sm font-semibold text-danger hover:text-red-700 dark:hover:text-red-400 transition-colors md:ml-auto">
+                            <Trash2 className="w-4 h-4"/>
                             {t('subject.delete')}
                         </button>
                     )}
@@ -368,30 +368,22 @@ export const SubjectDetailsView: React.FC = () => {
                 </div>
             )}
             {isDeleteModalOpen && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
-                    <div className="bg-white dark:bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+                    <div className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
 
                         <div className="flex justify-between items-center p-6 pb-4 border-b border-border">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-[#8b1114]/10 dark:bg-[#8b1114]/20 rounded-full text-[#8b1114] dark:text-[#ff6b6b]">
+                                <div className="p-2 bg-danger-subtle rounded-full text-danger">
                                     <Trash2 className="w-5 h-5"/>
                                 </div>
-                                <h2 className="text-[20px] font-bold text-[#2a2a2a] dark:text-primary">
+                                <h2 className="text-xl font-bold text-primary">
                                     {t('subject.deleteConfirmTitle')}
                                 </h2>
                             </div>
-                            <button
-                                onClick={() => setIsDeleteModalOpen(false)}
-                                className="text-gray-500 hover:text-gray-800 dark:text-secondary dark:hover:text-primary transition-colors"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </button>
                         </div>
 
                         <div className="p-6">
-                            <p className="text-[14px] text-gray-600 dark:text-secondary leading-relaxed mb-6">
+                            <p className="text-sm text-secondary leading-relaxed mb-6">
                                 {t('subject.deleteConfirmMessage')}
                             </p>
 
@@ -401,7 +393,7 @@ export const SubjectDetailsView: React.FC = () => {
                                     type="checkbox"
                                     checked={deleteGiteaOrg}
                                     onChange={(e) => setDeleteGiteaOrg(e.target.checked)}
-                                    className="w-4 h-4 rounded border-border accent-[#8b1114] cursor-pointer transition-colors"
+                                    className="w-4 h-4 rounded border-border text-danger focus:ring-danger cursor-pointer"
                                 />
                                 <label
                                     htmlFor="gitea-delete-checkbox"
@@ -412,29 +404,25 @@ export const SubjectDetailsView: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="px-6 pb-6 pt-2 flex justify-end items-center gap-6">
+                        <div className="px-6 pb-6 pt-2 flex justify-end items-center gap-4">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
                                 disabled={isDeleting}
-                                className="text-[14px] font-bold text-[#5a5a5a] dark:text-secondary hover:text-[#2a2a2a] dark:hover:text-primary transition-colors disabled:opacity-50"
+                                className="text-sm font-bold text-secondary hover:text-primary transition-colors disabled:opacity-50"
                             >
                                 {t('common.cancel')}
                             </button>
                             <button
                                 onClick={handleDeleteSubject}
                                 disabled={isDeleting}
-                                className="px-6 py-2.5 bg-[#8b1114] hover:bg-[#6b0d0f] text-white text-[14px] font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center disabled:opacity-50"
+                                className="px-6 py-2.5 bg-danger hover:bg-red-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center disabled:opacity-50"
                             >
                                 {isDeleting ? (
-                                    <svg className="animate-spin h-4 w-4 mr-2 text-white" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
+                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                                 ) : null}
-                                {t('subject.delete')}
+                                {t('common.delete')}
                             </button>
                         </div>
-
                     </div>
                 </div>
             )}
