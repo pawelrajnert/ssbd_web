@@ -58,15 +58,16 @@ export const reportService = {
 
         generateStudentScan: async (
             repositoryId: string,
-            tag: string
+            studentTag: string,
+            taskTag: string
         ): Promise<StudentReportDetailsDTO> => {
             const response = await axiosInstance.post<StudentReportDetailsDTO>(
                 `/reports/student-scan/${repositoryId}`,
                 null,
-                {params: {tag}}
+                {params: {studentTag, taskTag}}
             );
             return response.data;
-        },
+        }
 
         postStartSubjectAnalysis: async (
             subjectId: string | undefined,

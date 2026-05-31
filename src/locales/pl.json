@@ -25,7 +25,8 @@
     "create": "Utwórz",
     "delete": "Usuń",
     "back": "Wróć",
-    "confirm": "Potwierdź"
+    "confirm": "Potwierdź",
+    "save": "Zapisz"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -422,7 +423,8 @@
       "fetch": "Nie udało się pobrać globalnych reguł",
       "createFailed": "Akcja nie powiodła się. Sprawdź poprawność danych.",
       "invalidTokens": "Minimalna liczba tokenów musi wynosić co najmniej 1",
-      "invalidTickets": "Liczba nie może być ujemna"
+      "invalidTickets": "Liczba nie może być ujemna",
+      "updateFailed": "Aktualizacja nie powiodła się. Spróbuj ponownie."
     },
     "add": {
       "title": "Dodaj nową regułę",
@@ -432,6 +434,8 @@
       "title": "Edytuj regułę",
       "submit": "Zapisz zmiany"
     },
+    "editConfirmTitle": "Potwierdź edycję",
+    "editConfirmDescription": "Czy na pewno chcesz zapisać wprowadzone zmiany w tej regule?",
     "form": {
       "raportLevelLabel": "Poziom widoczności raportu",
       "studentTicketsLabel": "Maksymalna liczba zgłoszeń na studenta",
@@ -475,11 +479,12 @@
       "info": {
         "templateActive": "Reguły weryfikacji zostaną skopiowane automatycznie z wybranego szablonu."
       }
-  },
+    },
     "deleteTitle": "Usuń szablon reguł",
     "deleteConfirmation": "Czy na pewno chcesz usunąć ten szablon reguł? Spowoduje to anulowanie i usunięcie wszystkich powiązanych zaplanowanych sprawdzeń.",
     "deleteSuccess": "Szablon reguł został pomyślnie usunięty.",
     "deleteError": "Wystąpił błąd podczas usuwania szablonu reguł.",
+    "deleteErrorNotFound": "Nie znaleziono reguły. Mogła zostać już usunięta.",
     "conflictError": "Dane zostały zmodyfikowane przez innego użytkownika. Odśwież widok i spróbuj ponownie."
   },
   "reportList": {
@@ -515,7 +520,11 @@
       "repository": "Repozytorium",
       "repositoryPlaceholder": "— wybierz repozytorium —",
       "noRepositories": "Brak przypisanych do użytkownika repozytoriów.",
-      "scansUsed": "Ilość wykonanych skanowań"
+      "scansUsed": "Ilość wykonanych skanowań",
+      "studentTag": "Nadany tag testowy",
+      "studentTagPlaceholder": "Podaj tag, którym został oznaczony zamieszczony kod",
+      "taskTag": "Tag sprawdzanego zadania",
+      "taskTagPlaceholder": "np. zadanie1_ias64"
     },
     "result": {
       "title": "Wynik skanowania",
