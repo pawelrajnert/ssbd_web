@@ -23,7 +23,8 @@
     "no": "Nie",
     "saving": "Zapisywanie...",
     "create": "Utwórz",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "back": "Wróć"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -619,6 +620,29 @@
         "tagPlaceholder": "n.p. v67",
         "submit": "Rozpocznij analizę"
       }
+    }
+  },
+  "schedule": {
+    "modal": {
+      "title": "Harmonogram analiz"
+    },
+    "subtitle": "Zarządzaj zaplanowanymi i wykonanymi zadaniami skanowania repozytoriów.",
+    "date": "Data zaplanowania",
+    "tag": "Tag analizy",
+    "statusLabel": "Status",
+    "status": {
+      "all": "Wszystkie",
+      "planned": "Oczekuje",
+      "executed": "Wykonano"
+    },
+    "empty": "Brak zaplanowanych analiz.",
+    "error": {
+      "fetch": "Nie udało się pobrać harmonogramu."
+    },
+    "sort": {
+      "toggle": "Zmień kierunek sortowania",
+      "newest": "Najnowsze",
+      "oldest": "Najstarsze"
     }
   }
 }

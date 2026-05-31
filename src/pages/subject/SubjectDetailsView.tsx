@@ -8,6 +8,7 @@ import type {Page} from "../../types/user.types.ts";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {getSimilarityBadge} from "../../shared/components/similarity_badge/SimilarityBadge.tsx";
 import {Calendar, SquarePen, CirclePlay, BarChartBigIcon} from "lucide-react"
+import {PATHS} from "../../routes/paths.ts";
 
 export const SubjectDetailsView: React.FC = () => {
     const {id} = useParams<{ id: string }>();
@@ -103,6 +104,11 @@ export const SubjectDetailsView: React.FC = () => {
 
                 <div className="flex flex-wrap gap-6">
                     <button
+                        onClick={() => {
+                            if (subject?.id) {
+                                navigate(PATHS.SUBJECT_SCHEDULE_LIST.replace(':id', subject.id.toString()));
+                            }
+                        }}
                         className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors">
                         <Calendar/>
                         {t('subject.details.actions.schedule')}

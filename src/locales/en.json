@@ -21,7 +21,8 @@
     "loading": "Loading...",
     "yes": "Yes",
     "no": "No",
-    "delete": "Delete"
+    "delete": "Delete",
+    "return": "Return"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -506,6 +507,29 @@
     "history": {
       "title": "Previous scans",
       "empty": "There are no previous scans available."
+    }
+  },
+  "schedule": {
+    "modal": {
+      "title": "JPlag Analysis Schedule"
+    },
+    "subtitle": "Manage planned and completed repository scan tasks.",
+    "date": "Scheduled Date",
+    "tag": "Analysis Tag",
+    "statusLabel": "Status",
+    "status": {
+      "all": "All",
+      "planned": "Planned",
+      "executed": "Executed"
+    },
+    "empty": "No scheduled analyses found.",
+    "error": {
+      "fetch": "Failed to load schedule."
+    },
+    "sort": {
+      "toggle": "Toggle sort direction",
+      "newest": "Newest first",
+      "oldest": "Oldest first"
     }
   }
 }
