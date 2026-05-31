@@ -22,7 +22,9 @@
     "yes": "Tak",
     "no": "Nie",
     "saving": "Zapisywanie...",
-    "create": "Utwórz przedmiot"
+    "create": "Utwórz",
+    "delete": "Usuń",
+    "confirm": "Potwierdź"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -335,7 +337,8 @@
     }
   },
   "header": {
-    "title": "Kustosz Akademicki", "og nazwa wraca": "wielkie pozdro",
+    "title": "Kustosz Akademicki",
+    "og nazwa wraca": "wielkie pozdro",
     "subtitle": "Politechnika Łódzka",
     "dashboard": "Panel Główny",
     "userManagement": "Zarządzanie Użytkownikami",
@@ -471,23 +474,32 @@
       "info": {
         "templateActive": "Reguły weryfikacji zostaną skopiowane automatycznie z wybranego szablonu."
       }
-    }
+  },
+    "deleteTitle": "Usuń szablon reguł",
+    "deleteConfirmation": "Czy na pewno chcesz usunąć ten szablon reguł? Spowoduje to anulowanie i usunięcie wszystkich powiązanych zaplanowanych sprawdzeń.",
+    "deleteSuccess": "Szablon reguł został pomyślnie usunięty.",
+    "deleteError": "Wystąpił błąd podczas usuwania szablonu reguł.",
+    "conflictError": "Dane zostały zmodyfikowane przez innego użytkownika. Odśwież widok i spróbuj ponownie."
   },
   "reportList": {
     "title": "Moje raporty",
-    "sub": "Przeglądaj i zarządzaj raportami analiz akademickiej integralności z pośród wszystkich dostępnych przedmiotów.",
+    "sub": "Przeglądaj i zarządzaj raportami analiz akademickiej integralności spośród wszystkich dostępnych przedmiotów.",
     "refresh": "Odśwież",
     "pagination": {
-      "showing": "pokazuje",
+      "showing": "Pokazuje",
       "to": "do",
-      "of": "z"
+      "of": "z",
+      "users": "raportów",
+      "page": "Strona",
+      "prev": "Poprzednia",
+      "next": "Następna"
     },
     "list": {
-      "subject": "Przedmiot/Tag",
+      "subject": "Przedmiot",
       "creation_date": "Utworzono",
       "avg": "Średnie podobieństwo",
-      "action": "Działanie",
-      "not_found": "Nie znaleziono raportów",
+      "action": "Akcja",
+      "notFound": "Nie znaleziono żadnych raportów",
       "delete": "Usuń"
     }
   },
@@ -527,5 +539,97 @@
       "title": "Historia skanowań",
       "empty": "Brak poprzednich skanowań kodu."
     }
+  },
+  "subject": {
+    "list": {
+      "title": "Zarządzane Przedmioty",
+      "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",
+      "role": {
+        "student": "Panel Studenta / Moje Przedmioty",
+        "teacher": "Panel Prowadzącego / Moje Przedmioty"
+      },
+      "tabs": {
+        "active": "Aktywne Kursy",
+        "archived": "Zarchiwizowane"
+      },
+      "btn": {
+        "create": "Utwórz Przedmiot"
+      },
+      "empty": "Brak przedmiotów w tej kategorii.",
+      "card": {
+        "exampleImage": "[ Przykładowe zdjęcie ]",
+        "nextScan": "Następny skan:",
+        "status": {
+          "archived": "Zarchiwizowany",
+          "pending": "Oczekuje na uruchomienie"
+        },
+        "btn": {
+          "manage": "Zarządzaj kursem",
+          "stats": "Statystyki"
+        }
+      },
+      "noDescription": "Brak opisu przedmiotu.",
+      "fetchError": "Wystąpił błąd podczas pobierania."
+    },
+    "details": {
+      "fetchError": "Błąd pobierania danych.",
+      "notFound": "Nie znaleziono przedmiotu.",
+      "breadcrumb": "Zarządzanie Kursem",
+      "edition": "Edycja",
+      "organization": "Organizacja Gitea",
+      "actions": {
+        "schedule": "Harmonogram",
+        "edit": "Edytuj Przedmiot",
+        "analyze": "Uruchom Analizę",
+        "statistics": "Statystyki"
+      },
+      "stats": {
+        "students": "LICZBA STUDENTÓW",
+        "repos": "AKTYWNE REPOZYTORIA",
+        "pending": "PRZEPROWADZONO ANALIZ",
+        "similarity": "ŚREDNIE PODOBIEŃSTWO"
+      },
+      "reports": {
+        "title": "Ostatnie Raporty",
+        "viewAll": "Zobacz wszystkie →",
+        "report": "Raport",
+        "reposCount": "repozytoriów studenckich",
+        "modalTitle": "Wszystkie Raporty Antyplagiatowe",
+        "modalReposCount": "Repozytoria"
+      },
+      "repos": {
+        "title": "Aktywne Repozytoria Studenckie",
+        "refresh": "Odśwież",
+        "filter": "Filtruj",
+        "sort": "Sortuj po dacie",
+        "lastCommit": "Ostatni commit",
+        "contributors": "Użytkownicy",
+        "viewCode": "Podgląd Kodu",
+        "analyze": "Analizuj"
+      },
+      "status": {
+        "clean": "Kod czysty",
+        "alert": "Wykryto podobieństwo",
+        "pending": "Oczekuje na weryfikację"
+      },
+      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
+    },
+    "analysis": {
+      "modal": {
+        "title": "Uruchom nową analizę",
+        "description": "Wprowadż odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
+        "tagLabel": "Tag gitea",
+        "tagPlaceholder": "n.p. v67",
+        "submit": "Rozpocznij analizę"
+      }
+    },
+    "delete": "Usuń przedmiot",
+    "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
+    "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
+    "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
+    "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
+    "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
+    "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
+    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu."
   }
 }

@@ -1,3 +1,11 @@
+export interface RulePresetDTO {
+    id: string;
+    raportLevelName: string;
+    studentTicketCount: number;
+    minimumTokensMatch: number;
+    enableNormalization: boolean;
+}
+
 export interface SubjectDTO {
     id?: string | null;
     versionHash?: string | null;
@@ -7,4 +15,9 @@ export interface SubjectDTO {
     subjectDescription?: string | null;
     giteaURL: string;
     archived?: boolean | null;
+    canEdit?: boolean | null;
+    canManageTeachers?: boolean | null;
+    canViewStats?: boolean | null;
+    templateId?: string | null;
+    manualRules?: RulePresetDTO | null;
 }

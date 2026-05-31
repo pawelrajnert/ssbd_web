@@ -4,68 +4,88 @@ import type {ReportDTO} from "../types/report.types";
 import type {StudentReportDetailsDTO} from "../types/studentScan.types.ts";
 
 export const reportService = {
-    getAllReportsForSubject: async (
-        subjectId: string,
-        page?: number,
-        size?: number,
-        sortBy?: string,
-        sortDesc?: boolean
-    ) => {
-        const params = new URLSearchParams();
-        if (page !== undefined) params.append('page', page.toString());
-        if (size !== undefined) params.append('size', size.toString());
+        getAllReportsForSubject: async (
+            subjectId: string,
+            page?: number,
+            size?: number,
+            sortBy?: string,
+            sortDesc?: boolean
+        ) => {
+            const params = new URLSearchParams();
+            if (page !== undefined) params.append('page', page.toString());
+            if (size !== undefined) params.append('size', size.toString());
 
-        if (sortBy !== undefined) params.append('sortBy', sortBy);
-        if (sortDesc !== undefined) params.append('sortDesc', sortDesc.toString());
+            if (sortBy !== undefined) params.append('sortBy', sortBy);
+            if (sortDesc !== undefined) params.append('sortDesc', sortDesc.toString());
 
-        const response = await axiosInstance.get<Page<ReportDTO>>(
-            `/reports/subject/${subjectId}?${params.toString()}`
-        );
+            const response = await axiosInstance.get<Page<ReportDTO>>(
+                `/reports/subject/${subjectId}?${params.toString()}`
+            );
 
-        return response.data;
-    },
+            return response.data;
+        },
 
-    getAllReportsForTeacher: async (
-        page?: number,
-        size?: number,
-        sortBy?: string,
-        sortDesc?: boolean
-    ) => {
-        const params = new URLSearchParams();
-        if (page !== undefined) params.append('page', page.toString());
-        if (size !== undefined) params.append('size', size.toString());
+        getAllReportsForTeacher: async (
+            page?: number,
+            size?: number,
+            sortBy?: string,
+            sortDesc?: boolean
+        ) => {
+            const params = new URLSearchParams();
+            if (page !== undefined) params.append('page', page.toString());
+            if (size !== undefined) params.append('size', size.toString());
 
-        if (sortBy !== undefined) params.append('sortBy', sortBy);
-        if (sortDesc !== undefined) params.append('sortDesc', sortDesc.toString());
+            if (sortBy !== undefined) params.append('sortBy', sortBy);
+            if (sortDesc !== undefined) params.append('sortDesc', sortDesc.toString());
 
-        const response = await axiosInstance.get<Page<ReportDTO>>(
-            `/reports/teacher?${params.toString()}`
-        );
+            const response = await axiosInstance.get<Page<ReportDTO>>(
+                `/reports/teacher?${params.toString()}`
+            );
 
-        return response.data;
-    },
-    deleteReport: async (id: string) => {
-        const response = await axiosInstance.delete<Page<ReportDTO>>(
-            `/reports/${id}`
-        );
-        return response.data;
-    },
+            return response.data;
+        },
+        deleteReport: async (id: string) => {
+            const response = await axiosInstance.delete<Page<ReportDTO>>(
+                `/reports/${id}`
+            );
+            return response.data;
+        },
 
-    getMyReports: async (): Promise<ReportDTO[]> => {
-        const response = await axiosInstance.get<ReportDTO[]>('/reports/my-reports');
-        return response.data;
-    },
+        getMyReports: async (): Promise<ReportDTO[]> => {
+            const response = await axiosInstance.get<ReportDTO[]>('/reports/my-reports');
+            return response.data;
+        },
 
-    generateStudentScan: async (
-        repositoryId: string,
-        studentTag: string,
-        taskTag: string
-    ): Promise<StudentReportDetailsDTO> => {
-        const response = await axiosInstance.post<StudentReportDetailsDTO>(
-            `/reports/student-scan/${repositoryId}`,
-            null,
-            {params: {studentTag, taskTag}}
-        );
-        return response.data;
-    }
+        generateStudentScan: async (
+            repositoryId: string,
+            tag: string
+        ): Promise<StudentReportDetailsDTO> => {
+            const response = await axiosInstance.post<StudentReportDetailsDTO>(
+                `/reports/student-scan/${repositoryId}`,
+                null,
+                {params: {tag}}
+            );
+            return response.data;
+        },
+
+        postStartSubjectAnalysis: async (
+            subjectId: string | undefined,
+            tag: string
+        ): Promise<ReportDTO> => {
+            const response = await axiosInstance.post<ReportDTO>(
+                `reports/demand/${subjectId}`,
+                null,
+                {params: {tag}}
+            )
+            return response.data;
+        }
+
+    };
+
+export const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
+    const optionsDate: Intl.DateTimeFormatOptions = {month: 'short', day: 'numeric', year: 'numeric'};
+    const optionsTime: Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit', hour12: false};
+
+    return `${date.toLocaleDateString('en-US', optionsDate)} • ${date.toLocaleTimeString('en-US', optionsTime)}`;
 };

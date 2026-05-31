@@ -14,3 +14,28 @@ export const subjectService = {
         return response.data;
     }
 };
+
+export const getAllSubjects = async (): Promise<SubjectDTO[]> => {
+    const response = await axiosInstance.get<SubjectDTO[]>('/subjects');
+    return response.data;
+};
+
+export const getSubjectDetails = async (id: string): Promise<SubjectDTO> => {
+    const response = await axiosInstance.get<SubjectDTO>(`/subjects/${id}`);
+    if (response.headers['etag']) {
+        response.data.versionHash = response.headers['etag'].replace(/"/g, '');
+    }
+
+    return response.data;
+};
+
+export const deleteSubject = async (subjectId: string, versionHash: string, deleteGiteaOrg: boolean = false): Promise<void> => {
+    await axiosInstance.delete(`/subjects/${subjectId}`, {
+        headers: {
+            'If-Match': versionHash,
+        },
+        params: {
+            deleteGiteaOrg: deleteGiteaOrg,
+        },
+    });
+};
