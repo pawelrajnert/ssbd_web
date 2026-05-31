@@ -20,4 +20,34 @@ export interface SubjectDTO {
     canViewStats?: boolean | null;
     templateId?: string | null;
     manualRules?: RulePresetDTO | null;
+    teachers?: TeacherAssignmentDTO[];
+}
+
+export type TeacherSubjectRole = 'OWNER' | 'EDITOR' | 'VIEWER';
+
+export interface TeacherAssignmentDTO {
+    login: string;
+    role: TeacherSubjectRole;
+}
+
+export interface UpdateRulePresetDTO {
+    raportLevelName: string;
+    studentTicketCount: number;
+    minimumTokensMatch: number;
+    enableNormalization: boolean;
+}
+
+export interface UpdateSubjectDTO {
+    name: string;
+    subjectDescription: string;
+    giteaURL: string;
+    teachers: TeacherAssignmentDTO[];
+    rules: UpdateRulePresetDTO | null;
+}
+
+export interface TeacherSearchDTO {
+    login: string;
+    firstName: string;
+    lastName: string;
+    email: string;
 }
