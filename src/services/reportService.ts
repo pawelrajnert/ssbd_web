@@ -67,7 +67,7 @@ export const reportService = {
                 {params: {studentTag, taskTag}}
             );
             return response.data;
-        }
+        },
 
         postStartSubjectAnalysis: async (
             subjectId: string | undefined,
