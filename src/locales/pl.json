@@ -24,6 +24,7 @@
     "saving": "Zapisywanie...",
     "create": "Utwórz",
     "delete": "Usuń",
+    "back": "Wróć",
     "confirm": "Potwierdź",
     "save": "Zapisz"
   },
@@ -512,6 +513,8 @@
     "title": "Sprawdź swój kod",
     "sub": "Sprawdź swój kod względem potencjalnego plagiatu.",
     "form": {
+      "tag": "Tag testowy",
+      "tagPlaceholder": "np. IAS64",
       "submit": "Rozpocznij skanowanie",
       "scanning": "Skanowanie...",
       "repository": "Repozytorium",
@@ -627,6 +630,29 @@
         "tagPlaceholder": "n.p. v67",
         "submit": "Rozpocznij analizę"
       }
+    }
+  },
+  "schedule": {
+    "modal": {
+      "title": "Harmonogram analiz"
+    },
+    "subtitle": "Zarządzaj zaplanowanymi i wykonanymi zadaniami skanowania repozytoriów.",
+    "date": "Data zaplanowania",
+    "tag": "Tag analizy",
+    "statusLabel": "Status",
+    "status": {
+      "all": "Wszystkie",
+      "planned": "Oczekuje",
+      "executed": "Wykonano"
+    },
+    "empty": "Brak zaplanowanych analiz.",
+    "error": {
+      "fetch": "Nie udało się pobrać harmonogramu."
+    },
+    "sort": {
+      "toggle": "Zmień kierunek sortowania",
+      "newest": "Najnowsze",
+      "oldest": "Najstarsze"
     },
     "delete": "Usuń przedmiot",
     "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
