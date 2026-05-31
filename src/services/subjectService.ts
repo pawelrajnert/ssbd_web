@@ -22,7 +22,6 @@ export const getAllSubjects = async (): Promise<SubjectDTO[]> => {
 
 export const getSubjectDetails = async (id: string): Promise<SubjectDTO> => {
     const response = await axiosInstance.get<SubjectDTO>(`/subjects/${id}`);
-
     if (response.headers['etag']) {
         response.data.versionHash = response.headers['etag'].replace(/"/g, '');
     }
@@ -35,5 +34,16 @@ export const updateSubject = async (id: string, data: UpdateSubjectDTO, versionH
         headers: {
             'If-Match': versionHash
         }
+    });
+};
+
+export const deleteSubject = async (subjectId: string, versionHash: string, deleteGiteaOrg: boolean = false): Promise<void> => {
+    await axiosInstance.delete(`/subjects/${subjectId}`, {
+        headers: {
+            'If-Match': versionHash,
+        },
+        params: {
+            deleteGiteaOrg: deleteGiteaOrg,
+        },
     });
 };

@@ -20,6 +20,7 @@ export interface SubjectDTO {
     canViewStats?: boolean | null;
     templateId?: string | null;
     manualRules?: RulePresetDTO | null;
+    teachers?: TeacherAssignmentDTO[];
 }
 
 export type TeacherSubjectRole = 'OWNER' | 'EDITOR' | 'VIEWER';

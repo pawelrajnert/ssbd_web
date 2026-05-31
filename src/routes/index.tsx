@@ -119,50 +119,6 @@ const routes: RouteObject[] = [
     //     ]
     // }, //dla testu :)
     {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    // {
-                    //     path: PATHS.PROFILE,
-                    //     element: <ProfilePage/>
-                    // },
-                    // {
-                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-                    //     element: <EmailChangeInitPage/>
-                    // },
-                    {
-                        path: PATHS.PROFILE,
-                        element: <UserEditPage/>
-                    },
-                    {
-                        path: PATHS.SUBJECT_DETAILS,
-                        element: <SubjectDetailsView/>
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    {
-                        path: PATHS.STUDENT_SUBJECT_LIST,
-                        element: <SubjectListView/>
-                    },
-                    {
-                        path: PATHS.STUDENT_SCAN,
-                        element: <StudentScanPage/>
-                    }
-                ]
-            }
-        ]
-    },
-    {
         element: <ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
         children: [
             {
@@ -170,6 +126,10 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: "/subjects",
                         element: <SubjectListView/>
                     },
                     {
@@ -193,6 +153,28 @@ const routes: RouteObject[] = [
         ]
     },
     {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.STUDENT_SUBJECT_LIST,
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: "/subjects",
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: PATHS.STUDENT_SCAN,
+                        element: <StudentScanPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
         element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR]}/>,
         children: [
             {
@@ -205,6 +187,32 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.USER_EDIT,
                         element: <UserEditPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    // {
+                    //     path: PATHS.PROFILE,
+                    //     element: <ProfilePage/>
+                    // },
+                    // {
+                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
+                    //     element: <EmailChangeInitPage/>
+                    // },
+                    {
+                        path: PATHS.PROFILE,
+                        element: <UserEditPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
                     }
                 ]
             }
