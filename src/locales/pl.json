@@ -495,14 +495,16 @@
     "title": "Sprawdź swój kod",
     "sub": "Sprawdź swój kod względem potencjalnego plagiatu.",
     "form": {
-      "tag": "Tag testowy",
-      "tagPlaceholder": "np. IAS64",
       "submit": "Rozpocznij skanowanie",
       "scanning": "Skanowanie...",
       "repository": "Repozytorium",
       "repositoryPlaceholder": "— wybierz repozytorium —",
       "noRepositories": "Brak przypisanych do użytkownika repozytoriów.",
-      "scansUsed": "Ilość wykonanych skanowań"
+      "scansUsed": "Ilość wykonanych skanowań",
+      "studentTag": "Nadany tag testowy",
+      "studentTagPlaceholder": "Podaj tag, którym został oznaczony zamieszczony kod",
+      "taskTag": "Tag sprawdzanego zadania",
+      "taskTagPlaceholder": "np. zadanie1_ias64"
     },
     "result": {
       "title": "Wynik skanowania",

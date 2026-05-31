@@ -471,14 +471,16 @@
     "title": "Check your own code",
     "sub": "Check your own code in case of possible plagiarism.",
     "form": {
-      "tag": "Test tag",
-      "tagPlaceholder": "e.g. IAS64",
       "submit": "Start scanning",
       "scanning": "Scanning...",
       "repository": "Repository",
       "repositoryPlaceholder": "— check repository —",
       "noRepositories": "No repositories found for such user.",
-      "scansUsed": "Amount of code scans"
+      "scansUsed": "Amount of code scans",
+      "studentTag": "Chosen test tag",
+      "studentTagPlaceholder": "Provide the tag used to mark the code",
+      "taskTag": "Tag of the task to compare own code with",
+      "taskTagPlaceholder": "e.g. task1_ias64"
     },
     "result": {
       "title": "Result of a code scan",
