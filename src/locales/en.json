@@ -22,7 +22,8 @@
     "yes": "Yes",
     "no": "No",
     "delete": "Delete",
-    "return": "Return"
+    "return": "Return",
+    "confirm": "Confirm"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -531,5 +532,15 @@
       "newest": "Newest first",
       "oldest": "Oldest first"
     }
+  },
+  "subject": {
+    "delete": "Delete subject",
+    "deleteConfirmTitle": "Are you sure you want to delete this subject?",
+    "deleteConfirmMessage": "This operation is irreversible. All subject data, repositories, and report files will be permanently deleted from the system.",
+    "deleteGiteaOption": "Also delete the associated organization on the Gitea server",
+    "deleteSuccess": "Subject has been successfully deleted.",
+    "deleteError": "An error occurred while deleting the subject.",
+    "deleteConflict": "Subject data has been modified by another user. Please refresh the page and try again.",
+    "deleteForbidden": "You do not have permission to delete this subject."
   }
 }
