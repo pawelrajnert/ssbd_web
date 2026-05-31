@@ -509,6 +509,48 @@
       "delete": "Usuń"
     }
   },
+  "studentReportList": {
+    "title": "Moje raporty",
+    "sub": "Przeglądaj swoje raporty antyplagiatowe ze wszystkich przypisanych przedmiotów.",
+    "refresh": "Odśwież",
+    "list": {
+      "subject": "Przedmiot / Tag",
+      "creation_date": "Data utworzenia",
+      "avg": "Średnie podobieństwo",
+      "action": "Akcje",
+      "notFound": "Obecnie nie masz dostępnych raportów do wglądu.",
+      "view": "Zobacz raport"
+    },
+    "pagination": {
+      "showing": "Pokazano",
+      "of": "z"
+    }
+  },
+  "studentReportDetails": {
+    "back": "Wróć do listy",
+    "privacyNotice": "Ten widok został zanonimizowany. Ukryto dane i kody źródłowe innych studentów zgodnie z polityką prywatności przedmiotu.",
+    "matchesTitle": "Znalezione podobieństwa Twojego kodu",
+    "noMatches": "Brak znaczących podobieństw",
+    "noMatchesSub": "System nie wykrył plagiatu w Twoim repozytorium w tym raporcie.",
+    "comparedWith": "Porównano z:",
+    "anonymized": "Repozytorium Innego Studenta",
+    "metrics": {
+      "max": "Maksymalne",
+      "average": "Średnie",
+      "longest": "Najdłuższy fragment",
+      "tokens": "tokenów"
+    },
+    "code": {
+      "show": "Zobacz oflagowany kod",
+      "hide": "Ukryj kod",
+      "file": "Plik:",
+      "flaggedLines": "Oflagowane linie:"
+    },
+    "error": {
+      "accessDenied": "Brak dostępu do tego raportu.",
+      "general": "Wystąpił błąd podczas ładowania raportu."
+    }
+  },
   "studentScan": {
     "title": "Sprawdź swój kod",
     "sub": "Sprawdź swój kod względem potencjalnego plagiatu.",
