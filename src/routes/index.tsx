@@ -29,6 +29,7 @@ import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
 import { SubjectListView } from "../pages/subject/SubjectListView.tsx";
 import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
+import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -139,7 +140,11 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.SUBJECT_DETAILS,
                         element: <SubjectDetailsView/>
-                    }
+                    },
+                    {
+                        path: PATHS.SUBJECT_SCHEDULE_LIST,
+                        element: <SubjectSchedulePage />,
+                    },
                 ]
             }
         ]

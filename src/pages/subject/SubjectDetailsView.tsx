@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
-import {getSubjectDetails, deleteSubject} from '../../services/subjectService';
+import {deleteSubject, getSubjectDetails} from '../../services/subjectService';
 import type {SubjectDTO} from '../../types/SubjectDTO';
 import {useTranslation} from 'react-i18next';
 import {formatDate, reportService} from "../../services/reportService.ts";
 import type {Page} from "../../types/user.types.ts";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {getSimilarityBadge} from "../../shared/components/similarity_badge/SimilarityBadge.tsx";
+import {PATHS} from "../../routes/paths.ts";
 import {Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2} from "lucide-react"
 
 export const SubjectDetailsView: React.FC = () => {
@@ -137,6 +138,11 @@ export const SubjectDetailsView: React.FC = () => {
 
                 <div className="flex flex-wrap gap-6">
                     <button
+                        onClick={() => {
+                            if (subject?.id) {
+                                navigate(PATHS.SUBJECT_SCHEDULE_LIST.replace(':id', subject.id.toString()));
+                            }
+                        }}
                         className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors">
                         <Calendar/>
                         {t('subject.details.actions.schedule')}
