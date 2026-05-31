@@ -511,7 +511,7 @@
   },
   "schedule": {
     "modal": {
-      "title": "JPlag Analysis Schedule"
+      "title": "Analysis Schedule"
     },
     "subtitle": "Manage planned and completed repository scan tasks.",
     "date": "Scheduled Date",
