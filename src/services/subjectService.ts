@@ -2,8 +2,31 @@ import type { SubjectDTO, UpdateSubjectDTO } from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
 
 export const subjectService = {
-    createSubject: async (data: SubjectDTO): Promise<void> => {
-        await axiosInstance.post('/subjects', data);
+    createSubject: async (subject: SubjectDTO): Promise<void> => {
+        if (subject.templateId) {
+            const templateDto = {
+                name: subject.name,
+                organizationName: subject.organizationName,
+                edition: subject.edition,
+                subjectDescription: subject.subjectDescription,
+                giteaURL: subject.giteaURL,
+                templateId: subject.templateId,
+                raportLevelName: subject.manualRules?.raportLevelName || 'FULL',
+                teachers: subject.teachers
+            };
+            await axiosInstance.post('/subjects/template', templateDto);
+        } else {
+            const manualDto = {
+                name: subject.name,
+                organizationName: subject.organizationName,
+                edition: subject.edition,
+                subjectDescription: subject.subjectDescription,
+                giteaURL: subject.giteaURL,
+                manualRules: subject.manualRules,
+                teachers: subject.teachers
+            };
+            await axiosInstance.post('/subjects/manual', manualDto);
+        }
     },
     getSubjects: async (): Promise<SubjectDTO[]> => {
         const response = await axiosInstance.get('/subjects');
