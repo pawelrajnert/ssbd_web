@@ -1,9 +1,32 @@
-import type { SubjectDTO } from '../types/SubjectDTO';
+import type { SubjectDTO, UpdateSubjectDTO } from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
 
 export const subjectService = {
-    createSubject: async (data: SubjectDTO): Promise<void> => {
-        await axiosInstance.post('/subjects', data);
+    createSubject: async (subject: SubjectDTO): Promise<void> => {
+        if (subject.templateId) {
+            const templateDto = {
+                name: subject.name,
+                organizationName: subject.organizationName,
+                edition: subject.edition,
+                subjectDescription: subject.subjectDescription,
+                giteaURL: subject.giteaURL,
+                templateId: subject.templateId,
+                raportLevelName: subject.manualRules?.raportLevelName || 'FULL',
+                teachers: subject.teachers
+            };
+            await axiosInstance.post('/subjects/template', templateDto);
+        } else {
+            const manualDto = {
+                name: subject.name,
+                organizationName: subject.organizationName,
+                edition: subject.edition,
+                subjectDescription: subject.subjectDescription,
+                giteaURL: subject.giteaURL,
+                manualRules: subject.manualRules,
+                teachers: subject.teachers
+            };
+            await axiosInstance.post('/subjects/manual', manualDto);
+        }
     },
     getSubjects: async (): Promise<SubjectDTO[]> => {
         const response = await axiosInstance.get('/subjects');
@@ -27,6 +50,14 @@ export const getSubjectDetails = async (id: string): Promise<SubjectDTO> => {
     }
 
     return response.data;
+};
+
+export const updateSubject = async (id: string, data: UpdateSubjectDTO, versionHash: string): Promise<void> => {
+    await axiosInstance.put(`/subjects/${id}`, data, {
+        headers: {
+            'If-Match': versionHash
+        }
+    });
 };
 
 export const deleteSubject = async (subjectId: string, versionHash: string, deleteGiteaOrg: boolean = false): Promise<void> => {

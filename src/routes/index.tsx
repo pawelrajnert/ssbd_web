@@ -120,6 +120,80 @@ const routes: RouteObject[] = [
     //     ]
     // }, //dla testu :)
     {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.TEACHER_SUBJECT_LIST,
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: "/subjects",
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: PATHS.CREATE_SUBJECT,
+                        element: <CreateSubjectPage/>
+                    },
+                    {
+                        path: PATHS.TEACHER_SUBJECT_USERS,
+                        element: <TeacherSubjectUsersPage/>
+                    },
+                    {
+                        path: PATHS.REPORT_LIST,
+                        element: <ReportListPage/>
+                    },
+                    {
+                        path: PATHS.GLOBAL_RULES,
+                        element: <GlobalRulesPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.STUDENT_SUBJECT_LIST,
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: "/subjects",
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: PATHS.STUDENT_SCAN,
+                        element: <StudentScanPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.USER_LIST,
+                        element: <UserListPage/>
+                    },
+                    {
+                        path: PATHS.USER_EDIT,
+                        element: <UserEditPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
         element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
         children: [
             {
@@ -145,72 +219,6 @@ const routes: RouteObject[] = [
                         path: PATHS.SUBJECT_SCHEDULE_LIST,
                         element: <SubjectSchedulePage />,
                     },
-                ]
-            }
-        ]
-    },
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    {
-                        path: PATHS.STUDENT_SUBJECT_LIST,
-                        element: <SubjectListView/>
-                    },
-                    {
-                        path: PATHS.STUDENT_SCAN,
-                        element: <StudentScanPage/>
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    {
-                        path: PATHS.TEACHER_SUBJECT_LIST,
-                        element: <SubjectListView/>
-                    },
-                    {
-                        path: PATHS.CREATE_SUBJECT,
-                        element: <CreateSubjectPage/>
-                    },
-                    {
-                        path: PATHS.TEACHER_SUBJECT_USERS,
-                        element: <TeacherSubjectUsersPage/>
-                    },
-                    {
-                        path: PATHS.REPORT_LIST,
-                        element: <ReportListPage/>
-                    },
-                    {
-                        path: PATHS.GLOBAL_RULES,
-                        element: <GlobalRulesPage/>
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    {
-                        path: PATHS.USER_LIST,
-                        element: <UserListPage/>
-                    },
-                    {
-                        path: PATHS.USER_EDIT,
-                        element: <UserEditPage/>
-                    }
                 ]
             }
         ]
