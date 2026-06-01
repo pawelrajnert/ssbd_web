@@ -22,7 +22,8 @@
     "yes": "Yes",
     "no": "No",
     "delete": "Delete",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "save": "Save"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -417,7 +418,8 @@
       "fetch": "Failed to fetch global rules",
       "createFailed": "Action failed. Please check the data.",
       "invalidTokens": "Minimum tokens must be at least 1",
-      "invalidTickets": "Number cannot be negative"
+      "invalidTickets": "Number cannot be negative",
+      "updateFailed": "Failed to update the rule. Please try again."
     },
     "add": {
       "title": "Add New Global Rule",
@@ -427,6 +429,8 @@
       "title": "Edit Rule",
       "submit": "Save Changes"
     },
+    "editConfirmTitle": "Confirm Edit",
+    "editConfirmDescription": "Are you sure you want to save the changes made to this rule?",
     "form": {
       "raportLevelLabel": "Report visibility level",
       "studentTicketsLabel": "Max student tickets allowed",
@@ -450,6 +454,7 @@
     "deleteConfirmation": "Are you sure you want to delete this rule template? This will cancel and delete all associated scheduled checks.",
     "deleteSuccess": "Rule template deleted successfully.",
     "deleteError": "An error occurred while deleting the rule template.",
+    "deleteErrorNotFound": "Rule not found. It might have been already deleted.",
     "conflictError": "Data has been modified by another user. Please refresh and try again."
   },
   "reportList": {
@@ -474,6 +479,48 @@
       "delete": "Delete"
     }
   },
+  "studentReportList": {
+    "title": "My Reports",
+    "sub": "View your anti-plagiarism reports from all assigned subjects.",
+    "refresh": "Refresh",
+    "list": {
+      "subject": "Subject / Tag",
+      "creation_date": "Creation Date",
+      "avg": "Average Similarity",
+      "action": "Actions",
+      "notFound": "You currently have no available reports to view.",
+      "view": "View report"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of"
+    }
+  },
+  "studentReportDetails": {
+    "back": "Back to list",
+    "privacyNotice": "This view has been anonymized. Data and source codes of other students are hidden according to the subject's privacy policy.",
+    "matchesTitle": "Found similarities in your code",
+    "noMatches": "No significant similarities",
+    "noMatchesSub": "The system did not detect plagiarism in your repository in this report.",
+    "comparedWith": "Compared with:",
+    "anonymized": "Another Student's Repository",
+    "metrics": {
+      "max": "Maximum",
+      "average": "Average",
+      "longest": "Longest match",
+      "tokens": "tokens"
+    },
+    "code": {
+      "show": "View flagged code",
+      "hide": "Hide code",
+      "file": "File:",
+      "flaggedLines": "Flagged lines:"
+    },
+    "error": {
+      "accessDenied": "Access denied to this report.",
+      "general": "An error occurred while loading the report."
+    }
+  },
   "studentScan": {
     "title": "Check your own code",
     "sub": "Check your own code in case of possible plagiarism.",
@@ -485,7 +532,11 @@
       "repository": "Repository",
       "repositoryPlaceholder": "— check repository —",
       "noRepositories": "No repositories found for such user.",
-      "scansUsed": "Amount of code scans"
+      "scansUsed": "Amount of code scans",
+      "studentTag": "Chosen test tag",
+      "studentTagPlaceholder": "Provide the tag used to mark the code",
+      "taskTag": "Tag of the task to compare own code with",
+      "taskTagPlaceholder": "e.g. task1_ias64"
     },
     "result": {
       "title": "Result of a code scan",
@@ -509,6 +560,29 @@
       "empty": "There are no previous scans available."
     }
   },
+  "schedule": {
+    "modal": {
+      "title": "Analysis Schedule"
+    },
+    "subtitle": "Manage planned and completed repository scan tasks.",
+    "date": "Scheduled Date",
+    "tag": "Analysis Tag",
+    "statusLabel": "Status",
+    "status": {
+      "all": "All",
+      "planned": "Planned",
+      "executed": "Executed"
+    },
+    "empty": "No scheduled analyses found.",
+    "error": {
+      "fetch": "Failed to load schedule."
+    },
+    "sort": {
+      "toggle": "Toggle sort direction",
+      "newest": "Newest first",
+      "oldest": "Oldest first"
+    }
+  },
   "subject": {
     "delete": "Delete subject",
     "deleteConfirmTitle": "Are you sure you want to delete this subject?",
@@ -518,5 +592,43 @@
     "deleteError": "An error occurred while deleting the subject.",
     "deleteConflict": "Subject data has been modified by another user. Please refresh the page and try again.",
     "deleteForbidden": "You do not have permission to delete this subject."
+  },
+  "subjectCreate": {
+    "title": "Create New Subject",
+    "subtitle": "Enter basic information and configure analysis settings.",
+    "generalInfo": "General Information",
+    "nameLabel": "Subject Name *",
+    "orgLabel": "Gitea Organization Name *",
+    "editionLabel": "Edition (Year/Semester) *",
+    "descLabel": "Subject Description",
+    "urlLabel": "Gitea URL *",
+    "rulesSection": "Grading and Analysis Rules",
+    "visibilityLabel": "Report Visibility Level for Student",
+    "visibilityFull": "Full Report - student sees detailed code matches",
+    "visibilityScore": "Score Only - student sees only percentages",
+    "visibilityHidden": "Hidden - student sees no analysis results",
+    "jplagSettings": "Advanced Scanner Parameters (JPlag)",
+    "modeManual": "Manual Configuration",
+    "modeTemplate": "Use JPlag Template",
+    "templateSelect": "Select saved parameter template",
+    "templateDefault": "-- Select template from list --",
+    "templateHelp": "Selecting a template will automatically apply the saved token count and normalization settings.",
+    "tokensLabel": "Initial Tokens (analyzed block length)",
+    "minTokensLabel": "Minimum token match (%)",
+    "normalizationLabel": "Enable code normalization before scanning",
+    "scheduleSection": "Scan Schedule",
+    "scheduleTitle": "Schedule Management",
+    "scheduleDesc": "Options to add and configure automated scheduled scans will be available in upcoming system updates.",
+    "addTeacher": "Add Teacher",
+    "searchPlaceholder": "Search by name or email...",
+    "assignedStaff": "ASSIGNED STAFF",
+    "noStaff": "No additional teachers. You will be assigned as the Main Owner.",
+    "roleOwner": "Owner",
+    "roleEditor": "Editor",
+    "errorEmpty": "Fill in all required fields (Name, Organization, Edition, URL).",
+    "errorTemplate": "Select a rule template from the list.",
+    "submitCreating": "Creating...",
+    "submitButton": "Create Subject",
+    "breadcrumb": "Create Subject"
   }
 }

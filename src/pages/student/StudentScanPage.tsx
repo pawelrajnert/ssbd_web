@@ -10,7 +10,8 @@ export default function StudentScanPage() {
     const {t} = useTranslation();
 
     const [selectedRepo, setSelectedRepo] = useState<StudentRepositoryDTO | null>(null);
-    const [tag, setTag] = useState('');
+    const [studentTag, setStudentTag] = useState('');
+    const [taskTag, setTaskTag] = useState('');
     const [isScanning, setIsScanning] = useState(false);
     const [scanResult, setScanResult] = useState<StudentReportDetailsDTO | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -53,12 +54,12 @@ export default function StudentScanPage() {
     }, [loadHistory]);
 
     const handleScan = async () => {
-        if (!selectedRepo || !tag.trim()) return;
+        if (!selectedRepo || !studentTag.trim() || !taskTag.trim()) return;
         setIsScanning(true);
         setError(null);
         setScanResult(null);
         try {
-            const result = await reportService.generateStudentScan(selectedRepo.repositoryId, tag.trim());
+            const result = await reportService.generateStudentScan(selectedRepo.repositoryId, studentTag.trim(), taskTag.trim());
             setScanResult(result);
             await loadHistory();
             setRepositories(prev => prev.map(r =>
@@ -93,7 +94,7 @@ export default function StudentScanPage() {
     };
 
     const noScansLeft = selectedRepo != null && selectedRepo.usedScans >= selectedRepo.maxScans;
-    const canSubmit = !isScanning && selectedRepo != null && tag.trim().length > 0 && !noScansLeft;
+    const canSubmit = !isScanning && selectedRepo != null && studentTag.trim().length > 0 && taskTag.trim().length > 0 && !noScansLeft;
 
     return (
         <div className="min-h-screen bg-base p-8">
@@ -162,17 +163,33 @@ export default function StudentScanPage() {
                             </div>
                         )}
 
-                        <div>
-                            <label className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
-                                {t('studentScan.form.tag')}
-                            </label>
-                            <input
-                                type="text"
-                                value={tag}
-                                onChange={e => setTag(e.target.value)}
-                                placeholder={t('studentScan.form.tagPlaceholder')}
-                                className="w-full bg-base border border-border rounded-md px-4 py-2.5 text-sm text-primary outline-none focus:border-brand transition-colors"
-                            />
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
+                                    {t('studentScan.form.studentTag')}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={studentTag}
+                                    onChange={e => setStudentTag(e.target.value)}
+                                    placeholder={t('studentScan.form.studentTagPlaceholder')}
+                                    className="w-full bg-base border border-border rounded-md px-4 py-2.5 text-sm text-primary outline-none focus:border-brand transition-colors"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
+                                    {t('studentScan.form.taskTag')}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={taskTag}
+                                    onChange={e => setTaskTag(e.target.value)}
+                                    placeholder={t('studentScan.form.taskTagPlaceholder')}
+                                    className="w-full bg-base border border-border rounded-md px-4 py-2.5 text-sm text-primary outline-none focus:border-brand transition-colors"
+                                />
+                            </div>
                         </div>
 
                         {error && (

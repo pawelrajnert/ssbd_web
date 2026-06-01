@@ -1,6 +1,7 @@
 import type {RouteObject} from "react-router-dom";
 import {createBrowserRouter} from "react-router-dom";
 import {PATHS} from "./paths.ts";
+
 import UserListPage from "../pages/UserList/UserListPage.tsx";
 import LoginPage from "../pages/auth/login/LoginPage.tsx";
 import Layout from "../layout.tsx";
@@ -11,13 +12,10 @@ import RegisterPage from "../pages/auth/register/RegisterPage.tsx";
 import ActivatePage from "../pages/auth/activate/ActivatePage.tsx";
 import PasswordResetInitPage from "../pages/auth/password_reset/PasswordResetInitPage.tsx";
 import PasswordResetConfirmPage from "../pages/auth/password_reset/PasswordResetConfirmPage.tsx";
-
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
 import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPage.tsx";
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
-// import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
-// import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
 import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePasswordChangePage.tsx";
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
@@ -29,6 +27,8 @@ import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
 import { SubjectListView } from "../pages/subject/SubjectListView.tsx";
 import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
+import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
+import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
 import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import { ChangeSubjectManagerPage } from "../pages/subject/ChangeSubjectManagerPage.tsx";
 
@@ -179,6 +179,10 @@ const routes: RouteObject[] = [
                         element: <SubjectListView/>
                     },
                     {
+                        path: "/subjects",
+                        element: <SubjectListView/>
+                    },
+                    {
                         path: PATHS.CREATE_SUBJECT,
                         element: <CreateSubjectPage/>
                     },
@@ -193,6 +197,36 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.GLOBAL_RULES,
                         element: <GlobalRulesPage/>
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.STUDENT_SUBJECT_LIST,
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: "/subjects",
+                        element: <SubjectListView/>
+                    },
+                    {
+                        path: PATHS.STUDENT_SCAN,
+                        element: <StudentScanPage/>
+                    },
+                    {
+                        path: PATHS.STUDENT_REPORTS,
+                        element: <StudentReportListPage/>
+                    },
+                    {
+                        path: PATHS.STUDENT_REPORT_DETAILS,
+                        element: <StudentReportDetailsPage/>
                     }
                 ]
             }
@@ -219,7 +253,29 @@ const routes: RouteObject[] = [
                 ]
             }
         ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.PROFILE,
+                        element: <UserEditPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_SCHEDULE_LIST,
+                        element: <SubjectSchedulePage />,
+                    },
+                ]
+            }
+        ]
     }
-]
+];
 
 export const router = createBrowserRouter(routes);

@@ -24,7 +24,9 @@
     "saving": "Zapisywanie...",
     "create": "Utwórz",
     "delete": "Usuń",
-    "confirm": "Potwierdź"
+    "back": "Wróć",
+    "confirm": "Potwierdź",
+    "save": "Zapisz"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -421,7 +423,8 @@
       "fetch": "Nie udało się pobrać globalnych reguł",
       "createFailed": "Akcja nie powiodła się. Sprawdź poprawność danych.",
       "invalidTokens": "Minimalna liczba tokenów musi wynosić co najmniej 1",
-      "invalidTickets": "Liczba nie może być ujemna"
+      "invalidTickets": "Liczba nie może być ujemna",
+      "updateFailed": "Aktualizacja nie powiodła się. Spróbuj ponownie."
     },
     "add": {
       "title": "Dodaj nową regułę",
@@ -431,6 +434,8 @@
       "title": "Edytuj regułę",
       "submit": "Zapisz zmiany"
     },
+    "editConfirmTitle": "Potwierdź edycję",
+    "editConfirmDescription": "Czy na pewno chcesz zapisać wprowadzone zmiany w tej regule?",
     "form": {
       "raportLevelLabel": "Poziom widoczności raportu",
       "studentTicketsLabel": "Maksymalna liczba zgłoszeń na studenta",
@@ -474,11 +479,12 @@
       "info": {
         "templateActive": "Reguły weryfikacji zostaną skopiowane automatycznie z wybranego szablonu."
       }
-  },
+    },
     "deleteTitle": "Usuń szablon reguł",
     "deleteConfirmation": "Czy na pewno chcesz usunąć ten szablon reguł? Spowoduje to anulowanie i usunięcie wszystkich powiązanych zaplanowanych sprawdzeń.",
     "deleteSuccess": "Szablon reguł został pomyślnie usunięty.",
     "deleteError": "Wystąpił błąd podczas usuwania szablonu reguł.",
+    "deleteErrorNotFound": "Nie znaleziono reguły. Mogła zostać już usunięta.",
     "conflictError": "Dane zostały zmodyfikowane przez innego użytkownika. Odśwież widok i spróbuj ponownie."
   },
   "reportList": {
@@ -503,6 +509,48 @@
       "delete": "Usuń"
     }
   },
+  "studentReportList": {
+    "title": "Moje raporty",
+    "sub": "Przeglądaj swoje raporty antyplagiatowe ze wszystkich przypisanych przedmiotów.",
+    "refresh": "Odśwież",
+    "list": {
+      "subject": "Przedmiot / Tag",
+      "creation_date": "Data utworzenia",
+      "avg": "Średnie podobieństwo",
+      "action": "Akcje",
+      "notFound": "Obecnie nie masz dostępnych raportów do wglądu.",
+      "view": "Zobacz raport"
+    },
+    "pagination": {
+      "showing": "Pokazano",
+      "of": "z"
+    }
+  },
+  "studentReportDetails": {
+    "back": "Wróć do listy",
+    "privacyNotice": "Ten widok został zanonimizowany. Ukryto dane i kody źródłowe innych studentów zgodnie z polityką prywatności przedmiotu.",
+    "matchesTitle": "Znalezione podobieństwa Twojego kodu",
+    "noMatches": "Brak znaczących podobieństw",
+    "noMatchesSub": "System nie wykrył plagiatu w Twoim repozytorium w tym raporcie.",
+    "comparedWith": "Porównano z:",
+    "anonymized": "Repozytorium Innego Studenta",
+    "metrics": {
+      "max": "Maksymalne",
+      "average": "Średnie",
+      "longest": "Najdłuższy fragment",
+      "tokens": "tokenów"
+    },
+    "code": {
+      "show": "Zobacz oflagowany kod",
+      "hide": "Ukryj kod",
+      "file": "Plik:",
+      "flaggedLines": "Oflagowane linie:"
+    },
+    "error": {
+      "accessDenied": "Brak dostępu do tego raportu.",
+      "general": "Wystąpił błąd podczas ładowania raportu."
+    }
+  },
   "studentScan": {
     "title": "Sprawdź swój kod",
     "sub": "Sprawdź swój kod względem potencjalnego plagiatu.",
@@ -514,7 +562,11 @@
       "repository": "Repozytorium",
       "repositoryPlaceholder": "— wybierz repozytorium —",
       "noRepositories": "Brak przypisanych do użytkownika repozytoriów.",
-      "scansUsed": "Ilość wykonanych skanowań"
+      "scansUsed": "Ilość wykonanych skanowań",
+      "studentTag": "Nadany tag testowy",
+      "studentTagPlaceholder": "Podaj tag, którym został oznaczony zamieszczony kod",
+      "taskTag": "Tag sprawdzanego zadania",
+      "taskTagPlaceholder": "np. zadanie1_ias64"
     },
     "result": {
       "title": "Wynik skanowania",
@@ -620,6 +672,29 @@
         "tagPlaceholder": "n.p. v67",
         "submit": "Rozpocznij analizę"
       }
+    }
+  },
+  "schedule": {
+    "modal": {
+      "title": "Harmonogram analiz"
+    },
+    "subtitle": "Zarządzaj zaplanowanymi i wykonanymi zadaniami skanowania repozytoriów.",
+    "date": "Data zaplanowania",
+    "tag": "Tag analizy",
+    "statusLabel": "Status",
+    "status": {
+      "all": "Wszystkie",
+      "planned": "Oczekuje",
+      "executed": "Wykonano"
+    },
+    "empty": "Brak zaplanowanych analiz.",
+    "error": {
+      "fetch": "Nie udało się pobrać harmonogramu."
+    },
+    "sort": {
+      "toggle": "Zmień kierunek sortowania",
+      "newest": "Najnowsze",
+      "oldest": "Najstarsze"
     },
     "delete": "Usuń przedmiot",
     "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
@@ -629,5 +704,75 @@
     "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
     "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
     "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu."
+  },
+  "subjectEdit": {
+    "title": "Edytuj Przedmiot",
+    "subtitle": "Zaktualizuj metadane przedmiotu i parametry analizy.",
+    "generalInfo": "INFORMACJE OGÓLNE",
+    "nameLabel": "Nazwa Przedmiotu",
+    "descLabel": "Opis",
+    "coTeachers": "WSPÓŁPROWADZĄCY I UPRAWNIENIA",
+    "addTeacher": "Dodaj Prowadzącego",
+    "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
+    "assignedStaff": "PRZYPISANA KADRA",
+    "roles": {
+      "OWNER": "Właściciel (Owner)",
+      "EDITOR": "Edytor (Edit Access)",
+      "VIEWER": "Obserwator (Read Only)"
+    },
+    "giteaAnalysis": "GITEA I ANALIZA",
+    "giteaUrl": "Adres URL Organizacji Gitea",
+    "tokens": "Tokeny dla Studentów",
+    "minTokens": "Minimalna zgodność tokenów",
+    "normalization": "Włącz normalizację (Normalization)",
+    "visibility": "Poziom Widoczności Raportu",
+    "levels": {
+      "FULL": "Pełny Raport",
+      "SCORE": "Tylko Wynik",
+      "HIDDEN": "Ukryty"
+    },
+    "cancel": "Anuluj",
+    "apply": "Zastosuj Zmiany",
+    "loading": "Zapisywanie...",
+    "errorEmpty": "Nazwa i URL nie mogą być puste.",
+    "success": "Przedmiot został zaktualizowany."
+  },
+  "subjectCreate": {
+    "title": "Utwórz Nowy Przedmiot",
+    "subtitle": "Wprowadź podstawowe informacje oraz skonfiguruj ustawienia analizy.",
+    "generalInfo": "Informacje Ogólne",
+    "nameLabel": "Nazwa Przedmiotu *",
+    "orgLabel": "Nazwa Organizacji Gitea *",
+    "editionLabel": "Edycja (Rok/Semestr) *",
+    "descLabel": "Opis Przedmiotu",
+    "urlLabel": "Adres URL Gitea *",
+    "rulesSection": "Reguły Oceniania i Analizy",
+    "visibilityLabel": "Poziom Widoczności Raportu dla Studenta",
+    "visibilityFull": "Pełny Raport - student widzi szczegółowe dopasowania kodu",
+    "visibilityScore": "Tylko Wynik - student widzi tylko procenty",
+    "visibilityHidden": "Ukryty - student nie widzi żadnych wyników analizy",
+    "jplagSettings": "Zaawansowane parametry skanera (JPlag)",
+    "modeManual": "Konfiguracja Ręczna",
+    "modeTemplate": "Użyj Szablonu JPlag",
+    "templateSelect": "Wybierz zapisany szablon parametrów",
+    "templateDefault": "-- Wybierz szablon z listy --",
+    "templateHelp": "Wybranie szablonu spowoduje automatyczne zaaplikowanie zapisanej w nim liczby tokenów oraz ustawień normalizacji.",
+    "tokensLabel": "Początkowe Tokeny (długość analizowanych bloków)",
+    "minTokensLabel": "Minimalna zgodność tokenów (%)",
+    "normalizationLabel": "Włącz normalizację kodu przed skanowaniem",
+    "scheduleSection": "Harmonogram Skanowania",
+    "scheduleTitle": "Zarządzanie Harmonogramem",
+    "scheduleDesc": "Opcje dodawania i konfiguracji automatycznych skanów w harmonogramie zostaną udostępnione w nadchodzących aktualizacjach systemu.",
+    "addTeacher": "Dodaj Prowadzącego",
+    "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
+    "assignedStaff": "PRZYPISANA KADRA",
+    "noStaff": "Brak dodatkowych prowadzących. Zostaniesz przypisany jako Główny Właściciel.",
+    "roleOwner": "Właściciel",
+    "roleEditor": "Edytor",
+    "errorEmpty": "Wypełnij wszystkie wymagane pola (Nazwa, Organizacja, Edycja, URL).",
+    "errorTemplate": "Wybierz szablon reguł z listy lub przełącz na konfigurację ręczną.",
+    "submitCreating": "Tworzenie...",
+    "submitButton": "Utwórz Przedmiot",
+    "breadcrumb": "Utwórz Przedmiot"
   }
 }

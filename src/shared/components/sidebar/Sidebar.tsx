@@ -1,4 +1,4 @@
-import {ChartColumnIncreasing, LucideGraduationCap, ScanSearch, Settings, Users, UserCheck} from "lucide-react"; // <-- Dodano UserCheck
+import {ChartColumnIncreasing, FileText, LucideGraduationCap, ScanSearch, Settings, Users, UserCheck} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {PATHS} from "../../../routes/paths.ts";
 import SidebarItem from "./SidebarItem.tsx";
@@ -29,6 +29,12 @@ export default function Sidebar() {
                     to={PATHS.STUDENT_SUBJECT_LIST}
                     icon={LucideGraduationCap}
                     label={t('sidebar.subjectList', 'Subject list')}
+                    allowedRoles={[RoleEnum.STUDENT]}
+                />
+                <SidebarItem
+                    to={PATHS.STUDENT_REPORTS}
+                    icon={FileText}
+                    label={t("studentReportList.title")}
                     allowedRoles={[RoleEnum.STUDENT]}
                 />
 

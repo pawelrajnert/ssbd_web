@@ -33,10 +33,15 @@ export default function GlobalRulesPage() {
 
     const [showModal, setShowModal] = useState(false);
     const [editingRuleId, setEditingRuleId] = useState<string | null>(null);
+    const [editingRuleVersionHash, setEditingRuleVersionHash] = useState<string | null>(null);
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [ruleToDelete, setRuleToDelete] = useState<RulePresetDTO | null>(null);
+
+    const [isEditConfirmOpen, setIsEditConfirmOpen] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [pendingEditData, setPendingEditData] = useState<RuleFormData | null>(null);
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<RuleFormData>({
         resolver: yupResolver(schema),
@@ -67,6 +72,7 @@ export default function GlobalRulesPage() {
 
     const openCreateModal = () => {
         setEditingRuleId(null);
+        setEditingRuleVersionHash(null);
         reset({
             raportLevelName: 'NOTHING',
             studentTicketCount: 0,
@@ -79,6 +85,7 @@ export default function GlobalRulesPage() {
 
     const openEditModal = (rule: RulePresetDTO) => {
         setEditingRuleId(rule.id);
+        setEditingRuleVersionHash(rule.versionHash);
         reset({
             raportLevelName: rule.raportLevelName,
             studentTicketCount: rule.studentTicketCount,
@@ -96,20 +103,49 @@ export default function GlobalRulesPage() {
 
     const onSubmit = async (data: RuleFormData) => {
         setApiError(null);
-        try {
-            if (editingRuleId) {
-                await ruleService.updateRulePreset(editingRuleId, data);
-            } else {
+
+        if (editingRuleId) {
+            setPendingEditData(data);
+            setIsEditConfirmOpen(true);
+        } else {
+            try {
                 await ruleService.createRulePreset(data);
+                setShowModal(false);
+                fetchRules();
+            } catch (err: unknown) {
+                if (axios.isAxiosError(err)) {
+                    setApiError(err.response?.data?.message || err.response?.data || t('globalRules.error.createFailed'));
+                } else {
+                    setApiError(t('globalRules.error.createFailed'));
+                }
             }
+        }
+    };
+
+    const handleConfirmEdit = async () => {
+        if (!editingRuleId || !pendingEditData || !editingRuleVersionHash) return;
+
+        setIsUpdating(true);
+        setApiError(null);
+
+        try {
+            await ruleService.updateRulePreset(editingRuleId, pendingEditData, editingRuleVersionHash);
+            setIsEditConfirmOpen(false);
             setShowModal(false);
             fetchRules();
-        } catch (err) {
+        } catch (err: unknown) {
+            setIsEditConfirmOpen(false);
             if (axios.isAxiosError(err)) {
-                setApiError(err.response?.data?.message || err.response?.data || t('globalRules.error.createFailed'));
+                if (err.response?.status === 409) {
+                    setApiError(t('globalRules.conflictError'));
+                } else {
+                    setApiError(err.response?.data?.message || err.response?.data || t('globalRules.error.updateFailed'));
+                }
             } else {
-                setApiError(t('globalRules.error.createFailed'));
+                setApiError(t('globalRules.error.updateFailed'));
             }
+        } finally {
+            setIsUpdating(false);
         }
     };
 
@@ -130,15 +166,19 @@ export default function GlobalRulesPage() {
 
             if (!currentRule) {
                 fetchRules();
-                throw new Error("Rule not found");
+                setError(t('globalRules.deleteErrorNotFound'));
+                setIsDeleting(false);
+                setIsDeleteModalOpen(false);
+                setRuleToDelete(null);
+                return;
             }
 
             await ruleService.deleteRulePreset(currentRule.id, currentRule.versionHash);
             fetchRules();
-        } catch (err: any) {
-            if (err.response?.status === 409) {
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 409) {
                 setError(t('globalRules.conflictError'));
-            } else if (err.message !== "Rule not found") {
+            } else {
                 setError(t('globalRules.deleteError'));
             }
         } finally {
@@ -271,6 +311,17 @@ export default function GlobalRulesPage() {
                 )}
 
                 <ConfirmationPopup
+                    isOpen={isEditConfirmOpen}
+                    onCancel={() => setIsEditConfirmOpen(false)}
+                    onConfirm={handleConfirmEdit}
+                    title={t('globalRules.editConfirmTitle')}
+                    description={t('globalRules.editConfirmDescription')}
+                    confirmText={t('common.save')}
+                    cancelText={t('common.cancel')}
+                    isLoading={isUpdating}
+                />
+
+                <ConfirmationPopup
                     isOpen={isDeleteModalOpen}
                     onCancel={() => {
                         setIsDeleteModalOpen(false);
@@ -279,8 +330,8 @@ export default function GlobalRulesPage() {
                     onConfirm={handleConfirmDelete}
                     title={t('globalRules.deleteTitle')}
                     description={t('globalRules.deleteConfirmation')}
-                    confirmText={t('common.delete', 'Usuń')}
-                    cancelText={t('common.cancel', 'Anuluj')}
+                    confirmText={t('common.delete')}
+                    cancelText={t('common.cancel')}
                     isLoading={isDeleting}
                 />
 
