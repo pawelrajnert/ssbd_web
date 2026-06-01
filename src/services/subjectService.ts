@@ -12,7 +12,12 @@ export const subjectService = {
     getSubjectUsers: async (subjectId: string): Promise<any> => {
         const response = await axiosInstance.get(`/subjects/${subjectId}/users`);
         return response.data;
-    }
+    },
+    changeSubjectManager: async (subjectId: string, newManagerLogin: string): Promise<void> => {
+        await axiosInstance.patch(`/subjects/${subjectId}/manager`, {
+            newManagerLogin: newManagerLogin
+        });
+    },
 };
 
 export const getAllSubjects = async (): Promise<SubjectDTO[]> => {

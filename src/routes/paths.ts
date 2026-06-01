@@ -24,7 +24,9 @@ export const PATHS = {
     REPORT_LIST: "/reports",
     GLOBAL_RULES: "/global-rules",
     SUBJECT_DETAILS: "/subjects/:id",
-    STUDENT_SCAN: "/student/scan"
+    STUDENT_SCAN: "/student/scan",
+    SUBJECT_SCHEDULE_LIST: "/subjects/:id/schedule",
+    CHANGE_SUBJECT_MANAGER: "/admin/change-subject-manager"
 } as const;
 
 export const getDashboardPath = (role: string | null): string => {
