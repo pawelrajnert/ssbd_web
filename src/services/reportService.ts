@@ -1,6 +1,6 @@
 import axiosInstance from "../api/auth/middleware";
 import type {Page} from "../types/user.types";
-import type {ReportDTO} from "../types/report.types";
+import type {ReportDTO, StudentOwnReportDetailsDTO} from "../types/report.types";
 import type {StudentReportDetailsDTO} from "../types/studentScan.types.ts";
 
 export const reportService = {
@@ -52,8 +52,67 @@ export const reportService = {
         },
 
         getMyReports: async (): Promise<ReportDTO[]> => {
-            const response = await axiosInstance.get<ReportDTO[]>('/reports/my-reports');
-            return response.data;
+            // TODO: do odkomentowania pozniej
+            // const response = await axiosInstance.get<ReportDTO[]>('/reports/my-reports');
+            // return response.data;
+
+            // poki co mock
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([
+                        {
+                            id: "mock-report-1234-5678",
+                            tag: "v1.0-final",
+                            average_similarity: 0.85,
+                            created_at: new Date().toISOString(),
+                            created_by: "admin",
+                            subject_name: "Programowanie Aplikacji Sieciowych"
+                        },
+                        {
+                            id: "mock-report-abcd-efgh",
+                            tag: "v2.0-poprawka",
+                            average_similarity: 0.12,
+                            created_at: new Date(Date.now() - 86400000).toISOString(),
+                            created_by: "admin",
+                            subject_name: "Metodyki Programowania"
+                        }
+                    ]);
+                }, 800);
+            });
+        },
+
+        getMyReportDetails: async (reportId: string): Promise<StudentOwnReportDetailsDTO> => {
+            // TODO: do odkomentowania pozniej
+            // const response = await axiosInstance.get<StudentOwnReportDetailsDTO>(`/reports/my-reports/${reportId}`);
+            // return response.data;
+
+            // poki co mock
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        reportId: reportId,
+                        tag: "v1.0-final",
+                        subjectName: "Programowanie Aplikacji Sieciowych",
+                        createdAt: new Date().toISOString(),
+                        matches: [
+                            {
+                                matchedWith: "Repozytorium Innego Studenta",
+                                maxSimilarity: 0.85,
+                                averageSimilarity: 0.45,
+                                longestMatch: 250,
+                                studentFile: "RoomController.java",
+                                studentCode: `package com.example.controller;\n\nimport org.springframework.web.bind.annotation.*;\n\n@RestController\n@RequestMapping("/api/rooms")\npublic class RoomController {\n\n    @GetMapping\n    public List<Room> getAllRooms() {\n        return roomService.findAll();\n    }\n\n    @PostMapping\n    public void addRoom(@RequestBody Room room) {\n        roomService.save(room);\n    }\n}`,
+                                matchedLines: [13, 14, 15, 16]
+                            },
+                            {
+                                matchedWith: "Repozytorium Innego Studenta",
+                                maxSimilarity: 0.32,
+                                longestMatch: 45
+                            }
+                        ]
+                    });
+                }, 800);
+            });
         },
 
         generateStudentScan: async (
@@ -80,6 +139,7 @@ export const reportService = {
             )
             return response.data;
         }
+
 
     };
 

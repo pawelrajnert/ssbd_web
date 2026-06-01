@@ -6,3 +6,21 @@ export interface ReportDTO {
     created_by: string;
     subject_name: string;
 }
+
+export interface FilteredComparisonDTO {
+    matchedWith: string;
+    maxSimilarity?: number;
+    averageSimilarity?: number;
+    longestMatch?: number;
+    studentFile?: string;
+    studentCode?: string;
+    matchedLines?: number[];
+}
+
+export interface StudentOwnReportDetailsDTO {
+    reportId: string;
+    tag: string;
+    subjectName: string;
+    createdAt: string;
+    matches: FilteredComparisonDTO[];
+}
