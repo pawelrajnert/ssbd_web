@@ -1,6 +1,7 @@
 import type {RouteObject} from "react-router-dom";
 import {createBrowserRouter} from "react-router-dom";
 import {PATHS} from "./paths.ts";
+
 import UserListPage from "../pages/UserList/UserListPage.tsx";
 import LoginPage from "../pages/auth/login/LoginPage.tsx";
 import Layout from "../layout.tsx";
@@ -11,13 +12,10 @@ import RegisterPage from "../pages/auth/register/RegisterPage.tsx";
 import ActivatePage from "../pages/auth/activate/ActivatePage.tsx";
 import PasswordResetInitPage from "../pages/auth/password_reset/PasswordResetInitPage.tsx";
 import PasswordResetConfirmPage from "../pages/auth/password_reset/PasswordResetConfirmPage.tsx";
-
 import EmailChangeConfirmPage from "../pages/own_email_change/EmailChangeConfirmPage.tsx";
 import UserEditPage from "../pages/UserEdit/UserEditPage.tsx";
 import EmailChangeRevertPage from "../pages/own_email_change/EmailChangeRevertPage.tsx";
 import TwoFactorVerifyPage from "../pages/auth/login/TwoFactorAuthorizationPage.tsx";
-// import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
-// import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
 import ForcePasswordChangePage from "../pages/auth/force_password_change/ForcePasswordChangePage.tsx";
 import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
@@ -30,6 +28,8 @@ import StudentScanPage from "../pages/student/StudentScanPage.tsx";
 import { SubjectListView } from "../pages/subject/SubjectListView.tsx";
 import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
 import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
+import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
+import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -94,31 +94,6 @@ const routes: RouteObject[] = [
             }
         ]
     },
-    // {
-    //     element: <Layout/>,
-    //     children: [
-    //         {
-    //             path: PATHS.USER_LIST,
-    //             element: <UserListPage/>
-    //         },
-    // {
-    //     path: PATHS.STUDENT_SCAN,
-    //     element: <StudentScanPage/>
-    // },
-    //         {
-    //             path: PATHS.USER_EDIT,
-    //             element: <UserEditPage/>
-    //         },
-    //         // {
-    //         //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-    //         //     element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
-    //         // },
-    // {
-    //     path: PATHS.TEACHER_SUBJECT_USERS,
-    //     element: <TeacherSubjectUsersPage/>
-    // }
-    //     ]
-    // }, //dla testu :)
     {
         element: <ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
         children: [
@@ -170,6 +145,14 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.STUDENT_SCAN,
                         element: <StudentScanPage/>
+                    },
+                    {
+                        path: PATHS.STUDENT_REPORTS,
+                        element: <StudentReportListPage/>
+                    },
+                    {
+                        path: PATHS.STUDENT_REPORT_DETAILS,
+                        element: <StudentReportDetailsPage/>
                     }
                 ]
             }
@@ -199,14 +182,6 @@ const routes: RouteObject[] = [
             {
                 element: <Layout/>,
                 children: [
-                    // {
-                    //     path: PATHS.PROFILE,
-                    //     element: <ProfilePage/>
-                    // },
-                    // {
-                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-                    //     element: <EmailChangeInitPage/>
-                    // },
                     {
                         path: PATHS.PROFILE,
                         element: <UserEditPage/>
@@ -223,6 +198,6 @@ const routes: RouteObject[] = [
             }
         ]
     }
-]
+];
 
 export const router = createBrowserRouter(routes);

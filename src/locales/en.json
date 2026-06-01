@@ -479,6 +479,48 @@
       "delete": "Delete"
     }
   },
+  "studentReportList": {
+    "title": "My Reports",
+    "sub": "View your anti-plagiarism reports from all assigned subjects.",
+    "refresh": "Refresh",
+    "list": {
+      "subject": "Subject / Tag",
+      "creation_date": "Creation Date",
+      "avg": "Average Similarity",
+      "action": "Actions",
+      "notFound": "You currently have no available reports to view.",
+      "view": "View report"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of"
+    }
+  },
+  "studentReportDetails": {
+    "back": "Back to list",
+    "privacyNotice": "This view has been anonymized. Data and source codes of other students are hidden according to the subject's privacy policy.",
+    "matchesTitle": "Found similarities in your code",
+    "noMatches": "No significant similarities",
+    "noMatchesSub": "The system did not detect plagiarism in your repository in this report.",
+    "comparedWith": "Compared with:",
+    "anonymized": "Another Student's Repository",
+    "metrics": {
+      "max": "Maximum",
+      "average": "Average",
+      "longest": "Longest match",
+      "tokens": "tokens"
+    },
+    "code": {
+      "show": "View flagged code",
+      "hide": "Hide code",
+      "file": "File:",
+      "flaggedLines": "Flagged lines:"
+    },
+    "error": {
+      "accessDenied": "Access denied to this report.",
+      "general": "An error occurred while loading the report."
+    }
+  },
   "studentScan": {
     "title": "Check your own code",
     "sub": "Check your own code in case of possible plagiarism.",
