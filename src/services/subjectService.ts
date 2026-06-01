@@ -70,3 +70,7 @@ export const deleteSubject = async (subjectId: string, versionHash: string, dele
         },
     });
 };
+
+export const syncSubjectWithGitea = async (subjectId: string): Promise<void> => {
+    await axiosInstance.post(`/subjects/${subjectId}/sync`);
+};
