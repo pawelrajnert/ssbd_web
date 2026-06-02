@@ -9,5 +9,9 @@ export const scheduleService = {
         const serverTimeMs = serverDateHeader ? new Date(serverDateHeader).getTime() : Date.now();
 
         return { schedules: response.data, serverTimeMs: serverTimeMs }
+    },
+
+    updateSchedule: async (scheduleId: string, data: { scheduleDateTime: string, tag: string }): Promise<void> => {
+        await axiosInstance.put(`/schedules/${scheduleId}`, data);
     }
 }

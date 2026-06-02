@@ -581,7 +581,8 @@
       "toggle": "Toggle sort direction",
       "newest": "Newest first",
       "oldest": "Oldest first"
-    }
+    },
+    "actions": "Actions"
   },
   "subject": {
     "delete": "Delete subject",

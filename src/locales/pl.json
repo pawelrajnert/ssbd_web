@@ -703,7 +703,8 @@
     "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
     "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
     "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
-    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu."
+    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu.",
+    "actions": "Akcje"
   },
   "subjectEdit": {
     "title": "Edytuj Przedmiot",
