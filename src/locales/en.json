@@ -568,6 +568,7 @@
     "date": "Scheduled Date",
     "tag": "Analysis Tag",
     "statusLabel": "Status",
+    "actions": "Actions",
     "status": {
       "all": "All",
       "planned": "Planned",
@@ -581,7 +582,12 @@
       "toggle": "Toggle sort direction",
       "newest": "Newest first",
       "oldest": "Oldest first"
-    }
+    },
+    "deleteScheduleTitle": "Delete schedule",
+    "deleteScheduleConfirm": "Are you sure you want to delete this schedule?",
+    "deleteScheduleError": "An error occurred while deleting the schedule.",
+    "deleteScheduleErrorNotFound": "Schedule not found. It might have been already deleted.",
+    "deleteScheduleConflict": "Schedule data has been modified. Please refresh the page and try again."
   },
   "subject": {
     "delete": "Delete subject",

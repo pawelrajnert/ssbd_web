@@ -4,8 +4,9 @@ import {useParams, useNavigate} from 'react-router-dom';
 import {scheduleService} from '../../services/scheduleService';
 import {type ScheduleDTO, ScheduleStatus, type FilterStatus} from '../../types/schedule.types';
 import {formatDate} from '../../services/reportService';
-import {CalendarClock, Filter, RefreshCw, ArrowLeft, ArrowUp, ArrowDown, ArrowUpDown} from 'lucide-react';
+import {CalendarClock, Filter, RefreshCw, ArrowLeft, ArrowUp, ArrowDown, ArrowUpDown, Trash2} from 'lucide-react';
 import axios from 'axios';
+import ConfirmationPopup from '../../shared/components/modals/ConfirmationPopup';
 
 type SortColumn = 'date' | 'tag';
 
@@ -34,19 +35,22 @@ export const SubjectSchedulePage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [statusFilter, setStatusFilter] = useState<FilterStatus>('ALL');
-    const [tagFilter, setTagFilter] = useState<string>(''); // Nowy stan dla tagu
+    const [tagFilter, setTagFilter] = useState<string>('');
 
     const [sortColumn, setSortColumn] = useState<SortColumn>('date');
     const [sortDesc, setSortDesc] = useState<boolean>(true);
 
     const [lastServerTime, setLastServerTime] = useState<number>(Date.now());
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [scheduleToDelete, setScheduleToDelete] = useState<ScheduleDTO | null>(null);
+
     const fetchSchedules = useCallback(async () => {
         if (!subjectId) return;
         setIsLoading(true);
         try {
-            const {schedules: fetched, serverTimeMs} =
-                await scheduleService.getSchedulesForSubject(subjectId);
+            const {schedules: fetched, serverTimeMs} = await scheduleService.getSchedulesForSubject(subjectId);
             setLastServerTime(serverTimeMs);
             setSchedules(fetched);
             setError(null);
@@ -81,6 +85,33 @@ export const SubjectSchedulePage: React.FC = () => {
             : <ArrowUp size={14} className="text-primary"/>;
     };
 
+    const openDeleteModal = (schedule: ScheduleDTO) => {
+        setScheduleToDelete(schedule);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!scheduleToDelete) return;
+
+        setIsDeleting(true);
+        setError(null);
+
+        try {
+            await scheduleService.deleteSchedule(scheduleToDelete.id, scheduleToDelete.versionHash);
+            await fetchSchedules();
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 409) {
+                setError(t('schedule.deleteScheduleConflict'));
+            } else {
+                setError(t('schedule.deleteScheduleError'));
+            }
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setScheduleToDelete(null);
+        }
+    };
+
     const sortedAndFiltered = useMemo(() => {
         const mapped = schedules.map(s => ({
             ...s,
@@ -102,7 +133,7 @@ export const SubjectSchedulePage: React.FC = () => {
 
             return sortDesc ? -diff : diff;
         });
-    }, [schedules, lastServerTime, statusFilter, tagFilter, sortColumn, sortDesc]); // Zaktualizowane zależności
+    }, [schedules, lastServerTime, statusFilter, tagFilter, sortColumn, sortDesc]);
 
     return (
         <div className="min-h-screen bg-base p-8">
@@ -187,18 +218,21 @@ export const SubjectSchedulePage: React.FC = () => {
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest">
                                     {t('schedule.statusLabel')}
                                 </th>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest text-right">
+                                    {t('schedule.actions')}
+                                </th>
                             </tr>
                             </thead>
                             <tbody className={`divide-y divide-border transition-opacity duration-200 ${isLoading ? 'opacity-60 pointer-events-none' : ''}`}>
                             {error ? (
                                 <tr>
-                                    <td colSpan={3} className="py-8 text-center text-danger font-medium">
+                                    <td colSpan={4} className="py-8 text-center text-danger font-medium">
                                         {error}
                                     </td>
                                 </tr>
                             ) : sortedAndFiltered.length === 0 && !isLoading ? (
                                 <tr>
-                                    <td colSpan={3} className="py-8 text-center text-secondary">
+                                    <td colSpan={4} className="py-8 text-center text-secondary">
                                         {t('schedule.empty')}
                                     </td>
                                 </tr>
@@ -225,6 +259,15 @@ export const SubjectSchedulePage: React.FC = () => {
                                                     : t('schedule.status.planned').toUpperCase()}
                                             </span>
                                         </td>
+                                        <td className="py-5 px-8 text-right">
+                                            <button
+                                                onClick={() => openDeleteModal(s)}
+                                                className="text-red-800 hover:text-red-600 dark:text-danger dark:hover:text-danger/80 transition-colors inline-flex items-center p-2 rounded-full hover:bg-red-800/10 dark:hover:bg-danger/10"
+                                                title={t('schedule.deleteScheduleTitle')}
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -232,6 +275,20 @@ export const SubjectSchedulePage: React.FC = () => {
                         </table>
                     </div>
                 </div>
+
+                <ConfirmationPopup
+                    isOpen={isDeleteModalOpen}
+                    onCancel={() => {
+                        setIsDeleteModalOpen(false);
+                        setScheduleToDelete(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    title={t('schedule.deleteScheduleTitle')}
+                    description={t('schedule.deleteScheduleConfirm')}
+                    confirmText={t('common.delete')}
+                    cancelText={t('common.cancel')}
+                    isLoading={isDeleting}
+                />
 
             </div>
         </div>
