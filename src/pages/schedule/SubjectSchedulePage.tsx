@@ -4,18 +4,15 @@ import {useParams, useNavigate} from 'react-router-dom';
 import {scheduleService} from '../../services/scheduleService';
 import {type ScheduleDTO, ScheduleStatus, type FilterStatus} from '../../types/schedule.types';
 import {formatDate} from '../../services/reportService';
-import {CalendarClock, Filter, RefreshCw, ArrowLeft, ArrowUp, ArrowDown, ArrowUpDown} from 'lucide-react';
+import {CalendarClock, Filter, RefreshCw, ArrowLeft, ArrowUp, ArrowDown, ArrowUpDown, Plus} from 'lucide-react';
+import {CreateScheduleModal} from "./CreateScheduleModal";
 import axios from 'axios';
 
 type SortColumn = 'date' | 'tag';
 
 const getSafeTimestamp = (dateString?: string): number => {
     if (!dateString) return 0;
-    const safeString =
-        dateString.includes('Z') || dateString.includes('+')
-            ? dateString
-            : `${dateString}Z`;
-    const time = new Date(safeString).getTime();
+    const time = new Date(dateString).getTime();
     return isNaN(time) ? 0 : time;
 };
 
@@ -34,12 +31,14 @@ export const SubjectSchedulePage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     const [statusFilter, setStatusFilter] = useState<FilterStatus>('ALL');
-    const [tagFilter, setTagFilter] = useState<string>(''); // Nowy stan dla tagu
+    const [tagFilter, setTagFilter] = useState<string>('');
 
     const [sortColumn, setSortColumn] = useState<SortColumn>('date');
     const [sortDesc, setSortDesc] = useState<boolean>(true);
 
     const [lastServerTime, setLastServerTime] = useState<number>(Date.now());
+
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     const fetchSchedules = useCallback(async () => {
         if (!subjectId) return;
@@ -102,7 +101,29 @@ export const SubjectSchedulePage: React.FC = () => {
 
             return sortDesc ? -diff : diff;
         });
-    }, [schedules, lastServerTime, statusFilter, tagFilter, sortColumn, sortDesc]); // Zaktualizowane zależności
+    }, [schedules, lastServerTime, statusFilter, tagFilter, sortColumn, sortDesc]);
+
+    const openCreateModal = () => {
+        setIsCreateModalOpen(true);
+    };
+
+    const handleCreateSchedule = async (scheduleToSave: ScheduleDTO) => {
+        if (!subjectId) return;
+
+        try {
+            setIsLoading(true);
+
+            await scheduleService.createSchedule(subjectId, scheduleToSave);
+
+            setIsCreateModalOpen(false);
+            fetchSchedules();
+        } catch (err: unknown) {
+            console.error("Błąd podczas dodawania harmonogramu:", err);
+            setError('Wystąpił błąd podczas planowania analizy');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-base p-8">
@@ -115,8 +136,7 @@ export const SubjectSchedulePage: React.FC = () => {
                     <ArrowLeft className="w-5 h-5"/>
                     {t('common.back')}
                 </button>
-
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
                         <h1 className="text-3xl font-bold text-primary mb-2">
                             {t('schedule.modal.title')}
@@ -126,38 +146,47 @@ export const SubjectSchedulePage: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex gap-4">
                         <button
                             onClick={fetchSchedules}
                             disabled={isLoading}
                             className="flex items-center gap-2 px-4 py-2 bg-surface border border-border hover:bg-active rounded-md text-sm font-bold text-primary transition-colors disabled:opacity-50"
                         >
                             <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''}/>
-                            {t('userList.refresh')}
+                            {t('common.refresh')}
                         </button>
+                        <button
+                            onClick={openCreateModal}
+                            className="flex items-center gap-2 px-4 py-2 bg-brand hover:bg-brand-hover rounded-md text-sm font-bold text-white transition-colors"
+                        >
+                            <Plus size={16} />
+                            {t('schedule.modal.title')}
+                        </button>
+                    </div>
+                </div>
 
-                        <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
-                            <Filter size={16} className="text-secondary mr-2"/>
-                            <input
-                                type="text"
-                                placeholder={`${t('schedule.tag')}...`}
-                                value={tagFilter}
-                                onChange={e => setTagFilter(e.target.value)}
-                                className="bg-transparent text-sm font-semibold text-primary focus:outline-none w-24 sm:w-32 placeholder:text-secondary/60"
-                            />
-                        </div>
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                    <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
+                        <Filter size={16} className="text-secondary mr-2"/>
+                        <input
+                            type="text"
+                            placeholder={`${t('schedule.tag')}...`}
+                            value={tagFilter}
+                            onChange={e => setTagFilter(e.target.value)}
+                            className="bg-transparent text-sm font-semibold text-primary focus:outline-none w-24 sm:w-32 placeholder:text-secondary/60"
+                        />
+                    </div>
 
-                        <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
-                            <select
-                                value={statusFilter}
-                                onChange={e => setStatusFilter(e.target.value as FilterStatus)}
-                                className="bg-transparent text-sm font-semibold text-primary focus:outline-none cursor-pointer appearance-none pr-4"
-                            >
-                                <option value="ALL">{t('schedule.status.all')}</option>
-                                <option value={ScheduleStatus.PLANNED}>{t('schedule.status.planned')}</option>
-                                <option value={ScheduleStatus.EXECUTED}>{t('schedule.status.executed')}</option>
-                            </select>
-                        </div>
+                    <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
+                        <select
+                            value={statusFilter}
+                            onChange={e => setStatusFilter(e.target.value as FilterStatus)}
+                            className="bg-transparent text-sm font-semibold text-primary focus:outline-none cursor-pointer appearance-none pr-4"
+                        >
+                            <option value="ALL">{t('schedule.status.all')}</option>
+                            <option value={ScheduleStatus.PLANNED}>{t('schedule.status.planned')}</option>
+                            <option value={ScheduleStatus.EXECUTED}>{t('schedule.status.executed')}</option>
+                        </select>
                     </div>
                 </div>
 
@@ -232,6 +261,12 @@ export const SubjectSchedulePage: React.FC = () => {
                         </table>
                     </div>
                 </div>
+
+                <CreateScheduleModal
+                    isOpen={isCreateModalOpen}
+                    onClose={() => setIsCreateModalOpen(false)}
+                    onSave={handleCreateSchedule}
+                />
 
             </div>
         </div>

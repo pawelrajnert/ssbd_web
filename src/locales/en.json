@@ -562,7 +562,12 @@
   },
   "schedule": {
     "modal": {
-      "title": "Analysis Schedule"
+      "title": "Schedule Analysis",
+      "desc": "Specify the execution date and indicate the repository tag to be checked.",
+      "deadline": "Execution Deadline",
+      "giteaTag": "Gitea Tag",
+      "tagPlaceholder": "e.g. lab-01",
+      "errorPast": "You cannot schedule an analysis in the past."
     },
     "subtitle": "Manage planned and completed repository scan tasks.",
     "date": "Scheduled Date",

@@ -676,7 +676,12 @@
   },
   "schedule": {
     "modal": {
-      "title": "Harmonogram analiz"
+      "title": "Zaplanuj analizę",
+      "desc": "Określ datę wykonania oraz wskaż tag repozytorium do sprawdzenia.",
+      "deadline": "Termin wykonania",
+      "giteaTag": "Tag Gitea",
+      "tagPlaceholder": "np. lab-01",
+      "errorPast": "Nie można zaplanować analizy w przeszłości."
     },
     "subtitle": "Zarządzaj zaplanowanymi i wykonanymi zadaniami skanowania repozytoriów.",
     "date": "Data zaplanowania",

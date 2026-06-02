@@ -9,5 +9,10 @@ export const scheduleService = {
         const serverTimeMs = serverDateHeader ? new Date(serverDateHeader).getTime() : Date.now();
 
         return { schedules: response.data, serverTimeMs: serverTimeMs }
+    },
+    createSchedule: async (subjectId: string, payload: {scheduleDateTime: string, tag: string}): Promise<{scheduleDateTime: string, tag: string}> => {
+        const response = await axiosInstance
+            .post<ScheduleDTO>(`/schedules/subject/${subjectId}`, {scheduleDateTime: payload.scheduleDateTime, tag: payload.tag});
+        return response.data
     }
 }
