@@ -403,7 +403,8 @@
     "subjectList": "Moje przedmioty",
     "reportList": "Lista raportów",
     "globalRules": "Globalne reguły",
-    "studentScan": "Sprawdź swój kod"
+    "studentScan": "Sprawdź swój kod",
+    "changeSubjectManager": "Zmień kierownika przedmiotu"
   },
   "subjectUsers": {
     "title": "Lista studentów dla przedmiotu",
@@ -591,6 +592,30 @@
     }
   },
   "subject": {
+    "manager": {
+      "change": {
+        "title": "Zmień kierownika przedmiotu",
+        "submit": "Zmień kierownika"
+      },
+      "subtitle": "Zarządzaj przypisaniem głównego kierownika do wybranego przedmiotu. Wpisz ścisły login użytkownika.",
+      "selectSubject": "Wybierz przedmiot",
+      "selectPlaceholder": "Wybierz przedmiot",
+      "loginInput": "Wpisz login nowego kierownika",
+      "loginPlaceholder": "np. jkowalski",
+      "teacherFound": "Poprawny identyfikator. Możesz go przypisać.",
+      "warning": "Akcja spowoduje natychmiastowe odebranie praw własności obecnemu prowadzącemu. Opcja zapisu odblokuje się po poprawnym zweryfikowaniu loginu w tle.",
+      "success": "Pomyślnie przypisano nowego kierownika do przedmiotu!",
+      "error": {
+        "fetchSubjects": "Nie udało się pobrać listy przedmiotów.",
+        "notATeacher": "Nie znaleziono nauczyciela o podanym loginie.",
+        "noSubjectSelected": "Proszę wybrać przedmiot.",
+        "notVerified": "Nie wprowadzono poprawnego loginu nauczyciela.",
+        "notFound": "Wskazany użytkownik nie posiada ról nauczycielskich lub przedmiot nie istnieje.",
+        "conflict": "Dane przedmiotu zostały zmodyfikowane w międzyczasie. Odśwież stronę i spróbuj ponownie.",
+        "forbidden": "Brak uprawnień do zmiany kierownika tego przedmiotu.",
+        "unexpected": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
+      }
+    },
     "list": {
       "title": "Zarządzane Przedmioty",
       "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",

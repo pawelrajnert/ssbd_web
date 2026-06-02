@@ -411,7 +411,8 @@
     "subjectList": "My subjects",
     "globalRules": "Global rules",
     "reportList": "Report list",
-    "studentScan": "Check your code"
+    "studentScan": "Check your code",
+    "changeSubjectManager": "Change subject's manager"
   },
   "globalRules": {
     "error": {
@@ -584,6 +585,30 @@
     }
   },
   "subject": {
+    "manager": {
+      "change": {
+        "title": "Change Subject Manager",
+        "submit": "Change Manager"
+      },
+      "subtitle": "Manage the assignment of the main manager to the selected subject. Enter the exact user login.",
+      "selectSubject": "Select subject",
+      "selectPlaceholder": "Select subject",
+      "loginInput": "Enter new manager's login",
+      "loginPlaceholder": "e.g. jsmith",
+      "teacherFound": "Valid identifier. You can assign them.",
+      "warning": "This action will immediately revoke ownership rights from the current manager. The save option will unlock after the login is successfully verified in the background.",
+      "success": "Successfully assigned a new manager to the subject!",
+      "error": {
+        "fetchSubjects": "Failed to fetch the list of subjects.",
+        "notATeacher": "No teacher found with the provided login.",
+        "noSubjectSelected": "Please select a subject.",
+        "notVerified": "A valid teacher login has not been provided.",
+        "notFound": "The specified user does not have teacher roles or the subject does not exist.",
+        "conflict": "Subject data was modified in the meantime. Refresh the page and try again.",
+        "forbidden": "No permission to change the manager of this subject.",
+        "unexpected": "An unexpected error occurred. Please try again."
+      }
+    },
     "delete": "Delete subject",
     "deleteConfirmTitle": "Are you sure you want to delete this subject?",
     "deleteConfirmMessage": "This operation is irreversible. All subject data, repositories, and report files will be permanently deleted from the system.",
