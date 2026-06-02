@@ -30,6 +30,16 @@ import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
 import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
+import { StudentSubjectDetailsView } from "../pages/student/StudentSubjectDetailsView.tsx";
+import { useAuth } from "../hooks/useAuth";
+
+const SubjectDetailsSwitcher = () => {
+    const { activeRole } = useAuth();
+    if (activeRole === RoleEnum.STUDENT) {
+        return <StudentSubjectDetailsView />;
+    }
+    return <SubjectDetailsView />;
+};
 
 const routes: RouteObject[] = [
     {
@@ -188,7 +198,7 @@ const routes: RouteObject[] = [
                     },
                     {
                         path: PATHS.SUBJECT_DETAILS,
-                        element: <SubjectDetailsView/>
+                        element: <SubjectDetailsSwitcher/>
                     },
                     {
                         path: PATHS.SUBJECT_SCHEDULE_LIST,
