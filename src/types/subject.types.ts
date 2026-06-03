@@ -23,9 +23,10 @@ export interface StudentSubjectDetailsDTO {
 }
 
 export const ReportVisibilityLevel = {
-    PELNY_WGLAD: 'PEŁNY_WGLĄD',
-    TYLKO_WYNIK: 'TYLKO_WYNIK',
-    UKRYTE: 'UKRYTE',
+    FULL_INSIGHT: 'FULL_INSIGHT',
+    SCORE_ONLY: 'SCORE_ONLY',
+    HIDDEN: 'HIDDEN',
     ONLY_HIGHEST_PERCENT: 'ONLY_HIGHEST_PERCENT'
 } as const;
+
 

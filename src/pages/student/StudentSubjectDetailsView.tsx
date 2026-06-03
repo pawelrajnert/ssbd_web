@@ -90,20 +90,20 @@ export const StudentSubjectDetailsView: React.FC = () => {
                     </h3>
                     <div className="bg-surface rounded-xl p-6 border border-border shadow-sm">
                         <p className="text-sm font-medium text-primary mb-2">
-                            Prowadzący ustawił poziom raportowania na:
+                            {t('subject.details.reportLevelLabel', 'Prowadzący ustawił poziom raportowania na:')}
                             <span className="ml-2 px-2.5 py-1 bg-active text-brand rounded-md font-mono text-xs">
                                 {subject.reportVisibilityLevel}
                             </span>
                         </p>
                         <p className="text-sm text-secondary leading-relaxed mt-4">
-                            {subject.reportVisibilityLevel === ReportVisibilityLevel.PELNY_WGLAD && "Będziesz miał pełny wgląd w analizę podobieństwa oraz dostęp do kodu podświetlającego problematyczne sekcje."}
-                            {subject.reportVisibilityLevel === ReportVisibilityLevel.TYLKO_WYNIK && "Będziesz widział wyłącznie wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu."}
-                            {subject.reportVisibilityLevel === ReportVisibilityLevel.ONLY_HIGHEST_PERCENT && "Będziesz widział wyłącznie najwyższy wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu."}
-                            {subject.reportVisibilityLevel === ReportVisibilityLevel.UKRYTE && "Wszystkie raporty są ukryte. Wyłącznie prowadzący posiada do nich wgląd."}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.FULL_INSIGHT && t('subject.details.reportLevel.fullInsight', 'Będziesz miał pełny wgląd w analizę podobieństwa oraz dostęp do kodu podświetlającego problematyczne sekcje.')}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.SCORE_ONLY && t('subject.details.reportLevel.scoreOnly', 'Będziesz widział wyłącznie wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu.')}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.ONLY_HIGHEST_PERCENT && t('subject.details.reportLevel.onlyHighest', 'Będziesz widział wyłącznie najwyższy wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu.')}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.HIDDEN && t('subject.details.reportLevel.hidden', 'Wszystkie raporty są ukryte. Wyłącznie prowadzący posiada do nich wgląd.')}
                         </p>
-                        {subject.reportVisibilityLevel !== ReportVisibilityLevel.UKRYTE && (
+                        {subject.reportVisibilityLevel !== ReportVisibilityLevel.HIDDEN && (
                             <button onClick={() => navigate(PATHS.STUDENT_REPORTS)} className="mt-6 px-5 py-2.5 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors w-full">
-                                Przejdź do moich raportów
+                                {t('subject.details.goToReportsBtn', 'Przejdź do moich raportów')}
                             </button>
                         )}
                     </div>
