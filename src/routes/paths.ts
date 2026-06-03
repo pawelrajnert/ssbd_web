@@ -22,6 +22,7 @@ export const PATHS = {
     CREATE_SUBJECT: "/teacher/subjects/create",
     TEACHER_SUBJECT_USERS: "/subjects/:subjectName/users",
     REPORT_LIST: "/reports",
+    TEACHER_REPORT_DETAILS: "/reports/:id",
     STUDENT_REPORTS: '/student/reports',
     STUDENT_REPORT_DETAILS: '/student/reports/:id',
     GLOBAL_RULES: "/global-rules",

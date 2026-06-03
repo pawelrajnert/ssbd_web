@@ -27,10 +27,11 @@ import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
 import { SubjectListView } from "../pages/subject/SubjectListView.tsx";
 import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
+import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
-import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import { ChangeSubjectManagerPage } from "../pages/subject/ChangeSubjectManagerPage.tsx";
+import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -95,79 +96,6 @@ const routes: RouteObject[] = [
             }
         ]
     },
-    // {
-    //     element: <Layout/>,
-    //     children: [
-    //         {
-    //             path: PATHS.USER_LIST,
-    //             element: <UserListPage/>
-    //         },
-    // {
-    //     path: PATHS.STUDENT_SCAN,
-    //     element: <StudentScanPage/>
-    // },
-    //         {
-    //             path: PATHS.USER_EDIT,
-    //             element: <UserEditPage/>
-    //         },
-    //         // {
-    //         //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-    //         //     element: <EmailChangeInitPage/> //tutaj jak sie odkomentuje to mozna email change testowac bez logowania
-    //         // },
-    // {
-    //     path: PATHS.TEACHER_SUBJECT_USERS,
-    //     element: <TeacherSubjectUsersPage/>
-    // }
-    //     ]
-    // }, //dla testu :)
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.STUDENT, RoleEnum.TEACHER]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    // {
-                    //     path: PATHS.PROFILE,
-                    //     element: <ProfilePage/>
-                    // },
-                    // {
-                    //     path: PATHS.OWN_EMAIL_CHANGE_MAIN,
-                    //     element: <EmailChangeInitPage/>
-                    // },
-                    {
-                        path: PATHS.PROFILE,
-                        element: <UserEditPage/>
-                    },
-                    {
-                        path: PATHS.SUBJECT_DETAILS,
-                        element: <SubjectDetailsView/>
-                    },
-                    {
-                        path: PATHS.SUBJECT_SCHEDULE_LIST,
-                        element: <SubjectSchedulePage />,
-                    },
-                ]
-            }
-        ]
-    },
-    {
-        element: <ProtectedRoute allowedRoles={[RoleEnum.STUDENT]}/>,
-        children: [
-            {
-                element: <Layout/>,
-                children: [
-                    {
-                        path: PATHS.STUDENT_SUBJECT_LIST,
-                        element: <SubjectListView/>
-                    },
-                    {
-                        path: PATHS.STUDENT_SCAN,
-                        element: <StudentScanPage/>
-                    }
-                ]
-            }
-        ]
-    },
     {
         element: <ProtectedRoute allowedRoles={[RoleEnum.TEACHER]}/>,
         children: [
@@ -193,6 +121,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.REPORT_LIST,
                         element: <ReportListPage/>
+                    },
+                    {
+                        path: PATHS.TEACHER_REPORT_DETAILS,
+                        element: <TeacherReportDetailsPage/>
                     },
                     {
                         path: PATHS.GLOBAL_RULES,
