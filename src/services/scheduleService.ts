@@ -10,6 +10,11 @@ export const scheduleService = {
 
         return { schedules: response.data, serverTimeMs: serverTimeMs }
     },
+    createSchedule: async (subjectId: string, payload: {scheduleDateTime: string, tag: string}): Promise<{scheduleDateTime: string, tag: string}> => {
+        const response = await axiosInstance
+            .post<ScheduleDTO>(`/schedules/subject/${subjectId}`, {scheduleDateTime: payload.scheduleDateTime, tag: payload.tag});
+        return response.data
+    },
     deleteSchedule: async (scheduleId: string, versionHash: string): Promise<void> => {
         await axiosInstance.delete(`/schedules/${scheduleId}`, {
             headers: {
