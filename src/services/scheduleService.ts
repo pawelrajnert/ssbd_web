@@ -10,6 +10,13 @@ export const scheduleService = {
 
         return { schedules: response.data, serverTimeMs: serverTimeMs }
     },
+    deleteSchedule: async (scheduleId: string, versionHash: string): Promise<void> => {
+        await axiosInstance.delete(`/schedules/${scheduleId}`, {
+            headers: {
+                'If-Match': versionHash
+            }
+        });
+    },
 
     updateSchedule: async (scheduleId: string, data: { scheduleDateTime: string, tag: string }): Promise<void> => {
         await axiosInstance.put(`/schedules/${scheduleId}`, data);

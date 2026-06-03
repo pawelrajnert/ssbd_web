@@ -2,6 +2,8 @@ export interface ScheduleDTO {
     id: string;
     scheduleDateTime: string;
     tag: string;
+    version: number;
+    versionHash: string;
 }
 
 export interface ScheduleResponse {
