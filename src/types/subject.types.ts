@@ -21,3 +21,11 @@ export interface StudentSubjectDetailsDTO {
     } | null;
     reportVisibilityLevel: string;
 }
+
+export const ReportVisibilityLevel = {
+    PELNY_WGLAD: 'PEŁNY_WGLĄD',
+    TYLKO_WYNIK: 'TYLKO_WYNIK',
+    UKRYTE: 'UKRYTE',
+    ONLY_HIGHEST_PERCENT: 'ONLY_HIGHEST_PERCENT'
+} as const;
+

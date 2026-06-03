@@ -7,7 +7,7 @@ import { formatDate, reportService } from "../../services/reportService";
 import type { Page } from "../../types/user.types";
 import type { ReportDTO } from "../../types/report.types";
 import { getSimilarityBadge } from "../../shared/components/similarity_badge/SimilarityBadge";
-import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2 } from "lucide-react";
+import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw } from "lucide-react";
 import { PATHS } from "../../routes/paths";
 import { EditSubjectModal } from './EditSubjectModal';
 
@@ -232,9 +232,9 @@ export const SubjectDetailsView: React.FC = () => {
                                         {isSyncing ? (
                                             <Loader2 className="w-4 h-4 animate-spin" />
                                         ) : (
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                            <RefreshCw className="w-4 h-4" />
                                         )}
-                                        {t('subject.details.repos.refresh', 'Odśwież z Gitea')}
+                                        <span className="text-sm font-semibold">{t('subject.details.syncGitea', 'Odśwież')}</span>
                                     </button>
                                 )}
                                 <button type="button" className="hover:text-primary transition-colors">{t('subject.details.repos.filter', 'Filtruj')}</button>

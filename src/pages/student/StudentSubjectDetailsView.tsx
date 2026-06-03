@@ -5,6 +5,7 @@ import { getStudentSubjectDetails } from '../../services/subjectService';
 import type { StudentSubjectDetailsDTO } from '../../types/subject.types';
 import { Loader2, ArrowLeft, BookOpen, ShieldAlert, GitBranch } from "lucide-react";
 import { PATHS } from "../../routes/paths";
+import { ReportVisibilityLevel } from '../../types/subject.types';
 
 export const StudentSubjectDetailsView: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -95,11 +96,12 @@ export const StudentSubjectDetailsView: React.FC = () => {
                             </span>
                         </p>
                         <p className="text-sm text-secondary leading-relaxed mt-4">
-                            {(subject.reportVisibilityLevel === 'PEŁNY_WGLĄD' || subject.reportVisibilityLevel === 'FULL') && "Będziesz miał pełny wgląd w analizę podobieństwa oraz dostęp do kodu podświetlającego problematyczne sekcje."}
-                            {(subject.reportVisibilityLevel === 'TYLKO_WYNIK' || subject.reportVisibilityLevel === 'SCORE') && "Będziesz widział wyłącznie wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu."}
-                            {(subject.reportVisibilityLevel === 'UKRYTE' || subject.reportVisibilityLevel === 'HIDDEN') && "Wszystkie raporty są ukryte. Wyłącznie prowadzący posiada do nich wgląd."}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.PELNY_WGLAD && "Będziesz miał pełny wgląd w analizę podobieństwa oraz dostęp do kodu podświetlającego problematyczne sekcje."}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.TYLKO_WYNIK && "Będziesz widział wyłącznie wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu."}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.ONLY_HIGHEST_PERCENT && "Będziesz widział wyłącznie najwyższy wynik procentowy podobieństwa bez dostępu do dokładnego porównania kodu."}
+                            {subject.reportVisibilityLevel === ReportVisibilityLevel.UKRYTE && "Wszystkie raporty są ukryte. Wyłącznie prowadzący posiada do nich wgląd."}
                         </p>
-                        {subject.reportVisibilityLevel !== 'UKRYTE' && subject.reportVisibilityLevel !== 'HIDDEN' && (
+                        {subject.reportVisibilityLevel !== ReportVisibilityLevel.UKRYTE && (
                             <button onClick={() => navigate(PATHS.STUDENT_REPORTS)} className="mt-6 px-5 py-2.5 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors w-full">
                                 Przejdź do moich raportów
                             </button>

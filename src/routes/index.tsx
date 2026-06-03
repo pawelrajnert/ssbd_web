@@ -31,15 +31,6 @@ import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
 import { StudentSubjectDetailsView } from "../pages/student/StudentSubjectDetailsView.tsx";
-import { useAuth } from "../hooks/useAuth";
-
-const SubjectDetailsSwitcher = () => {
-    const { activeRole } = useAuth();
-    if (activeRole === RoleEnum.STUDENT) {
-        return <StudentSubjectDetailsView />;
-    }
-    return <SubjectDetailsView />;
-};
 
 const routes: RouteObject[] = [
     {
@@ -163,6 +154,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.STUDENT_REPORT_DETAILS,
                         element: <StudentReportDetailsPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <StudentSubjectDetailsView/>
                     }
                 ]
             }
@@ -197,13 +192,23 @@ const routes: RouteObject[] = [
                         element: <UserEditPage/>
                     },
                     {
-                        path: PATHS.SUBJECT_DETAILS,
-                        element: <SubjectDetailsSwitcher/>
-                    },
-                    {
                         path: PATHS.SUBJECT_SCHEDULE_LIST,
                         element: <SubjectSchedulePage />,
                     },
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
+                    }
                 ]
             }
         ]
