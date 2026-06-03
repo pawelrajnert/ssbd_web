@@ -22,6 +22,7 @@
     "yes": "Yes",
     "no": "No",
     "delete": "Delete",
+    "back": "Back",
     "confirm": "Confirm",
     "save": "Save"
   },
@@ -631,5 +632,22 @@
     "submitCreating": "Creating...",
     "submitButton": "Create Subject",
     "breadcrumb": "Create Subject"
+  },
+  "report": {
+    "teacherDetailsTitle": "Anti-Plagiarism Report Details",
+    "subject": "Subject",
+    "tag": "Report Tag",
+    "createdAt": "Generated At",
+    "averageSimilarity": "Average Similarity",
+    "comparisonsList": "Detected Similarities",
+    "maxSimilarity": "Max Similarity",
+    "avgSimilarity": "Avg Similarity",
+    "longestMatch": "Longest Match (Tokens)",
+    "noCodeAvailable": "// Code unavailable. It probably hasn't been fetched correctly.",
+    "fileError": "Cannot load report details. The file might be corrupted or removed.",
+    "accessDenied": "You do not have permission to view this report. Ensure you are assigned to the subject.",
+    "notFound": "Report not found.",
+    "fetchError": "A server error occurred while fetching the report details.",
+    "noComparisons": "No similarities detected in this report."
   }
 }
