@@ -16,5 +16,9 @@ export const scheduleService = {
                 'If-Match': versionHash
             }
         });
+    },
+
+    updateSchedule: async (scheduleId: string, data: { scheduleDateTime: string, tag: string }): Promise<void> => {
+        await axiosInstance.put(`/schedules/${scheduleId}`, data);
     }
 }

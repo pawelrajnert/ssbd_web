@@ -7,15 +7,18 @@ import {
     ArrowUp,
     ArrowDown,
     ArrowUpDown,
-    Trash2
+    Trash2,
+    Eye
 } from "lucide-react";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {useEffect, useState, useCallback} from "react";
 import {reportService} from "../../services/reportService.ts";
 import {useTranslation} from "react-i18next";
 import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup";
+import { useNavigate } from "react-router-dom";
 
 export default function ReportsPage() {
+    const navigate = useNavigate();
     const [reports, setReports] = useState<ReportDTO[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -250,12 +253,22 @@ export default function ReportsPage() {
                                         <td className="py-5 px-8">
                                             {getSimilarityBadge(report.average_similarity * 100)}
                                         </td>
-                                        <td className="py-5 px-8 text-right relative">
-                                            <button
-                                                onClick={(e) => toggleMenu(report.id, e)}
-                                                className="text-secondary hover:text-primary transition-colors p-2 rounded-full hover:bg-border outline-none">
-                                                <MoreVertical size={20}/>
-                                            </button>
+                                        <td className="py-5 px-8 relative">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <button
+                                                    onClick={() => navigate(`/reports/${report.id}`)}
+                                                    className="text-secondary hover:text-brand transition-colors p-2 rounded-full hover:bg-border outline-none"
+                                                    title="Pokaż szczegóły raportu"
+                                                >
+                                                    <Eye size={20} />
+                                                </button>
+
+                                                <button
+                                                    onClick={(e) => toggleMenu(report.id, e)}
+                                                    className="text-secondary hover:text-primary transition-colors p-2 rounded-full hover:bg-border outline-none">
+                                                    <MoreVertical size={20}/>
+                                                </button>
+                                            </div>
 
                                             {openMenuId === report.id && (
                                                 <div className="absolute right-8 top-12 w-40 bg-surface border border-border rounded-lg shadow-lg z-50 py-1 overflow-hidden">
