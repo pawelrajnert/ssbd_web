@@ -22,6 +22,7 @@
     "yes": "Yes",
     "no": "No",
     "delete": "Delete",
+    "back": "Back",
     "confirm": "Confirm",
     "save": "Save"
   },
@@ -573,6 +574,7 @@
     "date": "Scheduled Date",
     "tag": "Analysis Tag",
     "statusLabel": "Status",
+    "actions": "Actions",
     "status": {
       "all": "All",
       "planned": "Planned",
@@ -586,7 +588,12 @@
       "toggle": "Toggle sort direction",
       "newest": "Newest first",
       "oldest": "Oldest first"
-    }
+    },
+    "deleteScheduleTitle": "Delete schedule",
+    "deleteScheduleConfirm": "Are you sure you want to delete this schedule?",
+    "deleteScheduleError": "An error occurred while deleting the schedule.",
+    "deleteScheduleErrorNotFound": "Schedule not found. It might have been already deleted.",
+    "deleteScheduleConflict": "Schedule data has been modified. Please refresh the page and try again."
   },
   "subject": {
     "delete": "Delete subject",
@@ -635,5 +642,22 @@
     "submitCreating": "Creating...",
     "submitButton": "Create Subject",
     "breadcrumb": "Create Subject"
+  },
+  "report": {
+    "teacherDetailsTitle": "Anti-Plagiarism Report Details",
+    "subject": "Subject",
+    "tag": "Report Tag",
+    "createdAt": "Generated At",
+    "averageSimilarity": "Average Similarity",
+    "comparisonsList": "Detected Similarities",
+    "maxSimilarity": "Max Similarity",
+    "avgSimilarity": "Avg Similarity",
+    "longestMatch": "Longest Match (Tokens)",
+    "noCodeAvailable": "// Code unavailable. It probably hasn't been fetched correctly.",
+    "fileError": "Cannot load report details. The file might be corrupted or removed.",
+    "accessDenied": "You do not have permission to view this report. Ensure you are assigned to the subject.",
+    "notFound": "Report not found.",
+    "fetchError": "A server error occurred while fetching the report details.",
+    "noComparisons": "No similarities detected in this report."
   }
 }

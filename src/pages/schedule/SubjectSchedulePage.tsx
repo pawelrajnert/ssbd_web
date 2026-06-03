@@ -1,12 +1,26 @@
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {useParams, useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {scheduleService} from '../../services/scheduleService';
-import {type ScheduleDTO, ScheduleStatus, type FilterStatus} from '../../types/schedule.types';
+import {type FilterStatus, type ScheduleDTO, ScheduleStatus} from '../../types/schedule.types';
 import {formatDate} from '../../services/reportService';
-import {CalendarClock, Filter, RefreshCw, ArrowLeft, ArrowUp, ArrowDown, ArrowUpDown, Plus} from 'lucide-react';
 import {CreateScheduleModal} from "./CreateScheduleModal";
+import {
+    ArrowDown,
+    ArrowLeft,
+    ArrowUp,
+    ArrowUpDown,
+    CalendarClock,
+    Check,
+    Edit,
+    Filter,
+    RefreshCw,
+    X,
+    Trash2,
+    Plus
+} from 'lucide-react';
 import axios from 'axios';
+import ConfirmationPopup from '../../shared/components/modals/ConfirmationPopup';
 
 type SortColumn = 'date' | 'tag';
 
@@ -38,6 +52,14 @@ export const SubjectSchedulePage: React.FC = () => {
 
     const [lastServerTime, setLastServerTime] = useState<number>(Date.now());
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [scheduleToDelete, setScheduleToDelete] = useState<ScheduleDTO | null>(null);
+
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editTag, setEditTag] = useState<string>('');
+    const [editDate, setEditDate] = useState<string>('');
+
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     const fetchSchedules = useCallback(async () => {
@@ -47,12 +69,13 @@ export const SubjectSchedulePage: React.FC = () => {
             const {schedules: fetched, serverTimeMs} =
                 await scheduleService.getSchedulesForSubject(subjectId);
             setLastServerTime(serverTimeMs);
-            setSchedules(fetched);
+            setSchedules(Array.isArray(fetched) ? fetched : []);
             setError(null);
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response) {
-                console.log('Status błędu:', err.response?.status);
+                console.log(err.response?.status);
             }
+            setSchedules([]);
             setError(t('schedule.error.fetch'));
         } finally {
             setIsLoading(false);
@@ -74,14 +97,75 @@ export const SubjectSchedulePage: React.FC = () => {
 
     const renderSortIcon = (column: SortColumn) => {
         if (sortColumn !== column)
-            return <ArrowUpDown size={14} className="text-secondary opacity-50 group-hover:opacity-100 transition-opacity"/>;
+            return <ArrowUpDown size={14}
+                                className="text-secondary opacity-50 group-hover:opacity-100 transition-opacity"/>;
         return sortDesc
             ? <ArrowDown size={14} className="text-primary"/>
             : <ArrowUp size={14} className="text-primary"/>;
     };
 
+    const openDeleteModal = (schedule: ScheduleDTO) => {
+        setScheduleToDelete(schedule);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!scheduleToDelete) return;
+
+        setIsDeleting(true);
+        setError(null);
+
+        try {
+            await scheduleService.deleteSchedule(scheduleToDelete.id, scheduleToDelete.versionHash);
+            await fetchSchedules();
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 409) {
+                setError(t('schedule.deleteScheduleConflict'));
+            } else {
+                setError(t('schedule.deleteScheduleError'));
+            }
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setScheduleToDelete(null);
+        }
+    };
+
+    const handleEditClick = (schedule: ScheduleDTO) => {
+        setEditingId(schedule.id);
+        setEditTag(schedule.tag);
+        if (schedule.scheduleDateTime) {
+            setEditDate(schedule.scheduleDateTime.substring(0, 16));
+        } else {
+            setEditDate('');
+        }
+    };
+
+    const handleSaveEdit = async (id: string) => {
+        try {
+            setIsLoading(true);
+            const formattedDate = new Date(editDate).toISOString();
+
+            await (scheduleService as any).updateSchedule(id, {
+                scheduleDateTime: formattedDate,
+                tag: editTag
+            });
+
+            setEditingId(null);
+            setError(null);
+            await fetchSchedules();
+        } catch (err: unknown) {
+            console.error(err);
+            setError(t('schedule.error.update'));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const sortedAndFiltered = useMemo(() => {
-        const mapped = schedules.map(s => ({
+        const safeSchedules = Array.isArray(schedules) ? schedules : [];
+
+        const mapped = safeSchedules.map(s => ({
             ...s,
             calculatedStatus: lastServerTime >= getSafeTimestamp(s.scheduleDateTime)
                 ? ScheduleStatus.EXECUTED
@@ -216,46 +300,135 @@ export const SubjectSchedulePage: React.FC = () => {
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest">
                                     {t('schedule.statusLabel')}
                                 </th>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest text-right">
+                                    {t('schedule.actions')}
+                                </th>
                             </tr>
                             </thead>
-                            <tbody className={`divide-y divide-border transition-opacity duration-200 ${isLoading ? 'opacity-60 pointer-events-none' : ''}`}>
+                            <tbody
+                                className={`divide-y divide-border transition-opacity duration-200 ${isLoading ? 'opacity-60 pointer-events-none' : ''}`}>
                             {error ? (
                                 <tr>
-                                    <td colSpan={3} className="py-8 text-center text-danger font-medium">
+                                    <td colSpan={4} className="py-8 text-center text-danger font-medium">
                                         {error}
                                     </td>
                                 </tr>
                             ) : sortedAndFiltered.length === 0 && !isLoading ? (
                                 <tr>
-                                    <td colSpan={3} className="py-8 text-center text-secondary">
+                                    <td colSpan={4} className="py-8 text-center text-secondary">
                                         {t('schedule.empty')}
                                     </td>
                                 </tr>
                             ) : (
-                                sortedAndFiltered.map(s => (
-                                    <tr key={s.id} className="hover:bg-base transition-colors group">
-                                        <td className="py-5 px-8">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-secondary border border-border group-hover:bg-surface transition-colors">
-                                                    <CalendarClock size={20}/>
+                                sortedAndFiltered.map(s => {
+                                    const isEditing = editingId === s.id;
+                                    return (
+                                        <tr key={s.id} className="hover:bg-base transition-colors group">
+                                            <td className="py-5 px-8">
+                                                <div className="flex items-center gap-3">
+                                                    <div
+                                                        className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-secondary border border-border group-hover:bg-surface transition-colors">
+                                                        <CalendarClock size={20}/>
+                                                    </div>
+                                                    {isEditing ? (
+                                                        <input
+                                                            type="datetime-local"
+                                                            value={editDate}
+                                                            onChange={e => setEditDate(e.target.value)}
+                                                            className="bg-surface border border-border rounded px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-brand"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-sm font-bold text-primary">
+                                                            {formatDate(s.scheduleDateTime)}
+                                                        </span>
+                                                    )}
                                                 </div>
-                                                <span className="text-sm font-bold text-primary">
-                                                    {formatDate(s.scheduleDateTime)}
+                                            </td>
+                                            <td className="py-5 px-8 text-sm text-secondary font-medium font-mono">
+                                                {isEditing ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editTag}
+                                                        onChange={e => setEditTag(e.target.value)}
+                                                        className="bg-surface border border-border rounded px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-brand w-full max-w-[200px]"
+                                                    />
+                                                ) : (
+                                                    s.tag
+                                                )}
+                                            </td>
+                                            <td className="py-5 px-8">
+                                                <span
+                                                    className={`px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_STYLES[s.calculatedStatus]}`}>
+                                                    {s.calculatedStatus === ScheduleStatus.EXECUTED
+                                                        ? t('schedule.status.executed').toUpperCase()
+                                                        : t('schedule.status.planned').toUpperCase()}
                                                 </span>
-                                            </div>
-                                        </td>
-                                        <td className="py-5 px-8 text-sm text-secondary font-medium font-mono">
-                                            {s.tag}
-                                        </td>
-                                        <td className="py-5 px-8">
-                                            <span className={`px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_STYLES[s.calculatedStatus]}`}>
-                                                {s.calculatedStatus === ScheduleStatus.EXECUTED
-                                                    ? t('schedule.status.executed').toUpperCase()
-                                                    : t('schedule.status.planned').toUpperCase()}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))
+                                            </td>
+                                            <td className="py-5 px-8 text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    {isEditing ? (
+                                                        <>
+                                                            <button
+                                                                onClick={() => handleSaveEdit(s.id)}
+                                                                className="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/30 rounded transition-colors"
+                                                                title={t('common.save')}
+                                                            >
+                                                                <Check size={18}/>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setEditingId(null)}
+                                                                className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded transition-colors"
+                                                                title={t('common.cancel')}
+                                                            >
+                                                                <X size={18}/>
+                                                            </button>
+                                                        </>
+                                                    ) : (
+                                                        <button
+                                                            onClick={() => handleEditClick(s)}
+                                                            className="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded transition-colors"
+                                                            title={t('common.edit')}
+                                                        >
+                                                            <Edit size={18}/>
+                                                        </button>
+                                                    )}
+                                                    <button
+                                                        onClick={() => openDeleteModal(s)}
+                                                        className="text-red-800 hover:text-red-600 dark:text-danger dark:hover:text-danger/80 transition-colors inline-flex items-center p-2 rounded-full hover:bg-red-800/10 dark:hover:bg-danger/10"
+                                                        title={t('schedule.deleteScheduleTitle')}
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                                // sortedAndFiltered.map(s => (
+                                //     <tr key={s.id} className="hover:bg-base transition-colors group">
+                                //         <td className="py-5 px-8">
+                                //             <div className="flex items-center gap-3">
+                                //                 <div className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-secondary border border-border group-hover:bg-surface transition-colors">
+                                //                     <CalendarClock size={20}/>
+                                //                 </div>
+                                //                 <span className="text-sm font-bold text-primary">
+                                //                     {formatDate(s.scheduleDateTime)}
+                                //                 </span>
+                                //             </div>
+                                //         </td>
+                                //         <td className="py-5 px-8 text-sm text-secondary font-medium font-mono">
+                                //             {s.tag}
+                                //         </td>
+                                //         <td className="py-5 px-8">
+                                //             <span className={`px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_STYLES[s.calculatedStatus]}`}>
+                                //                 {s.calculatedStatus === ScheduleStatus.EXECUTED
+                                //                     ? t('schedule.status.executed').toUpperCase()
+                                //                     : t('schedule.status.planned').toUpperCase()}
+                                //             </span>
+                                //         </td>
+
+                                    // </tr>
+                                // ))
                             )}
                             </tbody>
                         </table>
@@ -266,6 +439,20 @@ export const SubjectSchedulePage: React.FC = () => {
                     isOpen={isCreateModalOpen}
                     onClose={() => setIsCreateModalOpen(false)}
                     onSave={handleCreateSchedule}
+                />
+
+                <ConfirmationPopup
+                    isOpen={isDeleteModalOpen}
+                    onCancel={() => {
+                        setIsDeleteModalOpen(false);
+                        setScheduleToDelete(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    title={t('schedule.deleteScheduleTitle')}
+                    description={t('schedule.deleteScheduleConfirm')}
+                    confirmText={t('common.delete')}
+                    cancelText={t('common.cancel')}
+                    isLoading={isDeleting}
                 />
 
             </div>
