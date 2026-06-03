@@ -31,6 +31,7 @@ import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
 import { StudentSubjectDetailsView } from "../pages/student/StudentSubjectDetailsView.tsx";
+import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
 
 const routes: RouteObject[] = [
     {
@@ -120,6 +121,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.REPORT_LIST,
                         element: <ReportListPage/>
+                    },
+                    {
+                        path: PATHS.TEACHER_REPORT_DETAILS,
+                        element: <TeacherReportDetailsPage/>
                     },
                     {
                         path: PATHS.GLOBAL_RULES,
