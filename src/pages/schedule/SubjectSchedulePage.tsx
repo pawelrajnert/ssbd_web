@@ -14,9 +14,11 @@ import {
     Edit,
     Filter,
     RefreshCw,
-    X
+    X,
+    Trash2
 } from 'lucide-react';
 import axios from 'axios';
+import ConfirmationPopup from '../../shared/components/modals/ConfirmationPopup';
 
 type SortColumn = 'date' | 'tag';
 
@@ -52,6 +54,10 @@ export const SubjectSchedulePage: React.FC = () => {
 
     const [lastServerTime, setLastServerTime] = useState<number>(Date.now());
 
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [scheduleToDelete, setScheduleToDelete] = useState<ScheduleDTO | null>(null);
+
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editTag, setEditTag] = useState<string>('');
     const [editDate, setEditDate] = useState<string>('');
@@ -60,8 +66,7 @@ export const SubjectSchedulePage: React.FC = () => {
         if (!subjectId) return;
         setIsLoading(true);
         try {
-            const {schedules: fetched, serverTimeMs} =
-                await scheduleService.getSchedulesForSubject(subjectId);
+            const {schedules: fetched, serverTimeMs} = await scheduleService.getSchedulesForSubject(subjectId);
             setLastServerTime(serverTimeMs);
 
             setSchedules(Array.isArray(fetched) ? fetched : []);
@@ -97,6 +102,33 @@ export const SubjectSchedulePage: React.FC = () => {
         return sortDesc
             ? <ArrowDown size={14} className="text-primary"/>
             : <ArrowUp size={14} className="text-primary"/>;
+    };
+
+    const openDeleteModal = (schedule: ScheduleDTO) => {
+        setScheduleToDelete(schedule);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!scheduleToDelete) return;
+
+        setIsDeleting(true);
+        setError(null);
+
+        try {
+            await scheduleService.deleteSchedule(scheduleToDelete.id, scheduleToDelete.versionHash);
+            await fetchSchedules();
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 409) {
+                setError(t('schedule.deleteScheduleConflict'));
+            } else {
+                setError(t('schedule.deleteScheduleError'));
+            }
+        } finally {
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+            setScheduleToDelete(null);
+        }
     };
 
     const handleEditClick = (schedule: ScheduleDTO) => {
@@ -187,8 +219,7 @@ export const SubjectSchedulePage: React.FC = () => {
                             {t('userList.refresh')}
                         </button>
 
-                        <div
-                            className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
+                        <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
                             <Filter size={16} className="text-secondary mr-2"/>
                             <input
                                 type="text"
@@ -199,8 +230,7 @@ export const SubjectSchedulePage: React.FC = () => {
                             />
                         </div>
 
-                        <div
-                            className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
+                        <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
                             <select
                                 value={statusFilter}
                                 onChange={e => setStatusFilter(e.target.value as FilterStatus)}
@@ -334,14 +364,62 @@ export const SubjectSchedulePage: React.FC = () => {
                                                     )}
                                                 </div>
                                             </td>
+                                            <td className="py-5 px-8 text-right">
+                                                <button
+                                                    onClick={() => openDeleteModal(s)}
+                                                    className="text-red-800 hover:text-red-600 dark:text-danger dark:hover:text-danger/80 transition-colors inline-flex items-center p-2 rounded-full hover:bg-red-800/10 dark:hover:bg-danger/10"
+                                                    title={t('schedule.deleteScheduleTitle')}
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </td>
                                         </tr>
                                     );
                                 })
+                                // sortedAndFiltered.map(s => (
+                                //     <tr key={s.id} className="hover:bg-base transition-colors group">
+                                //         <td className="py-5 px-8">
+                                //             <div className="flex items-center gap-3">
+                                //                 <div className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-secondary border border-border group-hover:bg-surface transition-colors">
+                                //                     <CalendarClock size={20}/>
+                                //                 </div>
+                                //                 <span className="text-sm font-bold text-primary">
+                                //                     {formatDate(s.scheduleDateTime)}
+                                //                 </span>
+                                //             </div>
+                                //         </td>
+                                //         <td className="py-5 px-8 text-sm text-secondary font-medium font-mono">
+                                //             {s.tag}
+                                //         </td>
+                                //         <td className="py-5 px-8">
+                                //             <span className={`px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_STYLES[s.calculatedStatus]}`}>
+                                //                 {s.calculatedStatus === ScheduleStatus.EXECUTED
+                                //                     ? t('schedule.status.executed').toUpperCase()
+                                //                     : t('schedule.status.planned').toUpperCase()}
+                                //             </span>
+                                //         </td>
+
+                                    // </tr>
+                                // ))
                             )}
                             </tbody>
                         </table>
                     </div>
                 </div>
+
+                <ConfirmationPopup
+                    isOpen={isDeleteModalOpen}
+                    onCancel={() => {
+                        setIsDeleteModalOpen(false);
+                        setScheduleToDelete(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    title={t('schedule.deleteScheduleTitle')}
+                    description={t('schedule.deleteScheduleConfirm')}
+                    confirmText={t('common.delete')}
+                    cancelText={t('common.cancel')}
+                    isLoading={isDeleting}
+                />
 
             </div>
         </div>

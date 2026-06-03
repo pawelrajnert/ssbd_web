@@ -690,6 +690,7 @@
     "date": "Data zaplanowania",
     "tag": "Tag analizy",
     "statusLabel": "Status",
+    "actions": "Akcje",
     "status": {
       "all": "Wszystkie",
       "planned": "Oczekuje",
@@ -704,6 +705,11 @@
       "newest": "Najnowsze",
       "oldest": "Najstarsze"
     },
+    "deleteScheduleTitle": "Usuń harmonogram",
+    "deleteScheduleConfirm": "Czy na pewno chcesz usunąć ten harmonogram?",
+    "deleteScheduleError": "Wystąpił błąd podczas usuwania harmonogramu.",
+    "deleteScheduleErrorNotFound": "Nie znaleziono harmonogramu. Mógł zostać już usunięty.",
+    "deleteScheduleConflict": "Dane harmonogramu zostały zmodyfikowane. Odśwież stronę i spróbuj ponownie.",
     "delete": "Usuń przedmiot",
     "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
     "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
