@@ -21,6 +21,7 @@ export interface SubjectDTO {
     templateId?: string | null;
     manualRules?: RulePresetDTO | null;
     teachers?: TeacherAssignmentDTO[];
+    repositoryList?: any[];
 }
 
 export type TeacherSubjectRole = 'OWNER' | 'EDITOR' | 'VIEWER';
