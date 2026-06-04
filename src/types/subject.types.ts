@@ -29,4 +29,11 @@ export const ReportVisibilityLevel = {
     ONLY_HIGHEST_PERCENT: 'ONLY_HIGHEST_PERCENT'
 } as const;
 
-
+export interface RepositoryWithStudentDTO {
+    repositoryName: string;
+    ticketCount: number;
+    students: {
+        name: string;
+        surname: string;
+    }[]
+}

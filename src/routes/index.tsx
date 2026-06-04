@@ -161,7 +161,7 @@ const routes: RouteObject[] = [
                         element: <StudentReportDetailsPage/>
                     },
                     {
-                        path: PATHS.SUBJECT_DETAILS,
+                        path: PATHS.STUDENT_SUBJECT_DETAILS,
                         element: <StudentSubjectDetailsView/>
                     }
                 ]
