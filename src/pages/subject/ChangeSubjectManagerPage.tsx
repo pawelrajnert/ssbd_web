@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Loader2, GraduationCap, AlertCircle, CheckCircle2, User, UserCheck } from 'lucide-react';
+import { Loader2, GraduationCap, AlertCircle, CheckCircle2, UserCheck } from 'lucide-react';
 import axios from 'axios';
 import SubmitButton from '../../shared/components/buttons/SubmitButton';
 import { subjectService } from '../../services/subjectService';
-import { userService } from '../../services/userService';
-import type { SubjectDTO } from '../../types/SubjectDTO';
-import type { AccountWithAccessLevelsDTO } from '../../types/user.types';
-
-interface VerifiedTeacher {
-    login: string;
-    name: string;
-    surname: string;
-}
+import type { SubjectDTO, TeacherAssignmentDTO } from '../../types/SubjectDTO';
 
 export const ChangeSubjectManagerPage: React.FC = () => {
     const { t } = useTranslation();
@@ -21,11 +13,9 @@ export const ChangeSubjectManagerPage: React.FC = () => {
     const [selectedSubjectId, setSelectedSubjectId] = useState<string>('');
     const [isSubjectsLoading, setIsSubjectsLoading] = useState<boolean>(false);
 
-    const [loginInput, setLoginInput] = useState<string>('');
-    const [verifiedTeacher, setVerifiedTeacher] = useState<VerifiedTeacher | null>(null);
-
-    const [isChecking, setIsChecking] = useState<boolean>(false);
-    const [checkError, setCheckError] = useState<string | null>(null);
+    const [assignedTeachers, setAssignedTeachers] = useState<TeacherAssignmentDTO[]>([]);
+    const [selectedTeacherLogin, setSelectedTeacherLogin] = useState<string>('');
+    const [isTeachersLoading, setIsTeachersLoading] = useState<boolean>(false);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [submitError, setSubmitError] = useState<string | null>(null);
@@ -47,56 +37,37 @@ export const ChangeSubjectManagerPage: React.FC = () => {
     }, [t]);
 
     useEffect(() => {
-        if (loginInput.trim().length < 3) {
-            setVerifiedTeacher(null);
-            setCheckError(null);
-            setIsChecking(false);
+        if (!selectedSubjectId) {
+            setAssignedTeachers([]);
+            setSelectedTeacherLogin('');
             return;
         }
 
-        const verifyTeacher = async () => {
-            setIsChecking(true);
-            setCheckError(null);
-            setVerifiedTeacher(null);
+        const fetchTeachers = async () => {
+            setIsTeachersLoading(true);
+            setSubmitError(null);
+            setSuccessMessage(null);
 
             try {
-                const data: AccountWithAccessLevelsDTO = await userService.getAccountByLogin(loginInput.trim());
-                const accessLevels = data.accessLevels || [];
-
-                const isTeacher = accessLevels.some(
-                    (al) => al.active && (al.accessLevelName === 'TEACHER' || al.accessLevelName === 'ROLE_TEACHER')
-                );
-
-                if (!isTeacher) {
-                    setCheckError(t('subject.manager.error.notATeacher'));
-                    return;
-                }
-
-                setVerifiedTeacher({
-                    login: data.account.login,
-                    name: data.account.name,
-                    surname: data.account.surname
-                });
+                const data = await subjectService.getSubjectUsers(selectedSubjectId);
+                const candidates = data.filter((t: TeacherAssignmentDTO) => t.role !== 'OWNER');
+                setAssignedTeachers(candidates);
+                setSelectedTeacherLogin('');
             } catch (err) {
-                setCheckError(t('subject.manager.error.notATeacher'));
+                console.error(err);
+                setSubmitError(t('subject.manager.error.fetchTeachers'));
             } finally {
-                setIsChecking(false);
+                setIsTeachersLoading(false);
             }
         };
 
-        const timeoutId = setTimeout(verifyTeacher, 500);
-        return () => clearTimeout(timeoutId);
-    }, [loginInput, t]);
+        fetchTeachers();
+    }, [selectedSubjectId, t]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!selectedSubjectId) {
-            setSubmitError(t('subject.manager.error.noSubjectSelected'));
-            return;
-        }
-
-        if (!verifiedTeacher) {
+        if (!selectedSubjectId || !selectedTeacherLogin) {
             setSubmitError(t('subject.manager.error.notVerified'));
             return;
         }
@@ -106,23 +77,17 @@ export const ChangeSubjectManagerPage: React.FC = () => {
         setSuccessMessage(null);
 
         try {
-            await subjectService.changeSubjectManager(selectedSubjectId, verifiedTeacher.login);
-
+            await subjectService.changeSubjectManager(selectedSubjectId, selectedTeacherLogin);
             setSuccessMessage(t('subject.manager.success'));
-            setLoginInput('');
-            setVerifiedTeacher(null);
+            setSelectedTeacherLogin('');
             setSelectedSubjectId('');
+            setAssignedTeachers([]);
         } catch (err) {
             if (axios.isAxiosError(err)) {
-                if (err.response?.status === 404) {
-                    setSubmitError(t('subject.manager.error.notFound'));
-                } else if (err.response?.status === 409) {
-                    setSubmitError(t('subject.manager.error.conflict'));
-                } else if (err.response?.status === 403) {
-                    setSubmitError(t('subject.manager.error.forbidden'));
-                } else {
-                    setSubmitError(t('subject.manager.error.unexpected'));
-                }
+                if (err.response?.status === 404) setSubmitError(t('subject.manager.error.notFound'));
+                else if (err.response?.status === 409) setSubmitError(t('subject.manager.error.conflict'));
+                else if (err.response?.status === 403) setSubmitError(t('subject.manager.error.forbidden'));
+                else setSubmitError(t('subject.manager.error.unexpected'));
             } else {
                 setSubmitError(t('subject.manager.error.unexpected'));
             }
@@ -148,7 +113,6 @@ export const ChangeSubjectManagerPage: React.FC = () => {
 
                 <div className="bg-surface w-full max-w-3xl rounded-2xl shadow-sm border border-border p-6 md:p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
-
                         {submitError && (
                             <div className="mb-6 p-4 bg-danger-subtle border border-danger text-danger rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
                                 <AlertCircle size={20} className="shrink-0" />
@@ -157,7 +121,7 @@ export const ChangeSubjectManagerPage: React.FC = () => {
                         )}
 
                         {successMessage && (
-                            <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-300 rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
+                            <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
                                 <CheckCircle2 size={20} className="shrink-0" />
                                 {successMessage}
                             </div>
@@ -169,11 +133,7 @@ export const ChangeSubjectManagerPage: React.FC = () => {
                             </label>
                             <select
                                 value={selectedSubjectId}
-                                onChange={(e) => {
-                                    setSelectedSubjectId(e.target.value);
-                                    setSubmitError(null);
-                                    setSuccessMessage(null);
-                                }}
+                                onChange={(e) => setSelectedSubjectId(e.target.value)}
                                 className="w-full px-4 py-3 bg-surface border border-border rounded-md text-primary focus:ring-2 focus:ring-brand outline-none transition-all text-sm font-medium cursor-pointer"
                                 required
                                 disabled={isSubjectsLoading}
@@ -191,65 +151,52 @@ export const ChangeSubjectManagerPage: React.FC = () => {
 
                         <div>
                             <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
-                                {t('subject.manager.loginInput')}
+                                {t('subject.manager.selectNewManager')}
                             </label>
                             <div className="relative border border-border rounded-md focus-within:ring-2 focus-within:ring-brand transition-all bg-surface">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary">
-                                    {isChecking ? (
-                                        <Loader2 size={16} className="animate-spin text-brand" />
-                                    ) : (
-                                        <User size={16} />
-                                    )}
+                                    {isTeachersLoading ? <Loader2 size={16} className="animate-spin text-brand" /> : <UserCheck size={16} />}
                                 </div>
-                                <input
-                                    type="text"
-                                    value={loginInput}
+                                <select
+                                    value={selectedTeacherLogin}
                                     onChange={(e) => {
-                                        setLoginInput(e.target.value);
+                                        setSelectedTeacherLogin(e.target.value);
                                         setSubmitError(null);
                                         setSuccessMessage(null);
                                     }}
-                                    className="w-full pl-10 pr-4 py-3 bg-transparent outline-none text-primary text-sm font-medium placeholder:text-secondary placeholder:font-normal"
-                                    placeholder={t('subject.manager.loginPlaceholder')}
+                                    className="w-full pl-10 pr-4 py-3 bg-transparent outline-none text-primary text-sm font-medium cursor-pointer disabled:opacity-50"
                                     required
-                                    autoComplete="off"
-                                />
+                                    disabled={!selectedSubjectId || isTeachersLoading || assignedTeachers.length === 0}
+                                >
+                                    <option value="" disabled>
+                                        {isTeachersLoading
+                                            ? t('common.loading')
+                                            : (!selectedSubjectId
+                                                ? t('subject.manager.selectFirst')
+                                                : t('subject.manager.selectFromList'))}
+                                    </option>
+                                    {assignedTeachers.map((teacher) => (
+                                        <option key={teacher.login} value={teacher.login}>
+                                            {teacher.login} {t('subject.manager.currentRole', { role: teacher.role })}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
-
-                            <div className="mt-3 min-h-10">
-                                {checkError && !isChecking && (
-                                    <div className="text-sm font-medium text-danger flex items-center gap-2 px-2 animate-in fade-in duration-200">
-                                        <AlertCircle size={16} />
-                                        {checkError}
-                                    </div>
-                                )}
-                                {verifiedTeacher && !isChecking && (
-                                    <div className="p-3 bg-brand/5 border border-brand/20 rounded-lg flex items-center gap-3 animate-in fade-in duration-200">
-                                        <div className="bg-brand text-white p-2 rounded-full shrink-0">
-                                            <UserCheck size={18} />
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-bold text-primary">
-                                                {verifiedTeacher.name} {verifiedTeacher.surname}
-                                            </p>
-                                            <p className="text-xs text-secondary mt-0.5">
-                                                {t('subject.manager.teacherFound')}
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                            {selectedSubjectId && assignedTeachers.length === 0 && !isTeachersLoading && (
+                                <p className="text-xs text-danger mt-2">
+                                    {t('subject.manager.error.noCandidates')}
+                                </p>
+                            )}
                         </div>
 
                         <div className="pt-4 border-t border-border mt-2">
                             <p className="mb-6 text-xs text-secondary leading-relaxed bg-base p-3 rounded border border-border">
                                 {t('subject.manager.warning')}
                             </p>
-
                             <div className="flex justify-end">
                                 <SubmitButton
                                     isLoading={isLoading}
-                                    disabled={!verifiedTeacher || isChecking}
+                                    disabled={!selectedTeacherLogin || !selectedSubjectId || isTeachersLoading}
                                     className="px-8 py-2.5 w-auto mt-0 text-sm tracking-widest uppercase"
                                 >
                                     {t('subject.manager.change.submit')}
