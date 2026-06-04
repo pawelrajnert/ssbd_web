@@ -477,7 +477,8 @@
       "avg": "Average similarity",
       "action": "Action",
       "notFound": "No reports were found",
-      "delete": "Delete"
+      "delete": "Delete",
+      "viewDetails": "Show report details"
     }
   },
   "studentReportList": {
@@ -658,6 +659,22 @@
     "accessDenied": "You do not have permission to view this report. Ensure you are assigned to the subject.",
     "notFound": "Report not found.",
     "fetchError": "A server error occurred while fetching the report details.",
-    "noComparisons": "No similarities detected in this report."
+    "noComparisons": "No similarities detected in this report.",
+    "similarity": "Similarity",
+    "tooltipCodeFrom": "Percentage of code from",
+    "tooltipFoundIn": "that was found in the code of",
+    "tooltipAsymmetry": "The numbers might not be symmetric due to the submissions having different lengths.",
+    "repositories": "Repositories",
+    "selectRepositories": "Select repositories from the bar above to view the code.",
+    "files": "Files",
+    "totalTokens": "Total tokens",
+    "copiedFragments": "Number of copied fragments",
+    "tokens": "tokens",
+    "tokensIn": "in",
+    "fragments": "frags.",
+    "noFiles": "No files to display",
+    "noCode": "// No code",
+    "tokensLabel": "tokens",
+    "fragmentsLabel": "fragments"
   }
 }

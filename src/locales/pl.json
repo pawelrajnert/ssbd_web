@@ -506,7 +506,8 @@
       "avg": "Średnie podobieństwo",
       "action": "Akcja",
       "notFound": "Nie znaleziono żadnych raportów",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "viewDetails": "Pokaż szczegóły raportu"
     }
   },
   "studentReportList": {
@@ -800,7 +801,6 @@
     "subject": "Przedmiot",
     "tag": "Tag raportu",
     "createdAt": "Wygenerowano",
-    "averageSimilarity": "Średnie podobieństwo",
     "comparisonsList": "Wykryte podobieństwa",
     "maxSimilarity": "Max. Podobieństwo",
     "avgSimilarity": "Śr. Podobieństwo",
@@ -810,6 +810,23 @@
     "accessDenied": "Brak dostępu do tego raportu. Upewnij się, że jesteś przypisany do przedmiotu.",
     "notFound": "Raport o podanym ID nie istnieje.",
     "fetchError": "Wystąpił błąd serwera podczas pobierania szczegółów raportu.",
-    "noComparisons": "Brak wykrytych podobieństw w tym raporcie."
+    "noComparisons": "Brak wykrytych podobieństw w tym raporcie.",
+    "averageSimilarity": "Średnie podobieństwo",
+    "similarity": "Podobieństwo",
+    "tooltipCodeFrom": "Procent kodu z",
+    "tooltipFoundIn": "który został znaleziony w kodzie",
+    "tooltipAsymmetry": "Liczby mogą nie być symetryczne ze względu na różne długości projektów.",
+    "repositories": "Repozytoria",
+    "selectRepositories": "Wybierz repozytoria z paska powyżej, aby zobaczyć kod.",
+    "files": "Pliki",
+    "totalTokens": "Suma tokenów",
+    "copiedFragments": "Ilość skopiowanych fragmentów",
+    "tokens": "tokenów",
+    "tokensIn": "w",
+    "fragments": "frgm.",
+    "noFiles": "Brak plików do wyświetlenia",
+    "noCode": "// Brak kodu",
+    "tokensLabel": "tokenów",
+    "fragmentsLabel": "fragmentów"
   }
 }

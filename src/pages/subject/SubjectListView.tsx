@@ -85,8 +85,9 @@ export const SubjectListView: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {displayedSubjects.map((sub) => (
                         <div
+                            onClick={() => sub.id && navigate(`/subjects/${sub.id}`)}
                             key={sub.id}
-                            className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group"
+                            className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group cursor-pointer"
                         >
                             <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
                                 <span className="text-brand font-medium tracking-wide opacity-50">
@@ -103,7 +104,7 @@ export const SubjectListView: React.FC = () => {
                                 </h3>
 
                                 <p className="text-secondary text-sm mb-5 line-clamp-3">
-                                    {(sub as any).description || t('subject.list.noDescription')}
+                                    {(sub).subjectDescription || t('subject.list.noDescription')}
                                 </p>
 
                                 <div className="mt-auto flex justify-between items-end mb-4">
@@ -124,14 +125,14 @@ export const SubjectListView: React.FC = () => {
                                     >
                                         {t('subject.list.card.btn.manage')}
                                     </button>
-                                    <button
-                                        className="w-11 h-11 shrink-0 bg-surface border border-border hover:bg-active text-secondary hover:text-brand rounded-lg flex items-center justify-center transition-colors shadow-sm"
-                                        title={t('subject.list.card.btn.stats')}
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                        </svg>
-                                    </button>
+                                    {/*<button*/}
+                                    {/*    className="w-11 h-11 shrink-0 bg-surface border border-border hover:bg-active text-secondary hover:text-brand rounded-lg flex items-center justify-center transition-colors shadow-sm"*/}
+                                    {/*    title={t('subject.list.card.btn.stats')}*/}
+                                    {/*>*/}
+                                    {/*    /!*<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">*!/*/}
+                                    {/*    /!*    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />*!/*/}
+                                    {/*    /!*</svg>*!/*/}
+                                    {/*</button>*/}
                                 </div>
                             </div>
                         </div>
