@@ -199,14 +199,14 @@ export default function GlobalRulesPage() {
                         <button
                             onClick={fetchRules}
                             disabled={isLoading}
-                            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border hover:bg-active rounded-md text-sm font-bold text-primary transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 bg-surface cursor-pointer border border-border hover:bg-active rounded-md text-sm font-bold text-primary transition-colors"
                         >
                             <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
                             {t('common.refresh')}
                         </button>
                         <button
                             onClick={openCreateModal}
-                            className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-dark rounded-md text-sm font-bold text-white transition-colors"
+                            className="flex items-center gap-2 px-4 py-2 bg-brand hover:bg-brand-hover cursor-pointer rounded-md text-sm font-bold text-white transition-colors"
                         >
                             <Plus size={16} />
                             {t('globalRules.add.title')}
@@ -299,7 +299,7 @@ export default function GlobalRulesPage() {
                                 </div>
                             </div>
 
-                            <button type="submit" disabled={isSubmitting} className="w-full mt-6 bg-primary text-white py-2 rounded font-bold hover:bg-primary-dark transition-colors disabled:opacity-50 flex justify-center items-center">
+                            <button type="submit" disabled={isSubmitting} className="w-full mt-6 bg-brand text-white py-2 rounded font-bold hover:bg-brand-hover transition-colors disabled:opacity-50 flex justify-center items-center">
                                 {isSubmitting ? (
                                     <RefreshCw className="animate-spin text-white" size={20} />
                                 ) : (

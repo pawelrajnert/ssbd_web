@@ -25,18 +25,31 @@ export interface StudentOwnReportDetailsDTO {
     matches: FilteredComparisonDTO[];
 }
 
+export interface TeacherMatchedFile {
+    fileA: string;
+    fileB: string;
+    codeA: string;
+    codeB: string;
+    matchedLinesA: number[];
+    matchedLinesB: number[];
+    tokens?: number;
+}
+
 export interface TeacherComparison {
     firstSubmission: string;
     secondSubmission: string;
     maxSimilarity: number;
     averageSimilarity: number;
     longestMatch: number;
+    similarityA?: number;
+    similarityB?: number;
     fileA?: string;
     fileB?: string;
     codeA?: string;
     codeB?: string;
     matchedLinesA?: number[];
     matchedLinesB?: number[];
+    matchedFiles?: TeacherMatchedFile[];
 }
 
 export interface TeacherReportDetails {
