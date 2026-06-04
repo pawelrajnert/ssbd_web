@@ -7,8 +7,7 @@ import {
     ArrowUp,
     ArrowDown,
     ArrowUpDown,
-    Trash2,
-    Eye
+    Trash2
 } from "lucide-react";
 import type {ReportDTO} from "../../types/report.types.ts";
 import {useEffect, useState, useCallback} from "react";
@@ -131,7 +130,7 @@ export default function ReportsPage() {
     };
 
     const getSimilarityBadge = (similarity: number) => {
-        const formattedSimilarity = similarity.toFixed(2);
+        const formattedSimilarity = similarity.toFixed(1);
 
         let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
         if (similarity >= 40) {
@@ -175,7 +174,7 @@ export default function ReportsPage() {
                         <button
                             onClick={fetchReports}
                             disabled={isLoading}
-                            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border hover:bg-active rounded-md text-sm font-bold text-primary transition-colors disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2 bg-surface cursor-pointer border border-border hover:bg-active rounded-md text-sm font-bold text-primary transition-colors disabled:opacity-50"
                         >
                             <RefreshCw size={16} className={isLoading ? "animate-spin" : ""}/>
                             {t("reportList.refresh")}
@@ -230,7 +229,7 @@ export default function ReportsPage() {
                                 </tr>
                             ) : (
                                 reports.map((report) => (
-                                    <tr key={report.id} className="hover:bg-base transition-colors group">
+                                    <tr key={report.id} className="hover:bg-base transition-colors group cursor-pointer" onClick={() => navigate(`/reports/${report.id}`)}>
                                         <td className="py-5 px-8">
                                             <div className="flex items-center gap-3">
                                                 <div
@@ -251,18 +250,10 @@ export default function ReportsPage() {
                                             {formatDate(report.created_at)}
                                         </td>
                                         <td className="py-5 px-8">
-                                            {getSimilarityBadge(report.average_similarity)}
+                                            {getSimilarityBadge(report.average_similarity * 100)}
                                         </td>
                                         <td className="py-5 px-8 relative">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={() => navigate(`/reports/${report.id}`)}
-                                                    className="text-secondary hover:text-brand transition-colors p-2 rounded-full hover:bg-border outline-none"
-                                                    title={t('reportList.list.viewDetails')}
-                                                >
-                                                    <Eye size={20} />
-                                                </button>
-
                                                 <button
                                                     onClick={(e) => toggleMenu(report.id, e)}
                                                     className="text-secondary hover:text-primary transition-colors p-2 rounded-full hover:bg-border outline-none">
@@ -273,7 +264,10 @@ export default function ReportsPage() {
                                             {openMenuId === report.id && (
                                                 <div className="absolute right-8 top-12 w-40 bg-surface border border-border rounded-lg shadow-lg z-50 py-1 overflow-hidden">
                                                     <button
-                                                        onClick={() => openDeleteConfirmation(report.id)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            openDeleteConfirmation(report.id);
+                                                        }}
                                                         className="w-full text-left px-4 py-2 text-sm text-danger hover:bg-danger-subtle flex items-center gap-2 transition-colors"
                                                     >
                                                         <Trash2 size={16} />

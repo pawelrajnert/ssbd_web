@@ -81,6 +81,25 @@ const TeacherReportDetailsPage: React.FC = () => {
         );
     }
 
+    const getSimilarityBadge = (similarity: number) => {
+        const formattedSimilarity = similarity.toFixed(1);
+
+        let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
+        if (similarity >= 40) {
+            badgeClass += "bg-brand text-white";
+        } else if (similarity >= 10) {
+            badgeClass += "bg-cyan-600 text-white";
+        } else {
+            badgeClass += "bg-gray-200 text-secondary";
+        }
+
+        return (
+            <span className={badgeClass}>
+            {formattedSimilarity}%
+        </span>
+        );
+    };
+
     return (
         <div className="flex flex-col h-screen bg-base overflow-hidden">
 
@@ -92,6 +111,9 @@ const TeacherReportDetailsPage: React.FC = () => {
                     <div className="h-6 w-px bg-border mx-2"></div>
                     <h1 className="text-lg font-bold text-primary truncate max-w-[300px] xl:max-w-[500px]" title={report.subjectName}>
                         {report.subjectName}
+                    </h1>
+                    <h1 className="text-lg font-bold text-primary truncate max-w-[300px] xl:max-w-[500px]" title={report.subjectName}>
+                        {getSimilarityBadge(report.averageSimilarity * 100)}
                     </h1>
                 </div>
 

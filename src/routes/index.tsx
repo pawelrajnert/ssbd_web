@@ -21,7 +21,7 @@ import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
-import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
+import ReportListPage from "../pages/report_list/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
 import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
