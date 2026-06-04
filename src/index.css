@@ -57,6 +57,26 @@
     body {
         @apply bg-base text-primary transition-colors duration-300;
     }
+}
 
-    
+/* potrzebowalem do ladnego git diffa, na razie tu zostawilem */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 5px;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #3f3f46;
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #52525b;
+}
+.custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
 }

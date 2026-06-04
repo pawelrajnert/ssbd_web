@@ -131,12 +131,12 @@ export default function ReportsPage() {
     };
 
     const getSimilarityBadge = (similarity: number) => {
-        const roundedSimilarity = Math.round(similarity);
+        const formattedSimilarity = similarity.toFixed(2);
 
         let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
-        if (roundedSimilarity >= 40) {
+        if (similarity >= 40) {
             badgeClass += "bg-brand text-white";
-        } else if (roundedSimilarity >= 10) {
+        } else if (similarity >= 10) {
             badgeClass += "bg-cyan-600 text-white";
         } else {
             badgeClass += "bg-gray-200 text-secondary";
@@ -144,8 +144,8 @@ export default function ReportsPage() {
 
         return (
             <span className={badgeClass}>
-                {roundedSimilarity}% match
-            </span>
+            {formattedSimilarity}% match
+        </span>
         );
     };
 
@@ -251,14 +251,14 @@ export default function ReportsPage() {
                                             {formatDate(report.created_at)}
                                         </td>
                                         <td className="py-5 px-8">
-                                            {getSimilarityBadge(report.average_similarity * 100)}
+                                            {getSimilarityBadge(report.average_similarity)}
                                         </td>
                                         <td className="py-5 px-8 relative">
                                             <div className="flex items-center justify-end gap-2">
                                                 <button
                                                     onClick={() => navigate(`/reports/${report.id}`)}
                                                     className="text-secondary hover:text-brand transition-colors p-2 rounded-full hover:bg-border outline-none"
-                                                    title="Pokaż szczegóły raportu"
+                                                    title={t('reportList.list.viewDetails')}
                                                 >
                                                     <Eye size={20} />
                                                 </button>
