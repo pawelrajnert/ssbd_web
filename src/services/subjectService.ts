@@ -1,5 +1,6 @@
 import type { SubjectDTO, UpdateSubjectDTO } from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
+import type { StudentSubjectDetailsDTO } from '../types/subject.types';
 
 export const subjectService = {
     createSubject: async (subject: SubjectDTO): Promise<void> => {
@@ -69,4 +70,13 @@ export const deleteSubject = async (subjectId: string, versionHash: string, dele
             deleteGiteaOrg: deleteGiteaOrg,
         },
     });
+};
+
+export const syncSubjectWithGitea = async (subjectId: string): Promise<void> => {
+    await axiosInstance.post(`/subjects/${subjectId}/sync`);
+};
+
+export const getStudentSubjectDetails = async (subjectId: string): Promise<StudentSubjectDetailsDTO> => {
+    const response = await axiosInstance.get(`/subjects/${subjectId}/student`);
+    return response.data;
 };

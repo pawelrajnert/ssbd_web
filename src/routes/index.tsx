@@ -30,6 +30,7 @@ import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
 import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
+import { StudentSubjectDetailsView } from "../pages/student/StudentSubjectDetailsView.tsx";
 import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
 
 const routes: RouteObject[] = [
@@ -158,6 +159,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.STUDENT_REPORT_DETAILS,
                         element: <StudentReportDetailsPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <StudentSubjectDetailsView/>
                     }
                 ]
             }
@@ -192,13 +197,23 @@ const routes: RouteObject[] = [
                         element: <UserEditPage/>
                     },
                     {
-                        path: PATHS.SUBJECT_DETAILS,
-                        element: <SubjectDetailsView/>
-                    },
-                    {
                         path: PATHS.SUBJECT_SCHEDULE_LIST,
                         element: <SubjectSchedulePage />,
                     },
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
+                    }
                 ]
             }
         ]
