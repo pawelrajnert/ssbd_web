@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getSubjectDetails, deleteSubject } from '../../services/subjectService';
+import { getSubjectDetails, deleteSubject, syncSubjectWithGitea } from '../../services/subjectService';
 import type { SubjectDTO } from '../../types/SubjectDTO';
 import { formatDate, reportService } from "../../services/reportService";
 import type { Page } from "../../types/user.types";
 import type { ReportDTO } from "../../types/report.types";
 import { getSimilarityBadge } from "../../shared/components/similarity_badge/SimilarityBadge";
-import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2 } from "lucide-react";
+import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw } from "lucide-react";
 import { PATHS } from "../../routes/paths";
 import { EditSubjectModal } from './EditSubjectModal';
 
@@ -30,10 +30,7 @@ export const SubjectDetailsView: React.FC = () => {
     const [deleteGiteaOrg, setDeleteGiteaOrg] = useState<boolean>(false);
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-    const MOCK_REPOS = [
-        { id: 1, name: 'Grupa_cz_12_01', date: 'Oct 24, 2026', msg: t('subject.details.status.clean', 'Brak podejrzenia plagiatu'), status: 'clean', users: 'Jan Kowalski, Anna Nowak' },
-        { id: 2, name: 'Grupa_cz_12_02', date: 'Oct 23, 2026', msg: `${t('subject.details.status.alert', 'Podejrzenie!')} 82%`, status: 'alert', users: 'Marek Wiśniewski, Kasia Zielińska' }
-    ];
+    const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
     const fetchSubjectData = () => {
         if (!id) return;
@@ -100,8 +97,24 @@ export const SubjectDetailsView: React.FC = () => {
         }
     };
 
+    const handleSyncGitea = async () => {
+        if (!id) return;
+        setIsSyncing(true);
+        setError(null);
+        try {
+            await syncSubjectWithGitea(id);
+            fetchSubjectData();
+        } catch (err: any) {
+            setError(t('subject.details.syncError', 'Błąd komunikacji z platformą Gitea podczas synchronizacji.'));
+        } finally {
+            setIsSyncing(false);
+        }
+    };
+
     if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand" /></div>;
     if (error || !subject) return <div className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
+
+    const repositoryList = (subject as any).repositoryList || [];
 
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
@@ -164,7 +177,7 @@ export const SubjectDetailsView: React.FC = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mb-4">
                         {[
                             {label: t('subject.details.stats.students', 'Studentów'), value: '42'},
-                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: '128'},
+                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositoryList.length.toString()},
                             {label: t('subject.details.stats.pending', 'Oczekujące'), value: reports?.totalElements || '0'},
                             {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: '8.4%'}
                         ].map((stat, idx) => (
@@ -209,40 +222,62 @@ export const SubjectDetailsView: React.FC = () => {
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-primary">{t('subject.details.repos.title', 'Repozytoria')}</h3>
                             <div className="flex gap-4 text-sm font-semibold text-secondary">
-                                <button type="button" className="hover:text-primary transition-colors flex items-center gap-1">
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                                    {t('subject.details.repos.refresh', 'Odśwież')}
-                                </button>
+                                {subject.canEdit && (
+                                    <button
+                                        type="button"
+                                        onClick={handleSyncGitea}
+                                        disabled={isSyncing}
+                                        className="hover:text-brand transition-colors flex items-center gap-1 disabled:opacity-50"
+                                    >
+                                        {isSyncing ? (
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                            <RefreshCw className="w-4 h-4" />
+                                        )}
+                                        <span className="text-sm font-semibold">{t('subject.details.syncGitea', 'Odśwież')}</span>
+                                    </button>
+                                )}
                                 <button type="button" className="hover:text-primary transition-colors">{t('subject.details.repos.filter', 'Filtruj')}</button>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            {MOCK_REPOS.map((repo) => {
-                                let colors = "border-border bg-surface";
-                                if (repo.status === 'alert') colors = "border-danger-border bg-danger-subtle";
-                                if (repo.status === 'clean') colors = "border-blue-200 bg-blue-50 dark:border-blue-900/50 dark:bg-blue-900/10";
+                            {repositoryList.length === 0 ? (
+                                <div className="p-8 text-center text-secondary border border-dashed border-border rounded-xl">
+                                    {t('subject.details.repos.empty', 'Brak zsynchronizowanych repozytoriów. Kliknij "Odśwież z Gitea", aby pobrać nowości.')}
+                                </div>
+                            ) : (
+                                repositoryList.map((repo: any) => {
+                                    const repoName = repo.repositoryName || repo.name || 'Nieznane repozytorium';
+                                    const repoId = repo.id || repo.repositoryName;
 
-                                return (
-                                    <div key={repo.id} className={`border rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 transition-colors ${colors}`}>
-                                        <div>
-                                            <h4 className="font-bold text-primary text-base mb-1">{repo.name}</h4>
-                                            <p className="text-sm text-secondary mb-1">
-                                                {t('subject.details.repos.lastCommit', 'Ostatni commit')}: {repo.date} — <span className={repo.status === 'alert' ? 'text-danger font-bold' : repo.status === 'clean' ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-primary'}>{repo.msg}</span>
-                                            </p>
-                                            <p className="text-xs text-secondary font-medium">{t('subject.details.repos.contributors', 'Członkowie')}: {repo.users}</p>
+                                    const users = repo.studentList && repo.studentList.length > 0
+                                        ? repo.studentList.map((s: any) => s.account?.login || s.login || 'Nieznany').join(', ')
+                                        : t('subject.details.repos.noUsers', 'Brak przypisanych członków');
+
+                                    return (
+                                        <div key={repoId} className="border border-border bg-surface rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:border-brand/50 transition-colors">
+                                            <div>
+                                                <h4 className="font-bold text-primary text-base mb-1">{repoName}</h4>
+                                                <p className="text-sm text-secondary mb-1">
+                                                    {t('subject.details.repos.tickets', 'Dostępne skanowania')}: <span className="font-bold text-primary">{repo.ticketCount || 0}</span>
+                                                </p>
+                                                <p className="text-xs text-secondary font-medium">
+                                                    {t('subject.details.repos.contributors', 'Członkowie')}: <span className="text-primary">{users}</span>
+                                                </p>
+                                            </div>
+                                            <div className="flex gap-2 shrink-0 mt-2 sm:mt-0">
+                                                <button type="button" className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors">
+                                                    {t('subject.details.repos.viewCode', 'Kod')}
+                                                </button>
+                                                <button type="button" className="px-4 py-2 bg-brand border border-brand rounded-lg text-sm font-bold text-white hover:bg-brand-hover shadow-sm transition-colors">
+                                                    {t('subject.details.repos.analyze', 'Skanuj')}
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="flex gap-2 shrink-0 mt-2 sm:mt-0">
-                                            <button type="button" className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors">
-                                                {t('subject.details.repos.viewCode', 'Kod')}
-                                            </button>
-                                            <button type="button" className="px-4 py-2 bg-brand border border-brand rounded-lg text-sm font-bold text-white hover:bg-brand-hover shadow-sm transition-colors">
-                                                {t('subject.details.repos.analyze', 'Skanuj')}
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })
+                            )}
                         </div>
                     </div>
 

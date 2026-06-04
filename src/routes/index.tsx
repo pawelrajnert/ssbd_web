@@ -21,7 +21,7 @@ import UnblockAccountPage from "../pages/auth/unblock/UnblockAccountPage.tsx";
 import LoginEmailInitialPage from "../pages/auth/login/EmailLoginInitialPage.tsx";
 import LoginEmailVerifyPage from "../pages/auth/login/EmailLoginVerifyPage.tsx";
 import TeacherSubjectUsersPage from "../pages/teacher/TeacherSubjectUsersPage.tsx";
-import ReportListPage from "../pages/ReportList/ReportListPage.tsx";
+import ReportListPage from "../pages/report_list/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
 import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
@@ -31,6 +31,7 @@ import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
 import { ChangeSubjectManagerPage } from "../pages/subject/ChangeSubjectManagerPage.tsx";
+import { StudentSubjectDetailsView } from "../pages/student/StudentSubjectDetailsView.tsx";
 import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
 
 const routes: RouteObject[] = [
@@ -159,6 +160,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.STUDENT_REPORT_DETAILS,
                         element: <StudentReportDetailsPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <StudentSubjectDetailsView/>
                     }
                 ]
             }
@@ -197,13 +202,23 @@ const routes: RouteObject[] = [
                         element: <UserEditPage/>
                     },
                     {
-                        path: PATHS.SUBJECT_DETAILS,
-                        element: <SubjectDetailsView/>
-                    },
-                    {
                         path: PATHS.SUBJECT_SCHEDULE_LIST,
                         element: <SubjectSchedulePage />,
                     },
+                ]
+            }
+        ]
+    },
+    {
+        element: <ProtectedRoute allowedRoles={[RoleEnum.ADMINISTRATOR, RoleEnum.TEACHER]}/>,
+        children: [
+            {
+                element: <Layout/>,
+                children: [
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
+                    }
                 ]
             }
         ]

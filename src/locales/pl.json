@@ -507,7 +507,8 @@
       "avg": "Średnie podobieństwo",
       "action": "Akcja",
       "notFound": "Nie znaleziono żadnych raportów",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "viewDetails": "Pokaż szczegóły raportu"
     }
   },
   "studentReportList": {
@@ -715,12 +716,18 @@
   },
   "schedule": {
     "modal": {
-      "title": "Harmonogram analiz"
+      "title": "Zaplanuj analizę",
+      "desc": "Określ datę wykonania oraz wskaż tag repozytorium do sprawdzenia.",
+      "deadline": "Termin wykonania",
+      "giteaTag": "Tag Gitea",
+      "tagPlaceholder": "np. lab-01",
+      "errorPast": "Nie można zaplanować analizy w przeszłości."
     },
     "subtitle": "Zarządzaj zaplanowanymi i wykonanymi zadaniami skanowania repozytoriów.",
     "date": "Data zaplanowania",
     "tag": "Tag analizy",
     "statusLabel": "Status",
+    "actions": "Akcje",
     "status": {
       "all": "Wszystkie",
       "planned": "Oczekuje",
@@ -735,6 +742,11 @@
       "newest": "Najnowsze",
       "oldest": "Najstarsze"
     },
+    "deleteScheduleTitle": "Usuń harmonogram",
+    "deleteScheduleConfirm": "Czy na pewno chcesz usunąć ten harmonogram?",
+    "deleteScheduleError": "Wystąpił błąd podczas usuwania harmonogramu.",
+    "deleteScheduleErrorNotFound": "Nie znaleziono harmonogramu. Mógł zostać już usunięty.",
+    "deleteScheduleConflict": "Dane harmonogramu zostały zmodyfikowane. Odśwież stronę i spróbuj ponownie.",
     "delete": "Usuń przedmiot",
     "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
     "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
@@ -820,7 +832,6 @@
     "subject": "Przedmiot",
     "tag": "Tag raportu",
     "createdAt": "Wygenerowano",
-    "averageSimilarity": "Średnie podobieństwo",
     "comparisonsList": "Wykryte podobieństwa",
     "maxSimilarity": "Max. Podobieństwo",
     "avgSimilarity": "Śr. Podobieństwo",
@@ -830,6 +841,23 @@
     "accessDenied": "Brak dostępu do tego raportu. Upewnij się, że jesteś przypisany do przedmiotu.",
     "notFound": "Raport o podanym ID nie istnieje.",
     "fetchError": "Wystąpił błąd serwera podczas pobierania szczegółów raportu.",
-    "noComparisons": "Brak wykrytych podobieństw w tym raporcie."
+    "noComparisons": "Brak wykrytych podobieństw w tym raporcie.",
+    "averageSimilarity": "Średnie podobieństwo",
+    "similarity": "Podobieństwo",
+    "tooltipCodeFrom": "Procent kodu z",
+    "tooltipFoundIn": "który został znaleziony w kodzie",
+    "tooltipAsymmetry": "Liczby mogą nie być symetryczne ze względu na różne długości projektów.",
+    "repositories": "Repozytoria",
+    "selectRepositories": "Wybierz repozytoria z paska powyżej, aby zobaczyć kod.",
+    "files": "Pliki",
+    "totalTokens": "Suma tokenów",
+    "copiedFragments": "Ilość skopiowanych fragmentów",
+    "tokens": "tokenów",
+    "tokensIn": "w",
+    "fragments": "frgm.",
+    "noFiles": "Brak plików do wyświetlenia",
+    "noCode": "// Brak kodu",
+    "tokensLabel": "tokenów",
+    "fragmentsLabel": "fragmentów"
   }
 }

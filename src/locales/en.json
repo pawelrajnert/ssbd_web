@@ -478,7 +478,8 @@
       "avg": "Average similarity",
       "action": "Action",
       "notFound": "No reports were found",
-      "delete": "Delete"
+      "delete": "Delete",
+      "viewDetails": "Show report details"
     }
   },
   "studentReportList": {
@@ -564,12 +565,18 @@
   },
   "schedule": {
     "modal": {
-      "title": "Analysis Schedule"
+      "title": "Schedule Analysis",
+      "desc": "Specify the execution date and indicate the repository tag to be checked.",
+      "deadline": "Execution Deadline",
+      "giteaTag": "Gitea Tag",
+      "tagPlaceholder": "e.g. lab-01",
+      "errorPast": "You cannot schedule an analysis in the past."
     },
     "subtitle": "Manage planned and completed repository scan tasks.",
     "date": "Scheduled Date",
     "tag": "Analysis Tag",
     "statusLabel": "Status",
+    "actions": "Actions",
     "status": {
       "all": "All",
       "planned": "Planned",
@@ -584,7 +591,11 @@
       "newest": "Newest first",
       "oldest": "Oldest first"
     },
-    "actions": "Actions"
+    "deleteScheduleTitle": "Delete schedule",
+    "deleteScheduleConfirm": "Are you sure you want to delete this schedule?",
+    "deleteScheduleError": "An error occurred while deleting the schedule.",
+    "deleteScheduleErrorNotFound": "Schedule not found. It might have been already deleted.",
+    "deleteScheduleConflict": "Schedule data has been modified. Please refresh the page and try again."
   },
   "subject": {
     "manager": {
@@ -679,6 +690,22 @@
     "accessDenied": "You do not have permission to view this report. Ensure you are assigned to the subject.",
     "notFound": "Report not found.",
     "fetchError": "A server error occurred while fetching the report details.",
-    "noComparisons": "No similarities detected in this report."
+    "noComparisons": "No similarities detected in this report.",
+    "similarity": "Similarity",
+    "tooltipCodeFrom": "Percentage of code from",
+    "tooltipFoundIn": "that was found in the code of",
+    "tooltipAsymmetry": "The numbers might not be symmetric due to the submissions having different lengths.",
+    "repositories": "Repositories",
+    "selectRepositories": "Select repositories from the bar above to view the code.",
+    "files": "Files",
+    "totalTokens": "Total tokens",
+    "copiedFragments": "Number of copied fragments",
+    "tokens": "tokens",
+    "tokensIn": "in",
+    "fragments": "frags.",
+    "noFiles": "No files to display",
+    "noCode": "// No code",
+    "tokensLabel": "tokens",
+    "fragmentsLabel": "fragments"
   }
 }
