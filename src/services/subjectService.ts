@@ -29,8 +29,12 @@ export const subjectService = {
             await axiosInstance.post('/subjects/manual', manualDto);
         }
     },
-    getSubjects: async (): Promise<SubjectDTO[]> => {
+    getTeacherSubjects: async (): Promise<SubjectDTO[]> => {
         const response = await axiosInstance.get('/subjects');
+        return response.data;
+    },
+    getStudentSubjects: async (): Promise<SubjectDTO[]> => {
+        const response = await axiosInstance.get('/subjects/student/list');
         return response.data;
     },
     getSubjectUsers: async (subjectId: string): Promise<any> => {
@@ -39,8 +43,13 @@ export const subjectService = {
     }
 };
 
-export const getAllSubjects = async (): Promise<SubjectDTO[]> => {
+export const getTeacherSubjects = async (): Promise<SubjectDTO[]> => {
     const response = await axiosInstance.get<SubjectDTO[]>('/subjects');
+    return response.data;
+};
+
+export const getStudentSubjects = async (): Promise<SubjectDTO[]> => {
+    const response = await axiosInstance.get<SubjectDTO[]>('/subjects/student/list');
     return response.data;
 };
 
