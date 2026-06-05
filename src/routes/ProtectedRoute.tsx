@@ -2,6 +2,8 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { PATHS } from './paths.ts';
 import { useAuth } from "../hooks/useAuth";
 import {type Role, RoleEnum} from "../types/role.types.ts";
+import {toast} from "react-toastify";
+import {useTranslation} from "react-i18next";
 
 interface HandleProtectionProperties {
     allowedRoles?: Role[];
@@ -10,6 +12,7 @@ interface HandleProtectionProperties {
 const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
     const { isAuthenticated, activeRole } = useAuth();
     const location = useLocation();
+    const {t} = useTranslation();
 
     if (!isAuthenticated) {
         return <Navigate to={PATHS.LOGIN} replace />;
@@ -26,8 +29,10 @@ const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
 
 
     if (!hasPermission) {
-        console.warn("Access Denied. User Role:", activeRole, "Allowed:", allowedRoles);
-
+        console.log(`Access Denied. User role: ${activeRole}, allowed: ${allowedRoles}`)
+        toast.warn(t("common.accessDenied"), {
+            toastId: "common.accessDenied"
+        });
         if (activeRole === RoleEnum.ADMINISTRATOR) {
             return <Navigate to={PATHS.USER_LIST} replace />;
         } else if (activeRole === RoleEnum.STUDENT) {

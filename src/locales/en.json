@@ -24,7 +24,8 @@
     "delete": "Delete",
     "back": "Back",
     "confirm": "Confirm",
-    "save": "Save"
+    "save": "Save",
+    "accessDenied": "You do not have access to this page"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -707,5 +708,10 @@
     "noCode": "// No code",
     "tokensLabel": "tokens",
     "fragmentsLabel": "fragments"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "backToHome": "Back to Dashboard"
   }
 }

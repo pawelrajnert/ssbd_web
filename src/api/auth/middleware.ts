@@ -1,5 +1,7 @@
 import axios from 'axios';
 import type {FailedQueueItem} from "../../types/failed_query.type.ts";
+import {toast} from "react-toastify";
+import i18n from "i18next";
 
 
 // const baseURL = 'http://localhost:8081/api';
@@ -30,6 +32,7 @@ axiosInstance.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    config.headers['Accept-Language'] = localStorage.getItem('i18nextLng') || 'pl';
     return config;
 });
 
@@ -84,6 +87,45 @@ axiosInstance.interceptors.response.use(
                 sessionStorage.clear();
                 window.location.href = '/login';
             }
+        }
+        if (error.response) {
+            const status = error.response.status;
+            if (status !== 401 && status !== 400) {
+                const backendMessage = error.response.data;
+                let toastMessage = backendMessage;
+                if (!toastMessage) {
+                    let errorMessageKey = 'errors.generic';
+                    switch (status) {
+                        case 403:
+                            errorMessageKey = 'errors.forbidden';
+                            break;
+                        case 404:
+                            errorMessageKey = 'errors.notFound';
+                            break;
+                        case 409:
+                            errorMessageKey = 'errors.conflict';
+                            break;
+                        case 412:
+                            errorMessageKey = 'errors.preconditionFailed';
+                            break;
+                        case 500:
+                        case 502:
+                        case 503:
+                        case 504:
+                            errorMessageKey = 'errors.serverError';
+                            break;
+                    }
+                    toastMessage = i18n.t(errorMessageKey);
+                }
+
+                toast.error(toastMessage, {
+                    toastId: toastMessage
+                });
+            }
+        } else if (error.request) {
+            toast.error(i18n.t('errors.networkDown'), {
+                toastId: 'global-network-error'
+            });
         }
         return Promise.reject(error);
     }
