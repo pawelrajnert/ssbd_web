@@ -4,8 +4,8 @@ import {toast} from "react-toastify";
 import i18n from "i18next";
 
 
-// const baseURL = 'http://localhost:8081/api';
-const baseURL = '/api';
+const baseURL = 'http://localhost:8081/api';
+// const baseURL = '/api';
 // przed wrzucaniem na produkcję podmienić :)
 
 const axiosInstance = axios.create({

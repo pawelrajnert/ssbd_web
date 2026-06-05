@@ -128,18 +128,18 @@ export const SubjectDetailsView: React.FC = () => {
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
 
             <div className="mb-8 border-b border-border pb-6">
-                <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-                    {t('subject.details.breadcrumb', 'Przedmioty')} / {subject.name}
-                </div>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">{subject.name}</h1>
-                        <p className="text-secondary max-w-4xl text-sm md:text-base mb-6 leading-relaxed">
+                        <p className="text-secondary max-w-4xl text-sm mb-6 leading-relaxed">
                             {t('subject.details.edition', 'Edycja')}: <span
                             className="font-medium text-primary">{subject.edition}</span> | {t('subject.details.organization', 'Organizacja')}: <a
                             href={subject.giteaURL || `https://gitea.com/${subject.organizationName}`} target="_blank"
                             rel="noreferrer"
                             className="font-medium text-brand hover:underline">{subject.organizationName}</a>
+                        </p>
+                        <p className="text-primary max-w-4xl text-sm mb-6 leading-relaxed">
+                            {subject.subjectDescription}
                         </p>
                     </div>
 
@@ -227,7 +227,9 @@ export const SubjectDetailsView: React.FC = () => {
                                 reports?.content.map((report) => (
                                     <div key={report.id}
                                          className="min-w-[280px] p-5 rounded-xl border border-border bg-surface shadow-sm snap-start shrink-0 cursor-pointer hover:border-brand transition-colors"
-                                        onClick={() => { navigate(`/reports/${report.id}`)}}
+                                         onClick={() => {
+                                             navigate(`/reports/${report.id}`)
+                                         }}
                                     >
                                         <div className="flex justify-between items-start mb-3">
                                             <h4 className="font-bold text-primary">{t('subject.details.reports.report', 'Raport')} • {formatDate(report.created_at)}</h4>
@@ -345,7 +347,9 @@ export const SubjectDetailsView: React.FC = () => {
                                 <div
                                     key={report.id}
                                     className="p-5 rounded-xl border border-border bg-surface shadow-sm cursor-pointer hover:border-brand transition-colors flex flex-col min-h-[160px]"
-                                    onClick={() => { navigate(`/reports/${report.id}`)}}
+                                    onClick={() => {
+                                        navigate(`/reports/${report.id}`)
+                                    }}
                                 >
                                     <div className="flex justify-between items-start gap-3 mb-4">
                                         <h4 className="font-bold text-primary leading-relaxed">
