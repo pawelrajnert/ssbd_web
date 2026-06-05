@@ -90,9 +90,11 @@ export const TeacherSubjectListPage: React.FC = () => {
                             className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group cursor-pointer"
                         >
                             <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
-                                <span className="text-brand font-medium tracking-wide opacity-50">
-                                    {t('subject.list.card.exampleImage')}
-                                </span>
+                                <img
+                                    src={`https://api.dicebear.com/7.x/shapes/svg?seed=${sub.id}`}
+                                    alt="Okładka przedmiotu"
+                                    className="w-full h-full object-cover"
+                                />
                                 <div className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
                                     {sub.edition}
                                 </div>

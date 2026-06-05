@@ -28,7 +28,6 @@ export const PATHS = {
     GLOBAL_RULES: "/global-rules",
     STUDENT_SUBJECT_DETAILS: "/student/subjects/:id",
     SUBJECT_DETAILS: "/subjects/:id",
-    STUDENT_SUBJECT_DETAILS: "/my-subjects/:id",
     STUDENT_SCAN: "/student/scan",
     SUBJECT_SCHEDULE_LIST: "/subjects/:id/schedule",
     CHANGE_SUBJECT_MANAGER: "/admin/change-subject-manager"

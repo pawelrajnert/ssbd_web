@@ -10,9 +10,8 @@ export const subjectService = {
                 organizationName: subject.organizationName,
                 edition: subject.edition,
                 subjectDescription: subject.subjectDescription,
-                giteaURL: subject.giteaURL,
                 templateId: subject.templateId,
-                raportLevelName: subject.manualRules?.raportLevelName || 'FULL',
+                raportLevelName: subject.manualRules?.raportLevelName,
                 teachers: subject.teachers
             };
             await axiosInstance.post('/subjects/template', templateDto);
@@ -22,7 +21,6 @@ export const subjectService = {
                 organizationName: subject.organizationName,
                 edition: subject.edition,
                 subjectDescription: subject.subjectDescription,
-                giteaURL: subject.giteaURL,
                 manualRules: subject.manualRules,
                 teachers: subject.teachers
             };
