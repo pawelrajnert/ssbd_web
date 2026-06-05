@@ -120,7 +120,30 @@ export const SubjectDetailsView: React.FC = () => {
         } finally {
             setIsSyncing(false);
         }
+        repositoryService.getRepositoriesForSubject(id)
+            .then(data => setRepositories(data))
+            .catch();
     };
+
+    const uniqueStudentsCount = React.useMemo(() => {
+        if (!repositories) return '0';
+        const uniqueStudentIdentifiers = new Set<string>();
+        repositories.forEach(repo => {
+            if (repo.students) {
+                repo.students.forEach(student => {
+                    uniqueStudentIdentifiers.add(`${student.name} ${student.surname}`);
+                });
+            }
+        });
+        return uniqueStudentIdentifiers.size.toString();
+    }, [repositories]);
+
+    const displaySimilarity = React.useMemo(() => {
+        if (subject?.aggregatedAverageSimilarity != null) {
+            return `${subject.aggregatedAverageSimilarity.toFixed(1)}%`;
+        }
+        return '0.0%';
+    }, [subject?.aggregatedAverageSimilarity]);
 
     if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand" /></div>;
     if (error || !subject) return <div className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
@@ -187,10 +210,10 @@ export const SubjectDetailsView: React.FC = () => {
                 <div className="flex flex-col gap-10">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mb-4">
                         {[
-                            {label: t('subject.details.stats.students', 'Studentów'), value: '42'},
-                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositories?.length.toString()},
-                            {label: t('subject.details.stats.pending', 'Oczekujące'), value: reports?.totalElements || '0'},
-                            {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: '8.4%'}
+                            {label: t('subject.details.stats.students', 'Studentów'), value: uniqueStudentsCount},
+                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositories?.length?.toString() || '0'},
+                            {label: t('subject.details.stats.pending', 'Oczekujące'), value: reports?.totalElements?.toString() || '0'},
+                            {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: displaySimilarity}
                         ].map((stat, idx) => (
                             <div key={idx} className="flex flex-col">
                                 <span className="text-[11px] sm:text-xs font-bold text-secondary uppercase tracking-widest mb-1">{stat.label}</span>
