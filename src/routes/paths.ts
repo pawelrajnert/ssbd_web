@@ -28,7 +28,8 @@ export const PATHS = {
     GLOBAL_RULES: "/global-rules",
     SUBJECT_DETAILS: "/subjects/:id",
     STUDENT_SCAN: "/student/scan",
-    SUBJECT_SCHEDULE_LIST: "/subjects/:id/schedule"
+    SUBJECT_SCHEDULE_LIST: "/subjects/:id/schedule",
+    CHANGE_SUBJECT_MANAGER: "/admin/change-subject-manager"
 } as const;
 
 export const getDashboardPath = (role: string | null): string => {
