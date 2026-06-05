@@ -1,22 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import {getSubjectDetails, deleteSubject, syncSubjectWithGitea} from '../../services/subjectService';
-import type {SubjectDTO} from '../../types/SubjectDTO';
-import {formatDate, reportService} from "../../services/reportService";
-import type {Page} from "../../types/user.types";
-import type {ReportDTO} from "../../types/report.types";
-import {SimilarityBadge} from "../../shared/components/similarity_badge/SimilarityBadge";
-import {Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw} from "lucide-react";
-import {PATHS} from "../../routes/paths";
-import {EditSubjectModal} from './EditSubjectModal';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { getSubjectDetails, deleteSubject, syncSubjectWithGitea } from '../../services/subjectService';
+import type { SubjectDTO } from '../../types/SubjectDTO';
+import { formatDate, reportService } from "../../services/reportService";
+import type { Page } from "../../types/user.types";
+import type { ReportDTO } from "../../types/report.types";
+import { SimilarityBadge } from "../../shared/components/similarity_badge/SimilarityBadge";
+import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw } from "lucide-react";
+import { PATHS } from "../../routes/paths";
+import { EditSubjectModal } from './EditSubjectModal';
 import {repositoryService} from "../../services/repositoryService.ts";
 import type {RepositoryWithStudentDTO} from "../../types/subject.types.ts";
 
 export const SubjectDetailsView: React.FC = () => {
-    const {id} = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [subject, setSubject] = useState<SubjectDTO | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -116,7 +116,30 @@ export const SubjectDetailsView: React.FC = () => {
         } finally {
             setIsSyncing(false);
         }
+        repositoryService.getRepositoriesForSubject(id)
+            .then(data => setRepositories(data))
+            .catch();
     };
+
+    const uniqueStudentsCount = React.useMemo(() => {
+        if (!repositories) return '0';
+        const uniqueStudentIdentifiers = new Set<string>();
+        repositories.forEach(repo => {
+            if (repo.students) {
+                repo.students.forEach(student => {
+                    uniqueStudentIdentifiers.add(`${student.name} ${student.surname}`);
+                });
+            }
+        });
+        return uniqueStudentIdentifiers.size.toString();
+    }, [repositories]);
+
+    const displaySimilarity = React.useMemo(() => {
+        if (subject?.aggregatedAverageSimilarity != null) {
+            return `${subject.aggregatedAverageSimilarity.toFixed(1)}%`;
+        }
+        return '0.0%';
+    }, [subject?.aggregatedAverageSimilarity]);
 
     if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2
         className="w-8 h-8 animate-spin text-brand"/></div>;
@@ -188,20 +211,13 @@ export const SubjectDetailsView: React.FC = () => {
                 <div className="flex flex-col gap-10">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mb-4">
                         {[
-                            {label: t('subject.details.stats.students', 'Studentów'), value: '42'},
-                            {
-                                label: t('subject.details.stats.repos', 'Repozytoriów'),
-                                value: repositories?.length.toString()
-                            },
-                            {
-                                label: t('subject.details.stats.pending', 'Oczekujące'),
-                                value: reports?.totalElements || '0'
-                            },
-                            {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: '8.4%'}
+                            {label: t('subject.details.stats.students', 'Studentów'), value: uniqueStudentsCount},
+                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositories?.length?.toString() || '0'},
+                            {label: t('subject.details.stats.pending', 'Oczekujące'), value: reports?.totalElements?.toString() || '0'},
+                            {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: displaySimilarity}
                         ].map((stat, idx) => (
                             <div key={idx} className="flex flex-col">
-                                <span
-                                    className="text-[11px] sm:text-xs font-bold text-secondary uppercase tracking-widest mb-1">{stat.label}</span>
+                                <span className="text-[11px] sm:text-xs font-bold text-secondary uppercase tracking-widest mb-1">{stat.label}</span>
                                 <span className="text-4xl sm:text-5xl font-extrabold text-primary">{stat.value}</span>
                             </div>
                         ))}
@@ -210,17 +226,15 @@ export const SubjectDetailsView: React.FC = () => {
                     <div>
                         <div className="flex justify-between items-center mb-4 mt-4">
                             <h3 className="text-xl font-bold text-primary flex items-center gap-2">
-                                <BarChartBigIcon className="w-5 h-5 text-brand"/>
+                                <BarChartBigIcon className="w-5 h-5 text-brand" />
                                 {t('subject.details.reports.title', 'Ostatnie Raporty')}
                             </h3>
-                            <button type="button" onClick={() => setIsReportsModalOpen(true)}
-                                    className="text-sm font-bold text-brand hover:text-brand-hover cursor-pointer transition-colors">
+                            <button type="button" onClick={() => setIsReportsModalOpen(true)} className="text-sm font-bold text-brand hover:text-brand-hover transition-colors">
                                 {t('subject.details.reports.viewAll', 'Zobacz Wszystkie')}
                             </button>
                         </div>
 
-                        <div
-                            className="flex overflow-x-auto gap-5 pb-4 snap-x [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#cbd5e1] hover:[&::-webkit-scrollbar-thumb]:bg-[#94a3b8] dark:[&::-webkit-scrollbar-thumb]:bg-[#475569] dark:hover:[&::-webkit-scrollbar-thumb]:bg-[#334155] [&::-webkit-scrollbar-thumb]:rounded-full transition-colors">
+                        <div className="flex overflow-x-auto gap-5 pb-4 snap-x [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#cbd5e1] hover:[&::-webkit-scrollbar-thumb]:bg-[#94a3b8] dark:[&::-webkit-scrollbar-thumb]:bg-[#475569] dark:hover:[&::-webkit-scrollbar-thumb]:bg-[#334155] [&::-webkit-scrollbar-thumb]:rounded-full transition-colors">
                             {reports?.content.length === 0 ? (
                                 <p className="text-sm text-secondary italic">Brak wygenerowanych raportów.</p>
                             ) : (
@@ -258,23 +272,20 @@ export const SubjectDetailsView: React.FC = () => {
                                         className="hover:text-brand transition-colors flex items-center gap-1 disabled:opacity-50"
                                     >
                                         {isSyncing ? (
-                                            <Loader2 className="w-4 h-4 animate-spin"/>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
                                         ) : (
-                                            <RefreshCw className="w-4 h-4"/>
+                                            <RefreshCw className="w-4 h-4" />
                                         )}
-                                        <span
-                                            className="text-sm font-semibold">{t('subject.details.syncGitea', 'Odśwież')}</span>
+                                        <span className="text-sm font-semibold">{t('subject.details.syncGitea', 'Odśwież')}</span>
                                     </button>
                                 )}
-                                <button type="button"
-                                        className="hover:text-primary transition-colors">{t('subject.details.repos.filter', 'Filtruj')}</button>
+                                <button type="button" className="hover:text-primary transition-colors">{t('subject.details.repos.filter', 'Filtruj')}</button>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             {repositories?.length === 0 ? (
-                                <div
-                                    className="p-8 text-center text-secondary border border-dashed border-border rounded-xl">
+                                <div className="p-8 text-center text-secondary border border-dashed border-border rounded-xl">
                                     {t('subject.details.repos.empty', 'Brak zsynchronizowanych repozytoriów. Kliknij "Odśwież z Gitea", aby pobrać nowości.')}
                                 </div>
                             ) : (
@@ -286,9 +297,7 @@ export const SubjectDetailsView: React.FC = () => {
                                         : t('subject.details.repos.noUsers', 'Brak przypisanych członków');
 
                                     return (
-                                        <div key={repoName}
-                                             className="border border-border bg-surface rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:border-brand/50 transition-colors"
-                                        >
+                                        <div key={repoName} className="border border-border bg-surface rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:border-brand/50 transition-colors">
                                             <div>
                                                 <h4 className="font-bold text-primary text-base mb-1">{repoName}</h4>
                                                 <p className="text-sm text-secondary mb-1">
@@ -377,20 +386,14 @@ export const SubjectDetailsView: React.FC = () => {
             )}
 
             {isStartAnalysisModalOpen && (
-                <div
-                    className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-                    <div
-                        className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
                         <div className="flex justify-between items-center p-6 pb-4">
                             <h2 className="text-[20px] font-bold text-primary">
                                 {t('subject.analysis.modal.title', 'Rozpocznij Nową Analizę')}
                             </h2>
-                            <button onClick={() => setIsStartAnalysisModalOpen(false)}
-                                    className="text-secondary hover:text-primary transition-colors">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                          d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
+                            <button onClick={() => setIsStartAnalysisModalOpen(false)} className="text-secondary hover:text-primary transition-colors">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
                             </button>
                         </div>
                         <div className="px-6 pb-6">
@@ -398,8 +401,7 @@ export const SubjectDetailsView: React.FC = () => {
                                 {t('subject.analysis.modal.description', 'Wprowadź tag, aby pobrać odpowiedni kod ze wszystkich repozytoriów studentów przypisanych do przedmiotu.')}
                             </p>
                             <div>
-                                <label
-                                    className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-2">
+                                <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-2">
                                     {t('subject.analysis.modal.tagLabel', 'Tag z Gitea')}
                                 </label>
                                 <input
@@ -412,12 +414,10 @@ export const SubjectDetailsView: React.FC = () => {
                             </div>
                         </div>
                         <div className="px-6 pb-6 flex justify-end items-center gap-4">
-                            <button onClick={() => setIsStartAnalysisModalOpen(false)}
-                                    className="text-[14px] font-bold text-secondary hover:text-primary transition-colors">
+                            <button onClick={() => setIsStartAnalysisModalOpen(false)} className="text-[14px] font-bold text-secondary hover:text-primary transition-colors">
                                 {t('common.cancel', 'Anuluj')}
                             </button>
-                            <button onClick={handleStartAnalysis}
-                                    className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-[14px] font-bold rounded-lg shadow-sm transition-colors">
+                            <button onClick={handleStartAnalysis} className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-[14px] font-bold rounded-lg shadow-sm transition-colors">
                                 {t('subject.analysis.modal.submit', 'Skanuj Teraz')}
                             </button>
                         </div>
@@ -426,10 +426,8 @@ export const SubjectDetailsView: React.FC = () => {
             )}
 
             {isDeleteModalOpen && (
-                <div
-                    className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-                    <div
-                        className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
                         <div className="flex justify-between items-center p-6 pb-4 border-b border-border">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-danger-subtle rounded-full text-danger">
@@ -450,20 +448,17 @@ export const SubjectDetailsView: React.FC = () => {
                                     onChange={(e) => setDeleteGiteaOrg(e.target.checked)}
                                     className="w-4 h-4 rounded border-border accent-danger text-danger focus:ring-danger cursor-pointer"
                                 />
-                                <label htmlFor="gitea-delete-checkbox"
-                                       className="text-sm font-bold text-primary cursor-pointer select-none">
+                                <label htmlFor="gitea-delete-checkbox" className="text-sm font-bold text-primary cursor-pointer select-none">
                                     {t('subject.deleteGiteaOption', 'Usuń również organizację i repozytoria z Gitea')}
                                 </label>
                             </div>
                         </div>
                         <div className="px-6 pb-6 pt-2 flex justify-end items-center gap-4">
-                            <button onClick={() => setIsDeleteModalOpen(false)} disabled={isDeleting}
-                                    className="text-sm font-bold text-secondary hover:text-primary transition-colors disabled:opacity-50">
+                            <button onClick={() => setIsDeleteModalOpen(false)} disabled={isDeleting} className="text-sm font-bold text-secondary hover:text-primary transition-colors disabled:opacity-50">
                                 {t('common.cancel', 'Anuluj')}
                             </button>
-                            <button onClick={handleDeleteSubject} disabled={isDeleting}
-                                    className="px-6 py-2.5 bg-danger hover:bg-red-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center disabled:opacity-50">
-                                {isDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin"/> : null}
+                            <button onClick={handleDeleteSubject} disabled={isDeleting} className="px-6 py-2.5 bg-danger hover:bg-red-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center disabled:opacity-50">
+                                {isDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
                                 {t('common.delete', 'Usuń Trwale')}
                             </button>
                         </div>

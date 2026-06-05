@@ -25,7 +25,6 @@ import ReportListPage from "../pages/report_list/ReportListPage.tsx";
 import GlobalRulesPage from "../pages/teacher/GlobalRulesPage.tsx";
 import {CreateSubjectPage} from "../pages/teacher/CreateSubjectPage";
 import StudentScanPage from "../pages/student/StudentScanPage.tsx";
-import {SubjectListView} from "../pages/subject/SubjectListView.tsx";
 import {SubjectDetailsView} from "../pages/subject/SubjectDetailsView.tsx";
 import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
@@ -33,6 +32,8 @@ import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.
 import {ChangeSubjectManagerPage} from "../pages/subject/ChangeSubjectManagerPage.tsx";
 import {StudentSubjectDetailsView} from "../pages/student/StudentSubjectDetailsView.tsx";
 import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
+import { TeacherSubjectListPage } from "../pages/teacher/TeacherSubjectListPage.tsx";
+import { StudentSubjectListPage } from "../pages/student/StudentSubjectListPage.tsx";
 import NotFoundPage from "../shared/not_found/NotFoundPage.tsx";
 
 const routes: RouteObject[] = [
@@ -106,11 +107,7 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: PATHS.TEACHER_SUBJECT_LIST,
-                        element: <SubjectListView/>
-                    },
-                    {
-                        path: "/subjects",
-                        element: <SubjectListView/>
+                        element: <TeacherSubjectListPage/>
                     },
                     {
                         path: PATHS.CREATE_SUBJECT,
@@ -131,6 +128,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.GLOBAL_RULES,
                         element: <GlobalRulesPage/>
+                    },
+                    {
+                        path: PATHS.SUBJECT_DETAILS,
+                        element: <SubjectDetailsView/>
                     }
                 ]
             }
@@ -144,11 +145,7 @@ const routes: RouteObject[] = [
                 children: [
                     {
                         path: PATHS.STUDENT_SUBJECT_LIST,
-                        element: <SubjectListView/>
-                    },
-                    {
-                        path: "/subjects",
-                        element: <SubjectListView/>
+                        element: <StudentSubjectListPage/>
                     },
                     {
                         path: PATHS.STUDENT_SCAN,

@@ -25,7 +25,7 @@ export const ChangeSubjectManagerPage: React.FC = () => {
         const fetchSubjects = async () => {
             setIsSubjectsLoading(true);
             try {
-                const data = await subjectService.getSubjects();
+                const data = await subjectService.getTeacherSubjects();
                 setSubjects(data);
             } catch (err) {
                 setSubmitError(t('subject.manager.error.fetchSubjects'));

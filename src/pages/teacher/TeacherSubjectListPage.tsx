@@ -1,66 +1,141 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, BookOpen, RefreshCw } from 'lucide-react';
-import { subjectService } from '../../services/subjectService.ts';
+import { getTeacherSubjects } from '../../services/subjectService';
 import type { SubjectDTO } from '../../types/SubjectDTO';
+import { useTranslation } from 'react-i18next';
 import { PATHS } from '../../routes/paths';
 
-export function TeacherSubjectListPage() {
-    const { t } = useTranslation();
+export const TeacherSubjectListPage: React.FC = () => {
     const navigate = useNavigate();
-    const [subjects, setSubjects] = useState<SubjectDTO[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const { t } = useTranslation();
 
-    const loadSubjects = async () => {
-        setIsLoading(true);
-        try {
-            const data = await subjectService.getSubjects();
-            setSubjects(data);
-        } catch (error) {
-            console.error("Błąd ładowania przedmiotów", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const [subjects, setSubjects] = useState<SubjectDTO[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [activeTab, setActiveTab] = useState<'active' | 'archived'>('active');
 
     useEffect(() => {
-        loadSubjects();
-    }, []);
+        getTeacherSubjects()
+            .then(data => {
+                setSubjects(data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setError(t('subject.list.fetchError'));
+                setLoading(false);
+            });
+    }, [t]);
+
+    const activeSubjects = subjects.filter(sub => !sub.archived);
+    const archivedSubjects = subjects.filter(sub => sub.archived);
+    const displayedSubjects = activeTab === 'active' ? activeSubjects : archivedSubjects;
+
+    const handleSubjectClick = (subjectId?: string | null) => {
+        if (!subjectId) return;
+        navigate(PATHS.SUBJECT_DETAILS.replace(':id', subjectId));
+    };
+
+    if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading', 'Ładowanie...')}</div>;
+    if (error) return <div className="p-8 text-center text-danger font-medium">{error}</div>;
 
     return (
-        <div className="p-8 bg-base min-h-screen">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-bold text-primary">{t('subject.list.title', 'Lista przedmiotów')}</h1>
+        <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base">
+            <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
+                {t('subject.list.role.teacher')}
+            </div>
+
+            <div className="mb-8">
+                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
+                    {t('subject.list.title')}
+                </h1>
+                <p className="text-secondary text-sm max-w-2xl">
+                    {t('subject.list.description')}
+                </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border mb-8 gap-4">
+                <div className="flex space-x-8">
                     <button
-                        onClick={() => navigate(PATHS.CREATE_SUBJECT)} // Użyj ścieżki z PATHS
-                        className="flex items-center gap-2 bg-brand hover:bg-brand-hover text-white px-4 py-2 rounded-md font-bold text-sm uppercase tracking-widest transition-colors"
+                        onClick={() => setActiveTab('active')}
+                        className={`text-sm font-bold pb-4 -mb-[1px] transition-colors ${activeTab === 'active' ? 'text-brand border-b-2 border-brand' : 'text-secondary hover:text-primary'}`}
                     >
-                        <Plus size={18} />
-                        {t('subject.create.title', 'Utwórz przedmiot')}
+                        {t('subject.list.tabs.active')} ({activeSubjects.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('archived')}
+                        className={`text-sm font-bold pb-4 -mb-[1px] transition-colors ${activeTab === 'archived' ? 'text-brand border-b-2 border-brand' : 'text-secondary hover:text-primary'}`}
+                    >
+                        {t('subject.list.tabs.archived')} ({archivedSubjects.length})
                     </button>
                 </div>
 
-                {isLoading ? (
-                    <div className="flex justify-center p-8"><RefreshCw className="animate-spin text-brand" size={32} /></div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {subjects.length > 0 ? subjects.map((sub) => (
-                            <div key={sub.id} className="bg-surface p-6 rounded-xl border border-border shadow-sm hover:border-brand transition-colors">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <BookOpen className="text-brand" />
-                                    <h2 className="font-bold text-primary text-lg">{sub.name}</h2>
-                                </div>
-                                <p className="text-sm text-secondary mb-2">Edycja: {sub.edition}</p>
-                                <a href={sub.giteaURL} target="_blank" rel="noreferrer" className="text-xs text-brand font-bold uppercase underline">Gitea</a>
-                            </div>
-                        )) : (
-                            <p className="text-secondary">{t('subject.list.empty', 'Brak przedmiotów do wyświetlenia.')}</p>
-                        )}
-                    </div>
-                )}
+                <button
+                    onClick={() => navigate(PATHS.CREATE_SUBJECT)}
+                    className="flex items-center gap-2 text-brand font-bold text-sm hover:text-brand-hover pb-4 transition-colors"
+                >
+                    <span className="text-lg leading-none">+</span> {t('subject.list.btn.create')}
+                </button>
             </div>
+
+            {displayedSubjects.length === 0 ? (
+                <div className="text-center bg-surface border border-border rounded-xl p-12 shadow-sm">
+                    <p className="text-secondary text-lg">{t('subject.list.empty')}</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    {displayedSubjects.map((sub) => (
+                        <div
+                            onClick={() => handleSubjectClick(sub.id)}
+                            key={sub.id}
+                            className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group cursor-pointer"
+                        >
+                            <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
+                                <img
+                                    src={`https://api.dicebear.com/7.x/shapes/svg?seed=${sub.id}`}
+                                    alt="Okładka przedmiotu"
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
+                                    {sub.edition}
+                                </div>
+                            </div>
+
+                            <div className="p-6 flex-grow flex flex-col">
+                                <h3
+                                    className="text-xl font-bold text-primary mb-2 line-clamp-2 leading-snug group-hover:text-brand transition-colors cursor-pointer"
+                                    onClick={(e) => { e.stopPropagation(); handleSubjectClick(sub.id); }}
+                                >
+                                    {sub.name}
+                                </h3>
+
+                                <p className="text-secondary text-sm mb-5 line-clamp-3">
+                                    {sub.subjectDescription || t('subject.list.noDescription')}
+                                </p>
+
+                                <div className="mt-auto flex justify-between items-end mb-4">
+                                    <div className="flex flex-col">
+                                        <span className="text-xs text-secondary font-semibold mb-1">
+                                            {t('subject.list.card.nextScan')}
+                                        </span>
+                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : 'text-blue-600 dark:text-blue-400'}`}>
+                                            {sub.archived ? t('subject.list.card.status.archived') : t('subject.list.card.status.pending')}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); handleSubjectClick(sub.id); }}
+                                        className="flex-grow bg-brand text-white text-sm font-bold py-2.5 rounded-lg hover:bg-brand-hover transition-colors shadow-sm"
+                                    >
+                                        {t('subject.list.card.btn.manage')}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
-}
+};
