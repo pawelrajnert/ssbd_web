@@ -10,6 +10,8 @@ import { getSimilarityBadge } from "../../shared/components/similarity_badge/Sim
 import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw } from "lucide-react";
 import { PATHS } from "../../routes/paths";
 import { EditSubjectModal } from './EditSubjectModal';
+import {repositoryService} from "../../services/repositoryService.ts";
+import type {RepositoryWithStudentDTO} from "../../types/subject.types.ts";
 
 export const SubjectDetailsView: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -30,6 +32,12 @@ export const SubjectDetailsView: React.FC = () => {
     const [deleteGiteaOrg, setDeleteGiteaOrg] = useState<boolean>(false);
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
+    const [repositories, setRepositories] = useState<RepositoryWithStudentDTO[] | null>(null);
+
+    // const MOCK_REPOS = [
+    //     { id: 1, name: 'Grupa_cz_12_01', date: 'Oct 24, 2026', msg: t('subject.details.status.clean', 'Brak podejrzenia plagiatu'), status: 'clean', users: 'Jan Kowalski, Anna Nowak' },
+    //     { id: 2, name: 'Grupa_cz_12_02', date: 'Oct 23, 2026', msg: `${t('subject.details.status.alert', 'Podejrzenie!')} 82%`, status: 'alert', users: 'Marek Wiśniewski, Kasia Zielińska' }
+    // ];
     const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
     const fetchSubjectData = () => {
@@ -52,6 +60,9 @@ export const SubjectDetailsView: React.FC = () => {
             reportService.getAllReportsForSubject(id, 0, 5, "created_at", true)
                 .then(data => setReports(data))
                 .catch(console.error);
+            repositoryService.getRepositoriesForSubject(id)
+                .then(data => setRepositories(data))
+                .catch();
         }
     }, [id, t]);
 
@@ -114,7 +125,7 @@ export const SubjectDetailsView: React.FC = () => {
     if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand" /></div>;
     if (error || !subject) return <div className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
 
-    const repositoryList = (subject as any).repositoryList || [];
+    // const repositoryList = (subject as any).repositoryList || [];
 
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
@@ -177,7 +188,7 @@ export const SubjectDetailsView: React.FC = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mb-4">
                         {[
                             {label: t('subject.details.stats.students', 'Studentów'), value: '42'},
-                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositoryList.length.toString()},
+                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositories?.length.toString()},
                             {label: t('subject.details.stats.pending', 'Oczekujące'), value: reports?.totalElements || '0'},
                             {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: '8.4%'}
                         ].map((stat, idx) => (
@@ -242,21 +253,20 @@ export const SubjectDetailsView: React.FC = () => {
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            {repositoryList.length === 0 ? (
+                            {repositories?.length === 0 ? (
                                 <div className="p-8 text-center text-secondary border border-dashed border-border rounded-xl">
                                     {t('subject.details.repos.empty', 'Brak zsynchronizowanych repozytoriów. Kliknij "Odśwież z Gitea", aby pobrać nowości.')}
                                 </div>
                             ) : (
-                                repositoryList.map((repo: any) => {
-                                    const repoName = repo.repositoryName || repo.name || 'Nieznane repozytorium';
-                                    const repoId = repo.id || repo.repositoryName;
-
-                                    const users = repo.studentList && repo.studentList.length > 0
-                                        ? repo.studentList.map((s: any) => s.account?.login || s.login || 'Nieznany').join(', ')
+                                repositories?.map((repo: RepositoryWithStudentDTO) => {
+                                    const repoName = repo.repositoryName;
+                                    console.log(repo);
+                                    const users = repo.students && repo.students.length > 0
+                                        ? repo.students.map((s) => `${s.name} ${s.surname}`)
                                         : t('subject.details.repos.noUsers', 'Brak przypisanych członków');
 
                                     return (
-                                        <div key={repoId} className="border border-border bg-surface rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:border-brand/50 transition-colors">
+                                        <div key={repoName} className="border border-border bg-surface rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:border-brand/50 transition-colors">
                                             <div>
                                                 <h4 className="font-bold text-primary text-base mb-1">{repoName}</h4>
                                                 <p className="text-sm text-secondary mb-1">
