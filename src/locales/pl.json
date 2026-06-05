@@ -26,7 +26,8 @@
     "delete": "Usuń",
     "back": "Wróć",
     "confirm": "Potwierdź",
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "accessDenied": "Nie masz dostępu do tej strony"
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -677,7 +678,8 @@
         "report": "Raport",
         "reposCount": "repozytoriów studenckich",
         "modalTitle": "Wszystkie Raporty Antyplagiatowe",
-        "modalReposCount": "Repozytoria"
+        "modalReposCount": "Repozytoria",
+        "repositories": "Przeskanowano repozytoriów:"
       },
       "repos": {
         "title": "Aktywne Repozytoria Studenckie",
@@ -852,5 +854,10 @@
     "noCode": "// Brak kodu",
     "tokensLabel": "tokenów",
     "fragmentsLabel": "fragmentów"
+  },
+  "notFound": {
+    "title": "Strona nie znaleziona",
+    "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
+    "backToHome": "Wróć do strony głównej"
   }
 }

@@ -29,3 +29,13 @@ export const changeOtherPassword = async (login: string, data: ChangeOtherPasswo
         }
     });
 };
+
+export const changeLanguage = async (languageCode: string) => {
+    return await api.post(
+        `/account/language`, null,
+        {
+            params: {
+                language: languageCode
+            }
+        });
+}

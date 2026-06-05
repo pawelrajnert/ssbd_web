@@ -5,6 +5,7 @@ export interface ReportDTO {
     created_at: string;
     created_by: string;
     subject_name: string;
+    scanned_repositories: number;
 }
 
 export interface FilteredComparisonDTO {

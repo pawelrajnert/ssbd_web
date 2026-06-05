@@ -1,10 +1,15 @@
-export const getSimilarityBadge = (similarity: number) => {
-    const roundedSimilarity = Math.round(similarity);
+interface SimilarityBadgeProps {
+    similarity: number;
+}
+
+export const SimilarityBadge = ({ similarity }: SimilarityBadgeProps) => {
+    const formattedSimilarity = similarity.toFixed(1);
 
     let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
-    if (roundedSimilarity >= 40) {
+
+    if (similarity >= 40) {
         badgeClass += "bg-brand text-white";
-    } else if (roundedSimilarity >= 10) {
+    } else if (similarity >= 10) {
         badgeClass += "bg-cyan-600 text-white";
     } else {
         badgeClass += "bg-gray-200 text-secondary";
@@ -12,7 +17,7 @@ export const getSimilarityBadge = (similarity: number) => {
 
     return (
         <span className={badgeClass}>
-            {roundedSimilarity}% match
-            </span>
+            {formattedSimilarity}%
+        </span>
     );
 };
