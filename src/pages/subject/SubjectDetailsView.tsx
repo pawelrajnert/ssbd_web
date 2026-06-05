@@ -6,7 +6,7 @@ import type { SubjectDTO } from '../../types/SubjectDTO';
 import { formatDate, reportService } from "../../services/reportService";
 import type { Page } from "../../types/user.types";
 import type { ReportDTO } from "../../types/report.types";
-import { getSimilarityBadge } from "../../shared/components/similarity_badge/SimilarityBadge";
+import { SimilarityBadge } from "../../shared/components/similarity_badge/SimilarityBadge";
 import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw } from "lucide-react";
 import { PATHS } from "../../routes/paths";
 import { EditSubjectModal } from './EditSubjectModal';
@@ -34,10 +34,6 @@ export const SubjectDetailsView: React.FC = () => {
 
     const [repositories, setRepositories] = useState<RepositoryWithStudentDTO[] | null>(null);
 
-    // const MOCK_REPOS = [
-    //     { id: 1, name: 'Grupa_cz_12_01', date: 'Oct 24, 2026', msg: t('subject.details.status.clean', 'Brak podejrzenia plagiatu'), status: 'clean', users: 'Jan Kowalski, Anna Nowak' },
-    //     { id: 2, name: 'Grupa_cz_12_02', date: 'Oct 23, 2026', msg: `${t('subject.details.status.alert', 'Podejrzenie!')} 82%`, status: 'alert', users: 'Marek Wiśniewski, Kasia Zielińska' }
-    // ];
     const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
     const fetchSubjectData = () => {
@@ -145,23 +141,28 @@ export const SubjectDetailsView: React.FC = () => {
         return '0.0%';
     }, [subject?.aggregatedAverageSimilarity]);
 
-    if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand" /></div>;
-    if (error || !subject) return <div className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
+    if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2
+        className="w-8 h-8 animate-spin text-brand"/></div>;
+    if (error || !subject) return <div
+        className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
 
-    // const repositoryList = (subject as any).repositoryList || [];
 
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
 
             <div className="mb-8 border-b border-border pb-6">
-                <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-                    {t('subject.details.breadcrumb', 'Przedmioty')} / {subject.name}
-                </div>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
                     <div>
                         <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">{subject.name}</h1>
-                        <p className="text-secondary max-w-4xl text-sm md:text-base mb-6 leading-relaxed">
-                            {t('subject.details.edition', 'Edycja')}: <span className="font-medium text-primary">{subject.edition}</span> | {t('subject.details.organization', 'Organizacja')}: <a href={subject.giteaURL || `https://gitea.com/${subject.organizationName}`} target="_blank" rel="noreferrer" className="font-medium text-brand hover:underline">{subject.organizationName}</a>
+                        <p className="text-secondary max-w-4xl text-sm mb-6 leading-relaxed">
+                            {t('subject.details.edition', 'Edycja')}: <span
+                            className="font-medium text-primary">{subject.edition}</span> | {t('subject.details.organization', 'Organizacja')}: <a
+                            href={subject.giteaURL || `https://gitea.com/${subject.organizationName}`} target="_blank"
+                            rel="noreferrer"
+                            className="font-medium text-brand hover:underline">{subject.organizationName}</a>
+                        </p>
+                        <p className="text-primary max-w-4xl text-sm mb-6 leading-relaxed">
+                            {subject.subjectDescription}
                         </p>
                     </div>
 
@@ -238,14 +239,21 @@ export const SubjectDetailsView: React.FC = () => {
                                 <p className="text-sm text-secondary italic">Brak wygenerowanych raportów.</p>
                             ) : (
                                 reports?.content.map((report) => (
-                                    <div key={report.id} className="min-w-[280px] p-5 rounded-xl border border-border bg-surface shadow-sm snap-start shrink-0 cursor-pointer hover:border-brand transition-colors">
+                                    <div key={report.id}
+                                         className="min-w-[280px] p-5 rounded-xl border border-border bg-surface shadow-sm snap-start shrink-0 cursor-pointer hover:border-brand transition-colors"
+                                         onClick={() => {
+                                             navigate(`/reports/${report.id}`)
+                                         }}
+                                    >
                                         <div className="flex justify-between items-start mb-3">
                                             <h4 className="font-bold text-primary">{t('subject.details.reports.report', 'Raport')} • {formatDate(report.created_at)}</h4>
                                             <span className={"text-[13px] font-bold px-2 py-0.5 rounded-sm"}>
-                                                {getSimilarityBadge(report.average_similarity * 100)}
+                                                <SimilarityBadge similarity={report.average_similarity * 100}/>
                                             </span>
                                         </div>
-                                        <p className="text-sm text-secondary font-mono bg-base px-2 py-1 rounded inline-block"> {report.tag} </p>
+                                        <p className="text-sm text-primary font-mono py-1 rounded inline-block">{t("subject.details.reports.repositories")}</p>
+                                        <b> {report.scanned_repositories}</b>
+                                        <p className="text-sm text-primary font-mono bg-base ml-8 px-2 py-1 rounded inline-block"> {report.tag} </p>
                                     </div>
                                 ))
                             )}
@@ -293,20 +301,24 @@ export const SubjectDetailsView: React.FC = () => {
                                             <div>
                                                 <h4 className="font-bold text-primary text-base mb-1">{repoName}</h4>
                                                 <p className="text-sm text-secondary mb-1">
-                                                    {t('subject.details.repos.tickets', 'Dostępne skanowania')}: <span className="font-bold text-primary">{repo.ticketCount || 0}</span>
+                                                    {t('subject.details.repos.tickets', 'Dostępne skanowania')}: <span
+                                                    className="font-bold text-primary">{repo.ticketCount || 0}</span>
                                                 </p>
                                                 <p className="text-xs text-secondary font-medium">
-                                                    {t('subject.details.repos.contributors', 'Członkowie')}: <span className="text-primary">{users}</span>
+                                                    {t('subject.details.repos.contributors', 'Członkowie')}: <span
+                                                    className="text-primary">{users}</span>
                                                 </p>
                                             </div>
-                                            <div className="flex gap-2 shrink-0 mt-2 sm:mt-0">
-                                                <button type="button" className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors">
-                                                    {t('subject.details.repos.viewCode', 'Kod')}
-                                                </button>
-                                                <button type="button" className="px-4 py-2 bg-brand border border-brand rounded-lg text-sm font-bold text-white hover:bg-brand-hover shadow-sm transition-colors">
-                                                    {t('subject.details.repos.analyze', 'Skanuj')}
-                                                </button>
-                                            </div>
+                                            {/*<div className="flex gap-2 shrink-0 mt-2 sm:mt-0">*/}
+                                            {/*    <button type="button"*/}
+                                            {/*            className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors">*/}
+                                            {/*        {t('subject.details.repos.viewCode', 'Kod')}*/}
+                                            {/*    </button>*/}
+                                            {/*    <button type="button"*/}
+                                            {/*            className="px-4 py-2 bg-brand border border-brand rounded-lg text-sm font-bold text-white hover:bg-brand-hover shadow-sm transition-colors">*/}
+                                            {/*        {t('subject.details.repos.analyze', 'Skanuj')}*/}
+                                            {/*    </button>*/}
+                                            {/*</div>*/}
                                         </div>
                                     );
                                 })
@@ -326,19 +338,46 @@ export const SubjectDetailsView: React.FC = () => {
                 <div className="fixed inset-0 z-50 bg-base flex flex-col p-6 md:p-10 overflow-y-auto animate-fade-in">
                     <div className="max-w-[1400px] w-full mx-auto">
                         <div className="flex justify-between items-center mb-8 border-b border-border pb-4 mt-4">
-                            <h2 className="text-3xl font-bold text-primary">{t('subject.details.reports.modalTitle', 'Wszystkie Raporty')}</h2>
-                            <button type="button" onClick={() => setIsReportsModalOpen(false)} className="text-secondary hover:text-brand font-bold text-3xl p-2 transition-colors leading-none">&times;</button>
+                            <h2 className="text-3xl font-bold text-primary">
+                                {t('subject.details.reports.modalTitle', 'Wszystkie Raporty Antyplagiatowe')}
+                            </h2>
+                            <button
+                                type="button"
+                                onClick={() => setIsReportsModalOpen(false)}
+                                className="text-secondary hover:text-brand font-bold text-3xl p-2 transition-colors leading-none"
+                            >
+                                &times;
+                            </button>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+
+                        <div
+                            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                             {reports?.content.map((report) => (
-                                <div key={report.id} className="p-5 rounded-xl border border-border bg-surface shadow-sm cursor-pointer hover:border-brand transition-colors">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <h4 className="font-bold text-primary">{t('subject.details.reports.report', 'Raport')} • {formatDate(report.created_at)}</h4>
-                                        <span className={"text-[13px] font-bold px-2 py-0.5 rounded-sm"}>
-                                            {getSimilarityBadge(report.average_similarity * 100)}
+                                <div
+                                    key={report.id}
+                                    className="p-5 rounded-xl border border-border bg-surface shadow-sm cursor-pointer hover:border-brand transition-colors flex flex-col min-h-[160px]"
+                                    onClick={() => {
+                                        navigate(`/reports/${report.id}`)
+                                    }}
+                                >
+                                    <div className="flex justify-between items-start gap-3 mb-4">
+                                        <h4 className="font-bold text-primary leading-relaxed">
+                                            {t('subject.details.reports.report', 'Raport')} • {formatDate(report.created_at)}
+                                        </h4>
+                                        <div className="shrink-0 mt-0.5">
+                                            <SimilarityBadge similarity={report.average_similarity * 100}/>
+                                        </div>
+                                    </div>
+                                    <div className="mt-auto flex flex-col items-start gap-2">
+                                        <p className="text-sm text-primary font-mono m-0">
+                                            {t("subject.details.reports.repositories")}
+                                            <span className="font-bold text-lg">{report.scanned_repositories} </span>
+                                        </p>
+                                        <span
+                                            className="inline-flex text-xs text-secondary font-mono bg-base px-2 py-1 rounded">
+                                            {report.tag}
                                         </span>
                                     </div>
-                                    <p className="text-sm text-secondary font-mono bg-base px-2 py-1 rounded inline-block">{report.tag}</p>
                                 </div>
                             ))}
                         </div>

@@ -4,9 +4,9 @@ import {useTranslation} from "react-i18next";
 import {useAuth} from "../../../hooks/useAuth";
 import {PATHS} from "../../../routes/paths";
 import {useBreadcrumb} from "../../../contexts/BreadcrumbContext";
-import i18n from "i18next";
 import {useEffect, useRef, useState} from "react";
 import {useTheme} from "../../../hooks/useTheme.ts";
+import {LanguageSelector} from "./LanguageSelector.tsx";
 
 export default function Header() {
     const {logout, availableRoles, changeActiveRole, activeRole, userLogin} = useAuth();
@@ -155,16 +155,7 @@ export default function Header() {
                                     <p className="text-[11px] font-bold text-secondary mb-2 tracking-wider flex items-center gap-2 uppercase">
                                         <Globe size={14}/> Language
                                     </p>
-                                    {/* Added dark:bg-surface to select to ensure the dropdown menu background is correct in dark mode */}
-                                    <select
-                                        value={i18n.language}
-                                        onChange={(e) => i18n.changeLanguage(e.target.value)}
-                                        className="w-full bg-transparent text-sm font-semibold text-primary border-b border-border py-2 outline-none cursor-pointer hover:border-brand transition-colors appearance-none dark:bg-surface"
-                                    >
-                                        <option value="en">🇺🇸 English (US)</option>
-                                        <option value="pl">🇵🇱 Polish (PL)</option>
-                                        <option value="uk">🇺🇦 Ukrainian (UK)</option>
-                                    </select>
+                                    <LanguageSelector/>
                                 </div>
 
                                 {availableRoles.length > 1 && (
