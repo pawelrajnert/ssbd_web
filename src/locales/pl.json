@@ -678,7 +678,8 @@
         "report": "Raport",
         "reposCount": "repozytoriów studenckich",
         "modalTitle": "Wszystkie Raporty Antyplagiatowe",
-        "modalReposCount": "Repozytoria"
+        "modalReposCount": "Repozytoria",
+        "repositories": "Przeskanowano repozytoriów:"
       },
       "repos": {
         "title": "Aktywne Repozytoria Studenckie",

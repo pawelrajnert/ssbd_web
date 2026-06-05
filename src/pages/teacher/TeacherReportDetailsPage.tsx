@@ -5,6 +5,7 @@ import { ArrowLeft, AlertTriangle, User } from 'lucide-react';
 import { reportService } from '../../services/reportService';
 import type { TeacherReportDetails, TeacherComparison } from '../../types/report.types';
 import {SideBySideViewer} from "../../shared/components/SideBySideViewer.tsx";
+import {SimilarityBadge} from "../../shared/components/similarity_badge/SimilarityBadge.tsx";
 
 const TeacherReportDetailsPage: React.FC = () => {
     const { t } = useTranslation();
@@ -81,25 +82,6 @@ const TeacherReportDetailsPage: React.FC = () => {
         );
     }
 
-    const getSimilarityBadge = (similarity: number) => {
-        const formattedSimilarity = similarity.toFixed(1);
-
-        let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
-        if (similarity >= 40) {
-            badgeClass += "bg-brand text-white";
-        } else if (similarity >= 10) {
-            badgeClass += "bg-cyan-600 text-white";
-        } else {
-            badgeClass += "bg-gray-200 text-secondary";
-        }
-
-        return (
-            <span className={badgeClass}>
-            {formattedSimilarity}%
-        </span>
-        );
-    };
-
     return (
         <div className="flex flex-col h-screen bg-base overflow-hidden">
 
@@ -113,7 +95,7 @@ const TeacherReportDetailsPage: React.FC = () => {
                         {report.subjectName}
                     </h1>
                     <h1 className="text-lg font-bold text-primary truncate max-w-[300px] xl:max-w-[500px]" title={report.subjectName}>
-                        {getSimilarityBadge(report.averageSimilarity * 100)}
+                        <SimilarityBadge similarity={report.averageSimilarity * 100}/>
                     </h1>
                 </div>
 
@@ -172,6 +154,7 @@ const TeacherReportDetailsPage: React.FC = () => {
                                 <span className={`text-sm ${isSelected ? 'text-brand' : 'text-primary'}`}>
                                     {comp.firstSubmission} <span className="text-[10px] text-secondary mx-1 uppercase">vs</span> {comp.secondSubmission}
                                 </span>
+                                <SimilarityBadge similarity={comp.averageSimilarity * 100}/>
                             </button>
                         );
                     })}

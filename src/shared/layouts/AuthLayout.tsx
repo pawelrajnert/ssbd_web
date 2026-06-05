@@ -1,34 +1,49 @@
 import {Outlet} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {Globe} from "lucide-react";
+import {Globe, Moon, Sun, Factory} from "lucide-react";
+import {useTheme} from "../../hooks/useTheme.ts";
 
 export default function AuthLayout() {
     const {t, i18n} = useTranslation();
+    const {theme, setTheme} = useTheme();
 
     return (
         <div className="flex min-h-screen bg-base relative transition-colors duration-300">
 
-            <div className="absolute top-6 right-8 z-10">
-                <div
-                    className="relative flex items-center gap-2 group bg-surface hover:bg-active px-3 py-2 rounded-lg transition-colors border border-border shadow-sm">
-                    <Globe size={18} className="text-secondary group-hover:text-brand transition-colors"/>
+            <div className="absolute top-6 right-8 z-10 flex items-center gap-4">
+                <div className="flex items-center bg-base border border-border rounded-lg p-1 h-10 shadow-sm">
+                    <button onClick={() => setTheme('light')}
+                            className={`flex items-center justify-center gap-2 h-full px-3 text-sm font-semibold rounded-md transition-all ${theme === 'light' ? 'bg-surface shadow-sm text-primary border border-border' : 'text-secondary hover:text-primary'}`}
+                    >
+                        <Sun size={16}/> Light
+                    </button>
+                    <button onClick={() => setTheme('dark')}
+                            className={`flex items-center justify-center gap-2 h-full px-3 text-sm font-semibold rounded-md transition-all ${theme === 'dark' ? 'bg-surface shadow-sm text-primary border border-border' : 'text-secondary hover:text-primary'}`}
+                    >
+                        <Moon size={16}/> Dark
+                    </button>
+                </div>
+
+                <div className="relative flex items-center group bg-base border border-border hover:border-brand rounded-lg h-10 pl-3 pr-2 shadow-sm transition-all focus-within:ring-2 focus-within:ring-brand/20">
+                    <Globe size={16} className="text-secondary group-hover:text-brand transition-colors shrink-0"/>
+
                     <select
                         value={i18n.language}
                         onChange={(e) => i18n.changeLanguage(e.target.value)}
-                        className="bg-transparent text-sm font-bold text-primary outline-none cursor-pointer hover:text-brand transition-colors appearance-none pr-2 dark:bg-surface"
+                        className="bg-transparent text-sm font-bold text-primary outline-none cursor-pointer appearance-none pl-2 pr-6 h-full w-full dark:bg-base"
                     >
                         <option value="en">EN</option>
                         <option value="pl">PL</option>
                         <option value="uk">UK</option>
                     </select>
-                    <div className="pointer-events-none text-secondary group-hover:text-brand">
-                        <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
-                            <path
-                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                clipRule="evenodd" fillRule="evenodd"></path>
+
+                    <div className="absolute right-2 pointer-events-none text-secondary group-hover:text-brand transition-colors h-full flex items-center">
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd"></path>
                         </svg>
                     </div>
                 </div>
+
             </div>
 
             <div className="hidden md:flex md:w-1/3 bg-[#7A1014] text-white p-12 flex-col justify-between">
@@ -42,8 +57,8 @@ export default function AuthLayout() {
                 </div>
 
                 <div className="flex items-center gap-4 opacity-80">
-                    <div className="w-8 h-8 bg-white/20 rounded">
-                        {/* TODO: dodać ikonkę fabryki */}
+                    <div className="w-8 h-8 bg-white/20 rounded flex items-center">
+                       <Factory className="ml-1"/>
                     </div>
                     <p className="text-sm font-semibold tracking-widest uppercase">
                         {t('auth.founded')}
