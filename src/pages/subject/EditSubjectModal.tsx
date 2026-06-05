@@ -51,7 +51,6 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
         const dto: UpdateSubjectDTO = {
             name,
             subjectDescription: description,
-            giteaURL: giteaUrl,
             teachers,
             rules: {
                 raportLevelName: visibility,

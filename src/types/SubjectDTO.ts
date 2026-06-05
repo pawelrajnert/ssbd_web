@@ -13,7 +13,7 @@ export interface SubjectDTO {
     organizationName: string;
     edition: string;
     subjectDescription?: string | null;
-    giteaURL: string;
+    giteaURL?: string;
     archived?: boolean | null;
     canEdit?: boolean | null;
     canManageTeachers?: boolean | null;
@@ -22,6 +22,7 @@ export interface SubjectDTO {
     manualRules?: RulePresetDTO | null;
     teachers?: TeacherAssignmentDTO[];
     repositoryList?: any[];
+    aggregatedAverageSimilarity?: number | null;
 }
 
 export type TeacherSubjectRole = 'OWNER' | 'EDITOR' | 'VIEWER';
@@ -40,10 +41,9 @@ export interface UpdateRulePresetDTO {
 
 export interface UpdateSubjectDTO {
     name: string;
-    subjectDescription: string;
-    giteaURL: string;
+    subjectDescription?: string | null;
     teachers: TeacherAssignmentDTO[];
-    rules: UpdateRulePresetDTO | null;
+    rules?: UpdateRulePresetDTO;
 }
 
 export interface TeacherSearchDTO {

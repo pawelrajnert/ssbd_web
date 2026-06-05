@@ -6,6 +6,7 @@ import { ruleService } from '../../services/ruleService';
 import type { SubjectDTO, TeacherAssignmentDTO } from '../../types/SubjectDTO';
 import { useBreadcrumb } from '../../contexts/BreadcrumbContext';
 import { TeacherAssignmentManager } from '../subject/TeacherAssignmentManager';
+import { PATHS } from '../../routes/paths';
 
 export const CreateSubjectPage: React.FC = () => {
     const { t } = useTranslation();
@@ -21,7 +22,6 @@ export const CreateSubjectPage: React.FC = () => {
     const [organizationName, setOrganizationName] = useState('');
     const [edition, setEdition] = useState('');
     const [description, setDescription] = useState('');
-    const [giteaUrl, setGiteaUrl] = useState('');
 
     const [usePreset, setUsePreset] = useState<boolean>(false);
     const [templateId, setTemplateId] = useState<string>('');
@@ -30,7 +30,8 @@ export const CreateSubjectPage: React.FC = () => {
     const [tickets, setTickets] = useState(10);
     const [minTokens, setMinTokens] = useState(0);
     const [normalization, setNormalization] = useState(false);
-    const [visibility, setVisibility] = useState('FULL');
+
+    const [visibility, setVisibility] = useState('ONLY_PERCENTAGES');
 
     const [teachers, setTeachers] = useState<TeacherAssignmentDTO[]>([]);
 
@@ -50,8 +51,8 @@ export const CreateSubjectPage: React.FC = () => {
     }, []);
 
     const handleSubmit = async () => {
-        if (!name.trim() || !organizationName.trim() || !edition.trim() || !giteaUrl.trim()) {
-            setError(t('subjectCreate.errorEmpty', 'Wypełnij wszystkie wymagane pola (Nazwa, Organizacja, Edycja, URL).'));
+        if (!name.trim() || !organizationName.trim() || !edition.trim()) {
+            setError(t('subjectCreate.errorEmpty', 'Wypełnij wszystkie wymagane pola (Nazwa, Organizacja, Edycja).'));
             return;
         }
 
@@ -68,7 +69,6 @@ export const CreateSubjectPage: React.FC = () => {
             organizationName,
             edition,
             subjectDescription: description,
-            giteaURL: giteaUrl,
             templateId: usePreset ? templateId : null,
             teachers: teachers,
             manualRules: {
@@ -82,7 +82,7 @@ export const CreateSubjectPage: React.FC = () => {
 
         try {
             await subjectService.createSubject(dto);
-            navigate('/subjects');
+            navigate(PATHS.TEACHER_SUBJECT_LIST);
         } catch (err: any) {
             setError(err.response?.data?.message || 'Wystąpił błąd podczas tworzenia przedmiotu.');
             setIsSubmitting(false);
@@ -92,7 +92,8 @@ export const CreateSubjectPage: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto p-6 md:p-10 animate-fade-in flex flex-col h-full">
             <div className="mb-8">
-                <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors mb-4">
+                {/* ZAMIAST navigate(-1) UŻYWAMY BEZPIECZNEGO PATHS */}
+                <button type="button" onClick={() => navigate(PATHS.TEACHER_SUBJECT_LIST)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors mb-4">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     {t('common.cancel', 'Wróć')}
                 </button>
@@ -123,10 +124,6 @@ export const CreateSubjectPage: React.FC = () => {
                                 <label className="block text-sm font-semibold text-primary mb-2">{t('subjectCreate.descLabel', 'Opis Przedmiotu')}</label>
                                 <textarea rows={4} value={description} onChange={e => setDescription(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors resize-none" />
                             </div>
-                            <div className="md:col-span-2">
-                                <label className="block text-sm font-semibold text-primary mb-2">{t('subjectCreate.urlLabel', 'Adres URL Gitea *')}</label>
-                                <input type="url" value={giteaUrl} onChange={e => setGiteaUrl(e.target.value)} className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors" />
-                            </div>
                         </div>
                     </section>
 
@@ -143,9 +140,9 @@ export const CreateSubjectPage: React.FC = () => {
                             <label className="block text-sm font-semibold text-primary mb-3">{t('subjectCreate.visibilityLabel', 'Poziom Widoczności Raportu')}</label>
                             <div className="flex flex-col gap-3">
                                 {[
-                                    { key: 'FULL', label: t('subjectCreate.visibilityFull', 'Pełny Raport - student widzi szczegółowe dopasowania kodu') },
-                                    { key: 'SCORE', label: t('subjectCreate.visibilityScore', 'Tylko Wynik - student widzi tylko procenty') },
-                                    { key: 'HIDDEN', label: t('subjectCreate.visibilityHidden', 'Ukryty - student nie widzi żadnych wyników analizy') }
+                                    { key: 'ONLY_PERCENTAGES', label: t('subjectCreate.visibilityScore', 'Tylko Wyniki Procentowe - student widzi jedynie procentowe dopasowanie') },
+                                    { key: 'ONLY_HIGHEST_PERCENT', label: t('subjectCreate.visibilityHighest', 'Tylko Najwyższy Procent - student widzi tylko najwyższy wynik z całego raportu') },
+                                    { key: 'NOTHING', label: t('subjectCreate.visibilityHidden', 'Ukryty - student nie widzi żadnych wyników analizy') }
                                 ].map(level => (
                                     <label key={level.key} className="flex items-center gap-3 cursor-pointer w-fit">
                                         <input type="radio" name="visibility" value={level.key} checked={visibility === level.key} onChange={e => setVisibility(e.target.value)} className="w-4 h-4 accent-brand" />
@@ -220,7 +217,8 @@ export const CreateSubjectPage: React.FC = () => {
                 </div>
 
                 <div className="flex justify-end gap-4 p-6 md:p-8 border-t border-border bg-base/50 rounded-b-2xl mt-auto">
-                    <button type="button" onClick={() => navigate(-1)} disabled={isSubmitting} className="px-6 py-2.5 rounded-lg text-sm font-bold text-secondary border border-border hover:bg-surface transition-colors">
+                    {/* ZAMIAST navigate(-1) UŻYWAMY BEZPIECZNEGO PATHS */}
+                    <button type="button" onClick={() => navigate(PATHS.TEACHER_SUBJECT_LIST)} disabled={isSubmitting} className="px-6 py-2.5 rounded-lg text-sm font-bold text-secondary border border-border hover:bg-surface transition-colors">
                         {t('common.cancel', 'Anuluj')}
                     </button>
                     <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="px-8 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
