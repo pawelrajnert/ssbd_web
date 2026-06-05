@@ -29,6 +29,7 @@ import { SubjectDetailsView } from "../pages/subject/SubjectDetailsView.tsx";
 import {SubjectSchedulePage} from "../pages/schedule/SubjectSchedulePage.tsx";
 import StudentReportListPage from "../pages/student/StudentReportListPage.tsx";
 import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.tsx";
+import { ChangeSubjectManagerPage } from "../pages/subject/ChangeSubjectManagerPage.tsx";
 import { StudentSubjectDetailsView } from "../pages/student/StudentSubjectDetailsView.tsx";
 import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
 import { TeacherSubjectListPage } from "../pages/teacher/TeacherSubjectListPage.tsx";
@@ -178,6 +179,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.USER_EDIT,
                         element: <UserEditPage/>
+                    },
+                    {
+                        path: PATHS.CHANGE_SUBJECT_MANAGER,
+                        element: <ChangeSubjectManagerPage/>
                     }
                 ]
             }
