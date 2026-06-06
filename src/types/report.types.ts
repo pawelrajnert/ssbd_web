@@ -10,12 +10,9 @@ export interface ReportDTO {
 
 export interface FilteredComparisonDTO {
     matchedWith: string;
-    maxSimilarity?: number;
+    studentSimilarity?: number;
+    otherSimilarity?: number;
     averageSimilarity?: number;
-    longestMatch?: number;
-    studentFile?: string;
-    studentCode?: string;
-    matchedLines?: number[];
 }
 
 export interface StudentOwnReportDetailsDTO {
@@ -24,6 +21,7 @@ export interface StudentOwnReportDetailsDTO {
     subjectName: string;
     createdAt: string;
     matches: FilteredComparisonDTO[];
+    raportLevel: string
 }
 
 export interface TeacherMatchedFile {

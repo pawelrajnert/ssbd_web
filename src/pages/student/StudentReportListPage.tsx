@@ -24,7 +24,7 @@ export default function StudentReportListPage() {
     const [sortBy, setSortBy] = useState<keyof ReportDTO | undefined>(undefined);
     const [sortDesc, setSortDesc] = useState<boolean | undefined>(undefined);
 
-    const [t] = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
 
     const fetchReports = useCallback(async () => {
@@ -95,11 +95,14 @@ export default function StudentReportListPage() {
     };
 
     const formatDate = (isoString: string) => {
+        if (!isoString) return "";
         const date = new Date(isoString);
         const optionsDate: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
         const optionsTime: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
 
-        return `${date.toLocaleDateString(undefined, optionsDate)} • ${date.toLocaleTimeString(undefined, optionsTime)}`;
+        const lang = i18n.resolvedLanguage || i18n.language || 'en';
+
+        return `${date.toLocaleDateString(lang, optionsDate)} • ${date.toLocaleTimeString(lang, optionsTime)}`;
     };
 
     const getSimilarityBadge = (similarity: number) => {

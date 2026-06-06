@@ -502,27 +502,18 @@
   },
   "studentReportDetails": {
     "back": "Back to list",
-    "privacyNotice": "This view has been anonymized. Data and source codes of other students are hidden according to the subject's privacy policy.",
-    "matchesTitle": "Found similarities in your code",
+    "privacyNotice": "This view has been anonymized. According to the anti-plagiarism system policy, students do not have access to source codes – only anonymized percentage statistics are displayed.",
+    "hiddenTitle": "Results hidden",
+    "hiddenDesc": "The teacher has disabled viewing details for this report. If you have questions, please contact the instructor.",
     "noMatches": "No significant similarities",
     "noMatchesSub": "The system did not detect plagiarism in your repository in this report.",
+    "matchesTitle": "Found similarities of your code",
     "comparedWith": "Compared with:",
     "anonymized": "Another Student's Repository",
     "metrics": {
-      "max": "Maximum",
-      "average": "Average",
-      "longest": "Longest match",
-      "tokens": "tokens"
-    },
-    "code": {
-      "show": "View flagged code",
-      "hide": "Hide code",
-      "file": "File:",
-      "flaggedLines": "Flagged lines:"
-    },
-    "error": {
-      "accessDenied": "Access denied to this report.",
-      "general": "An error occurred while loading the report."
+      "studentSimilarity": "Amount of your code in foreign repository",
+      "otherSimilarity": "Amount of foreign code in your repository",
+      "average": "Average repositories similarity"
     }
   },
   "studentScan": {

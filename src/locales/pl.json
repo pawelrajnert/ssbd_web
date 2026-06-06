@@ -531,27 +531,18 @@
   },
   "studentReportDetails": {
     "back": "Wróć do listy",
-    "privacyNotice": "Ten widok został zanonimizowany. Ukryto dane i kody źródłowe innych studentów zgodnie z polityką prywatności przedmiotu.",
-    "matchesTitle": "Znalezione podobieństwa Twojego kodu",
+    "privacyNotice": "Ten widok został zanonimizowany. Zgodnie z polityką systemu antyplagiatowego, studenci nie mają wglądu w kod źródłowy - prezentowane są wyłącznie zanonimizowane statystyki procentowe.",
+    "hiddenTitle": "Wyniki ukryte",
+    "hiddenDesc": "Prowadzący wyłączył możliwość podglądu szczegółów dla tego raportu. Jeśli masz pytania, skontaktuj się z wykładowcą.",
     "noMatches": "Brak znaczących podobieństw",
     "noMatchesSub": "System nie wykrył plagiatu w Twoim repozytorium w tym raporcie.",
+    "matchesTitle": "Znalezione podobieństwa Twojego kodu",
     "comparedWith": "Porównano z:",
     "anonymized": "Repozytorium Innego Studenta",
     "metrics": {
-      "max": "Maksymalne",
-      "average": "Średnie",
-      "longest": "Najdłuższy fragment",
-      "tokens": "tokenów"
-    },
-    "code": {
-      "show": "Zobacz oflagowany kod",
-      "hide": "Ukryj kod",
-      "file": "Plik:",
-      "flaggedLines": "Oflagowane linie:"
-    },
-    "error": {
-      "accessDenied": "Brak dostępu do tego raportu.",
-      "general": "Wystąpił błąd podczas ładowania raportu."
+      "studentSimilarity": "Ilość Twojego kodu w obcym repozytorium",
+      "otherSimilarity": "Ilość obcego kodu w Twoim repozytorium",
+      "average": "Średnie podobieństwo repozytoriów"
     }
   },
   "studentScan": {
