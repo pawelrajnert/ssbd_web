@@ -20,7 +20,7 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
     const [tickets, setTickets] = useState(subject.manualRules?.studentTicketCount || 10);
     const [minTokens, setMinTokens] = useState(subject.manualRules?.minimumTokensMatch || 0);
     const [normalization, setNormalization] = useState(subject.manualRules?.enableNormalization || false);
-    const [visibility, setVisibility] = useState(subject.manualRules?.raportLevelName || 'FULL');
+    const [visibility, setVisibility] = useState(subject.manualRules?.raportLevelName || 'ONLY_PERCENTAGES');
 
     const [teachers, setTeachers] = useState<TeacherAssignmentDTO[]>([]);
 
@@ -163,9 +163,9 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
                                 <label className="block text-sm font-semibold text-primary mb-3">{t('subjectEdit.visibility', 'Poziom Widoczności Raportu')}</label>
                                 <div className="flex flex-col gap-3">
                                     {[
-                                        { key: 'FULL', label: 'Pełny Raport' },
-                                        { key: 'SCORE', label: 'Tylko Wynik' },
-                                        { key: 'HIDDEN', label: 'Ukryty' }
+                                        { key: 'ONLY_PERCENTAGES', label: t('subjectEdit.levelPercentages', 'Tylko Statystyki (Wszystkie)') },
+                                        { key: 'ONLY_HIGHEST_PERCENT', label: t('subjectEdit.levelHighest', 'Tylko Statystyki (Najwyższy wynik)') },
+                                        { key: 'NOTHING', label: t('subjectEdit.levelHidden', 'Ukryty (Brak dostępu dla studenta)') }
                                     ].map(level => (
                                         <label key={level.key} className="flex items-center gap-3 cursor-pointer">
                                             <input

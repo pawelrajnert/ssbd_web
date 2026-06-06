@@ -483,6 +483,36 @@
       "viewDetails": "Show report details"
     }
   },
+  "subjectEdit": {
+    "title": "Edit Subject",
+    "subtitle": "Update subject metadata and analysis parameters.",
+    "generalInfo": "GENERAL INFORMATION",
+    "nameLabel": "Subject Name",
+    "descLabel": "Description",
+    "coTeachers": "CO-TEACHERS AND PERMISSIONS",
+    "addTeacher": "Add Teacher",
+    "searchPlaceholder": "Search by surname or email...",
+    "assignedStaff": "ASSIGNED STAFF",
+    "roles": {
+      "OWNER": "Owner",
+      "EDITOR": "Editor (Edit Access)",
+      "VIEWER": "Viewer (Read Only)"
+    },
+    "giteaAnalysis": "GITEA AND ANALYSIS",
+    "giteaUrl": "Gitea Organization URL",
+    "tokens": "Student Tickets",
+    "minTokens": "Minimum tokens match",
+    "normalization": "Enable normalization",
+    "visibility": "Report Visibility Level",
+    "levelPercentages": "All Statistics (All comparisons)",
+    "levelHighest": "Highest score (Single comparison)",
+    "levelHidden": "Hidden (No access for student)",
+    "cancel": "Cancel",
+    "apply": "Apply Changes",
+    "loading": "Saving...",
+    "errorEmpty": "Name and URL cannot be empty.",
+    "success": "Subject has been updated."
+  },
   "studentReportList": {
     "title": "My Reports",
     "sub": "View your anti-plagiarism reports from all assigned subjects.",
