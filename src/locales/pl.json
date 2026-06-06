@@ -771,11 +771,9 @@
     "minTokens": "Minimalna zgodność tokenów",
     "normalization": "Włącz normalizację (Normalization)",
     "visibility": "Poziom Widoczności Raportu",
-    "levels": {
-      "FULL": "Pełny Raport",
-      "SCORE": "Tylko Wynik",
-      "HIDDEN": "Ukryty"
-    },
+    "levelPercentages": "Wszystkie Statystyki (Wszystkie porównania)",
+    "levelHighest": "Najwyższy wynik (Pojedyncze porówanie)",
+    "levelHidden": "Ukryty (Brak dostępu dla studenta)",
     "cancel": "Anuluj",
     "apply": "Zastosuj Zmiany",
     "loading": "Zapisywanie...",
