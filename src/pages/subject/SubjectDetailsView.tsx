@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { getSubjectDetails, deleteSubject, syncSubjectWithGitea } from '../../services/subjectService';
+import {
+    getSubjectDetails,
+    deleteSubject,
+    syncSubjectWithGitea,
+    getTranslatedDescription
+} from '../../services/subjectService';
 import type { SubjectDTO } from '../../types/SubjectDTO';
 import { formatDate, reportService } from "../../services/reportService";
 import type { Page } from "../../types/user.types";
@@ -147,6 +152,18 @@ export const SubjectDetailsView: React.FC = () => {
         className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
 
 
+    function handleShowTranslation() {
+        getTranslatedDescription(id).then((response) => {
+            setSubject((prevSubject) => {
+                if (!prevSubject) return null;
+                return {
+                    ...prevSubject,
+                    subjectDescription: response.translatedSubjectDescription
+                };
+            });
+        });
+    }
+
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
 
@@ -164,6 +181,12 @@ export const SubjectDetailsView: React.FC = () => {
                         <p className="text-primary max-w-4xl text-sm mb-6 leading-relaxed">
                             {subject.subjectDescription}
                         </p>
+                        <button
+                            onClick={() => handleShowTranslation()}
+                            className="cursor-pointer text-sm font-medium text-brand hover:text-primary underline underline-offset-4 decoration-brand/30 hover:decoration-primary transition-all duration-200 focus:outline-none"
+                        >
+                            {t("subject.translation")}
+                        </button>
                     </div>
 
                     <div className="flex flex-wrap gap-6">

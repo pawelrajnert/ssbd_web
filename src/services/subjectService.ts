@@ -1,6 +1,6 @@
 import type { SubjectDTO, UpdateSubjectDTO } from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
-import type { StudentSubjectDetailsDTO } from '../types/subject.types';
+import type {StudentSubjectDetailsDTO, TranslatedSubjectDescriptionDTO} from '../types/subject.types';
 
 export const subjectService = {
     createSubject: async (subject: SubjectDTO): Promise<void> => {
@@ -92,3 +92,8 @@ export const getStudentSubjectDetails = async (subjectId: string): Promise<Stude
     const response = await axiosInstance.get(`/subjects/${subjectId}/student`);
     return response.data;
 };
+
+export const getTranslatedDescription = async (subjectId: string | undefined): Promise<TranslatedSubjectDescriptionDTO> => {
+    const response = await axiosInstance.get(`/subjects/${subjectId}/translate`);
+    return response.data;
+}
