@@ -620,6 +620,7 @@
     "deleteScheduleConflict": "Schedule data has been modified. Please refresh the page and try again."
   },
   "subject": {
+    "translation": "Pokaż tłumaczenie",
     "manager": {
       "change": {
         "title": "Change Subject Manager",
