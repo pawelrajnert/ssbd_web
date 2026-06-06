@@ -37,3 +37,7 @@ export interface RepositoryWithStudentDTO {
         surname: string;
     }[]
 }
+
+export interface TranslatedSubjectDescriptionDTO{
+    translatedSubjectDescription: string
+}

@@ -615,6 +615,7 @@
         "unexpected": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
       }
     },
+    "translation": "Pokaż tłumaczenie",
     "list": {
       "title": "Zarządzane Przedmioty",
       "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",
