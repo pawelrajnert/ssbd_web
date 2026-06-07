@@ -602,7 +602,8 @@
     "status": {
       "all": "All",
       "planned": "Planned",
-      "executed": "Executed"
+      "executed": "Executed",
+      "failed": "Failed"
     },
     "empty": "No scheduled analyses found.",
     "error": {

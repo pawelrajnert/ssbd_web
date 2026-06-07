@@ -725,7 +725,8 @@
     "status": {
       "all": "Wszystkie",
       "planned": "Oczekuje",
-      "executed": "Wykonano"
+      "executed": "Wykonano",
+      "failed": "Nie powiódł się"
     },
     "empty": "Brak zaplanowanych analiz.",
     "error": {
