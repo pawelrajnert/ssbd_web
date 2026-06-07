@@ -1,5 +1,5 @@
 import axiosInstance from '../api/auth/middleware.ts';
-import type {ScheduleDTO, ScheduleResponse} from "../types/schedule.types.ts";
+import type {ScheduleDTO, ScheduleResponse, CreateSchedulePayload, UpdateSchedulePayload} from "../types/schedule.types.ts";
 
 
 export const scheduleService = {
@@ -10,9 +10,18 @@ export const scheduleService = {
 
         return { schedules: response.data, serverTimeMs: serverTimeMs }
     },
-    createSchedule: async (subjectId: string, payload: {scheduleDateTime: string, tag: string}): Promise<{scheduleDateTime: string, tag: string}> => {
+    createSchedule: async (subjectId: string, payload: CreateSchedulePayload): Promise<ScheduleDTO> => {
+        const fullDto: Partial<ScheduleDTO> = {
+            id: null as any,
+            scheduleDateTime: payload.scheduleDateTime,
+            tag: payload.tag,
+            isExecuted: false,
+            hasFailed: false,
+            versionHash: ""
+        }
+
         const response = await axiosInstance
-            .post<ScheduleDTO>(`/schedules/subject/${subjectId}`, {scheduleDateTime: payload.scheduleDateTime, tag: payload.tag});
+            .post<ScheduleDTO>(`/schedules/subject/${subjectId}`, fullDto);
         return response.data
     },
     deleteSchedule: async (scheduleId: string, versionHash: string): Promise<void> => {
@@ -23,7 +32,11 @@ export const scheduleService = {
         });
     },
 
-    updateSchedule: async (scheduleId: string, data: { scheduleDateTime: string, tag: string }): Promise<void> => {
-        await axiosInstance.put(`/schedules/${scheduleId}`, data);
+    updateSchedule: async (scheduleId: string, data: UpdateSchedulePayload, versionHash: string): Promise<void> => {
+        await axiosInstance.put(`/schedules/${scheduleId}`, data, {
+            headers: {
+                'If-Match': versionHash
+            }
+        });
     }
 }
