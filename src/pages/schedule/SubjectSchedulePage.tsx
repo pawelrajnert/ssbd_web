@@ -33,6 +33,7 @@ const getSafeTimestamp = (dateString?: string): number => {
 const STATUS_STYLES: Record<ScheduleStatus, string> = {
     [ScheduleStatus.PLANNED]: 'bg-blue-600 text-white shadow-sm dark:bg-blue-700',
     [ScheduleStatus.EXECUTED]: 'bg-green-600 text-white shadow-sm dark:bg-green-700',
+    [ScheduleStatus.FAILED]: 'bg-red-600 text-white shadow-sm dark:bg-red-700',
 };
 
 export const SubjectSchedulePage: React.FC = () => {
@@ -50,8 +51,6 @@ export const SubjectSchedulePage: React.FC = () => {
     const [sortColumn, setSortColumn] = useState<SortColumn>('date');
     const [sortDesc, setSortDesc] = useState<boolean>(true);
 
-    const [lastServerTime, setLastServerTime] = useState<number>(Date.now());
-
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [scheduleToDelete, setScheduleToDelete] = useState<ScheduleDTO | null>(null);
@@ -66,9 +65,7 @@ export const SubjectSchedulePage: React.FC = () => {
         if (!subjectId) return;
         setIsLoading(true);
         try {
-            const {schedules: fetched, serverTimeMs} =
-                await scheduleService.getSchedulesForSubject(subjectId);
-            setLastServerTime(serverTimeMs);
+            const {schedules: fetched} = await scheduleService.getSchedulesForSubject(subjectId);
             setSchedules(Array.isArray(fetched) ? fetched : []);
             setError(null);
         } catch (err: unknown) {
@@ -165,12 +162,25 @@ export const SubjectSchedulePage: React.FC = () => {
     const sortedAndFiltered = useMemo(() => {
         const safeSchedules = Array.isArray(schedules) ? schedules : [];
 
-        const mapped = safeSchedules.map(s => ({
-            ...s,
-            calculatedStatus: lastServerTime >= getSafeTimestamp(s.scheduleDateTime)
-                ? ScheduleStatus.EXECUTED
-                : ScheduleStatus.PLANNED,
-        }));
+        console.log("Surowe dane harmonogramu:", safeSchedules);
+
+        const mapped = safeSchedules.map(s => {
+            let status: ScheduleStatus = ScheduleStatus.PLANNED;
+
+            const isTaskFailed = s.hasFailed || (s as any).failed === true;
+            const isTaskExecuted = s.isExecuted || (s as any).executed === true;
+
+            if (isTaskFailed) {
+                status = ScheduleStatus.FAILED;
+            } else if (isTaskExecuted) {
+                status = ScheduleStatus.EXECUTED;
+            }
+
+            return {
+                ...s,
+                calculatedStatus: status,
+            };
+        });
 
         const filtered = mapped.filter(s => {
             const matchesStatus = statusFilter === 'ALL' || s.calculatedStatus === statusFilter;
@@ -185,7 +195,7 @@ export const SubjectSchedulePage: React.FC = () => {
 
             return sortDesc ? -diff : diff;
         });
-    }, [schedules, lastServerTime, statusFilter, tagFilter, sortColumn, sortDesc]);
+    }, [schedules, statusFilter, tagFilter, sortColumn, sortDesc]);
 
     const openCreateModal = () => {
         setIsCreateModalOpen(true);
@@ -270,6 +280,7 @@ export const SubjectSchedulePage: React.FC = () => {
                             <option value="ALL">{t('schedule.status.all')}</option>
                             <option value={ScheduleStatus.PLANNED}>{t('schedule.status.planned')}</option>
                             <option value={ScheduleStatus.EXECUTED}>{t('schedule.status.executed')}</option>
+                            <option value={ScheduleStatus.FAILED}>{t('schedule.status.failed')}</option>
                         </select>
                     </div>
                 </div>
@@ -350,7 +361,7 @@ export const SubjectSchedulePage: React.FC = () => {
                                                         type="text"
                                                         value={editTag}
                                                         onChange={e => setEditTag(e.target.value)}
-                                                        className="bg-surface border border-border rounded px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-brand w-full max-w-[200px]"
+                                                        className="bg-surface border border-border rounded px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-brand w-full max-w-50"
                                                     />
                                                 ) : (
                                                     s.tag
@@ -359,9 +370,7 @@ export const SubjectSchedulePage: React.FC = () => {
                                             <td className="py-5 px-8">
                                                 <span
                                                     className={`px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_STYLES[s.calculatedStatus]}`}>
-                                                    {s.calculatedStatus === ScheduleStatus.EXECUTED
-                                                        ? t('schedule.status.executed').toUpperCase()
-                                                        : t('schedule.status.planned').toUpperCase()}
+                                                    {t(s.calculatedStatus).toUpperCase()}
                                                 </span>
                                             </td>
                                             <td className="py-5 px-8 text-right">
@@ -404,31 +413,6 @@ export const SubjectSchedulePage: React.FC = () => {
                                         </tr>
                                     );
                                 })
-                                // sortedAndFiltered.map(s => (
-                                //     <tr key={s.id} className="hover:bg-base transition-colors group">
-                                //         <td className="py-5 px-8">
-                                //             <div className="flex items-center gap-3">
-                                //                 <div className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-secondary border border-border group-hover:bg-surface transition-colors">
-                                //                     <CalendarClock size={20}/>
-                                //                 </div>
-                                //                 <span className="text-sm font-bold text-primary">
-                                //                     {formatDate(s.scheduleDateTime)}
-                                //                 </span>
-                                //             </div>
-                                //         </td>
-                                //         <td className="py-5 px-8 text-sm text-secondary font-medium font-mono">
-                                //             {s.tag}
-                                //         </td>
-                                //         <td className="py-5 px-8">
-                                //             <span className={`px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ${STATUS_STYLES[s.calculatedStatus]}`}>
-                                //                 {s.calculatedStatus === ScheduleStatus.EXECUTED
-                                //                     ? t('schedule.status.executed').toUpperCase()
-                                //                     : t('schedule.status.planned').toUpperCase()}
-                                //             </span>
-                                //         </td>
-
-                                    // </tr>
-                                // ))
                             )}
                             </tbody>
                         </table>
