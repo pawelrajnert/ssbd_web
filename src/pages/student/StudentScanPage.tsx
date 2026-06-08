@@ -20,7 +20,7 @@ export default function StudentScanPage() {
 
     const [repositories, setRepositories] = useState<StudentRepositoryDTO[]>([]);
     const [isLoadingRepos, setIsLoadingRepos] = useState(false);
-    const [usedScans, setUsedScans] = useState<number|undefined>(0);
+    const [usedScans, setUsedScans] = useState<number>(0);
 
     const [history, setHistory] = useState<ReportDTO[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -70,8 +70,7 @@ export default function StudentScanPage() {
                     ? { ...r, usedScans: r.usedScans + 1 }
                     : r
             ));
-            setUsedScans(usedScans+1);
-        } catch (err: any) {
+            setUsedScans(prev => prev + 1);        } catch (err: any) {
             const status = err?.response?.status;
             if (status === 403) setError(t('studentScan.errors.noTickets'));
             else if (status === 404) setError(t('studentScan.errors.notFound'));
@@ -147,7 +146,7 @@ export default function StudentScanPage() {
                                     onChange={e => {
                                         const repo = repositories.find(r => r.repositoryId === e.target.value) ?? null;
                                         setSelectedRepo(repo);
-                                        setUsedScans(repo?.usedScans);
+                                        setUsedScans(repo?.usedScans ?? 0);
                                         setError(null);
                                         setScanResult(null);
                                     }}
