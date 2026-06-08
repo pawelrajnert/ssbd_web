@@ -735,6 +735,31 @@
     "generic": "Operation completed successfully."
   },
   "errors": {
-
+  },
+  "visibility": {
+    "ONLY_PERCENTAGES": {
+      "label": "Only percentages",
+      "description": "You can see the similarity percentages for all your scans. Access to the detailed source code comparison is blocked."
+    },
+    "ONLY_HIGHEST_PERCENT": {
+      "label": "Only highest percent",
+      "description": "You can only see your highest similarity percentage. Other scans and detailed code comparisons are blocked."
+    },
+    "NOTHING": {
+      "label": "Nothing",
+      "description": "All generated reports are hidden from you. Only the teaching staff has full access to the analysis."
+    }
+  },
+  "subject": {
+    "list": {
+      "card": {
+        "nextScan": "Next scan",
+        "status": {
+          "archived": "Archived",
+          "pending": "Pending",
+          "noScanPlanned": "No scans scheduled"
+        }
+      }
+    }
   }
 }

@@ -15,7 +15,6 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
 
     const [name, setName] = useState(subject.name || '');
     const [description, setDescription] = useState(subject.subjectDescription || '');
-    const [giteaUrl, setGiteaUrl] = useState(subject.giteaURL || '');
 
     const [tickets, setTickets] = useState(subject.manualRules?.studentTicketCount || 10);
     const [minTokens, setMinTokens] = useState(subject.manualRules?.minimumTokensMatch || 0);
@@ -26,6 +25,7 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showConfirmEdit, setShowConfirmEdit] = useState(false);
 
     useEffect(() => {
         if (subject.id) {
@@ -39,12 +39,17 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
         }
     }, [subject.id]);
 
-    const handleSubmit = async () => {
-        if (!name.trim() || !giteaUrl.trim()) {
-            setError(t('subjectEdit.errorEmpty', 'Nazwa i URL nie mogą być puste.'));
+    const handlePreSubmit = () => {
+        if (!name.trim()) {
+            setError(t('subjectEdit.errorEmptyName', 'Nazwa przedmiotu nie może być pusta.'));
             return;
         }
+        setError(null);
+        setShowConfirmEdit(true);
+    };
 
+    const executeSubmit = async () => {
+        setShowConfirmEdit(false);
         setIsSubmitting(true);
         setError(null);
 
@@ -118,15 +123,6 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
                     <section>
                         <h3 className="text-xs font-bold text-secondary tracking-widest mb-4 uppercase">{t('subjectEdit.giteaAnalysis', 'GITEA I ANALIZA')}</h3>
                         <div className="flex flex-col gap-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-primary mb-1">{t('subjectEdit.giteaUrl', 'Adres URL Organizacji Gitea')}</label>
-                                <input
-                                    type="url"
-                                    value={giteaUrl}
-                                    onChange={e => setGiteaUrl(e.target.value)}
-                                    className="w-full bg-base border border-border text-primary rounded-lg px-4 py-2 focus:outline-none focus:border-brand transition-colors"
-                                />
-                            </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
@@ -196,13 +192,44 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({ subject, onC
                     </button>
                     <button
                         type="button"
-                        onClick={handleSubmit}
+                        onClick={handlePreSubmit}
                         disabled={isSubmitting}
                         className="px-6 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? t('subjectEdit.loading', 'Zapisywanie...') : t('subjectEdit.apply', 'Zastosuj Zmiany')}
                     </button>
                 </div>
+
+                {showConfirmEdit && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                        <div className="bg-surface border border-border rounded-2xl shadow-xl max-w-md w-full p-6 space-y-6">
+                            <div>
+                                <h3 className="text-xl font-bold text-primary">
+                                    {t('subjectEdit.confirmTitle', 'Potwierdź modyfikację danych')}
+                                </h3>
+                                <p className="text-sm text-secondary mt-2">
+                                    {t('subjectEdit.confirmMessage', 'Czy na pewno chcesz zapisać wprowadzone zmiany? Dotychczasowe dane biznesowe przedmiotu w bazie danych zostaną nadpisane.')}
+                                </p>
+                            </div>
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmEdit(false)}
+                                    className="px-4 py-2.5 rounded-lg text-sm font-semibold text-secondary border border-border hover:bg-base transition-colors"
+                                >
+                                    {t('common.cancel', 'Anuluj')}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={executeSubmit}
+                                    className="px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors"
+                                >
+                                    {t('common.confirmAction', 'Zapisz zmiany')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

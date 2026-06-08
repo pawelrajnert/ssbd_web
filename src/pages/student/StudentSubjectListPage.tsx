@@ -8,7 +8,7 @@ import { useBreadcrumb } from '../../contexts/BreadcrumbContext';
 
 export const StudentSubjectListPage: React.FC = () => {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { setDynamicBreadcrumb } = useBreadcrumb();
 
     useEffect(() => {
@@ -117,8 +117,15 @@ export const StudentSubjectListPage: React.FC = () => {
                                         <span className="text-xs text-secondary font-semibold mb-1">
                                             {t('subject.list.card.nextScan')}
                                         </span>
-                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : 'text-blue-600 dark:text-blue-400'}`}>
-                                            {sub.archived ? t('subject.list.card.status.archived') : t('subject.list.card.status.pending')}
+                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : sub.nextScan ? 'text-blue-600 dark:text-blue-400' : 'text-secondary'}`}>
+                                            {sub.archived
+                                                ? t('subject.list.card.status.archived')
+                                                : sub.nextScan
+                                                    ? new Date(sub.nextScan).toLocaleString(i18n.language, {
+                                                        dateStyle: 'medium',
+                                                        timeStyle: 'short'
+                                                    })
+                                                    : t('subject.list.card.status.noScanPlanned')}
                                         </span>
                                     </div>
                                 </div>
