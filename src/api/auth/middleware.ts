@@ -37,7 +37,22 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 axiosInstance.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        const method = response.config.method?.toUpperCase();
+        const url = response.config.url || '';
+        const silentUrls = ['/auth/refresh', '/auth/login', '/auth/check2FA'];
+        const isSilentUrl = silentUrls.some(silent => url.includes(silent));
+        if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method || '') && !isSilentUrl) {
+            const backendMessage = response.data?.message;
+            const toastMessage = backendMessage || i18n.t('success.generic');
+            toast.success(toastMessage, {
+                autoClose: false,
+                closeOnClick: true,
+                toastId: `success-${method}-${url}`
+            });
+        }
+        return response;
+    },
     async (error) => {
         const originalRequest = error.config;
 
