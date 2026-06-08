@@ -20,6 +20,7 @@ export interface CreateSchedulePayload {
 export interface UpdateSchedulePayload {
     scheduleDateTime: string;
     tag: string;
+    versionHash: string;
 }
 
 export const ScheduleStatus = {

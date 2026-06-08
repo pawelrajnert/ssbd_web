@@ -139,13 +139,17 @@ export const SubjectSchedulePage: React.FC = () => {
     };
 
     const handleSaveEdit = async (id: string) => {
+        const schedule = schedules.find(s => s.id === id);
+        if (!schedule) return;
         try {
             setIsLoading(true);
-            const formattedDate = new Date(editDate).toISOString();
+            const [datePart, timePart] = editDate.split('T');
+            const formattedDate = `${datePart}T${timePart}:00.000`;
 
             await (scheduleService as any).updateSchedule(id, {
                 scheduleDateTime: formattedDate,
-                tag: editTag
+                tag: editTag,
+                versionHash: schedule.versionHash,
             });
 
             setEditingId(null);
@@ -161,8 +165,6 @@ export const SubjectSchedulePage: React.FC = () => {
 
     const sortedAndFiltered = useMemo(() => {
         const safeSchedules = Array.isArray(schedules) ? schedules : [];
-
-        console.log("Surowe dane harmonogramu:", safeSchedules);
 
         const mapped = safeSchedules.map(s => {
             let status: ScheduleStatus = ScheduleStatus.PLANNED;
@@ -210,7 +212,7 @@ export const SubjectSchedulePage: React.FC = () => {
             await scheduleService.createSchedule(subjectId, scheduleToSave);
 
             setIsCreateModalOpen(false);
-            fetchSchedules();
+            await fetchSchedules();
         } catch (err: unknown) {
             console.error("Błąd podczas dodawania harmonogramu:", err);
             setError('Wystąpił błąd podczas planowania analizy');
