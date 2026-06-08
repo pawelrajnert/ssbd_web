@@ -35,7 +35,7 @@ export default function ReportsPage() {
     const [reportToDelete, setReportToDelete] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    const [t] = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const fetchReports = useCallback(async () => {
         setIsLoading(true);
@@ -126,16 +126,18 @@ export default function ReportsPage() {
         const optionsDate: Intl.DateTimeFormatOptions = {month: 'short', day: 'numeric', year: 'numeric'};
         const optionsTime: Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit', hour12: false};
 
-        return `${date.toLocaleDateString('en-US', optionsDate)} • ${date.toLocaleTimeString('en-US', optionsTime)}`;
+        const lang = i18n.resolvedLanguage || i18n.language || 'en';
+
+        return `${date.toLocaleDateString(lang, optionsDate)} • ${date.toLocaleTimeString(lang, optionsTime)}`;
     };
 
     const getSimilarityBadge = (similarity: number) => {
-        const formattedSimilarity = similarity.toFixed(1);
+        const roundedSimilarity = Math.round(similarity);
 
         let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
-        if (similarity >= 40) {
+        if (roundedSimilarity >= 40) {
             badgeClass += "bg-brand text-white";
-        } else if (similarity >= 10) {
+        } else if (roundedSimilarity >= 10) {
             badgeClass += "bg-cyan-600 text-white";
         } else {
             badgeClass += "bg-gray-200 text-secondary";
@@ -143,7 +145,7 @@ export default function ReportsPage() {
 
         return (
             <span className={badgeClass}>
-            {formattedSimilarity}% match
+            {roundedSimilarity}%
         </span>
         );
     };

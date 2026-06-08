@@ -4,10 +4,17 @@ import { getStudentSubjects } from '../../services/subjectService';
 import type { SubjectDTO } from '../../types/SubjectDTO';
 import { useTranslation } from 'react-i18next';
 import { PATHS } from '../../routes/paths';
+import { useBreadcrumb } from '../../contexts/BreadcrumbContext';
 
 export const StudentSubjectListPage: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { setDynamicBreadcrumb } = useBreadcrumb();
+
+    useEffect(() => {
+        setDynamicBreadcrumb('sidebar.subjectList');
+        return () => setDynamicBreadcrumb(null);
+    }, [setDynamicBreadcrumb]);
 
     const [subjects, setSubjects] = useState<SubjectDTO[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -121,7 +128,7 @@ export const StudentSubjectListPage: React.FC = () => {
                                         onClick={(e) => { e.stopPropagation(); handleSubjectClick(sub.id); }}
                                         className="flex-grow bg-brand text-white text-sm font-bold py-2.5 rounded-lg hover:bg-brand-hover transition-colors shadow-sm"
                                     >
-                                        {t('subject.list.card.btn.view')}
+                                        {t('subject.list.card.btn.view', 'Zobacz')}
                                     </button>
                                 </div>
                             </div>

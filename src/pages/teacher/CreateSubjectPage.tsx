@@ -14,9 +14,9 @@ export const CreateSubjectPage: React.FC = () => {
     const { setDynamicBreadcrumb } = useBreadcrumb();
 
     useEffect(() => {
-        setDynamicBreadcrumb(t('subjectCreate.breadcrumb', 'Utwórz Przedmiot'));
+        setDynamicBreadcrumb('subjectCreate.breadcrumb');
         return () => setDynamicBreadcrumb(null);
-    }, [setDynamicBreadcrumb, t]);
+    }, [setDynamicBreadcrumb]);
 
     const [name, setName] = useState('');
     const [organizationName, setOrganizationName] = useState('');
@@ -92,7 +92,6 @@ export const CreateSubjectPage: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto p-6 md:p-10 animate-fade-in flex flex-col h-full">
             <div className="mb-8">
-                {/* ZAMIAST navigate(-1) UŻYWAMY BEZPIECZNEGO PATHS */}
                 <button type="button" onClick={() => navigate(PATHS.TEACHER_SUBJECT_LIST)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors mb-4">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     {t('common.cancel', 'Wróć')}
@@ -217,7 +216,6 @@ export const CreateSubjectPage: React.FC = () => {
                 </div>
 
                 <div className="flex justify-end gap-4 p-6 md:p-8 border-t border-border bg-base/50 rounded-b-2xl mt-auto">
-                    {/* ZAMIAST navigate(-1) UŻYWAMY BEZPIECZNEGO PATHS */}
                     <button type="button" onClick={() => navigate(PATHS.TEACHER_SUBJECT_LIST)} disabled={isSubmitting} className="px-6 py-2.5 rounded-lg text-sm font-bold text-secondary border border-border hover:bg-surface transition-colors">
                         {t('common.cancel', 'Anuluj')}
                     </button>

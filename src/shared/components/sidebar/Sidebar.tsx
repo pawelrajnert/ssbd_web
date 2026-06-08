@@ -37,6 +37,12 @@ export default function Sidebar() {
                     label={t("studentReportList.title")}
                     allowedRoles={[RoleEnum.STUDENT]}
                 />
+                <SidebarItem
+                    to={PATHS.STUDENT_SCAN}
+                    icon={ScanSearch}
+                    label={t('sidebar.studentScan')}
+                    allowedRoles={[RoleEnum.STUDENT]}
+                />
 
                 {/** Elementy dla Prowadzącego */}
                 <SidebarItem
@@ -57,28 +63,7 @@ export default function Sidebar() {
                     label={t('sidebar.globalRules', 'Global rules')}
                     allowedRoles={[RoleEnum.TEACHER]}
                 />
-
-                {/*<SidebarItem*/}
-                {/*    to="/"*/}
-                {/*    icon={FileText}*/}
-                {/*    label={t('sidebar.reports', 'Plagiarism Reports')}*/}
-                {/*/>*/}
             </div>
-
-            {/*<div className="p-4 mb-2">*/}
-            {/*    <SidebarItem*/}
-            {/*        to="/"*/}
-            {/*        icon={HelpCircle}*/}
-            {/*        label={t('sidebar.help', 'Help Center')}*/}
-            {/*    />*/}
-            {/*</div>*/}
-
-            <SidebarItem
-                to={PATHS.STUDENT_SCAN}
-                icon={ScanSearch}
-                label={t('sidebar.studentScan')}
-                allowedRoles={[RoleEnum.STUDENT]}
-            />
         </aside>
     );
 }

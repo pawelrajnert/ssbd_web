@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import ConfirmationPopup from "../../shared/components/modals/ConfirmationPopup";
+import { useBreadcrumb } from "../../contexts/BreadcrumbContext";
 
 const schema = yup.object({
     raportLevelName: yup.string().required("validation.required"),
@@ -26,6 +27,8 @@ type RuleFormData = yup.InferType<typeof schema>;
 
 export default function GlobalRulesPage() {
     const { t } = useTranslation();
+    const { setDynamicBreadcrumb } = useBreadcrumb();
+
     const [rules, setRules] = useState<RulePresetDTO[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -52,6 +55,11 @@ export default function GlobalRulesPage() {
             enableNormalization: false
         }
     });
+
+    useEffect(() => {
+        setDynamicBreadcrumb('sidebar.globalRules');
+        return () => setDynamicBreadcrumb(null);
+    }, [setDynamicBreadcrumb]);
 
     const fetchRules = async () => {
         setIsLoading(true);
