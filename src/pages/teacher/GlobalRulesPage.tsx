@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import ConfirmationPopup from "../../shared/components/modals/ConfirmationPopup";
+import { useBreadcrumb } from "../../contexts/BreadcrumbContext";
 
 const schema = yup.object({
     raportLevelName: yup.string().required("validation.required"),
@@ -26,6 +27,8 @@ type RuleFormData = yup.InferType<typeof schema>;
 
 export default function GlobalRulesPage() {
     const { t } = useTranslation();
+    const { setDynamicBreadcrumb } = useBreadcrumb();
+
     const [rules, setRules] = useState<RulePresetDTO[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -52,6 +55,11 @@ export default function GlobalRulesPage() {
             enableNormalization: false
         }
     });
+
+    useEffect(() => {
+        setDynamicBreadcrumb('sidebar.globalRules');
+        return () => setDynamicBreadcrumb(null);
+    }, [setDynamicBreadcrumb]);
 
     const fetchRules = async () => {
         setIsLoading(true);
@@ -161,23 +169,19 @@ export default function GlobalRulesPage() {
         setError(null);
 
         try {
-            const freshData = await ruleService.getRulePresetsTemplates();
-            const currentRule = freshData.find(r => r.id === ruleToDelete.id);
-
-            if (!currentRule) {
-                fetchRules();
-                setError(t('globalRules.deleteErrorNotFound'));
-                setIsDeleting(false);
-                setIsDeleteModalOpen(false);
-                setRuleToDelete(null);
-                return;
-            }
-
-            await ruleService.deleteRulePreset(currentRule.id, currentRule.versionHash);
+            await ruleService.deleteRulePreset(ruleToDelete.id, ruleToDelete.versionHash);
             fetchRules();
         } catch (err: unknown) {
-            if (axios.isAxiosError(err) && err.response?.status === 409) {
-                setError(t('globalRules.conflictError'));
+            if (axios.isAxiosError(err)) {
+                if (err.response?.status === 409) {
+                    setError(t('globalRules.conflictError'));
+                    fetchRules();
+                } else if (err.response?.status === 404) {
+                    setError(t('globalRules.deleteErrorNotFound'));
+                    fetchRules();
+                } else {
+                    setError(t('globalRules.deleteError'));
+                }
             } else {
                 setError(t('globalRules.deleteError'));
             }
@@ -245,7 +249,7 @@ export default function GlobalRulesPage() {
                                     >
                                         <option value="NOTHING">{t('globalRules.levels.NOTHING')}</option>
                                         <option value="ONLY_PERCENTAGES">{t('globalRules.levels.ONLY_PERCENTAGES')}</option>
-                                        <option value="FULL_VIEW">{t('globalRules.levels.FULL_VIEW')}</option>
+                                        <option value="ONLY_HIGHEST_PERCENT">{t('globalRules.levels.ONLY_HIGHEST_PERCENT')}</option>
                                     </select>
                                     {errors.raportLevelName && <p className="text-danger text-xs mt-1">{t(errors.raportLevelName.message as string)}</p>}
                                 </div>

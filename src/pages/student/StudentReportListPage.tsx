@@ -5,8 +5,7 @@ import {
     ChevronRight,
     ArrowUp,
     ArrowDown,
-    ArrowUpDown,
-    Eye
+    ArrowUpDown
 } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -190,9 +189,6 @@ export default function StudentReportListPage() {
                                         {renderSortIcon('average_similarity')}
                                     </div>
                                 </th>
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest text-right">
-                                    {t("studentReportList.list.action")}
-                                </th>
                             </tr>
                             </thead>
                             <tbody
@@ -200,7 +196,7 @@ export default function StudentReportListPage() {
                             >
                             {paginatedReports.length === 0 && !isLoading ? (
                                 <tr>
-                                    <td colSpan={4} className="py-12 text-center text-secondary font-medium">
+                                    <td colSpan={3} className="py-12 text-center text-secondary font-medium">
                                         <div className="flex flex-col items-center justify-center gap-3">
                                             <FileText size={32} className="opacity-40" />
                                             <p>{t("studentReportList.list.notFound")}</p>
@@ -209,7 +205,11 @@ export default function StudentReportListPage() {
                                 </tr>
                             ) : (
                                 paginatedReports.map((report) => (
-                                    <tr key={report.id} className="hover:bg-base transition-colors group">
+                                    <tr
+                                        key={report.id}
+                                        onClick={() => handleViewReport(report.id)}
+                                        className="hover:bg-base transition-colors group cursor-pointer"
+                                    >
                                         <td className="py-5 px-8">
                                             <div className="flex items-center gap-3">
                                                 <div className="w-10 h-10 rounded-lg bg-base flex items-center justify-center text-secondary border border-border group-hover:bg-surface transition-colors">
@@ -230,15 +230,6 @@ export default function StudentReportListPage() {
                                         </td>
                                         <td className="py-5 px-8">
                                             {getSimilarityBadge(report.average_similarity * 100)}
-                                        </td>
-                                        <td className="py-5 px-8 text-right">
-                                            <button
-                                                onClick={() => handleViewReport(report.id)}
-                                                title={t("studentReportList.list.view")}
-                                                className="inline-flex items-center justify-center text-secondary hover:text-brand transition-colors p-2 rounded-full hover:bg-brand-subtle outline-none"
-                                            >
-                                                <Eye size={20} />
-                                            </button>
                                         </td>
                                     </tr>
                                 ))

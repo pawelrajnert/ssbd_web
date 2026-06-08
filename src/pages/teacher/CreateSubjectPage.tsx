@@ -14,9 +14,9 @@ export const CreateSubjectPage: React.FC = () => {
     const { setDynamicBreadcrumb } = useBreadcrumb();
 
     useEffect(() => {
-        setDynamicBreadcrumb(t('subjectCreate.breadcrumb', 'Utwórz Przedmiot'));
+        setDynamicBreadcrumb('subjectCreate.breadcrumb');
         return () => setDynamicBreadcrumb(null);
-    }, [setDynamicBreadcrumb, t]);
+    }, [setDynamicBreadcrumb]);
 
     const [name, setName] = useState('');
     const [organizationName, setOrganizationName] = useState('');

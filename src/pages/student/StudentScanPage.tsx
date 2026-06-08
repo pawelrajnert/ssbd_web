@@ -1,13 +1,15 @@
-import {useCallback, useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {AlertTriangle, CheckCircle, FileText, RefreshCw, ScanSearch} from 'lucide-react';
-import {reportService} from '../../services/reportService.ts';
-import {repositoryService} from '../../services/repositoryService.ts';
-import type {StudentReportDetailsDTO, StudentRepositoryDTO} from '../../types/studentScan.types.ts';
-import type {ReportDTO} from '../../types/report.types.ts';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { AlertTriangle, CheckCircle, FileText, RefreshCw, ScanSearch, ExternalLink } from 'lucide-react';
+import { reportService } from '../../services/reportService';
+import { repositoryService } from '../../services/repositoryService';
+import type { StudentReportDetailsDTO, StudentRepositoryDTO } from '../../types/studentScan.types';
+import type { ReportDTO } from '../../types/report.types';
 
 export default function StudentScanPage() {
-    const {t} = useTranslation();
+    const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
 
     const [selectedRepo, setSelectedRepo] = useState<StudentRepositoryDTO | null>(null);
     const [studentTag, setStudentTag] = useState('');
@@ -41,7 +43,7 @@ export default function StudentScanPage() {
         setIsLoadingHistory(true);
         try {
             const data = await reportService.getMyReports();
-            setHistory(Array.isArray(data) ? data : (data as any)?.content ?? []);
+            setHistory(data || []);
         } catch {
             setHistory([]);
         } finally {
@@ -64,7 +66,7 @@ export default function StudentScanPage() {
             await loadHistory();
             setRepositories(prev => prev.map(r =>
                 r.repositoryId === selectedRepo.repositoryId
-                    ? {...r, usedScans: r.usedScans + 1}
+                    ? { ...r, usedScans: r.usedScans + 1 }
                     : r
             ));
         } catch (err: any) {
@@ -79,18 +81,34 @@ export default function StudentScanPage() {
     };
 
     const formatDate = (iso: string) => {
+        if (!iso) return "";
         const d = new Date(iso);
-        return d.toLocaleDateString('pl-PL', {month: 'short', day: 'numeric', year: 'numeric'})
-            + ' • ' + d.toLocaleTimeString('pl-PL', {hour: '2-digit', minute: '2-digit', hour12: false});
+        const lang = i18n.resolvedLanguage || i18n.language || 'en';
+        return d.toLocaleDateString(lang, { month: 'short', day: 'numeric', year: 'numeric' })
+            + ' • ' + d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit', hour12: false });
     };
 
-    const getSimilarityBadge = (sim: number) => {
-        const pct = Math.round(sim * 100);
-        let cls = 'px-3 py-1 text-xs font-bold rounded-full ';
-        if (pct >= 40) cls += 'bg-brand text-white';
-        else if (pct >= 10) cls += 'bg-cyan-600 text-white';
-        else cls += 'bg-gray-200 text-secondary';
-        return <span className={cls}>{pct}% match</span>;
+    const getSimilarityBadge = (similarity: number) => {
+        const roundedSimilarity = Math.round(similarity);
+
+        let badgeClass = "px-3 py-1 text-xs font-bold rounded-full whitespace-nowrap ";
+        if (roundedSimilarity >= 40) {
+            badgeClass += "bg-brand text-white";
+        } else if (roundedSimilarity >= 10) {
+            badgeClass += "bg-cyan-600 text-white";
+        } else {
+            badgeClass += "bg-gray-200 text-secondary";
+        }
+
+        return (
+            <span className={badgeClass}>
+                {roundedSimilarity}%
+            </span>
+        );
+    };
+
+    const handleViewReport = (reportId: string) => {
+        navigate(`/student/reports/${reportId}`);
     };
 
     const noScansLeft = selectedRepo != null && selectedRepo.usedScans >= selectedRepo.maxScans;
@@ -114,7 +132,7 @@ export default function StudentScanPage() {
                             </label>
                             {isLoadingRepos ? (
                                 <div className="flex items-center gap-2 text-sm text-secondary py-2.5">
-                                    <RefreshCw size={14} className="animate-spin"/>
+                                    <RefreshCw size={14} className="animate-spin" />
                                     {t('common.loading')}
                                 </div>
                             ) : repositories.length === 0 ? (
@@ -148,7 +166,7 @@ export default function StudentScanPage() {
                                     ? 'bg-danger-subtle border-danger-border text-danger'
                                     : 'bg-base border-border text-secondary'
                             }`}>
-                                <ScanSearch size={14}/>
+                                <ScanSearch size={14} />
                                 <span>
                                     {t('studentScan.form.scansUsed')}:{' '}
                                     <span className="font-bold text-primary">
@@ -165,8 +183,7 @@ export default function StudentScanPage() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label
-                                    className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
+                                <label className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
                                     {t('studentScan.form.studentTag')}
                                 </label>
                                 <input
@@ -178,8 +195,7 @@ export default function StudentScanPage() {
                                 />
                             </div>
                             <div>
-                                <label
-                                    className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
+                                <label className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
                                     {t('studentScan.form.taskTag')}
                                 </label>
                                 <input
@@ -193,9 +209,8 @@ export default function StudentScanPage() {
                         </div>
 
                         {error && (
-                            <div
-                                className="flex items-center gap-2 text-sm text-danger bg-danger-subtle border border-danger-border rounded-md px-4 py-2.5">
-                                <AlertTriangle size={16}/>
+                            <div className="flex items-center gap-2 text-sm text-danger bg-danger-subtle border border-danger-border rounded-md px-4 py-2.5">
+                                <AlertTriangle size={16} />
                                 {error}
                             </div>
                         )}
@@ -206,8 +221,8 @@ export default function StudentScanPage() {
                             className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start"
                         >
                             {isScanning
-                                ? <><RefreshCw size={16} className="animate-spin"/>{t('studentScan.form.scanning')}</>
-                                : <><ScanSearch size={16}/>{t('studentScan.form.submit')}</>
+                                ? <><RefreshCw size={16} className="animate-spin" />{t('studentScan.form.scanning')}</>
+                                : <><ScanSearch size={16} />{t('studentScan.form.submit')}</>
                             }
                         </button>
                     </div>
@@ -215,39 +230,36 @@ export default function StudentScanPage() {
 
                 {scanResult && (
                     <div className="bg-surface rounded-2xl shadow-sm border border-border p-6 mb-6">
-                        <div className="flex items-center gap-2 mb-4">
-                            <CheckCircle size={20} className="text-brand"/>
-                            <h2 className="text-lg font-bold text-primary">{t('studentScan.result.title')}</h2>
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-2">
+                                <CheckCircle size={20} className="text-brand" />
+                                <h2 className="text-lg font-bold text-primary">{t('studentScan.result.title', 'Result of a code scan')}</h2>
+                            </div>
+
+                            <button
+                                onClick={() => handleViewReport(scanResult.reportId)}
+                                className="flex items-center gap-2 px-4 py-2 bg-base border border-border hover:bg-active text-sm font-bold text-primary rounded-md transition-colors"
+                            >
+                                <FileText size={16} className="text-secondary" />
+                                {t('studentScan.result.openReport', 'Open Report')}
+                                <ExternalLink size={16} className="text-secondary" />
+                            </button>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                            <div>
-                                <span className="text-secondary">{t('studentScan.result.tag')}: </span>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                            <div className="bg-base border border-border rounded-md p-3">
+                                <span className="block text-xs text-secondary mb-1">{t('studentScan.result.tag', 'Tag')}:</span>
                                 <span className="font-bold text-primary">{scanResult.tag}</span>
                             </div>
-                            <div>
-                                <span className="text-secondary">{t('studentScan.result.subject')}: </span>
+                            <div className="bg-base border border-border rounded-md p-3">
+                                <span className="block text-xs text-secondary mb-1">{t('studentScan.result.subject', 'Subject')}:</span>
                                 <span className="font-bold text-primary">{scanResult.subjectName}</span>
                             </div>
-                            <div>
-                                <span className="text-secondary">{t('studentScan.result.scannedAt')}: </span>
+                            <div className="bg-base border border-border rounded-md p-3">
+                                <span className="block text-xs text-secondary mb-1">{t('studentScan.result.scannedAt', 'Scanned')}:</span>
                                 <span className="font-bold text-primary">{formatDate(scanResult.createdAt)}</span>
                             </div>
                         </div>
-                        {scanResult.matches.length === 0 ? (
-                            <p className="text-secondary text-sm">{t('studentScan.result.noMatches')}</p>
-                        ) : (
-                            <div className="divide-y divide-border">
-                                {scanResult.matches.map((m, i) => (
-                                    <div key={i} className="flex items-center justify-between py-3">
-                                        <span className="text-sm text-secondary">
-                                            {t('studentScan.result.matchedLines')}:{' '}
-                                            <span className="font-bold text-primary">{m.matchedLines}</span>
-                                        </span>
-                                        {getSimilarityBadge(m.similarity)}
-                                    </div>
-                                ))}
-                            </div>
-                        )}
                     </div>
                 )}
 
@@ -259,23 +271,24 @@ export default function StudentScanPage() {
                             disabled={isLoadingHistory}
                             className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-primary bg-base border border-border rounded-md hover:bg-active transition-colors disabled:opacity-50"
                         >
-                            <RefreshCw size={14} className={isLoadingHistory ? 'animate-spin' : ''}/>
+                            <RefreshCw size={14} className={isLoadingHistory ? 'animate-spin' : ''} />
                             {t('common.refresh')}
                         </button>
                     </div>
-                    <div
-                        className={`divide-y divide-border ${isLoadingHistory ? 'opacity-60' : ''} transition-opacity`}>
+                    <div className={`divide-y divide-border ${isLoadingHistory ? 'opacity-60' : ''} transition-opacity`}>
                         {(!Array.isArray(history) || history.length === 0) ? (
                             <p className="text-center text-secondary text-sm py-8">
                                 {t('studentScan.history.empty')}
                             </p>
                         ) : history.map(r => (
-                            <div key={r.id}
-                                 className="flex items-center justify-between px-6 py-4 hover:bg-base transition-colors">
+                            <div
+                                key={r.id}
+                                onClick={() => handleViewReport(r.id)}
+                                className="flex items-center justify-between px-6 py-4 hover:bg-base transition-colors group cursor-pointer"
+                            >
                                 <div className="flex items-center gap-3">
-                                    <div
-                                        className="w-9 h-9 rounded-lg bg-base border border-border flex items-center justify-center text-secondary">
-                                        <FileText size={18}/>
+                                    <div className="w-9 h-9 rounded-lg bg-base border border-border flex items-center justify-center text-secondary group-hover:bg-surface transition-colors">
+                                        <FileText size={18} />
                                     </div>
                                     <div>
                                         <p className="text-sm font-bold text-primary">{r.tag}</p>
@@ -283,8 +296,8 @@ export default function StudentScanPage() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <span className="text-sm text-secondary">{formatDate(r.created_at)}</span>
-                                    {getSimilarityBadge(r.average_similarity)}
+                                    <span className="text-sm text-secondary font-medium">{formatDate(r.created_at)}</span>
+                                    {getSimilarityBadge(r.average_similarity * 100)}
                                 </div>
                             </div>
                         ))}

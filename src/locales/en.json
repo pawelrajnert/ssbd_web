@@ -411,25 +411,25 @@
   "sidebar": {
     "userManagement": "User Management",
     "subjectList": "My subjects",
-    "globalRules": "Global rules",
+    "globalRules": "Rule presets",
     "reportList": "Report list",
     "studentScan": "Check your code",
     "changeSubjectManager": "Change subject's manager"
   },
   "globalRules": {
     "error": {
-      "fetch": "Failed to fetch global rules",
+      "fetch": "Failed to fetch rule presets",
       "createFailed": "Action failed. Please check the data.",
       "invalidTokens": "Minimum tokens must be at least 1",
       "invalidTickets": "Number cannot be negative",
-      "updateFailed": "Failed to update the rule. Please try again."
+      "updateFailed": "Failed to update the rule preset. Please try again."
     },
     "add": {
-      "title": "Add New Global Rule",
-      "submit": "Create Rule"
+      "title": "Add New rule preset",
+      "submit": "Create Rule preset"
     },
     "edit": {
-      "title": "Edit Rule",
+      "title": "Edit rule preset",
       "submit": "Save Changes"
     },
     "editConfirmTitle": "Confirm Edit",
@@ -447,11 +447,11 @@
       "normalization": "Normalization",
       "actions": "Actions"
     },
-    "noResults": "No global rules found",
+    "noResults": "No rule presets found",
     "levels": {
       "NOTHING": "Nothing",
       "ONLY_PERCENTAGES": "Only percentages",
-      "FULL_VIEW": "Full view"
+      "ONLY_HIGHEST_PERCENT": "Only highest percent"
     },
     "deleteTitle": "Delete rule template",
     "deleteConfirmation": "Are you sure you want to delete this rule template? This will cancel and delete all associated scheduled checks.",
@@ -602,7 +602,8 @@
     "status": {
       "all": "All",
       "planned": "Planned",
-      "executed": "Executed"
+      "executed": "Executed",
+      "failed": "Failed"
     },
     "empty": "No scheduled analyses found.",
     "error": {
@@ -727,7 +728,7 @@
   "notFound": {
     "title": "Page Not Found",
     "description": "The page you are looking for doesn't exist or has been moved.",
-    "backToHome": "Back to Dashboard"
+    "goBack": "Back"
   },
   "visibility": {
     "ONLY_PERCENTAGES": {

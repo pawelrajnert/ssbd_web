@@ -403,7 +403,7 @@
     "userManagement": "Zarządzanie użytkownikami",
     "subjectList": "Moje przedmioty",
     "reportList": "Lista raportów",
-    "globalRules": "Globalne reguły",
+    "globalRules": "Szablony reguł",
     "studentScan": "Sprawdź swój kod",
     "changeSubjectManager": "Zmień kierownika przedmiotu"
   },
@@ -422,7 +422,7 @@
   },
   "globalRules": {
     "error": {
-      "fetch": "Nie udało się pobrać globalnych reguł",
+      "fetch": "Nie udało się pobrać szablonów reguł",
       "createFailed": "Akcja nie powiodła się. Sprawdź poprawność danych.",
       "invalidTokens": "Minimalna liczba tokenów musi wynosić co najmniej 1",
       "invalidTickets": "Liczba nie może być ujemna",
@@ -451,11 +451,11 @@
       "normalization": "Normalizacja",
       "actions": "Akcje"
     },
-    "noResults": "Brak globalnych reguł",
+    "noResults": "Brak szablonów reguł",
     "levels": {
       "NOTHING": "Nic",
       "ONLY_PERCENTAGES": "Tylko procenty",
-      "FULL_VIEW": "Pełny"
+      "ONLY_HIGHEST_PERCENT": "Tylko Najwyższe podobieństwo"
     },
     "subject": {
       "create": {
@@ -725,7 +725,8 @@
     "status": {
       "all": "Wszystkie",
       "planned": "Oczekuje",
-      "executed": "Wykonano"
+      "executed": "Wykonano",
+      "failed": "Nie powiódł się"
     },
     "empty": "Brak zaplanowanych analiz.",
     "error": {
@@ -848,7 +849,7 @@
   "notFound": {
     "title": "Strona nie znaleziona",
     "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
-    "backToHome": "Wróć do strony głównej"
+    "goBack": "Wróć"
   },
   "visibility": {
     "ONLY_PERCENTAGES": {

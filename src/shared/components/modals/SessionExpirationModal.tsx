@@ -49,12 +49,14 @@ export const SessionExpirationModal = () => {
     if (!showModal) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm z-[9999] transition-opacity animate-in fade-in duration-300">
-            <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all flex flex-col items-center text-center animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 flex items-center justify-center bg-slate-900/40 dark:bg-slate-900/70 backdrop-blur-sm z-[9999] transition-opacity animate-in fade-in duration-300">
+            {/* Przywrócono bg-white dla jasnego motywu, dark:bg-surface dla ciemnego */}
+            <div className="bg-white dark:bg-surface p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all flex flex-col items-center text-center animate-in zoom-in-95 duration-300 dark:border dark:border-border">
 
-                <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6 shadow-inner border border-red-100">
+                {/* Zastosowano bg-brand-subtle zamiast sztywnych czerwonych kolorów */}
+                <div className="w-16 h-16 bg-brand-subtle rounded-full flex items-center justify-center mb-6 shadow-inner border border-brand/10 dark:border-brand/20">
                     <svg
-                        className="w-8 h-8 text-[#7A1014]"
+                        className="w-8 h-8 text-brand"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -69,26 +71,26 @@ export const SessionExpirationModal = () => {
                     </svg>
                 </div>
 
-                <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-primary mb-2">
                     {t("sessionModal.title")}
                 </h2>
 
-                <p className="text-gray-600 mb-8 leading-relaxed">
+                <p className="text-gray-600 dark:text-secondary mb-8 leading-relaxed">
                     {t("sessionModal.desc1")}
-                    <strong className="text-[#7A1014] font-bold text-lg">{timeLeft}</strong>
+                    <strong className="text-brand font-bold text-lg mx-1.5">{timeLeft}</strong>
                     {t("sessionModal.desc2")}
                 </p>
 
                 <div className="flex w-full gap-3 sm:flex-row flex-col-reverse">
                     <button
                         onClick={logout}
-                        className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors focus:ring-2 focus:ring-gray-200 outline-none"
+                        className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-border text-gray-700 dark:text-primary font-medium rounded-md hover:bg-gray-50 dark:hover:bg-active transition-colors focus:ring-2 focus:ring-gray-200 dark:focus:ring-border outline-none"
                     >
                         {t("sessionModal.logout")}
                     </button>
                     <button
                         onClick={extendSession}
-                        className="flex-1 px-4 py-2.5 bg-[#7A1014] text-white font-bold rounded-md hover:bg-red-900 transition-colors shadow-sm focus:ring-2 focus:ring-red-200 outline-none"
+                        className="flex-1 px-4 py-2.5 bg-brand text-white font-bold rounded-md hover:bg-brand-hover transition-colors shadow-sm focus:ring-2 focus:ring-brand/50 outline-none"
                     >
                         {t("sessionModal.extend")}
                     </button>
