@@ -64,14 +64,14 @@ const ForcePasswordChangePage = () => {
                     if (typeof responseData === 'object') {
                         if (responseData.errors) {
                             const msgs = Object.values(responseData.errors).map(msg => t(String(msg)));
-                            setServerError(`Błąd walidacji: ${msgs.join(' | ')}`);
+                            setServerError(`${t('error.validation')}: ${msgs.join(' | ')}`);
                         } else if (responseData.message) {
                             setServerError(t(String(responseData.message)));
                         } else {
-                            setServerError(`Odrzucone: Upewnij się, że nowe hasło ma MINIMUM 12 ZNAKÓW i spełnia wymogi bezpieczeństwa.`);
+                            setServerError(t('error.passwordRequirements'));
                         }
                     } else {
-                        setServerError(`Odrzucone: ${responseData}`);
+                        setServerError(`${t('error.rejected')}: ${responseData}`);
                     }
                 }
                 else if (status === 409) {
@@ -93,7 +93,7 @@ const ForcePasswordChangePage = () => {
                     }
                 }
             } else {
-                setServerError("Błąd komunikacji: " + err.message);
+                setServerError(`${t('error.communication')}: ` + err.message);
             }
         }
     };
