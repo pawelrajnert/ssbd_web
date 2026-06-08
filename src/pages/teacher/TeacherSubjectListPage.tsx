@@ -7,7 +7,7 @@ import { PATHS } from '../../routes/paths';
 
 export const TeacherSubjectListPage: React.FC = () => {
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [subjects, setSubjects] = useState<SubjectDTO[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -41,16 +41,24 @@ export const TeacherSubjectListPage: React.FC = () => {
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base">
             <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-                {t('subject.list.role.teacher')}
+                {t('subject.list.role.teacher', 'Panel Prowadzącego')}
             </div>
 
-            <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
-                    {t('subject.list.title')}
-                </h1>
-                <p className="text-secondary text-sm max-w-2xl">
-                    {t('subject.list.description')}
-                </p>
+            <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
+                        {t('subject.list.title')}
+                    </h1>
+                    <p className="text-secondary text-sm max-w-2xl">
+                        {t('subject.list.description')}
+                    </p>
+                </div>
+                <button
+                    onClick={() => navigate(PATHS.CREATE_SUBJECT)}
+                    className="px-5 py-2.5 bg-brand text-white text-sm font-bold rounded-lg hover:bg-brand-hover shadow-md transition-colors whitespace-nowrap shrink-0"
+                >
+                    {t('subject.list.btn.create', 'Utwórz przedmiot')}
+                </button>
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border mb-8 gap-4">
@@ -68,13 +76,6 @@ export const TeacherSubjectListPage: React.FC = () => {
                         {t('subject.list.tabs.archived')} ({archivedSubjects.length})
                     </button>
                 </div>
-
-                <button
-                    onClick={() => navigate(PATHS.CREATE_SUBJECT)}
-                    className="flex items-center gap-2 text-brand font-bold text-sm hover:text-brand-hover pb-4 transition-colors"
-                >
-                    <span className="text-lg leading-none">+</span> {t('subject.list.btn.create')}
-                </button>
             </div>
 
             {displayedSubjects.length === 0 ? (
@@ -91,9 +92,9 @@ export const TeacherSubjectListPage: React.FC = () => {
                         >
                             <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
                                 <img
-                                    src={`https://api.dicebear.com/7.x/shapes/svg?seed=${sub.id}`}
-                                    alt="Okładka przedmiotu"
-                                    className="w-full h-full object-cover"
+                                    src={`https://api.dicebear.com/7.x/shapes/svg?seed=${sub.id || sub.name}`}
+                                    alt={`Okładka przedmiotu ${sub.name}`}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
                                 <div className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
                                     {sub.edition}
@@ -117,8 +118,15 @@ export const TeacherSubjectListPage: React.FC = () => {
                                         <span className="text-xs text-secondary font-semibold mb-1">
                                             {t('subject.list.card.nextScan')}
                                         </span>
-                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : 'text-blue-600 dark:text-blue-400'}`}>
-                                            {sub.archived ? t('subject.list.card.status.archived') : t('subject.list.card.status.pending')}
+                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : sub.nextScan ? 'text-blue-600 dark:text-blue-400' : 'text-secondary'}`}>
+                                            {sub.archived
+                                                ? t('subject.list.card.status.archived')
+                                                : sub.nextScan
+                                                    ? new Date(sub.nextScan).toLocaleString(i18n.language, {
+                                                        dateStyle: 'medium',
+                                                        timeStyle: 'short'
+                                                    })
+                                                    : t('subject.list.card.status.noScanPlanned')}
                                         </span>
                                     </div>
                                 </div>

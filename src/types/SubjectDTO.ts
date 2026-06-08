@@ -23,6 +23,7 @@ export interface SubjectDTO {
     teachers?: TeacherAssignmentDTO[];
     repositoryList?: any[];
     aggregatedAverageSimilarity?: number | null;
+    nextScan?: string | null;
 }
 
 export type TeacherSubjectRole = 'OWNER' | 'EDITOR' | 'VIEWER';
