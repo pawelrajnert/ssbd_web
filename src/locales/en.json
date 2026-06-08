@@ -728,7 +728,13 @@
   "notFound": {
     "title": "Page Not Found",
     "description": "The page you are looking for doesn't exist or has been moved.",
-    "goBack": "Back"
+    "goBack": "Back",
+    "backToHome": "Back to Dashboard"
+  },
+  "success": {
+    "generic": "Operation completed successfully."
+  },
+  "errors": {
   },
   "visibility": {
     "ONLY_PERCENTAGES": {

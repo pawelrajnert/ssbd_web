@@ -703,6 +703,12 @@
     "submitCreating": "Створення...",
     "submitButton": "Створити Предмет"
   },
+  "success": {
+    "generic": "Операція пройшла успішно."
+  },
+  "errors": {
+
+  },
   "visibility": {
     "ONLY_PERCENTAGES": {
       "label": "Тільки відсотки",
