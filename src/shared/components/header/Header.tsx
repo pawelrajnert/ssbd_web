@@ -43,14 +43,26 @@ export default function Header() {
         return paths.map((path, index) => {
             currentPath += `/${path}`;
             const isLast = index === paths.length - 1;
+            const pathLower = path.toLowerCase();
 
             let formattedName = path.replace(/-/g, ' ');
             formattedName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
 
-            if (path.toLowerCase() === 'users') {
+            if (isLast && dynamicBreadcrumb) {
+                formattedName = t(dynamicBreadcrumb);
+            }
+            else if (pathLower === 'users') {
                 formattedName = t('header.userManagement');
-            } else if (isLast && dynamicBreadcrumb) {
-                formattedName = dynamicBreadcrumb;
+            } else if (pathLower === 'student' || pathLower === 'teacher' || pathLower === 'admin') {
+                formattedName = t(`userEdit.roles.${pathLower}`);
+            } else if (pathLower === 'reports') {
+                formattedName = activeRole === 'STUDENT' ? t('studentReportList.title') : t('reportList.title');
+            } else if (pathLower === 'subjects') {
+                formattedName = t('sidebar.subjectList');
+            } else if (pathLower === 'scan') {
+                formattedName = t('sidebar.studentScan');
+            } else if (pathLower === 'profile') {
+                formattedName = t('profile.accountSettings');
             }
 
             return {name: formattedName, path: currentPath, isLast};
@@ -71,6 +83,7 @@ export default function Header() {
                 return 'bg-transparent';
         }
     };
+
     const getDefaultLocationPath = (role: string | null) => {
         switch (role?.toUpperCase()) {
             case 'ADMIN':
@@ -97,7 +110,6 @@ export default function Header() {
                         </p>
                     </div>
                 </Link>
-                {/* Swapped red-100 for border to keep separators consistent */}
                 <div className="h-8 w-px bg-border hidden md:block"></div>
                 <nav className="hidden md:flex items-center gap-2 text-sm font-medium">
                     {breadcrumbs.map((crumb, index) => (
@@ -195,7 +207,6 @@ export default function Header() {
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                            {/* Changed border-white to border-surface so it perfectly matches the header background */}
                             <span
                                 className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-surface rounded-full"></span>
                         </div>
