@@ -169,23 +169,19 @@ export default function GlobalRulesPage() {
         setError(null);
 
         try {
-            const freshData = await ruleService.getRulePresetsTemplates();
-            const currentRule = freshData.find(r => r.id === ruleToDelete.id);
-
-            if (!currentRule) {
-                fetchRules();
-                setError(t('globalRules.deleteErrorNotFound'));
-                setIsDeleting(false);
-                setIsDeleteModalOpen(false);
-                setRuleToDelete(null);
-                return;
-            }
-
-            await ruleService.deleteRulePreset(currentRule.id, currentRule.versionHash);
+            await ruleService.deleteRulePreset(ruleToDelete.id, ruleToDelete.versionHash);
             fetchRules();
         } catch (err: unknown) {
-            if (axios.isAxiosError(err) && err.response?.status === 409) {
-                setError(t('globalRules.conflictError'));
+            if (axios.isAxiosError(err)) {
+                if (err.response?.status === 409) {
+                    setError(t('globalRules.conflictError'));
+                    fetchRules();
+                } else if (err.response?.status === 404) {
+                    setError(t('globalRules.deleteErrorNotFound'));
+                    fetchRules();
+                } else {
+                    setError(t('globalRules.deleteError'));
+                }
             } else {
                 setError(t('globalRules.deleteError'));
             }
