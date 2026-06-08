@@ -848,6 +848,6 @@
   "notFound": {
     "title": "Strona nie znaleziona",
     "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
-    "backToHome": "Wróć do strony głównej"
+    "goBack": "Wróć"
   }
 }

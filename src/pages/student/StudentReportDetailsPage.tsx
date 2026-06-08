@@ -134,6 +134,9 @@ export default function StudentReportDetailsPage() {
                                         ? (avg * max) / (2 * max - avg)
                                         : null;
 
+                                    const isHighestPercentage = reportDetails.raportLevel === "HIGHEST_PERCENTAGE";
+                                    const highestPercentValue = Math.max(max, avg);
+
                                     return (
                                         <div key={index} className="bg-surface rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
 
@@ -148,36 +151,8 @@ export default function StudentReportDetailsPage() {
 
                                             <div className="flex flex-wrap gap-4 mt-2">
 
-                                                {match.studentSimilarity !== undefined && match.studentSimilarity !== null && (
-                                                    <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(match.studentSimilarity)}`}>
-                                                        <div className="flex items-center gap-2 mb-1 opacity-80">
-                                                            <Activity size={18} />
-                                                            <span className="text-xs font-bold uppercase tracking-wider">
-                                                                {t("studentReportDetails.metrics.studentSimilarity")}
-                                                            </span>
-                                                        </div>
-                                                        <p className="text-3xl font-black">
-                                                            {(match.studentSimilarity * 100).toFixed(1)}%
-                                                        </p>
-                                                    </div>
-                                                )}
-
-                                                {otherSim !== null && (
-                                                    <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(otherSim)}`}>
-                                                        <div className="flex items-center gap-2 mb-1 opacity-80">
-                                                            <Users size={18} />
-                                                            <span className="text-xs font-bold uppercase tracking-wider">
-                                                                {t("studentReportDetails.metrics.otherSimilarity")}
-                                                            </span>
-                                                        </div>
-                                                        <p className="text-3xl font-black">
-                                                            {(otherSim * 100).toFixed(1)}%
-                                                        </p>
-                                                    </div>
-                                                )}
-
-                                                {hasAverage && (
-                                                    <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(match.averageSimilarity!)}`}>
+                                                {isHighestPercentage ? (
+                                                    <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(highestPercentValue)}`}>
                                                         <div className="flex items-center gap-2 mb-1 opacity-80">
                                                             <Hash size={18} />
                                                             <span className="text-xs font-bold uppercase tracking-wider">
@@ -185,10 +160,55 @@ export default function StudentReportDetailsPage() {
                                                             </span>
                                                         </div>
                                                         <p className="text-3xl font-black">
-                                                            {(match.averageSimilarity! * 100).toFixed(1)}%
+                                                            {(highestPercentValue * 100).toFixed(1)}%
                                                         </p>
                                                     </div>
+                                                ) : (
+                                                    <>
+                                                        {match.studentSimilarity !== undefined && match.studentSimilarity !== null && (
+                                                            <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(match.studentSimilarity)}`}>
+                                                                <div className="flex items-center gap-2 mb-1 opacity-80">
+                                                                    <Activity size={18} />
+                                                                    <span className="text-xs font-bold uppercase tracking-wider">
+                                                                        {t("studentReportDetails.metrics.studentSimilarity")}
+                                                                    </span>
+                                                                </div>
+                                                                <p className="text-3xl font-black">
+                                                                    {(match.studentSimilarity * 100).toFixed(1)}%
+                                                                </p>
+                                                            </div>
+                                                        )}
+
+                                                        {otherSim !== null && (
+                                                            <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(otherSim)}`}>
+                                                                <div className="flex items-center gap-2 mb-1 opacity-80">
+                                                                    <Users size={18} />
+                                                                    <span className="text-xs font-bold uppercase tracking-wider">
+                                                                        {t("studentReportDetails.metrics.otherSimilarity")}
+                                                                    </span>
+                                                                </div>
+                                                                <p className="text-3xl font-black">
+                                                                    {(otherSim * 100).toFixed(1)}%
+                                                                </p>
+                                                            </div>
+                                                        )}
+
+                                                        {hasAverage && (
+                                                            <div className={`w-full sm:w-64 p-4 rounded-xl border flex flex-col gap-1 ${getPercentageColor(match.averageSimilarity!)}`}>
+                                                                <div className="flex items-center gap-2 mb-1 opacity-80">
+                                                                    <Hash size={18} />
+                                                                    <span className="text-xs font-bold uppercase tracking-wider">
+                                                                        {t("studentReportDetails.metrics.average")}
+                                                                    </span>
+                                                                </div>
+                                                                <p className="text-3xl font-black">
+                                                                    {(match.averageSimilarity! * 100).toFixed(1)}%
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                    </>
                                                 )}
+
                                             </div>
                                         </div>
                                     );
