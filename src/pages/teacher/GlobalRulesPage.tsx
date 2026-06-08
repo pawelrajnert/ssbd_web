@@ -253,7 +253,7 @@ export default function GlobalRulesPage() {
                                     >
                                         <option value="NOTHING">{t('globalRules.levels.NOTHING')}</option>
                                         <option value="ONLY_PERCENTAGES">{t('globalRules.levels.ONLY_PERCENTAGES')}</option>
-                                        <option value="FULL_VIEW">{t('globalRules.levels.FULL_VIEW')}</option>
+                                        <option value="ONLY_HIGHEST_PERCENT">{t('globalRules.levels.ONLY_HIGHEST_PERCENT')}</option>
                                     </select>
                                     {errors.raportLevelName && <p className="text-danger text-xs mt-1">{t(errors.raportLevelName.message as string)}</p>}
                                 </div>

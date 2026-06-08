@@ -3,8 +3,6 @@ import { Tag, Clock, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { ScheduleDTO } from "../../types/schedule.types.ts";
 
-const TODAY_STR = new Date().toISOString().split('T')[0];
-
 interface CreateScheduleModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -12,6 +10,7 @@ interface CreateScheduleModalProps {
 }
 
 export const CreateScheduleModal: React.FC<CreateScheduleModalProps> = ({ isOpen, onClose, onSave }) => {
+    const TODAY_STR = new Date().toISOString().split('T')[0];
     const { t } = useTranslation();
 
     const [date, setDate] = useState('');
