@@ -50,7 +50,7 @@ export default function RegisterPage() {
                 const messages = errorData.violations.map((v: any) => v.message).join(", ");
                 setGlobalError(messages);
             } else {
-                setGlobalError("An unexpected error occurred.");
+                setGlobalError(t('error.unexpected'));
             }
             setIsLoading(false);
         }

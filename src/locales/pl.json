@@ -134,6 +134,8 @@
     }
   },
   "userList": {
+    "changePasswordFor": "Zmień hasło dla",
+    "cancel": "Anuluj",
     "title": "Zarządzanie użytkownikami",
     "subtitle": "Skutecznie zarządzaj dostępem instytucjonalnym, definiuj role akademickie i monitoruj aktywność badaczy w repozytorium uniwersyteckim.",
     "refresh": "Odśwież",
@@ -586,6 +588,16 @@
   },
   "subject": {
     "manager": {
+      "list": {
+        "card": {
+          "nextScan": "Następny skan",
+          "status": {
+            "archived": "Zarchiwizowany",
+            "pending": "Oczekuje",
+            "noScanPlanned": "Brak zaplanowanych skanów"
+          }
+        }
+      },
       "change": {
         "title": "Zmień kierownika przedmiotu",
         "submit": "Zmień kierownika"
@@ -632,82 +644,81 @@
       },
       "empty": "Brak przedmiotów w tej kategorii.",
       "card": {
-        "exampleImage": "[ Przykładowe zdjęcie ]",
-        "nextScan": "Następny skan:",
-        "status": {
-          "archived": "Zarchiwizowany",
-          "pending": "Oczekuje na uruchomienie"
-        },
-        "btn": {
-          "manage": "Zarządzaj kursem",
-          "stats": "Statystyki"
-        }
+        "archived": "Archiwalny",
+        "pending": "Oczekuje",
+        "noScanPlanned": "Brak zaplanowanych skanów"
       },
-      "noDescription": "Brak opisu przedmiotu.",
-      "fetchError": "Wystąpił błąd podczas pobierania."
-    },
-    "details": {
-      "fetchError": "Błąd pobierania danych.",
-      "notFound": "Nie znaleziono przedmiotu.",
-      "breadcrumb": "Zarządzanie Kursem",
-      "edition": "Edycja",
-      "organization": "Organizacja Gitea",
-      "actions": {
-        "schedule": "Harmonogram",
-        "edit": "Edytuj Przedmiot",
-        "analyze": "Uruchom Analizę",
-        "statistics": "Statystyki"
-      },
-      "stats": {
-        "students": "LICZBA STUDENTÓW",
-        "repos": "AKTYWNE REPOZYTORIA",
-        "pending": "PRZEPROWADZONO ANALIZ",
-        "similarity": "ŚREDNIE PODOBIEŃSTWO"
-      },
-      "reports": {
-        "title": "Ostatnie Raporty",
-        "viewAll": "Zobacz wszystkie →",
-        "report": "Raport",
-        "reposCount": "repozytoriów studenckich",
-        "modalTitle": "Wszystkie Raporty Antyplagiatowe",
-        "modalReposCount": "Repozytoria",
-        "repositories": "Przeskanowano repozytoriów:"
-      },
-      "repos": {
-        "title": "Aktywne Repozytoria Studenckie",
-        "refresh": "Odśwież",
-        "filter": "Filtruj",
-        "sort": "Sortuj po dacie",
-        "lastCommit": "Ostatni commit",
-        "contributors": "Użytkownicy",
-        "viewCode": "Podgląd Kodu",
-        "analyze": "Analizuj"
-      },
+      "exampleImage": "[ Przykładowe zdjęcie ]",
+      "nextScan": "Następny skan:",
       "status": {
-        "clean": "Kod czysty",
-        "alert": "Wykryto podobieństwo",
-        "pending": "Oczekuje na weryfikację"
-      },
-      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
-    },
-    "analysis": {
-      "modal": {
-        "title": "Uruchom nową analizę",
-        "description": "Wprowadż odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
-        "tagLabel": "Tag gitea",
-        "tagPlaceholder": "n.p. v67",
-        "submit": "Rozpocznij analizę"
+        "archived": "Zarchiwizowany",
+        "pending": "Oczekuje na uruchomienie"
       }
     },
-    "delete": "Usuń przedmiot",
-    "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
-    "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
-    "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
-    "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
-    "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
-    "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
-    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu."
+    "noDescription": "Brak opisu przedmiotu.",
+    "fetchError": "Wystąpił błąd podczas pobierania."
   },
+  "details": {
+    "fetchError": "Błąd pobierania danych.",
+    "notFound": "Nie znaleziono przedmiotu.",
+    "breadcrumb": "Zarządzanie Kursem",
+    "edition": "Edycja",
+    "organization": "Organizacja Gitea",
+    "actions": {
+      "schedule": "Harmonogram",
+      "edit": "Edytuj Przedmiot",
+      "analyze": "Uruchom Analizę",
+      "statistics": "Statystyki"
+    },
+    "stats": {
+      "students": "LICZBA STUDENTÓW",
+      "repos": "AKTYWNE REPOZYTORIA",
+      "pending": "PRZEPROWADZONO ANALIZ",
+      "similarity": "ŚREDNIE PODOBIEŃSTWO"
+    },
+    "reports": {
+      "title": "Ostatnie Raporty",
+      "viewAll": "Zobacz wszystkie →",
+      "report": "Raport",
+      "reposCount": "repozytoriów studenckich",
+      "modalTitle": "Wszystkie Raporty Antyplagiatowe",
+      "modalReposCount": "Repozytoria",
+      "repositories": "Przeskanowano repozytoriów:"
+    },
+    "repos": {
+      "title": "Aktywne Repozytoria Studenckie",
+      "refresh": "Odśwież",
+      "filter": "Filtruj",
+      "sort": "Sortuj po dacie",
+      "lastCommit": "Ostatni commit",
+      "contributors": "Użytkownicy",
+      "viewCode": "Podgląd Kodu",
+      "analyze": "Analizuj"
+    },
+    "status": {
+      "clean": "Kod czysty",
+      "alert": "Wykryto podobieństwo",
+      "pending": "Oczekuje na weryfikację"
+    },
+    "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
+  },
+  "analysis": {
+    "modal": {
+      "title": "Uruchom nową analizę",
+      "description": "Wprowadż odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
+      "tagLabel": "Tag gitea",
+      "tagPlaceholder": "n.p. v67",
+      "submit": "Rozpocznij analizę"
+    }
+  },
+  "delete": "Usuń przedmiot",
+  "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
+  "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
+  "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
+  "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
+  "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
+  "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
+  "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu.",
   "schedule": {
     "modal": {
       "title": "Zaplanuj analizę",
@@ -721,7 +732,6 @@
     "date": "Data zaplanowania",
     "tag": "Tag analizy",
     "statusLabel": "Status",
-    "actions": "Akcje",
     "status": {
       "all": "Wszystkie",
       "planned": "Oczekuje",
@@ -869,18 +879,6 @@
     "NOTHING": {
       "label": "Nic",
       "description": "Wszystkie wygenerowane raporty są dla Ciebie ukryte. Wyłącznie kadra prowadząca przedmiot posiada pełny wgląd w analizę."
-    }
-  },
-  "subject": {
-    "list": {
-      "card": {
-        "nextScan": "Następny skan",
-        "status": {
-          "archived": "Archiwalny",
-          "pending": "Oczekuje",
-          "noScanPlanned": "Brak zaplanowanych skanów"
-        }
-      }
     }
   }
 }
