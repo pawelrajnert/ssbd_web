@@ -785,7 +785,7 @@
     "breadcrumb": "Utwórz Przedmiot",
     "title": "Utwórz Nowy Przedmiot",
     "subtitle": "Wprowadź podstawowe informacje oraz skonfiguruj ustawienia analizy.",
-    "errorEmpty": "Wypełnij wszystkie wymagane поля (Nazwa, Organizacja, Edycja).",
+    "errorEmpty": "Wypełnij wszystkie wymagane pola (Nazwa, Organizacja, Edycja).",
     "errorTemplate": "Wybierz szablon reguł z listy.",
     "generalInfo": "Informacje Ogólne",
     "nameLabel": "Nazwa Przedmiotu *",
@@ -849,5 +849,31 @@
     "title": "Strona nie znaleziona",
     "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
     "backToHome": "Wróć do strony głównej"
+  },
+  "visibility": {
+    "ONLY_PERCENTAGES": {
+      "label": "Tylko procenty",
+      "description": "Widzisz wyniki procentowe podobieństwa dla wszystkich swoich skanów. Dostęp do dokładnego porównania kodu źródłowego jest zablokowany."
+    },
+    "ONLY_HIGHEST_PERCENT": {
+      "label": "Tylko najwyższy procent",
+      "description": "Widzisz wyłącznie swój najwyższy wynik procentowy podobieństwa. Pozostałe skany oraz dokładne porównania kodu są zablokowane."
+    },
+    "NOTHING": {
+      "label": "Nic",
+      "description": "Wszystkie wygenerowane raporty są dla Ciebie ukryte. Wyłącznie kadra prowadząca przedmiot posiada pełny wgląd w analizę."
+    }
+  },
+  "subject": {
+    "list": {
+      "card": {
+        "nextScan": "Następny skan",
+        "status": {
+          "archived": "Archiwalny",
+          "pending": "Oczekuje",
+          "noScanPlanned": "Brak zaplanowanych skanów"
+        }
+      }
+    }
   }
 }

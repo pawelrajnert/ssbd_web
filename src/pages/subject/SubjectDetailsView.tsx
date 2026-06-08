@@ -213,11 +213,6 @@ export const SubjectDetailsView: React.FC = () => {
                             <CirclePlay/>
                             {t('subject.details.actions.analyze', 'Skanuj Teraz')}
                         </button>
-                        <button
-                            className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors">
-                            <BarChartBigIcon/>
-                            {t('subject.details.actions.statistics', 'Statystyki')}
-                        </button>
                         {subject.canEdit && (
                             <button
                                 onClick={() => setIsDeleteModalOpen(true)}

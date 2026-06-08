@@ -38,6 +38,8 @@ export const CreateSubjectPage: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+
     useEffect(() => {
         ruleService.getRulePresetsTemplates()
             .then((response: any) => {
@@ -50,7 +52,7 @@ export const CreateSubjectPage: React.FC = () => {
             });
     }, []);
 
-    const handleSubmit = async () => {
+    const handlePreSubmit = () => {
         if (!name.trim() || !organizationName.trim() || !edition.trim()) {
             setError(t('subjectCreate.errorEmpty', 'Wypełnij wszystkie wymagane pola (Nazwa, Organizacja, Edycja).'));
             return;
@@ -61,8 +63,13 @@ export const CreateSubjectPage: React.FC = () => {
             return;
         }
 
-        setIsSubmitting(true);
         setError(null);
+        setShowConfirmModal(true);
+    };
+
+    const executeSubmit = async () => {
+        setShowConfirmModal(false);
+        setIsSubmitting(true);
 
         const dto: SubjectDTO = {
             name,
@@ -92,7 +99,6 @@ export const CreateSubjectPage: React.FC = () => {
     return (
         <div className="max-w-4xl mx-auto p-6 md:p-10 animate-fade-in flex flex-col h-full">
             <div className="mb-8">
-                {/* ZAMIAST navigate(-1) UŻYWAMY BEZPIECZNEGO PATHS */}
                 <button type="button" onClick={() => navigate(PATHS.TEACHER_SUBJECT_LIST)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors mb-4">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     {t('common.cancel', 'Wróć')}
@@ -203,29 +209,47 @@ export const CreateSubjectPage: React.FC = () => {
                             </div>
                         )}
                     </section>
-
-                    <section>
-                        <h3 className="text-xs font-bold text-secondary tracking-widest mb-5 uppercase">{t('subjectCreate.scheduleSection', 'Harmonogram Skanowania')}</h3>
-                        <div className="p-8 bg-base border border-border border-dashed rounded-xl flex flex-col items-center justify-center text-center gap-3">
-                            <svg className="w-8 h-8 text-secondary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            <p className="text-primary font-semibold">{t('subjectCreate.scheduleTitle', 'Zarządzanie Harmonogramem')}</p>
-                            <p className="text-secondary text-sm max-w-sm">
-                                {t('subjectCreate.scheduleDesc', 'Opcje dodawania i konfiguracji automatycznych skanów w harmonogramie zostaną udostępnione w nadchodzących aktualizacjach systemu.')}
-                            </p>
-                        </div>
-                    </section>
                 </div>
 
                 <div className="flex justify-end gap-4 p-6 md:p-8 border-t border-border bg-base/50 rounded-b-2xl mt-auto">
-                    {/* ZAMIAST navigate(-1) UŻYWAMY BEZPIECZNEGO PATHS */}
                     <button type="button" onClick={() => navigate(PATHS.TEACHER_SUBJECT_LIST)} disabled={isSubmitting} className="px-6 py-2.5 rounded-lg text-sm font-bold text-secondary border border-border hover:bg-surface transition-colors">
                         {t('common.cancel', 'Anuluj')}
                     </button>
-                    <button type="button" onClick={handleSubmit} disabled={isSubmitting} className="px-8 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
+                    <button type="button" onClick={handlePreSubmit} disabled={isSubmitting} className="px-8 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
                         {isSubmitting ? t('subjectCreate.submitCreating', 'Tworzenie...') : t('subjectCreate.submitButton', 'Utwórz Przedmiot')}
                     </button>
                 </div>
             </div>
+            {showConfirmModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-surface border border-border rounded-2xl shadow-xl max-w-md w-full p-6 space-y-6">
+                        <div>
+                            <h3 className="text-xl font-bold text-primary">
+                                {t('subjectCreate.confirmTitle', 'Potwierdź utworzenie przedmiotu')}
+                            </h3>
+                            <p className="text-sm text-secondary mt-2">
+                                {t('subjectCreate.confirmMessage', 'Czy na pewno chcesz utworzyć ten przedmiot? Akcja spowoduje nieodwracalne zapisanie nowych struktur biznesowych w relacyjnej bazie danych.')}
+                            </p>
+                        </div>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setShowConfirmModal(false)}
+                                className="px-4 py-2.5 rounded-lg text-sm font-semibold text-secondary border border-border hover:bg-base transition-colors"
+                            >
+                                {t('common.cancel', 'Anuluj')}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={executeSubmit}
+                                className="px-5 py-2.5 rounded-lg text-sm font-bold text-white bg-brand hover:bg-brand-hover shadow-md transition-colors"
+                            >
+                                {t('common.confirmAction', 'Potwierdzam')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
