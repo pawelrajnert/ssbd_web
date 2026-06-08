@@ -20,6 +20,7 @@ export default function StudentScanPage() {
 
     const [repositories, setRepositories] = useState<StudentRepositoryDTO[]>([]);
     const [isLoadingRepos, setIsLoadingRepos] = useState(false);
+    const [usedScans, setUsedScans] = useState<number|undefined>(0);
 
     const [history, setHistory] = useState<ReportDTO[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
@@ -69,6 +70,7 @@ export default function StudentScanPage() {
                     ? { ...r, usedScans: r.usedScans + 1 }
                     : r
             ));
+            setUsedScans(usedScans+1);
         } catch (err: any) {
             const status = err?.response?.status;
             if (status === 403) setError(t('studentScan.errors.noTickets'));
@@ -111,7 +113,7 @@ export default function StudentScanPage() {
         navigate(`/student/reports/${reportId}`);
     };
 
-    const noScansLeft = selectedRepo != null && selectedRepo.usedScans >= selectedRepo.maxScans;
+    const noScansLeft = selectedRepo != null && usedScans >= selectedRepo.maxScans;
     const canSubmit = !isScanning && selectedRepo != null && studentTag.trim().length > 0 && taskTag.trim().length > 0 && !noScansLeft;
 
     return (
@@ -145,6 +147,7 @@ export default function StudentScanPage() {
                                     onChange={e => {
                                         const repo = repositories.find(r => r.repositoryId === e.target.value) ?? null;
                                         setSelectedRepo(repo);
+                                        setUsedScans(repo?.usedScans);
                                         setError(null);
                                         setScanResult(null);
                                     }}
@@ -170,7 +173,7 @@ export default function StudentScanPage() {
                                 <span>
                                     {t('studentScan.form.scansUsed')}:{' '}
                                     <span className="font-bold text-primary">
-                                        {selectedRepo.usedScans} / {selectedRepo.maxScans}
+                                        {usedScans} / {selectedRepo.maxScans}
                                     </span>
                                 </span>
                                 {noScansLeft && (

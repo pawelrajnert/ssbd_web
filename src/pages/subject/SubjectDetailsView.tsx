@@ -55,17 +55,26 @@ export const SubjectDetailsView: React.FC = () => {
             });
     };
 
+    const fetchReports = (id: string) => {
+        reportService.getAllReportsForSubject(id, 0, 1000, "created_at", false)
+            .then(data => setReports(data))
+            .catch(console.error)
+    }
+
+    const fetchRepositories = (id: string) => {
+        repositoryService.getRepositoriesForSubject(id)
+            .then(data => setRepositories(data))
+            .catch();
+    }
+
     useEffect(() => {
         fetchSubjectData();
         if (id) {
-            reportService.getAllReportsForSubject(id, 0, 5, "created_at", true)
-                .then(data => setReports(data))
-                .catch(console.error);
-            repositoryService.getRepositoriesForSubject(id)
-                .then(data => setRepositories(data))
-                .catch();
+            fetchReports(id);
+            fetchRepositories(id);
         }
     }, [id, t]);
+
 
     const handleStartAnalysis = () => {
         if (!id) return;
@@ -73,9 +82,8 @@ export const SubjectDetailsView: React.FC = () => {
             .then(() => {
                 setIsStartAnalysisModalOpen(false);
                 setAnalysisTag('');
-            })
-            .catch((err: string) => {
-                setError(err);
+                fetchSubjectData();
+                fetchReports(id);
             });
     };
 
@@ -141,7 +149,7 @@ export const SubjectDetailsView: React.FC = () => {
 
     const displaySimilarity = React.useMemo(() => {
         if (subject?.aggregatedAverageSimilarity != null) {
-            return `${subject.aggregatedAverageSimilarity.toFixed(1)}%`;
+            return `${(subject.aggregatedAverageSimilarity*100).toFixed(1)}%`;
         }
         return '0.0%';
     }, [subject?.aggregatedAverageSimilarity]);

@@ -849,6 +849,13 @@
   "notFound": {
     "title": "Strona nie znaleziona",
     "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
-    "goBack": "Wróć"
+    "goBack": "Wróć",
+    "backToHome": "Wróć do strony głównej"
+  },
+  "success": {
+    "generic": "Operacja zakończyła się sukcesem."
+  },
+  "errors": {
+
   }
 }

@@ -1,5 +1,5 @@
 import {useLocation, useNavigate, Link} from "react-router-dom";
-import {Bell, Globe, Moon, Palette, Settings, Shield, Sun} from "lucide-react";
+import { Globe, Moon, Palette, Settings, Shield, Sun} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../../../hooks/useAuth";
 import {PATHS} from "../../../routes/paths";
@@ -130,9 +130,9 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-6">
                 <div className="flex items-center gap-4 text-secondary">
-                    <button className="hover:text-brand transition-colors">
-                        <Bell size={20}/>
-                    </button>
+                    {/*<button className="hover:text-brand transition-colors">*/}
+                    {/*    <Bell size={20}/>*/}
+                    {/*</button>*/}
                     <div className="relative" ref={settingsRef}>
                         <button
                             className={`p-2 rounded-full transition-colors ${isSettingsOpen ? 'bg-active text-brand' : 'hover:text-brand'}`}
