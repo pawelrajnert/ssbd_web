@@ -688,6 +688,9 @@
             "archived": "Archived",
             "pending": "Pending",
             "noScanPlanned": "No scans scheduled"
+          },
+          "btn": {
+            "manage": "Zarządzaj kursem"
           }
         },
         "title": "Managed Subjects",
