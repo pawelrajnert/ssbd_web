@@ -35,13 +35,13 @@ export const TeacherSubjectListPage: React.FC = () => {
         navigate(PATHS.SUBJECT_DETAILS.replace(':id', subjectId));
     };
 
-    if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading', 'Ładowanie...')}</div>;
+    if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading')}</div>;
     if (error) return <div className="p-8 text-center text-danger font-medium">{error}</div>;
 
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base">
             <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-                {t('subject.list.role.teacher', 'Panel Prowadzącego')}
+                {t('subject.list.role.teacher')}
             </div>
 
             <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -57,7 +57,7 @@ export const TeacherSubjectListPage: React.FC = () => {
                     onClick={() => navigate(PATHS.CREATE_SUBJECT)}
                     className="px-5 py-2.5 bg-brand text-white text-sm font-bold rounded-lg hover:bg-brand-hover shadow-md transition-colors whitespace-nowrap shrink-0"
                 >
-                    {t('subject.list.btn.create', 'Utwórz przedmiot')}
+                    {t('subject.list.btn.create')}
                 </button>
             </div>
 
