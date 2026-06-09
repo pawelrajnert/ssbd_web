@@ -136,6 +136,8 @@
     }
   },
   "userList": {
+    "changePasswordFor": "Zmień hasło dla",
+    "cancel": "Anuluj",
     "title": "Zarządzanie użytkownikami",
     "subtitle": "Skutecznie zarządzaj dostępem instytucjonalnym, definiuj role akademickie i monitoruj aktywność badaczy w repozytorium uniwersyteckim.",
     "refresh": "Odśwież",
@@ -622,6 +624,7 @@
     "list": {
       "title": "Zarządzane Przedmioty",
       "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",
+      "noDescription": "Brak opisu przedmiotu.",
       "role": {
         "student": "Panel Studenta / Moje Przedmioty",
         "teacher": "Panel Prowadzącego / Moje Przedmioty"
@@ -635,28 +638,28 @@
       },
       "empty": "Brak przedmiotów w tej kategorii.",
       "card": {
-        "exampleImage": "[ Przykładowe zdjęcie ]",
+        "archived": "Archiwalny",
+        "pending": "Oczekuje",
+        "noScanPlanned": "Brak zaplanowanych skanów",
         "nextScan": "Następny skan",
-        "status": {
-          "archived": "Archiwalny",
-          "pending": "Oczekuje",
-          "noScanPlanned": "Brak zaplanowanych skanów"
-        },
+        "exampleImage": "[ Przykładowe zdjęcie ]",
         "btn": {
           "manage": "Zarządzaj kursem",
           "stats": "Statystyki",
           "view": "Zobacz"
+        },
+        "status": {
+          "archived": "Zarchiwizowany",
+          "pending": "Oczekuje",
+          "noScanPlanned": "Brak zaplanowanych skanów"
         }
       },
-      "noDescription": "Brak opisu przedmiotu.",
       "fetchError": "Wystąpił błąd podczas pobierania."
     },
     "details": {
       "fetchError": "Błąd pobierania danych.",
       "notFound": "Nie znaleziono przedmiotu.",
       "breadcrumb": "Zarządzanie Kursem",
-      "syncError": "Błąd komunikacji z platformą Gitea podczas synchronizacji.",
-      "syncGitea": "Odśwież z Gitea",
       "edition": "Edycja",
       "organization": "Organizacja Gitea",
       "editionLabel": "Edycja:",
@@ -672,6 +675,8 @@
       "archivedWarning": "Ten przedmiot jest zarchiwizowany. Uruchamianie skanowań, usuwanie raportów oraz edycja są zablokowane.",
       "studentBreadcrumb": "Szczegóły przedmiotu",
       "studentArchivedWarning": "Ten przedmiot jest zarchiwizowany. Wykonywanie nowych skanów z Twojego repozytorium jest zablokowane.",
+      "syncError": "Błąd komunikacji z platformą Gitea podczas synchronizacji.",
+      "syncGitea": "Odśwież z Gitea",
       "actions": {
         "schedule": "Harmonogram",
         "edit": "Edytuj Przedmiot",
@@ -693,9 +698,7 @@
         "modalTitle": "Wszystkie Raporty Antyplagiatowe",
         "modalReposCount": "Repozytoria",
         "repositories": "Przeskanowano repozytoriów:",
-        "empty": "Brak zsynchronizowanych repozytoriów. Kliknij \"Odśwież z Gitea\", aby pobrać nowości.",
-        "noUsers": "Brak przypisanych członków",
-        "tickets": "Dostępne skanowania"
+        "empty": "Brak wygenerowanych raportów."
       },
       "repos": {
         "title": "Aktywne Repozytoria Studenckie",
@@ -706,7 +709,9 @@
         "contributors": "Użytkownicy",
         "viewCode": "Podgląd Kodu",
         "analyze": "Analizuj",
-        "tickets": "Dostępne skanowania"
+        "tickets": "Dostępne skanowania",
+        "empty": "Brak zsynchronizowanych repozytoriów. Kliknij \"Odśwież z Gitea\", aby pobrać nowości.",
+        "noUsers": "Brak przypisanych członków"
       },
       "status": {
         "clean": "Kod czysty",
@@ -732,9 +737,9 @@
     "analysis": {
       "modal": {
         "title": "Uruchom nową analizę",
-        "description": "Wprowadż odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
+        "description": "Wprowadź odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
         "tagLabel": "Tag gitea",
-        "tagPlaceholder": "n.p. v67",
+        "tagPlaceholder": "np. v67",
         "submit": "Rozpocznij analizę"
       }
     },
@@ -760,7 +765,6 @@
     "date": "Data zaplanowania",
     "tag": "Tag analizy",
     "statusLabel": "Status",
-    "actions": "Akcje",
     "status": {
       "all": "Wszystkie",
       "planned": "Oczekuje",
@@ -781,14 +785,6 @@
     "deleteScheduleError": "Wystąpił błąd podczas usuwania harmonogramu.",
     "deleteScheduleErrorNotFound": "Nie znaleziono harmonogramu. Mógł zostać już usunięty.",
     "deleteScheduleConflict": "Dane harmonogramu zostały zmodyfikowane. Odśwież stronę i spróbuj ponownie.",
-    "delete": "Usuń przedmiot",
-    "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
-    "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
-    "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
-    "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
-    "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
-    "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
-    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu.",
     "actions": "Akcje"
   },
   "subjectEdit": {

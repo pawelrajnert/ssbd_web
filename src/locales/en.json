@@ -25,7 +25,9 @@
     "back": "Back",
     "confirm": "Confirm",
     "save": "Save",
-    "accessDenied": "You do not have access to this page"
+    "accessDenied": "You do not have access to this page",
+    "saving": "Saving...",
+    "create": "Create"
   },
   "auth": {
     "title": "Preserving Academic Integrity",
@@ -209,8 +211,8 @@
     }
   },
   "force_password_change": {
-    "title": "Wymuszona zmiana hasła",
-    "description": "Ze względów bezpieczeństwa musisz ustalić nowe hasło przed wejściem do aplikacji."
+    "title": "Forced Password Change",
+    "description": "For security reasons, you must set a new password before accessing the application."
   },
   "password": {
     "old": "Old password",
@@ -417,6 +419,31 @@
     "changeSubjectManager": "Change subject's manager"
   },
   "globalRules": {
+    "subject": {
+      "create": {
+        "title": "Create a new subject"
+      },
+      "name": "Subject name",
+      "organizationName": "Organization name on Gitea",
+      "edition": "Edition (e.g. 2026)",
+      "giteaURL": "Gitea URL",
+      "subjectDescription": "Subject description",
+      "templateId": "Rule template (optional)",
+      "template": {
+        "none": "-- None (Custom configuration below) --"
+      },
+      "manualRules": {
+        "title": "Manual rules configuration"
+      },
+      "rules": {
+        "studentTicketCount": "Submission limit per student",
+        "minimumTokensMatch": "Minimum token match",
+        "enableNormalization": "Enable code normalization"
+      },
+      "info": {
+        "templateActive": "Verification rules will be copied automatically from the selected template."
+      }
+    },
     "error": {
       "fetch": "Failed to fetch rule presets",
       "createFailed": "Action failed. Please check the data.",
@@ -650,7 +677,46 @@
         "conflict": "Subject data was modified in the meantime. Refresh the page and try again.",
         "forbidden": "No permission to change the manager of this subject.",
         "unexpected": "An unexpected error occurred. Please try again."
-      }
+      },
+      "list": {
+        "card": {
+          "archived": "Archival",
+          "pending": "Pending",
+          "noScanPlanned": "No scheduled scans",
+          "nextScan": "Next scan",
+          "status": {
+            "archived": "Archived",
+            "pending": "Pending",
+            "noScanPlanned": "No scans scheduled"
+          },
+          "btn": {
+            "manage": "Zarządzaj kursem"
+          }
+        },
+        "title": "Managed Subjects",
+        "description": "Browse your subjects and manage their anti-plagiarism rules and Gitea organizations.",
+        "role": {
+          "student": "Student Panel / My Subjects",
+          "teacher": "Teacher Panel / My Subjects"
+        },
+        "tabs": {
+          "active": "Active Courses",
+          "archived": "Archived"
+        },
+        "btn": {
+          "create": "Create Subject"
+        },
+        "empty": "No subjects in this category.",
+        "exampleImage": "[ Example image ]",
+        "nextScan": "Next scan:",
+        "status": {
+          "archived": "Archived",
+          "pending": "Pending execution"
+        }
+      },
+      "translation": "Show translation",
+      "noDescription": "No subject description.",
+      "fetchError": "An error occurred while fetching."
     },
     "delete": "Delete subject",
     "deleteConfirmTitle": "Are you sure you want to delete this subject?",
@@ -750,16 +816,68 @@
       "description": "All generated reports are hidden from you. Only the teaching staff has full access to the analysis."
     }
   },
-  "subject": {
-    "list": {
-      "card": {
-        "nextScan": "Next scan",
-        "status": {
-          "archived": "Archived",
-          "pending": "Pending",
-          "noScanPlanned": "No scans scheduled"
-        }
-      }
+  "about": {
+    "title": "Peace be upon you"
+  },
+  "analysis": {
+    "modal": {
+      "title": "Run a new analysis",
+      "description": "Enter the appropriate tag to run an analysis of all repositories that have the given tag.",
+      "tagLabel": "Gitea tag",
+      "tagPlaceholder": "e.g. v67",
+      "submit": "Start analysis"
     }
-  }
+  },
+  "details": {
+    "fetchError": "Error downloading data.",
+    "notFound": "Subject not found.",
+    "breadcrumb": "Course Management",
+    "edition": "Edition",
+    "organization": "Gitea Organization",
+    "actions": {
+      "schedule": "Schedule",
+      "edit": "Edit Subject",
+      "analyze": "Run Analysis",
+      "statistics": "Statistics"
+    },
+    "stats": {
+      "students": "NUMBER OF STUDENTS",
+      "repos": "ACTIVE REPOSITORIES",
+      "pending": "ANALYSES CONDUCTED",
+      "similarity": "AVERAGE SIMILARITY"
+    },
+    "reports": {
+      "title": "Recent Reports",
+      "viewAll": "See all →",
+      "report": "Report",
+      "reposCount": "student repositories",
+      "modalTitle": "All Anti-Plagiarism Reports",
+      "modalReposCount": "Repositories",
+      "repositories": "Scanned repositories:"
+    },
+    "repos": {
+      "title": "Active Student Repositories",
+      "refresh": "Refresh",
+      "filter": "Filter",
+      "sort": "Sort by date",
+      "lastCommit": "Last commit",
+      "contributors": "Users",
+      "viewCode": "Code Preview",
+      "analyze": "Analyze"
+    },
+    "status": {
+      "clean": "Code clean",
+      "alert": "Similarity detected",
+      "pending": "Pending verification"
+    },
+    "noAccess": "No permission to view detailed course data."
+  },
+  "delete": "Delete subject",
+  "deleteConfirmTitle": "Are you sure you want to delete this subject?",
+  "deleteConfirmMessage": "This operation is irreversible. All subject data, repositories, and report files will be permanently deleted from the system.",
+  "deleteGiteaOption": "Also delete the associated organization on the Gitea server",
+  "deleteSuccess": "Subject has been successfully deleted.",
+  "deleteError": "An error occurred while deleting the subject.",
+  "deleteConflict": "Subject data has been modified by another user. Refresh the page and try again.",
+  "deleteForbidden": "You do not have permission to delete this subject."
 }
