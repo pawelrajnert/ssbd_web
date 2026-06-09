@@ -27,7 +27,9 @@
     "back": "Wróć",
     "confirm": "Potwierdź",
     "save": "Zapisz",
-    "accessDenied": "Nie masz dostępu do tej strony"
+    "accessDenied": "Nie masz dostępu do tej strony",
+    "confirmAction": "Zapisz zmiany",
+    "searching": "Szukanie..."
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -587,17 +589,8 @@
     }
   },
   "subject": {
+    "deleteVersionError": "Błąd: Brak wersji przedmiotu (versionHash). Odśwież stronę.",
     "manager": {
-      "list": {
-        "card": {
-          "nextScan": "Następny skan",
-          "status": {
-            "archived": "Zarchiwizowany",
-            "pending": "Oczekuje",
-            "noScanPlanned": "Brak zaplanowanych skanów"
-          }
-        }
-      },
       "change": {
         "title": "Zmień kierownika przedmiotu",
         "submit": "Zmień kierownika"
@@ -631,7 +624,7 @@
     "list": {
       "title": "Zarządzane Przedmioty",
       "description": "Przeglądaj swoje przedmioty i zarządzaj w nich regułami antyplagiatowymi oraz organizacjami w Gitea.",
-      "noDescription": "Brak opisu.",
+      "noDescription": "Brak opisu przedmiotu.",
       "role": {
         "student": "Panel Studenta / Moje Przedmioty",
         "teacher": "Panel Prowadzącego / Moje Przedmioty"
@@ -648,84 +641,117 @@
         "archived": "Archiwalny",
         "pending": "Oczekuje",
         "noScanPlanned": "Brak zaplanowanych skanów",
+        "nextScan": "Następny skan",
+        "exampleImage": "[ Przykładowe zdjęcie ]",
         "btn": {
-          "manage": "Zarządzaj kursem"
+          "manage": "Zarządzaj kursem",
+          "stats": "Statystyki",
+          "view": "Zobacz"
         },
         "status": {
-          "noScanPlanned": "Nie ma zaplanowanych skanowań"
-        },
-        "nextScan": "Następny skan:"
+          "archived": "Zarchiwizowany",
+          "pending": "Oczekuje",
+          "noScanPlanned": "Brak zaplanowanych skanów"
+        }
       },
-      "exampleImage": "[ Przykładowe zdjęcie ]",
+      "fetchError": "Wystąpił błąd podczas pobierania."
+    },
+    "details": {
+      "fetchError": "Błąd pobierania danych.",
+      "notFound": "Nie znaleziono przedmiotu.",
+      "breadcrumb": "Zarządzanie Kursem",
+      "edition": "Edycja",
+      "organization": "Organizacja Gitea",
+      "editionLabel": "Edycja:",
+      "organizationLabel": "Organizacja:",
+      "repoHeader": "Twoje Repozytorium",
+      "availableTickets": "Dostępne tokeny skanowań:",
+      "runScanBtn": "Wykonaj skan kodu",
+      "noRepoAssigned": "Nie jesteś przypisany do żadnego repozytorium w tym przedmiocie.",
+      "reportsHeader": "Widoczność Raportów",
+      "reportLevelLabel": "Poziom dostępu do wyników:",
+      "goToReportsBtn": "Przejdź do moich raportów",
+      "noDescription": "Brak opisu przedmiotu.",
+      "archivedWarning": "Ten przedmiot jest zarchiwizowany. Uruchamianie skanowań, usuwanie raportów oraz edycja są zablokowane.",
+      "studentBreadcrumb": "Szczegóły przedmiotu",
+      "studentArchivedWarning": "Ten przedmiot jest zarchiwizowany. Wykonywanie nowych skanów z Twojego repozytorium jest zablokowane.",
+      "syncError": "Błąd komunikacji z platformą Gitea podczas synchronizacji.",
+      "syncGitea": "Odśwież z Gitea",
+      "actions": {
+        "schedule": "Harmonogram",
+        "edit": "Edytuj Przedmiot",
+        "analyze": "Uruchom Analizę",
+        "statistics": "Statystyki",
+        "settings": "Ustawienia Archiwum"
+      },
+      "stats": {
+        "students": "LICZBA STUDENTÓW",
+        "repos": "AKTYWNE REPOZYTORIA",
+        "pending": "PRZEPROWADZONO ANALIZ",
+        "similarity": "ŚREDNIE PODOBIEŃSTWO"
+      },
+      "reports": {
+        "title": "Ostatnie Raporty",
+        "viewAll": "Zobacz wszystkie →",
+        "report": "Raport",
+        "reposCount": "repozytoriów studenckich",
+        "modalTitle": "Wszystkie Raporty Antyplagiatowe",
+        "modalReposCount": "Repozytoria",
+        "repositories": "Przeskanowano repozytoriów:",
+        "empty": "Brak wygenerowanych raportów."
+      },
+      "repos": {
+        "title": "Aktywne Repozytoria Studenckie",
+        "refresh": "Odśwież",
+        "filter": "Filtruj",
+        "sort": "Sortuj po dacie",
+        "lastCommit": "Ostatni commit",
+        "contributors": "Użytkownicy",
+        "viewCode": "Podgląd Kodu",
+        "analyze": "Analizuj",
+        "tickets": "Dostępne skanowania",
+        "empty": "Brak zsynchronizowanych repozytoriów. Kliknij \"Odśwież z Gitea\", aby pobrać nowości.",
+        "noUsers": "Brak przypisanych członków"
+      },
       "status": {
-        "archived": "Zarchiwizowany",
-        "pending": "Oczekuje na uruchomienie"
+        "clean": "Kod czysty",
+        "alert": "Wykryto podobieństwo",
+        "pending": "Oczekuje na weryfikację"
+      },
+      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu.",
+      "visibility": {
+        "ONLY_PERCENTAGES": {
+          "label": "Tylko procenty",
+          "description": "Widzisz wyniki procentowe podobieństwa dla wszystkich swoich skanów. Dostęp do dokładnego porównania kodu źródłowego jest zablokowany."
+        },
+        "ONLY_HIGHEST_PERCENT": {
+          "label": "Tylko najwyższy procent",
+          "description": "Widzisz wyłącznie swój najwyższy wynik procentowy podobieństwa. Pozostałe skany oraz dokładne porównania kodu są zablokowane."
+        },
+        "NOTHING": {
+          "label": "Nic",
+          "description": "Wszystkie wygenerowane raporty są dla Ciebie ukryte. Wyłącznie kadra prowadząca przedmiot posiada pełny wgląd w analizę."
+        }
       }
     },
-    "noDescription": "Brak opisu przedmiotu.",
-    "fetchError": "Wystąpił błąd podczas pobierania."
+    "analysis": {
+      "modal": {
+        "title": "Uruchom nową analizę",
+        "description": "Wprowadź odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
+        "tagLabel": "Tag gitea",
+        "tagPlaceholder": "np. v67",
+        "submit": "Rozpocznij analizę"
+      }
+    },
+    "delete": "Usuń przedmiot",
+    "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
+    "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
+    "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
+    "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
+    "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
+    "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
+    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu."
   },
-  "details": {
-    "fetchError": "Błąd pobierania danych.",
-    "notFound": "Nie znaleziono przedmiotu.",
-    "breadcrumb": "Zarządzanie Kursem",
-    "edition": "Edycja",
-    "organization": "Organizacja Gitea",
-    "actions": {
-      "schedule": "Harmonogram",
-      "edit": "Edytuj Przedmiot",
-      "analyze": "Uruchom Analizę",
-      "statistics": "Statystyki"
-    },
-    "stats": {
-      "students": "LICZBA STUDENTÓW",
-      "repos": "AKTYWNE REPOZYTORIA",
-      "pending": "PRZEPROWADZONO ANALIZ",
-      "similarity": "ŚREDNIE PODOBIEŃSTWO"
-    },
-    "reports": {
-      "title": "Ostatnie Raporty",
-      "viewAll": "Zobacz wszystkie →",
-      "report": "Raport",
-      "reposCount": "repozytoriów studenckich",
-      "modalTitle": "Wszystkie Raporty Antyplagiatowe",
-      "modalReposCount": "Repozytoria",
-      "repositories": "Przeskanowano repozytoriów:"
-    },
-    "repos": {
-      "title": "Aktywne Repozytoria Studenckie",
-      "refresh": "Odśwież",
-      "filter": "Filtruj",
-      "sort": "Sortuj po dacie",
-      "lastCommit": "Ostatni commit",
-      "contributors": "Użytkownicy",
-      "viewCode": "Podgląd Kodu",
-      "analyze": "Analizuj"
-    },
-    "status": {
-      "clean": "Kod czysty",
-      "alert": "Wykryto podobieństwo",
-      "pending": "Oczekuje na weryfikację"
-    },
-    "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
-  },
-  "analysis": {
-    "modal": {
-      "title": "Uruchom nową analizę",
-      "description": "Wprowadż odpowiedni tag żeby uruchomić analizę wszystkich repozytoriów które posiadają dany tag.",
-      "tagLabel": "Tag gitea",
-      "tagPlaceholder": "n.p. v67",
-      "submit": "Rozpocznij analizę"
-    }
-  },
-  "delete": "Usuń przedmiot",
-  "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
-  "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
-  "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
-  "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
-  "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
-  "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
-  "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu.",
   "schedule": {
     "modal": {
       "title": "Zaplanuj analizę",
@@ -759,14 +785,6 @@
     "deleteScheduleError": "Wystąpił błąd podczas usuwania harmonogramu.",
     "deleteScheduleErrorNotFound": "Nie znaleziono harmonogramu. Mógł zostać już usunięty.",
     "deleteScheduleConflict": "Dane harmonogramu zostały zmodyfikowane. Odśwież stronę i spróbuj ponownie.",
-    "delete": "Usuń przedmiot",
-    "deleteConfirmTitle": "Czy na pewno chcesz usunąć ten przedmiot?",
-    "deleteConfirmMessage": "Ta operacja jest nieodwracalna. Z systemu zostaną trwale usunięte wszystkie dane przedmiotu, repozytoria oraz pliki raportów.",
-    "deleteGiteaOption": "Usuń również powiązaną organizację na serwerze Gitea",
-    "deleteSuccess": "Przedmiot został pomyślnie usunięty.",
-    "deleteError": "Wystąpił błąd podczas usuwania przedmiotu.",
-    "deleteConflict": "Dane przedmiotu zostały zmodyfikowane przez innego użytkownika. Odśwież stronę i spróbuj ponownie.",
-    "deleteForbidden": "Nie masz uprawnień do usunięcia tego przedmiotu.",
     "actions": "Akcje"
   },
   "subjectEdit": {
@@ -779,6 +797,21 @@
     "addTeacher": "Dodaj Prowadzącego",
     "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
     "assignedStaff": "PRZYPISANA KADRA",
+    "errorEmptyName": "Nazwa przedmiotu nie może być pusta.",
+    "errorShortName": "Nazwa przedmiotu musi mieć przynajmniej 3 znaki.",
+    "errorLongDesc": "Opis przedmiotu jest za długi (maksymalnie 500 znaków).",
+    "confirmTitle": "Potwierdź modyfikację danych",
+    "confirmMessage": "Czy na pewno chcesz zapisać wprowadzone zmiany? Dotychczasowe dane biznesowe przedmiotu w bazie danych zostaną nadpisane.",
+    "archivedWarning": "Ten przedmiot jest zarchiwizowany. Odblokuj go na dole strony, aby edytować dane.",
+    "dangerZone": "STREFA NIEBEZPIECZNA",
+    "unarchiveSubject": "Przywróć przedmiot z archiwum",
+    "archiveSubject": "Zarchiwizuj przedmiot",
+    "unarchiveDesc": "Przywrócenie przedmiotu odblokuje możliwość edycji i skanowania.",
+    "archiveDesc": "Zarchiwizowanie zablokuje możliwość edycji, synchronizacji i uruchamiania nowych skanów.",
+    "unarchiveBtn": "Odarchiwizuj",
+    "archiveBtn": "Zarchiwizuj",
+    "defaultError": "Wystąpił błąd podczas operacji.",
+    "archiveError": "Wystąpił błąd podczas zmiany statusu archiwum.",
     "roles": {
       "OWNER": "Właściciel (Owner)",
       "EDITOR": "Edytor (Edit Access)",
@@ -817,7 +850,7 @@
     "visibilityHidden": "Ukryty - student nie widzi żadnych wyników analizy",
     "jplagSettings": "Zaawansowane parametry skanera (JPlag)",
     "modeManual": "Konfiguracja Ręczna",
-    "modeTemplate": "Użyj Szablonu JPlag",
+    "modeTemplate": "Użyj Szablonu",
     "templateSelect": "Wybierz zapisany szablon parametrów",
     "templateDefault": "-- Wybierz szablon z listy --",
     "templateHelp": "Wybranie szablonu spowoduje automatyczne zaaplikowanie zapisanej w nim liczby tokenów oraz ustawień normalizacji.",
@@ -828,7 +861,24 @@
     "scheduleTitle": "Zarządzanie Harmonogramem",
     "scheduleDesc": "Opcje dodawania i konfiguracji automatycznych skanów w harmonogramie zostaną udostępnione w nadchodzących aktualizacjach systemu.",
     "submitCreating": "Tworzenie...",
-    "submitButton": "Utwórz Przedmiot"
+    "submitButton": "Utwórz Przedmiot",
+    "errorShortName": "Nazwa przedmiotu musi mieć przynajmniej 3 znaki.",
+    "errorShortOrg": "Nazwa organizacji Gitea jest za krótka.",
+    "defaultError": "Wystąpił błąd podczas operacji.",
+    "noTemplates": "Brak zapisanych szablonów w bazie. Skonfiguruj reguły ręcznie.",
+    "templateOption": "Szablon: {{tickets}} tokenów (Dopasowanie: {{match}}%)",
+    "confirmTitle": "Potwierdź utworzenie przedmiotu",
+    "confirmMessage": "Czy na pewno chcesz utworzyć ten przedmiot? Akcja spowoduje nieodwracalne zapisanie nowych struktur biznesowych w relacyjnej bazie danych.",
+    "confirmAction": "Potwierdzam",
+    "addTeacher": "Dodaj Prowadzącego",
+    "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
+    "addBtn": "Dodaj +",
+    "noResults": "Brak wyników",
+    "assignedStaff": "PRZYPISANA KADRA",
+    "noStaff": "Brak dodatkowych prowadzących. Zostaniesz przypisany jako Główny Właściciel.",
+    "roleOwner": "Właściciel",
+    "roleEditor": "Edytor",
+    "roleViewer": "Obserwator"
   },
   "report": {
     "teacherDetailsTitle": "Szczegóły Raportu Antyplagiatowego",
@@ -873,19 +923,5 @@
     "generic": "Operacja zakończyła się sukcesem."
   },
   "errors": {
-  },
-  "visibility": {
-    "ONLY_PERCENTAGES": {
-      "label": "Tylko procenty",
-      "description": "Widzisz wyniki procentowe podobieństwa dla wszystkich swoich skanów. Dostęp do dokładnego porównania kodu źródłowego jest zablokowany."
-    },
-    "ONLY_HIGHEST_PERCENT": {
-      "label": "Tylko najwyższy procent",
-      "description": "Widzisz wyłącznie swój najwyższy wynik procentowy podobieństwa. Pozostałe skany oraz dokładne porównania kodu są zablokowane."
-    },
-    "NOTHING": {
-      "label": "Nic",
-      "description": "Wszystkie wygenerowane raporty są dla Ciebie ukryte. Wyłącznie kadra prowadząca przedmiot posiada pełny wgląd w analizę."
-    }
   }
 }

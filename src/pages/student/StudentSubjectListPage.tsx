@@ -42,7 +42,7 @@ export const StudentSubjectListPage: React.FC = () => {
         navigate(PATHS.STUDENT_SUBJECT_DETAILS.replace(':id', subjectId));
     };
 
-    if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading', 'Ładowanie...')}</div>;
+    if (loading) return <div className="p-8 text-center text-secondary">{t('common.loading')}</div>;
     if (error) return <div className="p-8 text-center text-danger font-medium">{error}</div>;
 
     return (
@@ -135,7 +135,7 @@ export const StudentSubjectListPage: React.FC = () => {
                                         onClick={(e) => { e.stopPropagation(); handleSubjectClick(sub.id); }}
                                         className="flex-grow bg-brand text-white text-sm font-bold py-2.5 rounded-lg hover:bg-brand-hover transition-colors shadow-sm"
                                     >
-                                        {t('subject.list.card.btn.view', 'Zobacz')}
+                                        {t('subject.list.card.btn.view')}
                                     </button>
                                 </div>
                             </div>

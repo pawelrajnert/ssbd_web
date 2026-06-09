@@ -20,6 +20,7 @@ export interface StudentSubjectDetailsDTO {
         students?: any[];
     } | null;
     reportVisibilityLevel: string;
+    archived?: boolean | null;
 }
 
 export const ReportVisibilityLevel = {

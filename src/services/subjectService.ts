@@ -96,4 +96,12 @@ export const getStudentSubjectDetails = async (subjectId: string): Promise<Stude
 export const getTranslatedDescription = async (subjectId: string | undefined): Promise<TranslatedSubjectDescriptionDTO> => {
     const response = await axiosInstance.get(`/subjects/${subjectId}/translate`);
     return response.data;
-}
+};
+
+export const toggleArchiveSubject = async (subjectId: string, versionHash: string): Promise<void> => {
+    await axiosInstance.patch(`/subjects/${subjectId}/archive`, {}, {
+        headers: {
+            'If-Match': versionHash
+        }
+    });
+};
