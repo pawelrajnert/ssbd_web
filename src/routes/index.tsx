@@ -184,6 +184,10 @@ const routes: RouteObject[] = [
                     {
                         path: PATHS.CHANGE_SUBJECT_MANAGER,
                         element: <ChangeSubjectManagerPage/>
+                    },
+                    {
+                        path: PATHS.AUDIT_LOGS,
+                        element: <AuditListPage/>
                     }
                 ]
             }

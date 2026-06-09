@@ -1,4 +1,4 @@
-import {ChartColumnIncreasing, FileText, LucideGraduationCap, ScanSearch, Settings, Users, UserCheck} from "lucide-react";
+import {ChartColumnIncreasing, FileText, LucideGraduationCap, ScanSearch, Settings, Users, UserCheck, History} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {PATHS} from "../../../routes/paths.ts";
 import SidebarItem from "./SidebarItem.tsx";
@@ -23,7 +23,12 @@ export default function Sidebar() {
                     label={t('sidebar.changeSubjectManager', 'Change Subject Manager')}
                     allowedRoles={[RoleEnum.ADMINISTRATOR]}
                 />
-
+                <SidebarItem
+                    to={PATHS.AUDIT_LOGS}
+                    icon={History}
+                    label={t('sidebar.auditLogs', 'System Audit')}
+                    allowedRoles={[RoleEnum.ADMINISTRATOR]}
+                />
                 {/** Elementy dla studenta */}
                 <SidebarItem
                     to={PATHS.STUDENT_SUBJECT_LIST}
