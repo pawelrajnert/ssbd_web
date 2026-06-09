@@ -27,7 +27,9 @@
     "back": "Wróć",
     "confirm": "Potwierdź",
     "save": "Zapisz",
-    "accessDenied": "Nie masz dostępu do tej strony"
+    "accessDenied": "Nie masz dostępu do tej strony",
+    "confirmAction": "Zapisz zmiany",
+    "searching": "Szukanie..."
   },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
@@ -585,6 +587,7 @@
     }
   },
   "subject": {
+    "deleteVersionError": "Błąd: Brak wersji przedmiotu (versionHash). Odśwież stronę.",
     "manager": {
       "change": {
         "title": "Zmień kierownika przedmiotu",
@@ -633,14 +636,16 @@
       "empty": "Brak przedmiotów w tej kategorii.",
       "card": {
         "exampleImage": "[ Przykładowe zdjęcie ]",
-        "nextScan": "Następny skan:",
+        "nextScan": "Następny skan",
         "status": {
-          "archived": "Zarchiwizowany",
-          "pending": "Oczekuje na uruchomienie"
+          "archived": "Archiwalny",
+          "pending": "Oczekuje",
+          "noScanPlanned": "Brak zaplanowanych skanów"
         },
         "btn": {
           "manage": "Zarządzaj kursem",
-          "stats": "Statystyki"
+          "stats": "Statystyki",
+          "view": "Zobacz"
         }
       },
       "noDescription": "Brak opisu przedmiotu.",
@@ -650,13 +655,29 @@
       "fetchError": "Błąd pobierania danych.",
       "notFound": "Nie znaleziono przedmiotu.",
       "breadcrumb": "Zarządzanie Kursem",
+      "syncError": "Błąd komunikacji z platformą Gitea podczas synchronizacji.",
+      "syncGitea": "Odśwież z Gitea",
       "edition": "Edycja",
       "organization": "Organizacja Gitea",
+      "editionLabel": "Edycja:",
+      "organizationLabel": "Organizacja:",
+      "repoHeader": "Twoje Repozytorium",
+      "availableTickets": "Dostępne tokeny skanowań:",
+      "runScanBtn": "Wykonaj skan kodu",
+      "noRepoAssigned": "Nie jesteś przypisany do żadnego repozytorium w tym przedmiocie.",
+      "reportsHeader": "Widoczność Raportów",
+      "reportLevelLabel": "Poziom dostępu do wyników:",
+      "goToReportsBtn": "Przejdź do moich raportów",
+      "noDescription": "Brak opisu przedmiotu.",
+      "archivedWarning": "Ten przedmiot jest zarchiwizowany. Uruchamianie skanowań, usuwanie raportów oraz edycja są zablokowane.",
+      "studentBreadcrumb": "Szczegóły przedmiotu",
+      "studentArchivedWarning": "Ten przedmiot jest zarchiwizowany. Wykonywanie nowych skanów z Twojego repozytorium jest zablokowane.",
       "actions": {
         "schedule": "Harmonogram",
         "edit": "Edytuj Przedmiot",
         "analyze": "Uruchom Analizę",
-        "statistics": "Statystyki"
+        "statistics": "Statystyki",
+        "settings": "Ustawienia Archiwum"
       },
       "stats": {
         "students": "LICZBA STUDENTÓW",
@@ -671,7 +692,10 @@
         "reposCount": "repozytoriów studenckich",
         "modalTitle": "Wszystkie Raporty Antyplagiatowe",
         "modalReposCount": "Repozytoria",
-        "repositories": "Przeskanowano repozytoriów:"
+        "repositories": "Przeskanowano repozytoriów:",
+        "empty": "Brak zsynchronizowanych repozytoriów. Kliknij \"Odśwież z Gitea\", aby pobrać nowości.",
+        "noUsers": "Brak przypisanych członków",
+        "tickets": "Dostępne skanowania"
       },
       "repos": {
         "title": "Aktywne Repozytoria Studenckie",
@@ -681,14 +705,29 @@
         "lastCommit": "Ostatni commit",
         "contributors": "Użytkownicy",
         "viewCode": "Podgląd Kodu",
-        "analyze": "Analizuj"
+        "analyze": "Analizuj",
+        "tickets": "Dostępne skanowania"
       },
       "status": {
         "clean": "Kod czysty",
         "alert": "Wykryto podobieństwo",
         "pending": "Oczekuje na weryfikację"
       },
-      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu."
+      "noAccess": "Brak uprawnień do przeglądania szczegółowych danych kursu.",
+      "visibility": {
+        "ONLY_PERCENTAGES": {
+          "label": "Tylko procenty",
+          "description": "Widzisz wyniki procentowe podobieństwa dla wszystkich swoich skanów. Dostęp do dokładnego porównania kodu źródłowego jest zablokowany."
+        },
+        "ONLY_HIGHEST_PERCENT": {
+          "label": "Tylko najwyższy procent",
+          "description": "Widzisz wyłącznie swój najwyższy wynik procentowy podobieństwa. Pozostałe skany oraz dokładne porównania kodu są zablokowane."
+        },
+        "NOTHING": {
+          "label": "Nic",
+          "description": "Wszystkie wygenerowane raporty są dla Ciebie ukryte. Wyłącznie kadra prowadząca przedmiot posiada pełny wgląd w analizę."
+        }
+      }
     },
     "analysis": {
       "modal": {
@@ -762,6 +801,21 @@
     "addTeacher": "Dodaj Prowadzącego",
     "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
     "assignedStaff": "PRZYPISANA KADRA",
+    "errorEmptyName": "Nazwa przedmiotu nie może być pusta.",
+    "errorShortName": "Nazwa przedmiotu musi mieć przynajmniej 3 znaki.",
+    "errorLongDesc": "Opis przedmiotu jest za długi (maksymalnie 500 znaków).",
+    "confirmTitle": "Potwierdź modyfikację danych",
+    "confirmMessage": "Czy na pewno chcesz zapisać wprowadzone zmiany? Dotychczasowe dane biznesowe przedmiotu w bazie danych zostaną nadpisane.",
+    "archivedWarning": "Ten przedmiot jest zarchiwizowany. Odblokuj go na dole strony, aby edytować dane.",
+    "dangerZone": "STREFA NIEBEZPIECZNA",
+    "unarchiveSubject": "Przywróć przedmiot z archiwum",
+    "archiveSubject": "Zarchiwizuj przedmiot",
+    "unarchiveDesc": "Przywrócenie przedmiotu odblokuje możliwość edycji i skanowania.",
+    "archiveDesc": "Zarchiwizowanie zablokuje możliwość edycji, synchronizacji i uruchamiania nowych skanów.",
+    "unarchiveBtn": "Odarchiwizuj",
+    "archiveBtn": "Zarchiwizuj",
+    "defaultError": "Wystąpił błąd podczas operacji.",
+    "archiveError": "Wystąpił błąd podczas zmiany statusu archiwum.",
     "roles": {
       "OWNER": "Właściciel (Owner)",
       "EDITOR": "Edytor (Edit Access)",
@@ -800,7 +854,7 @@
     "visibilityHidden": "Ukryty - student nie widzi żadnych wyników analizy",
     "jplagSettings": "Zaawansowane parametry skanera (JPlag)",
     "modeManual": "Konfiguracja Ręczna",
-    "modeTemplate": "Użyj Szablonu JPlag",
+    "modeTemplate": "Użyj Szablonu",
     "templateSelect": "Wybierz zapisany szablon parametrów",
     "templateDefault": "-- Wybierz szablon z listy --",
     "templateHelp": "Wybranie szablonu spowoduje automatyczne zaaplikowanie zapisanej w nim liczby tokenów oraz ustawień normalizacji.",
@@ -811,7 +865,24 @@
     "scheduleTitle": "Zarządzanie Harmonogramem",
     "scheduleDesc": "Opcje dodawania i konfiguracji automatycznych skanów w harmonogramie zostaną udostępnione w nadchodzących aktualizacjach systemu.",
     "submitCreating": "Tworzenie...",
-    "submitButton": "Utwórz Przedmiot"
+    "submitButton": "Utwórz Przedmiot",
+    "errorShortName": "Nazwa przedmiotu musi mieć przynajmniej 3 znaki.",
+    "errorShortOrg": "Nazwa organizacji Gitea jest za krótka.",
+    "defaultError": "Wystąpił błąd podczas operacji.",
+    "noTemplates": "Brak zapisanych szablonów w bazie. Skonfiguruj reguły ręcznie.",
+    "templateOption": "Szablon: {{tickets}} tokenów (Dopasowanie: {{match}}%)",
+    "confirmTitle": "Potwierdź utworzenie przedmiotu",
+    "confirmMessage": "Czy na pewno chcesz utworzyć ten przedmiot? Akcja spowoduje nieodwracalne zapisanie nowych struktur biznesowych w relacyjnej bazie danych.",
+    "confirmAction": "Potwierdzam",
+    "addTeacher": "Dodaj Prowadzącego",
+    "searchPlaceholder": "Szukaj po nazwisku lub emailu...",
+    "addBtn": "Dodaj +",
+    "noResults": "Brak wyników",
+    "assignedStaff": "PRZYPISANA KADRA",
+    "noStaff": "Brak dodatkowych prowadzących. Zostaniesz przypisany jako Główny Właściciel.",
+    "roleOwner": "Właściciel",
+    "roleEditor": "Edytor",
+    "roleViewer": "Obserwator"
   },
   "report": {
     "teacherDetailsTitle": "Szczegóły Raportu Antyplagiatowego",
@@ -856,31 +927,5 @@
     "generic": "Operacja zakończyła się sukcesem."
   },
   "errors": {
-  },
-  "visibility": {
-    "ONLY_PERCENTAGES": {
-      "label": "Tylko procenty",
-      "description": "Widzisz wyniki procentowe podobieństwa dla wszystkich swoich skanów. Dostęp do dokładnego porównania kodu źródłowego jest zablokowany."
-    },
-    "ONLY_HIGHEST_PERCENT": {
-      "label": "Tylko najwyższy procent",
-      "description": "Widzisz wyłącznie swój najwyższy wynik procentowy podobieństwa. Pozostałe skany oraz dokładne porównania kodu są zablokowane."
-    },
-    "NOTHING": {
-      "label": "Nic",
-      "description": "Wszystkie wygenerowane raporty są dla Ciebie ukryte. Wyłącznie kadra prowadząca przedmiot posiada pełny wgląd w analizę."
-    }
-  },
-  "subject": {
-    "list": {
-      "card": {
-        "nextScan": "Następny skan",
-        "status": {
-          "archived": "Archiwalny",
-          "pending": "Oczekuje",
-          "noScanPlanned": "Brak zaplanowanych skanów"
-        }
-      }
-    }
   }
 }

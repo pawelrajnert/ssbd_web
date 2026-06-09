@@ -48,10 +48,10 @@ export const TeacherAssignmentManager: React.FC<Props> = ({ teachers, setTeacher
     return (
         <div className="flex flex-col gap-4">
             <div className="relative">
-                <label className="block text-sm font-semibold text-primary mb-1">{t('subjectCreate.addTeacher', 'Dodaj Prowadzącego')}</label>
+                <label className="block text-sm font-semibold text-primary mb-1">{t('subjectCreate.addTeacher')}</label>
                 <input
                     type="text"
-                    placeholder={t('subjectCreate.searchPlaceholder', 'Szukaj po nazwisku lub emailu...')}
+                    placeholder={t('subjectCreate.searchPlaceholder')}
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
                     className="w-full bg-surface border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors"
@@ -59,7 +59,7 @@ export const TeacherAssignmentManager: React.FC<Props> = ({ teachers, setTeacher
                 {searchQuery.length >= 2 && (
                     <div className="absolute z-10 w-full mt-1 bg-surface border border-border rounded-lg shadow-lg overflow-hidden max-h-60 overflow-y-auto">
                         {isSearching ? (
-                            <div className="p-4 text-sm text-secondary text-center">{t('common.loading', 'Szukanie...')}</div>
+                            <div className="p-4 text-sm text-secondary text-center">{t('common.searching')}</div>
                         ) : searchResults.length > 0 ? (
                             searchResults.map(res => (
                                 <div key={res.login} onClick={() => handleAddTeacher(res)} className="px-4 py-3 hover:bg-base cursor-pointer border-b border-border last:border-0 flex justify-between items-center">
@@ -67,19 +67,19 @@ export const TeacherAssignmentManager: React.FC<Props> = ({ teachers, setTeacher
                                         <p className="font-semibold text-primary">{res.firstName} {res.lastName}</p>
                                         <p className="text-xs text-secondary">{res.email}</p>
                                     </div>
-                                    <div className="text-brand text-sm font-bold">Dodaj +</div>
+                                    <div className="text-brand text-sm font-bold">{t('subjectCreate.addBtn')}</div>
                                 </div>
                             ))
                         ) : (
-                            <div className="p-4 text-sm text-secondary text-center">Brak wyników</div>
+                            <div className="p-4 text-sm text-secondary text-center">{t('subjectCreate.noResults')}</div>
                         )}
                     </div>
                 )}
             </div>
             <div>
-                <label className="block text-sm font-semibold text-secondary mb-2 uppercase text-xs tracking-wider">{t('subjectCreate.assignedStaff', 'PRZYPISANA KADRA')}</label>
+                <label className="block text-sm font-semibold text-secondary mb-2 uppercase text-xs tracking-wider">{t('subjectCreate.assignedStaff')}</label>
                 <div className="flex flex-col gap-3">
-                    {teachers.length === 0 && <p className="text-sm text-secondary italic">{t('subjectCreate.noStaff', 'Brak dodatkowych prowadzących. Zostaniesz przypisany jako Główny Właściciel.')}</p>}
+                    {teachers.length === 0 && <p className="text-sm text-secondary italic">{t('subjectCreate.noStaff')}</p>}
                     {teachers.map(teacher => (
                         <div key={teacher.login} className="flex items-center justify-between p-3 bg-surface border border-border rounded-xl">
                             <div className="flex items-center gap-3">
@@ -94,9 +94,9 @@ export const TeacherAssignmentManager: React.FC<Props> = ({ teachers, setTeacher
                                     onChange={(e) => handleRoleChange(teacher.login, e.target.value as TeacherSubjectRole)}
                                     className="bg-base border border-border text-primary text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-brand"
                                 >
-                                    <option value="OWNER">{t('subjectCreate.roleOwner', 'Właściciel')}</option>
-                                    <option value="EDITOR">{t('subjectCreate.roleEditor', 'Edytor')}</option>
-                                    <option value="VIEWER">{t('subjectCreate.roleViewer', 'Obserwator')}</option>
+                                    <option value="OWNER">{t('subjectCreate.roleOwner')}</option>
+                                    <option value="EDITOR">{t('subjectCreate.roleEditor')}</option>
+                                    <option value="VIEWER">{t('subjectCreate.roleViewer')}</option>
                                 </select>
                                 <button type="button" onClick={() => handleRemoveTeacher(teacher.login)} className="text-secondary hover:text-danger p-1">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>

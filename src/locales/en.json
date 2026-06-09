@@ -679,7 +679,7 @@
     "visibilityHidden": "Hidden - student does not see any analysis results",
     "jplagSettings": "Advanced Scanner Parameters (JPlag)",
     "modeManual": "Manual Configuration",
-    "modeTemplate": "Use JPlag Preset",
+    "modeTemplate": "Use Preset Template",
     "templateSelect": "Select a saved parameter preset",
     "templateDefault": "-- Select a preset from the list --",
     "templateHelp": "Selecting a preset will automatically apply its saved token count and normalization settings.",

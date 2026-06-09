@@ -15,8 +15,8 @@ import { SimilarityBadge } from "../../shared/components/similarity_badge/Simila
 import { Calendar, SquarePen, CirclePlay, BarChartBigIcon, Trash2, Loader2, RefreshCw } from "lucide-react";
 import { PATHS } from "../../routes/paths";
 import { EditSubjectModal } from './EditSubjectModal';
-import {repositoryService} from "../../services/repositoryService.ts";
-import type {RepositoryWithStudentDTO} from "../../types/subject.types.ts";
+import { repositoryService } from "../../services/repositoryService.ts";
+import type { RepositoryWithStudentDTO } from "../../types/subject.types.ts";
 
 export const SubjectDetailsView: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -50,7 +50,7 @@ export const SubjectDetailsView: React.FC = () => {
                 setLoading(false);
             })
             .catch(() => {
-                setError(t('subject.details.fetchError', 'Wystąpił błąd podczas pobierania przedmiotu.'));
+                setError(t('subject.details.fetchError'));
                 setLoading(false);
             });
     };
@@ -92,7 +92,7 @@ export const SubjectDetailsView: React.FC = () => {
         const currentHash = subject.versionHash;
 
         if (!currentHash) {
-            setError("Błąd: Brak wersji przedmiotu (versionHash). Odśwież stronę.");
+            setError(t('subject.deleteVersionError'));
             return;
         }
 
@@ -105,11 +105,11 @@ export const SubjectDetailsView: React.FC = () => {
             navigate('/subjects');
         } catch (err: any) {
             if (err.response?.status === 409) {
-                setError(t('subject.deleteConflict', 'Dane uległy zmianie. Odśwież stronę.'));
+                setError(t('subject.deleteConflict'));
             } else if (err.response?.status === 403) {
-                setError(t('subject.deleteForbidden', 'Brak uprawnień do usunięcia przedmiotu.'));
+                setError(t('subject.deleteForbidden'));
             } else {
-                setError(t('subject.deleteError', 'Wystąpił błąd podczas usuwania.'));
+                setError(t('subject.deleteError'));
             }
             setIsDeleteModalOpen(false);
         } finally {
@@ -125,7 +125,7 @@ export const SubjectDetailsView: React.FC = () => {
             await syncSubjectWithGitea(id);
             fetchSubjectData();
         } catch (err: any) {
-            setError(t('subject.details.syncError', 'Błąd komunikacji z platformą Gitea podczas synchronizacji.'));
+            setError(t('subject.details.syncError'));
         } finally {
             setIsSyncing(false);
         }
@@ -149,18 +149,17 @@ export const SubjectDetailsView: React.FC = () => {
 
     const displaySimilarity = React.useMemo(() => {
         if (subject?.aggregatedAverageSimilarity != null) {
-            return `${(subject.aggregatedAverageSimilarity*100).toFixed(1)}%`;
+            return `${(subject.aggregatedAverageSimilarity * 100).toFixed(1)}%`;
         }
         return '0.0%';
     }, [subject?.aggregatedAverageSimilarity]);
 
-    if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2
-        className="w-8 h-8 animate-spin text-brand"/></div>;
-    if (error || !subject) return <div
-        className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound', 'Nie znaleziono przedmiotu.')}</div>;
+    if (loading) return <div className="p-8 flex justify-center items-center h-64"><Loader2 className="w-8 h-8 animate-spin text-brand" /></div>;
+    if (error || !subject) return <div className="p-8 text-center text-danger font-medium">{error || t('subject.details.notFound')}</div>;
 
 
     function handleShowTranslation() {
+        if (!id) return;
         getTranslatedDescription(id).then((response) => {
             setSubject((prevSubject) => {
                 if (!prevSubject) return null;
@@ -176,57 +175,59 @@ export const SubjectDetailsView: React.FC = () => {
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base relative">
 
             <div className="mb-8 border-b border-border pb-6">
-                <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
-                    <div>
-                        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">{subject.name}</h1>
-                        <p className="text-secondary max-w-4xl text-sm mb-6 leading-relaxed">
-                            {t('subject.details.edition', 'Edycja')}: <span
-                            className="font-medium text-primary">{subject.edition}</span> | {t('subject.details.organization', 'Organizacja')}: <a
-                            href={subject.giteaURL || `https://gitea.com/${subject.organizationName}`} target="_blank"
-                            rel="noreferrer"
-                            className="font-medium text-brand hover:underline">{subject.organizationName}</a>
-                        </p>
-                        <p className="text-primary max-w-4xl text-sm mb-6 leading-relaxed">
-                            {subject.subjectDescription}
-                        </p>
-                        <button
-                            onClick={() => handleShowTranslation()}
-                            className="cursor-pointer text-sm font-medium text-brand hover:text-primary underline underline-offset-4 decoration-brand/30 hover:decoration-primary transition-all duration-200 focus:outline-none"
-                        >
-                            {t("subject.translation")}
-                        </button>
+                {subject.archived && (
+                    <div className="mb-6 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-500 p-4 rounded-xl flex items-center gap-3 shadow-sm animate-fade-in">
+                        <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        <span className="text-sm font-bold">
+                            {t('subject.details.archivedWarning')}
+                        </span>
                     </div>
+                )}
 
-                    <div className="flex flex-wrap gap-6">
-                        <button
-                            onClick={() => {
-                                if (subject?.id) {
-                                    navigate(PATHS.SUBJECT_SCHEDULE_LIST.replace(':id', subject.id.toString()));
-                                }
-                            }}
-                            className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors">
-                            <Calendar/>
-                            {t('subject.details.actions.schedule', 'Harmonogram')}
-                        </button>
-                        {subject.canEdit && (
-                            <button onClick={() => setIsEditModalOpen(true)}
-                                    className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors">
-                                <SquarePen/>
-                                {t('subject.details.actions.edit', 'Edytuj')}
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
+                    <div className="flex-1 min-w-0">
+                        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3 truncate">{subject.name}</h1>
+                        <p className="text-secondary text-sm mb-6 leading-relaxed flex flex-wrap items-center gap-2">
+                            <span>{t('subject.details.edition')}: <span className="font-medium text-primary">{subject.edition}</span></span>
+                            <span className="text-border">|</span>
+                            <span>{t('subject.details.organization')}: <a href={subject.giteaURL || `https://gitea.com/${subject.organizationName}`} target="_blank" rel="noreferrer" className="font-medium text-brand hover:underline">{subject.organizationName}</a></span>
+                        </p>
+                        <p className="text-primary max-w-4xl text-sm mb-4 leading-relaxed">
+                            {subject.subjectDescription ? subject.subjectDescription : <span className="italic text-secondary">{t('subject.details.noDescription')}</span>}
+                        </p>
+                        {subject.subjectDescription && (
+                            <button
+                                onClick={() => handleShowTranslation()}
+                                className="cursor-pointer text-sm font-medium text-brand hover:text-primary underline underline-offset-4 decoration-brand/30 hover:decoration-primary transition-all duration-200 focus:outline-none"
+                            >
+                                {t("subject.translation")}
                             </button>
                         )}
-                        <button
-                            className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand-hover transition-colors"
-                            onClick={() => setIsStartAnalysisModalOpen(true)}>
-                            <CirclePlay/>
-                            {t('subject.details.actions.analyze', 'Skanuj Teraz')}
-                        </button>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-start lg:justify-end gap-3 lg:gap-4 shrink-0 mt-4 lg:mt-0">
+                        {!subject.archived && (
+                            <>
+                                <button onClick={() => navigate(PATHS.SUBJECT_SCHEDULE_LIST.replace(':id', subject.id!.toString()))} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors px-2 py-1">
+                                    <Calendar className="w-4 h-4"/>
+                                    {t('subject.details.actions.schedule')}
+                                </button>
+                                <button className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand-hover transition-colors px-2 py-1" onClick={() => setIsStartAnalysisModalOpen(true)}>
+                                    <CirclePlay className="w-4 h-4"/>
+                                    {t('subject.details.actions.analyze')}
+                                </button>
+                            </>
+                        )}
                         {subject.canEdit && (
-                            <button
-                                onClick={() => setIsDeleteModalOpen(true)}
-                                className="flex items-center gap-2 text-sm font-semibold text-danger hover:text-red-700 dark:hover:text-red-400 transition-colors md:ml-auto">
+                            <button onClick={() => setIsEditModalOpen(true)} className="flex items-center gap-2 text-sm font-semibold text-secondary hover:text-brand transition-colors px-2 py-1">
+                                <SquarePen className="w-4 h-4"/>
+                                {subject.archived ? t('subject.details.actions.settings') : t('subject.details.actions.edit')}
+                            </button>
+                        )}
+                        {!subject.archived && subject.canManageTeachers && (
+                            <button onClick={() => setIsDeleteModalOpen(true)} className="flex items-center gap-2 text-sm font-semibold text-danger hover:text-red-700 dark:hover:text-red-400 transition-colors px-2 py-1">
                                 <Trash2 className="w-4 h-4"/>
-                                {t('subject.delete', 'Usuń')}
+                                {t('subject.delete')}
                             </button>
                         )}
                     </div>
@@ -237,10 +238,10 @@ export const SubjectDetailsView: React.FC = () => {
                 <div className="flex flex-col gap-10">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mb-4">
                         {[
-                            {label: t('subject.details.stats.students', 'Studentów'), value: uniqueStudentsCount},
-                            {label: t('subject.details.stats.repos', 'Repozytoriów'), value: repositories?.length?.toString() || '0'},
-                            {label: t('subject.details.stats.pending', 'Oczekujące'), value: reports?.totalElements?.toString() || '0'},
-                            {label: t('subject.details.stats.similarity', 'Średnie Podobieństwo'), value: displaySimilarity}
+                            { label: t('subject.details.stats.students'), value: uniqueStudentsCount },
+                            { label: t('subject.details.stats.repos'), value: repositories?.length?.toString() || '0' },
+                            { label: t('subject.details.stats.pending'), value: reports?.totalElements?.toString() || '0' },
+                            { label: t('subject.details.stats.similarity'), value: displaySimilarity }
                         ].map((stat, idx) => (
                             <div key={idx} className="flex flex-col">
                                 <span className="text-[11px] sm:text-xs font-bold text-secondary uppercase tracking-widest mb-1">{stat.label}</span>
@@ -253,16 +254,16 @@ export const SubjectDetailsView: React.FC = () => {
                         <div className="flex justify-between items-center mb-4 mt-4">
                             <h3 className="text-xl font-bold text-primary flex items-center gap-2">
                                 <BarChartBigIcon className="w-5 h-5 text-brand" />
-                                {t('subject.details.reports.title', 'Ostatnie Raporty')}
+                                {t('subject.details.reports.title')}
                             </h3>
                             <button type="button" onClick={() => setIsReportsModalOpen(true)} className="text-sm font-bold text-brand hover:text-brand-hover transition-colors">
-                                {t('subject.details.reports.viewAll', 'Zobacz Wszystkie')}
+                                {t('subject.details.reports.viewAll')}
                             </button>
                         </div>
 
                         <div className="flex overflow-x-auto gap-5 pb-4 snap-x [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#cbd5e1] hover:[&::-webkit-scrollbar-thumb]:bg-[#94a3b8] dark:[&::-webkit-scrollbar-thumb]:bg-[#475569] dark:hover:[&::-webkit-scrollbar-thumb]:bg-[#334155] [&::-webkit-scrollbar-thumb]:rounded-full transition-colors">
                             {reports?.content.length === 0 ? (
-                                <p className="text-sm text-secondary italic">Brak wygenerowanych raportów.</p>
+                                <p className="text-sm text-secondary italic">{t('subject.details.reports.empty')}</p>
                             ) : (
                                 reports?.content.map((report) => (
                                     <div key={report.id}
@@ -272,9 +273,9 @@ export const SubjectDetailsView: React.FC = () => {
                                          }}
                                     >
                                         <div className="flex justify-between items-start mb-3">
-                                            <h4 className="font-bold text-primary">{t('subject.details.reports.report', 'Raport')} • {formatDate(report.created_at)}</h4>
+                                            <h4 className="font-bold text-primary">{t('subject.details.reports.report')} • {formatDate(report.created_at)}</h4>
                                             <span className={"text-[13px] font-bold px-2 py-0.5 rounded-sm"}>
-                                                <SimilarityBadge similarity={report.average_similarity * 100}/>
+                                                <SimilarityBadge similarity={report.average_similarity * 100} />
                                             </span>
                                         </div>
                                         <p className="text-sm text-primary font-mono py-1 rounded inline-block">{t("subject.details.reports.repositories")}</p>
@@ -288,9 +289,9 @@ export const SubjectDetailsView: React.FC = () => {
 
                     <div>
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-primary">{t('subject.details.repos.title', 'Repozytoria')}</h3>
+                            <h3 className="text-xl font-bold text-primary">{t('subject.details.repos.title')}</h3>
                             <div className="flex gap-4 text-sm font-semibold text-secondary">
-                                {subject.canEdit && (
+                                {subject.canEdit && !subject.archived && (
                                     <button
                                         type="button"
                                         onClick={handleSyncGitea}
@@ -302,49 +303,36 @@ export const SubjectDetailsView: React.FC = () => {
                                         ) : (
                                             <RefreshCw className="w-4 h-4" />
                                         )}
-                                        <span className="text-sm font-semibold">{t('subject.details.syncGitea', 'Odśwież')}</span>
+                                        <span className="text-sm font-semibold">{t('subject.details.syncGitea')}</span>
                                     </button>
                                 )}
-                                <button type="button" className="hover:text-primary transition-colors">{t('subject.details.repos.filter', 'Filtruj')}</button>
+                                <button type="button" className="hover:text-primary transition-colors">{t('subject.details.repos.filter')}</button>
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             {repositories?.length === 0 ? (
                                 <div className="p-8 text-center text-secondary border border-dashed border-border rounded-xl">
-                                    {t('subject.details.repos.empty', 'Brak zsynchronizowanych repozytoriów. Kliknij "Odśwież z Gitea", aby pobrać nowości.')}
+                                    {t('subject.details.repos.empty')}
                                 </div>
                             ) : (
                                 repositories?.map((repo: RepositoryWithStudentDTO) => {
                                     const repoName = repo.repositoryName;
-                                    console.log(repo);
                                     const users = repo.students && repo.students.length > 0
-                                        ? repo.students.map((s) => `${s.name} ${s.surname}`)
-                                        : t('subject.details.repos.noUsers', 'Brak przypisanych członków');
+                                        ? repo.students.map((s) => `${s.name} ${s.surname}`).join(', ')
+                                        : t('subject.details.repos.noUsers');
 
                                     return (
                                         <div key={repoName} className="border border-border bg-surface rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:border-brand/50 transition-colors">
                                             <div>
                                                 <h4 className="font-bold text-primary text-base mb-1">{repoName}</h4>
                                                 <p className="text-sm text-secondary mb-1">
-                                                    {t('subject.details.repos.tickets', 'Dostępne skanowania')}: <span
-                                                    className="font-bold text-primary">{repo.ticketCount || 0}</span>
+                                                    {t('subject.details.repos.tickets')}: <span className="font-bold text-primary">{repo.ticketCount || 0}</span>
                                                 </p>
                                                 <p className="text-xs text-secondary font-medium">
-                                                    {t('subject.details.repos.contributors', 'Członkowie')}: <span
-                                                    className="text-primary">{users}</span>
+                                                    {t('subject.details.repos.contributors')}: <span className="text-primary">{users}</span>
                                                 </p>
                                             </div>
-                                            {/*<div className="flex gap-2 shrink-0 mt-2 sm:mt-0">*/}
-                                            {/*    <button type="button"*/}
-                                            {/*            className="px-4 py-2 bg-surface border border-border rounded-lg text-sm font-bold text-secondary hover:text-primary hover:bg-active transition-colors">*/}
-                                            {/*        {t('subject.details.repos.viewCode', 'Kod')}*/}
-                                            {/*    </button>*/}
-                                            {/*    <button type="button"*/}
-                                            {/*            className="px-4 py-2 bg-brand border border-brand rounded-lg text-sm font-bold text-white hover:bg-brand-hover shadow-sm transition-colors">*/}
-                                            {/*        {t('subject.details.repos.analyze', 'Skanuj')}*/}
-                                            {/*    </button>*/}
-                                            {/*</div>*/}
                                         </div>
                                     );
                                 })
@@ -355,7 +343,7 @@ export const SubjectDetailsView: React.FC = () => {
                 </div>
             ) : (
                 <div className="bg-surface border border-border rounded-xl p-12 text-center shadow-sm mt-8">
-                    <p className="text-secondary text-lg">{t('subject.details.noAccess', 'Nie masz dostępu do statystyk tego przedmiotu.')}</p>
+                    <p className="text-secondary text-lg">{t('subject.details.noAccess')}</p>
                 </div>
             )}
 
@@ -365,7 +353,7 @@ export const SubjectDetailsView: React.FC = () => {
                     <div className="max-w-[1400px] w-full mx-auto">
                         <div className="flex justify-between items-center mb-8 border-b border-border pb-4 mt-4">
                             <h2 className="text-3xl font-bold text-primary">
-                                {t('subject.details.reports.modalTitle', 'Wszystkie Raporty Antyplagiatowe')}
+                                {t('subject.details.reports.modalTitle')}
                             </h2>
                             <button
                                 type="button"
@@ -388,10 +376,10 @@ export const SubjectDetailsView: React.FC = () => {
                                 >
                                     <div className="flex justify-between items-start gap-3 mb-4">
                                         <h4 className="font-bold text-primary leading-relaxed">
-                                            {t('subject.details.reports.report', 'Raport')} • {formatDate(report.created_at)}
+                                            {t('subject.details.reports.report')} • {formatDate(report.created_at)}
                                         </h4>
                                         <div className="shrink-0 mt-0.5">
-                                            <SimilarityBadge similarity={report.average_similarity * 100}/>
+                                            <SimilarityBadge similarity={report.average_similarity * 100} />
                                         </div>
                                     </div>
                                     <div className="mt-auto flex flex-col items-start gap-2">
@@ -416,35 +404,35 @@ export const SubjectDetailsView: React.FC = () => {
                     <div className="bg-surface w-full max-w-[480px] rounded-2xl shadow-xl overflow-hidden border border-border">
                         <div className="flex justify-between items-center p-6 pb-4">
                             <h2 className="text-[20px] font-bold text-primary">
-                                {t('subject.analysis.modal.title', 'Rozpocznij Nową Analizę')}
+                                {t('subject.analysis.modal.title')}
                             </h2>
                             <button onClick={() => setIsStartAnalysisModalOpen(false)} className="text-secondary hover:text-primary transition-colors">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
                         <div className="px-6 pb-6">
                             <p className="text-[13px] text-secondary leading-relaxed mb-6">
-                                {t('subject.analysis.modal.description', 'Wprowadź tag, aby pobrać odpowiedni kod ze wszystkich repozytoriów studentów przypisanych do przedmiotu.')}
+                                {t('subject.analysis.modal.description')}
                             </p>
                             <div>
                                 <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-2">
-                                    {t('subject.analysis.modal.tagLabel', 'Tag z Gitea')}
+                                    {t('subject.analysis.modal.tagLabel')}
                                 </label>
                                 <input
                                     type="text"
                                     value={analysisTag}
                                     onChange={(e) => setAnalysisTag(e.target.value)}
-                                    placeholder={t('subject.analysis.modal.tagPlaceholder', 'np. wersja-koncowa-v1')}
+                                    placeholder={t('subject.analysis.modal.tagPlaceholder')}
                                     className="w-full px-4 py-2.5 bg-base border border-border rounded-lg text-primary placeholder:text-gray-400 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
                                 />
                             </div>
                         </div>
                         <div className="px-6 pb-6 flex justify-end items-center gap-4">
                             <button onClick={() => setIsStartAnalysisModalOpen(false)} className="text-[14px] font-bold text-secondary hover:text-primary transition-colors">
-                                {t('common.cancel', 'Anuluj')}
+                                {t('common.cancel')}
                             </button>
                             <button onClick={handleStartAnalysis} className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-[14px] font-bold rounded-lg shadow-sm transition-colors">
-                                {t('subject.analysis.modal.submit', 'Skanuj Teraz')}
+                                {t('subject.analysis.modal.submit')}
                             </button>
                         </div>
                     </div>
@@ -457,14 +445,14 @@ export const SubjectDetailsView: React.FC = () => {
                         <div className="flex justify-between items-center p-6 pb-4 border-b border-border">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-danger-subtle rounded-full text-danger">
-                                    <Trash2 className="w-5 h-5"/>
+                                    <Trash2 className="w-5 h-5" />
                                 </div>
-                                <h2 className="text-xl font-bold text-primary">{t('subject.deleteConfirmTitle', 'Usunąć przedmiot?')}</h2>
+                                <h2 className="text-xl font-bold text-primary">{t('subject.deleteConfirmTitle')}</h2>
                             </div>
                         </div>
                         <div className="p-6">
                             <p className="text-sm text-secondary leading-relaxed mb-6">
-                                {t('subject.deleteConfirmMessage', 'Czy na pewno chcesz trwale usunąć ten przedmiot? Ta akcja jest nieodwracalna.')}
+                                {t('subject.deleteConfirmMessage')}
                             </p>
                             <div className="flex items-center gap-3 mt-5">
                                 <input
@@ -475,17 +463,17 @@ export const SubjectDetailsView: React.FC = () => {
                                     className="w-4 h-4 rounded border-border accent-danger text-danger focus:ring-danger cursor-pointer"
                                 />
                                 <label htmlFor="gitea-delete-checkbox" className="text-sm font-bold text-primary cursor-pointer select-none">
-                                    {t('subject.deleteGiteaOption', 'Usuń również organizację i repozytoria z Gitea')}
+                                    {t('subject.deleteGiteaOption')}
                                 </label>
                             </div>
                         </div>
                         <div className="px-6 pb-6 pt-2 flex justify-end items-center gap-4">
                             <button onClick={() => setIsDeleteModalOpen(false)} disabled={isDeleting} className="text-sm font-bold text-secondary hover:text-primary transition-colors disabled:opacity-50">
-                                {t('common.cancel', 'Anuluj')}
+                                {t('common.cancel')}
                             </button>
                             <button onClick={handleDeleteSubject} disabled={isDeleting} className="px-6 py-2.5 bg-danger hover:bg-red-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center disabled:opacity-50">
                                 {isDeleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                                {t('common.delete', 'Usuń Trwale')}
+                                {t('common.delete')}
                             </button>
                         </div>
                     </div>
