@@ -35,13 +35,21 @@ export const subjectService = {
         const response = await axiosInstance.get('/subjects/student/list');
         return response.data;
     },
+    getAllSubjectsForAdmin: async (): Promise<SubjectDTO[]> => {
+        const response = await axiosInstance.get('/subjects/all');
+        return response.data;
+    },
     getSubjectUsers: async (subjectId: string): Promise<any> => {
         const response = await axiosInstance.get(`/subjects/${subjectId}/users`);
         return response.data;
     },
-    changeSubjectManager: async (subjectId: string, newManagerLogin: string): Promise<void> => {
+    changeSubjectManager: async (subjectId: string, newManagerLogin: string, versionHash: string): Promise<void> => {
         await axiosInstance.patch(`/subjects/${subjectId}/manager`, {
             newManagerLogin: newManagerLogin
+        }, {
+            headers: {
+                'If-Match': versionHash
+            }
         });
     },
 };
