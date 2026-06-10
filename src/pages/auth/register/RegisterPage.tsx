@@ -96,7 +96,8 @@ export default function RegisterPage() {
             </p>
 
             {globalError && (
-                <div className="mb-4 p-3 bg-danger-subtle text-danger text-sm rounded-md border border-danger-border">
+                <div id="registerGlobalError"
+                     className="mb-4 p-3 bg-danger-subtle text-danger text-sm rounded-md border border-danger-border">
                     {globalError}
                 </div>
             )}
@@ -215,6 +216,7 @@ export default function RegisterPage() {
                 </div>
 
                 <SubmitButton
+                    id="registerSubmitBtn"
                     type="submit"
                     isLoading={isLoading}
                     className="mt-6 text-xs tracking-widest uppercase"

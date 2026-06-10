@@ -213,6 +213,7 @@ export default function Header() {
                     </Link>
                 </div>
                 <button
+                    id="logoutBtn"
                     onClick={handleLogout}
                     className="flex items-center gap-2 text-sm font-bold text-brand hover:text-brand-hover transition-colors ml-2"
                 >
