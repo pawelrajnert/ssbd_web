@@ -56,6 +56,7 @@ export default function ConfirmationModal({
                         {finalCancelText}
                     </button>
                     <button
+                        id="confirmPopupBtn"
                         onClick={onConfirm}
                         disabled={isLoading}
                         className="px-6 py-2 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-md transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[120px]"
