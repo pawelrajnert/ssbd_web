@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
-import { ShieldCheck, KeyRound, AlertCircle, RefreshCw } from "lucide-react";
+import { useNavigate, useLocation, Navigate, Link } from "react-router-dom";
+import { ShieldCheck, KeyRound, AlertCircle, RefreshCw, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
+import { motion } from "framer-motion";
 
-import {getDashboardPath, PATHS} from "../../../routes/paths.ts";
-import {type JwtPayload, useAuth} from "../../../hooks/useAuth.ts";
-import {authService} from "../../../services/authService.ts";
+import { getDashboardPath, PATHS } from "../../../routes/paths.ts";
+import { type JwtPayload, useAuth } from "../../../hooks/useAuth.ts";
+import { authService } from "../../../services/authService.ts";
 import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
-import {_2faSchema, type _2faFormData} from "../../../shared/validators/2FASchema.ts";
-import {jwtDecode} from "jwt-decode";
+import { _2faSchema, type _2faFormData } from "../../../shared/validators/2FASchema.ts";
+import { jwtDecode } from "jwt-decode";
 
 export default function TwoFactorVerifyPage() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
-    const {setTokens} = useAuth();
+    const { setTokens } = useAuth();
 
     const userLogin = location.state?.login;
 
@@ -27,24 +28,18 @@ export default function TwoFactorVerifyPage() {
     const [isResending, setIsResending] = useState(false);
     const [countdown, setCountdown] = useState(60);
 
-    const {register, handleSubmit, formState: {errors}} = useForm<_2faFormData>({
+    const { register, handleSubmit, formState: { errors } } = useForm<_2faFormData>({
         resolver: yupResolver(_2faSchema),
-        defaultValues: {auth2F: ""}
+        defaultValues: { auth2F: "" }
     });
 
     useEffect(() => {
         if (countdown <= 0) return;
-
-        const timer = setInterval(() => {
-            setCountdown((prev) => prev - 1);
-        }, 1000);
-
+        const timer = setInterval(() => setCountdown((prev) => prev - 1), 1000);
         return () => clearInterval(timer);
     }, [countdown]);
 
-    if (!userLogin) {
-        return <Navigate to={PATHS.LOGIN} replace/>;
-    }
+    if (!userLogin) return <Navigate to={PATHS.LOGIN} replace />;
 
     const onSubmit = async (data: _2faFormData) => {
         setGlobalError(null);
@@ -56,8 +51,8 @@ export default function TwoFactorVerifyPage() {
             const decoded = jwtDecode<JwtPayload>(response.token);
             const newRole = decoded.roles?.includes("ADMIN") ? "ADMIN" : decoded.roles?.[0];
             const targetPath = location.state?.from?.pathname || getDashboardPath(newRole);
-            navigate(targetPath, {replace: true});
-        }catch (err) {
+            navigate(targetPath, { replace: true });
+        } catch (err) {
             if (axios.isAxiosError(err)) {
                 setGlobalError(t("auth.2fa.code.invalid"));
             } else {
@@ -77,51 +72,53 @@ export default function TwoFactorVerifyPage() {
             setSuccessMessage(t("auth.2fa.code.retry.success"));
             setCountdown(60);
         } catch (err) {
-            if (axios.isAxiosError(err)) {
-                setGlobalError(t("auth.2fa.code.retry.fail"));
-            }
+            if (axios.isAxiosError(err)) setGlobalError(t("auth.2fa.code.retry.fail"));
         } finally {
             setIsResending(false);
         }
     };
 
     return (
-        <div className="flex flex-col w-full px-4 animate-in fade-in duration-500 max-w-md mx-auto">
-            <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-active text-brand rounded-full flex items-center justify-center shadow-sm">
-                    <ShieldCheck size={20}/>
+        <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="w-full max-w-[440px]"
+        >
+            <div className="mb-10 text-center lg:text-left">
+                <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
+                    <div className="w-12 h-12 bg-brand/10 text-brand rounded-full flex items-center justify-center shadow-inner border border-brand/20">
+                        <ShieldCheck size={24} strokeWidth={2.5} />
+                    </div>
                 </div>
-                <h2 className="text-3xl font-extrabold text-primary">
+                <h2 className="text-3xl md:text-4xl font-black text-primary tracking-tight mb-3">
                     {t("auth.2fa.heading")}
                 </h2>
+                <p className="text-base text-secondary">
+                    {t("auth.2fa.description")}
+                </p>
             </div>
-            <p className="text-sm text-secondary mb-8">
-                {t("auth.2fa.description")}
-            </p>
 
             {globalError && (
-                <div
-                    className="mb-6 p-3 bg-danger-subtle text-danger text-sm rounded-md flex items-start gap-3 border border-danger-border">
-                    <AlertCircle size={18} className="mt-0.5 shrink-0"/>
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-danger-subtle text-danger text-sm font-bold rounded-2xl border border-danger-border flex items-start gap-2 shadow-sm">
+                    <AlertCircle size={20} className="shrink-0" />
                     <span>{globalError}</span>
-                </div>
+                </motion.div>
             )}
 
             {successMessage && (
-                <div
-                    className="mb-6 p-3 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-400 text-sm rounded-md border border-green-200 dark:border-green-900/50">
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-green-500/10 text-green-600 text-sm font-bold rounded-2xl border border-green-500/20 shadow-sm">
                     {successMessage}
-                </div>
+                </motion.div>
             )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div>
-                    <label className="block text-xs font-bold text-secondary tracking-wider mb-2 uppercase">
+                <div className="group">
+                    <label className="block text-[11px] font-black text-secondary tracking-widest mb-2 uppercase ml-1 transition-colors group-focus-within:text-primary">
                         {t("auth.2fa.inputLabel")}
                     </label>
-                    <div className="relative border-b border-border focus-within:border-brand transition-colors pb-2">
-                        <KeyRound className="absolute left-0 top-1/2 -translate-y-1/2 text-secondary opacity-70"
-                                  size={18}/>
+                    <div className="relative border border-border rounded-xl focus-within:border-brand transition-all duration-300 focus-within:ring-2 focus-within:ring-brand/20 bg-surface">
+                        <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary opacity-60 transition-colors group-focus-within:text-brand" size={20} />
                         <input
                             type="text"
                             inputMode="numeric"
@@ -129,7 +126,7 @@ export default function TwoFactorVerifyPage() {
                             maxLength={8}
                             pattern="[0-9]*"
                             autoComplete="one-time-code"
-                            className={`w-full pl-8 py-1 outline-none text-xl tracking-[0.3em] font-mono bg-transparent ${errors.auth2F ? "text-danger" : "text-primary"}`}
+                            className="w-full pl-12 pr-4 py-3.5 outline-none text-xl tracking-[0.3em] font-mono font-bold bg-transparent text-primary placeholder:text-secondary/30 disabled:opacity-50"
                             {...register("auth2F", {
                                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                                     e.target.value = e.target.value.replace(/[^0-9]/g, '');
@@ -137,33 +134,34 @@ export default function TwoFactorVerifyPage() {
                             })}
                         />
                     </div>
-                    {errors.auth2F && <p className="text-danger text-[10px] mt-1">{errors.auth2F.message}</p>}
+                    {errors.auth2F && <p className="text-danger text-xs mt-1.5 ml-1 font-medium">{errors.auth2F.message}</p>}
                 </div>
 
-                <SubmitButton type="submit" isLoading={isLoading} className="mt-6 tracking-wide w-full">
-                    {t("auth.2fa.submit")}
-                </SubmitButton>
+                <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.98 }} className="pt-2">
+                    <SubmitButton type="submit" isLoading={isLoading} className="w-full py-4 shadow-lg shadow-brand/20 font-black text-base tracking-wide rounded-2xl transition-all">
+                        {t("auth.2fa.submit")}
+                    </SubmitButton>
+                </motion.div>
 
-                <div className="flex flex-col items-center gap-4 mt-6">
+                <div className="flex flex-col items-center gap-6 mt-8">
                     <button
                         type="button"
                         onClick={handleResendCode}
                         disabled={isResending || countdown > 0}
-                        className="text-sm font-semibold text-secondary hover:text-brand transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-secondary"
+                        className="text-sm font-bold text-secondary hover:text-brand transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-secondary"
                     >
-                        <RefreshCw size={14} className={isResending ? "animate-spin" : ""}/>
+                        <RefreshCw size={16} className={isResending ? "animate-spin" : ""} />
                         {countdown > 0 ? `${t("auth.2fa.resend")} (${countdown}s)` : t("auth.2fa.resend")}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => navigate(PATHS.LOGIN)}
-                        className="text-xs font-bold text-secondary opacity-70 hover:opacity-100 transition-opacity underline-offset-4 hover:underline"
-                    >
-                        {t("auth.2fa.cancel")}
                     </button>
                 </div>
             </form>
-        </div>
+
+            <div className="mt-10 pt-6 border-t border-border/50 text-center">
+                <Link to={PATHS.LOGIN} className="inline-flex items-center text-sm font-bold text-secondary hover:text-primary transition-colors group">
+                    <ArrowLeft size={16} className="mr-2 group-hover:-translate-x-1 transition-transform" />
+                    {t("auth.2fa.cancel")}
+                </Link>
+            </div>
+        </motion.div>
     );
 }

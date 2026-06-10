@@ -32,6 +32,21 @@
     "searching": "Szukanie..."
   },
   "auth": {
+    "mobileTitle": "Antyplagiat PŁ",
+    "layoutTitle": "Uczelniany System",
+    "layoutTitleHighlight": "Antyplagiatowy",
+    "layoutSubtitle": "Zaawansowana weryfikacja i analiza strukturalna kodu źródłowego dostarczana dla studentów i pracowników Politechniki Łódzkiej.",
+    "features": {
+      "gitea": {
+        "title": "Repozytoria Gitea",
+        "desc": "Błyskawiczna integracja z projektami."
+      },
+      "jplag": {
+        "title": "Analiza JPlag",
+        "desc": "Wykrywanie plagiatu w strukturze kodu."
+      }
+    },
+    "footer": "Zespół 1 • {{year}} SSBD",
     "title": "Ochrona Uczciwości Akademickiej",
     "subtitle": "Analiza wkładu naukowego z precyzją i prestiżowym autorytetem na Politechnice Łódzkiej.",
     "founded": "Założona w 1945",
@@ -39,7 +54,7 @@
       "heading": "Logowanie",
       "subheading": "Uzyskaj dostęp do swojego panelu integralności akademickiej",
       "loginLabel": "LOGIN",
-      "loginPlaceholder": "NP. Jan_Kowalski",
+      "loginPlaceholder": "jkowalski",
       "passwordLabel": "HASŁO",
       "rememberMe": "Zapamiętaj moje urządzenie",
       "button": "Zaloguj się",
@@ -119,7 +134,7 @@
       "errorNotFound": "Konto z podanym adresem e-mail nie istnieje.",
       "errorGeneric": "Wystąpił nieoczekiwany błąd.",
       "emailLabel": "ADRES E-MAIL",
-      "emailPlaceholder": "nazwa@domena.pl",
+      "emailPlaceholder": "213767@edu.p.lodz.pl",
       "submitButton": "Wyślij kod",
       "backToLogin": "Wróć do logowania",
       "verify": {
@@ -346,7 +361,7 @@
     }
   },
   "header": {
-    "title": "Kustosz Akademicki",
+    "title": "System Antyplagiatowy",
     "og nazwa wraca": "wielkie pozdro",
     "subtitle": "Politechnika Łódzka",
     "dashboard": "Panel Główny",
@@ -366,7 +381,7 @@
   "validation": {
     "required": "To pole jest wymagane",
     "email": {
-      "invalid": "Proszę podać poprawny adres e-mail (np. nazwa@domena.pl)"
+      "invalid": "Proszę podać poprawny adres e-mail (np. nazwa@edu.p.lodz.pl)"
     },
     "password": {
       "minLength": "Hasło musi zawierać co najmniej 12 znaków",

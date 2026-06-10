@@ -32,6 +32,21 @@
     "searching": "Searching..."
   },
   "auth": {
+    "mobileTitle": "Anti-plagiarism TUL",
+    "layoutTitle": "Academic Integrity",
+    "layoutTitleHighlight": "System",
+    "layoutSubtitle": "Advanced verification and structural source code analysis delivered for students and staff of Lodz University of Technology.",
+    "features": {
+      "gitea": {
+        "title": "Gitea Repositories",
+        "desc": "Instant integration with projects."
+      },
+      "jplag": {
+        "title": "JPlag Analysis",
+        "desc": "Plagiarism detection in code structure."
+      }
+    },
+    "footer": "Team 1 • {{year}} SSBD",
     "title": "Academic Integrity Protection",
     "subtitle": "Analysis of scientific contribution with precision and prestigious authority at Lodz University of Technology.",
     "founded": "Founded in 1945",
@@ -39,7 +54,7 @@
       "heading": "Login",
       "subheading": "Access your academic integrity dashboard",
       "loginLabel": "LOGIN",
-      "loginPlaceholder": "E.G. John_Doe",
+      "loginPlaceholder": "jkowalski",
       "passwordLabel": "PASSWORD",
       "rememberMe": "Remember my device",
       "button": "Sign In",
@@ -119,7 +134,7 @@
       "errorNotFound": "An account with the provided email address does not exist.",
       "errorGeneric": "An unexpected error occurred.",
       "emailLabel": "EMAIL ADDRESS",
-      "emailPlaceholder": "name@domain.com",
+      "emailPlaceholder": "213767@edu.p.lodz.pl",
       "submitButton": "Send code",
       "backToLogin": "Back to login",
       "verify": {
@@ -346,7 +361,7 @@
     }
   },
   "header": {
-    "title": "Academic Custodian",
+    "title": "Anti-plagiarism System",
     "og nazwa wraca": "great regards",
     "subtitle": "Lodz University of Technology",
     "dashboard": "Main Dashboard",
@@ -366,7 +381,7 @@
   "validation": {
     "required": "This field is required",
     "email": {
-      "invalid": "Please provide a valid email address (e.g. name@domain.com)"
+      "invalid": "Please provide a valid email address (e.g. name@edu.p.lodz.pl)"
     },
     "password": {
       "minLength": "Password must contain at least 12 characters",
