@@ -194,6 +194,13 @@ export default function Header() {
                 <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleLogout} className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-danger-subtle text-danger border border-danger-border hover:bg-danger hover:text-white transition-colors ml-1" title={t('header.logout')}>
                     <LogOut size={18} />
                 </motion.button>
+                {/*<button*/}
+                {/*    id="logoutBtn"*/}
+                {/*    onClick={handleLogout}*/}
+                {/*    className="flex items-center gap-2 text-sm font-bold text-brand hover:text-brand-hover transition-colors ml-2"*/}
+                {/*>*/}
+                {/*    {t('header.logout')}*/}
+                {/*</button>*/}
             </div>
 
             <div className={`absolute bottom-0 left-0 w-full h-[2px] transition-colors duration-300 ${getRoleIndicatorColor(activeRole)}`} />

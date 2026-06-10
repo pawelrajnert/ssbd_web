@@ -104,7 +104,9 @@ export default function RegisterPage() {
             </div>
 
             {globalError && (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-danger-subtle text-danger text-sm font-bold rounded-2xl border border-danger-border flex items-center justify-center gap-2 shadow-sm">
+                <motion.div
+                    id="registerGlobalError"
+                    initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-danger-subtle text-danger text-sm font-bold rounded-2xl border border-danger-border flex items-center justify-center gap-2 shadow-sm">
                     {globalError}
                 </motion.div>
             )}
@@ -215,6 +217,7 @@ export default function RegisterPage() {
 
                 <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.98 }} className="pt-4">
                     <SubmitButton
+                        id="registerSubmitBtn"
                         type="submit"
                         isLoading={isLoading}
                         className="w-full py-4 shadow-lg shadow-brand/20 font-black text-base tracking-wide rounded-2xl transition-all"

@@ -47,6 +47,7 @@ export default function PasswordResetInitPage() {
     if (status === 'success') {
         return (
             <motion.div
+                id="resetPasswordSuccessMsg"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="w-full max-w-[440px] flex flex-col justify-center text-center"
@@ -123,6 +124,7 @@ export default function PasswordResetInitPage() {
                 <div className="space-y-3 pt-4">
                     <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.98 }}>
                         <SubmitButton
+                            id="resetPasswordSubmitBtn"
                             type="submit"
                             isLoading={status === 'loading'}
                             className="w-full py-4 shadow-lg shadow-brand/20 font-black text-base tracking-wide rounded-2xl transition-all"

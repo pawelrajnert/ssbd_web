@@ -104,7 +104,9 @@ export default function LoginPage() {
             </div>
 
             {globalError && (
-                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-danger-subtle text-danger text-sm font-bold rounded-2xl border border-danger-border flex items-center justify-center gap-2 shadow-sm">
+                <motion.div
+                    id="loginErrorBox"
+                    initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 p-4 bg-danger-subtle text-danger text-sm font-bold rounded-2xl border border-danger-border flex items-center justify-center gap-2 shadow-sm">
                     {globalError}
                 </motion.div>
             )}
@@ -162,11 +164,16 @@ export default function LoginPage() {
                     </Link>
                 </div>
 
-                <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.98 }}>
+                <motion.div
+                    id="loginSubmitBtn"
+                    whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.98 }}>
                     <SubmitButton type="submit" isLoading={isLoading} className="w-full py-4 shadow-lg shadow-brand/20 font-black text-base tracking-wide rounded-2xl transition-all">
                         {t('auth.login.button')}
                     </SubmitButton>
                 </motion.div>
+                {/*<SubmitButton id="loginSubmitBtn" type="submit" isLoading={isLoading} className="mt-2 tracking-wide">*/}
+                {/*    {t('auth.login.button')}*/}
+                {/*</SubmitButton>*/}
 
                 <div className="mt-8">
                     <div className="relative">
