@@ -17,7 +17,6 @@ export const StudentSubjectDetailsView: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Dynamiczna aktualizacja paska ścieżki (breadcrumb)
     useEffect(() => {
         if (subject?.name) {
             setDynamicBreadcrumb(subject.name);
