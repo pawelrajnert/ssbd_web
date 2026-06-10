@@ -1,18 +1,17 @@
 import { useEffect, useState, type KeyboardEvent } from "react";
-import { RefreshCw, Filter, ChevronLeft, ChevronRight, ChevronsUpDownIcon } from "lucide-react";
+import { RefreshCw, Filter, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronsUpDownIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { userService } from "../../services/userService";
 import { PATHS } from "../../routes/paths";
-import type { Page, AccountWithAccessLevelsDTO, AccountDTO } from "../../types/user.types";
+import type { AccountsHalResponse, AccountDTO } from "../../types/user.types";
 import ChangePasswordModal from "./ChangeOtherPasswordModal";
 
 export default function UserListPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const [data, setData] = useState<Page<AccountWithAccessLevelsDTO> | null>(null);
-    const [page, setPage] = useState(0);
+    const [data, setData] = useState<AccountsHalResponse | null>(null);
 
     const [size, setSize] = useState<number | undefined>(undefined);
     const [sortBy, setSortBy] = useState<string | undefined>(undefined);
@@ -67,42 +66,64 @@ export default function UserListPage() {
 
     useEffect(() => {
         if (!isProfileLoaded) return;
-
-        const fetchUsers = async () => {
-            setIsLoading(true);
-            try {
-                const result = await userService.getUsers(page, size, searchPhrase, sortBy, sortDesc);
-                setData(result);
-            } catch { /* empty */ } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchUsers();
-    }, [page, size, searchPhrase, sortBy, sortDesc, isProfileLoaded]);
+        setIsLoading(true);
+        userService.getUsers({ page: 0, size, phrase: searchPhrase, sortBy, sortDesc })
+            .then(setData)
+            .catch(() => {})
+            .finally(() => setIsLoading(false));
+    }, [size, searchPhrase, sortBy, sortDesc, isProfileLoaded]);
 
     const handleRefresh = () => {
         setSearchPhrase(phrase);
-        if (page !== 0) {
-            setPage(0);
-        } else if (isProfileLoaded) {
-            setIsLoading(true);
-            userService.getUsers(page, size, phrase, sortBy, sortDesc)
-                .then(setData)
-                .catch(() => {})
-                .finally(() => setIsLoading(false));
-        }
+        setIsLoading(true);
+        userService.getUsers({ page: 0, size, phrase, sortBy, sortDesc })
+            .then(setData)
+            .catch(() => {})
+            .finally(() => setIsLoading(false));
     };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') handleRefresh();
     };
 
+    const handleFirstPage = () => {
+        if (data?._links?.first?.href) {
+            setIsLoading(true);
+            userService.getUsers(data._links.first.href)
+                .then(setData)
+                .catch(() => {})
+                .finally(() => setIsLoading(false));
+        }
+    };
+
+    const handleLastPage = () => {
+        if (data?._links?.last?.href) {
+            setIsLoading(true);
+            userService.getUsers(data._links.last.href)
+                .then(setData)
+                .catch(() => {})
+                .finally(() => setIsLoading(false));
+        }
+    };
+
     const handleNextPage = () => {
-        if (data && !data.last) setPage(prev => prev + 1);
+        if (data?._links?.next?.href) {
+            setIsLoading(true);
+            userService.getUsers(data._links.next.href)
+                .then(setData)
+                .catch(() => {})
+                .finally(() => setIsLoading(false));
+        }
     };
 
     const handlePrevPage = () => {
-        if (page > 0) setPage(prev => prev - 1);
+        if (data?._links?.prev?.href) {
+            setIsLoading(true);
+            userService.getUsers(data._links.prev.href)
+                .then(setData)
+                .catch(() => {})
+                .finally(() => setIsLoading(false));
+        }
     };
 
     const handleSort = (column: string) => {
@@ -112,12 +133,10 @@ export default function UserListPage() {
             setSortBy(column);
             setSortDesc(false);
         }
-        setPage(0);
     };
 
     const handleSizeChange = (newSize: number) => {
         setSize(newSize);
-        setPage(0);
     };
 
     const formatDate = (dateString?: string | null) => {
@@ -125,6 +144,7 @@ export default function UserListPage() {
         const date = new Date(dateString);
         return date.toISOString().replace('T', ' ').substring(0, 16);
     };
+
     const renderRoleBadge = (roleName: string) => {
         const isAdmin = roleName === "ROLE_ADMIN" || roleName === "ADMINISTRATOR";
         const colors = isAdmin ? "bg-red-100 text-[#7A1014]" : "bg-teal-100 text-teal-800";
@@ -135,17 +155,17 @@ export default function UserListPage() {
             return roleName;
         };
         return (
-        <span
+            <span
                 key={roleName}
                 className={`inline-block px-3 py-1 ${colors} text-[10px] font-bold rounded-full tracking-wider mb-1`}
             >
-            {getLabel()}
-        </span>
+                {getLabel()}
+            </span>
         );
     };
 
     const availableSizes = [5, 10, 20, 50];
-    const currentSize = size !== undefined ? size : (data?.size || 10);
+    const currentSize = size !== undefined ? size : (data?.page?.size || 10);
 
     if (!availableSizes.includes(currentSize)) {
         availableSizes.push(currentSize);
@@ -250,14 +270,14 @@ export default function UserListPage() {
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
-                            {data?.content?.length === 0 ? (
+                            {(!data?._embedded?.accountWithAccessLevelsDTOList || data._embedded.accountWithAccessLevelsDTOList.length === 0) ? (
                                 <tr>
                                     <td colSpan={7} className="py-8 text-center text-secondary font-medium">
                                         {t('userList.noResults', 'Brak wyników')}
                                     </td>
                                 </tr>
                             ) : (
-                                data?.content?.map((row) => (
+                                data._embedded.accountWithAccessLevelsDTOList.map((row) => (
                                     <tr key={row.account.id} className="hover:bg-base transition-colors">
                                         <td className="py-4 px-8 align-middle">
                                             <div className="flex flex-col items-start">
@@ -286,7 +306,7 @@ export default function UserListPage() {
                     <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 border-t border-border bg-surface gap-4">
                         <div className="flex items-center gap-4">
                             <span className="text-sm text-primary font-medium">
-                                {t('userList.pagination.page')} {data ? (data.number + 1) : 0} {t('userList.pagination.of')} {data ? data.totalPages : 0}
+                                {t('userList.pagination.page')} {data ? (data.page.number + 1) : 0} {t('userList.pagination.of')} {data ? data.page.totalPages : 0}
                             </span>
                             <div className="flex items-center gap-2 text-sm text-primary font-medium">
                                 <label htmlFor="pageSize">{t('userList.pagination.showing')}</label>
@@ -304,8 +324,16 @@ export default function UserListPage() {
                         </div>
                         <div className="flex gap-2">
                             <button
+                                onClick={handleFirstPage}
+                                disabled={!data || data.page.number === 0 || isLoading}
+                                className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                <ChevronsLeft size={16} />
+                                {t('userList.pagination.first', 'Pierwsza')}
+                            </button>
+                            <button
                                 onClick={handlePrevPage}
-                                disabled={page === 0 || isLoading}
+                                disabled={!data?._links?.prev || isLoading}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 <ChevronLeft size={16} />
@@ -313,11 +341,19 @@ export default function UserListPage() {
                             </button>
                             <button
                                 onClick={handleNextPage}
-                                disabled={!data || data.last || isLoading}
+                                disabled={!data?._links?.next || isLoading}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                {t('userList.pagination.next', 'Następna')}
+                                {t('userList.pagination.next', 'Kolejna')}
                                 <ChevronRight size={16} />
+                            </button>
+                            <button
+                                onClick={handleLastPage}
+                                disabled={!data || data.page.number === data.page.totalPages - 1 || data.page.totalPages === 0 || isLoading}
+                                className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {t('userList.pagination.last', 'Ostatnia')}
+                                <ChevronsRight size={16} />
                             </button>
                         </div>
                     </div>
