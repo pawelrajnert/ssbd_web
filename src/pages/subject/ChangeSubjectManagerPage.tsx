@@ -25,7 +25,7 @@ export const ChangeSubjectManagerPage: React.FC = () => {
         const fetchSubjects = async () => {
             setIsSubjectsLoading(true);
             try {
-                const data = await subjectService.getTeacherSubjects();
+                const data = await subjectService.getAllSubjectsForAdmin();
                 setSubjects(data);
             } catch (err) {
                 setSubmitError(t('subject.manager.error.fetchSubjects'));
@@ -72,16 +72,26 @@ export const ChangeSubjectManagerPage: React.FC = () => {
             return;
         }
 
+        const selectedSubject = subjects.find(s => s.id === selectedSubjectId);
+        if (!selectedSubject || !selectedSubject.versionHash) {
+            setSubmitError(t('subject.deleteVersionError'));
+            return;
+        }
+
         setIsLoading(true);
         setSubmitError(null);
         setSuccessMessage(null);
 
         try {
-            await subjectService.changeSubjectManager(selectedSubjectId, selectedTeacherLogin);
+            await subjectService.changeSubjectManager(selectedSubjectId, selectedTeacherLogin, selectedSubject.versionHash);
             setSuccessMessage(t('subject.manager.success'));
             setSelectedTeacherLogin('');
             setSelectedSubjectId('');
             setAssignedTeachers([]);
+
+            const updatedSubjects = await subjectService.getAllSubjectsForAdmin();
+            setSubjects(updatedSubjects);
+
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 if (err.response?.status === 404) setSubmitError(t('subject.manager.error.notFound'));
