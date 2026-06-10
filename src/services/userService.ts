@@ -1,16 +1,27 @@
 import axiosInstance from "../api/auth/middleware";
-import type {AccountWithAccessLevelsDTO, UpdateAccountDTO} from "../types/user.types";
+import type {
+    AccountWithAccessLevelsDTO,
+    UpdateAccountDTO,
+    AccountsHalResponse,
+    GetUsersParams
+} from "../types/user.types";
 
 export const userService = {
-    getUsers: async (page: number, size?: number, phrase?: string, sortBy?: string, sortDesc?: boolean) => {
-        const params = new URLSearchParams();
-        if (phrase) params.append('phrase', phrase);
-        if (page !== undefined) params.append('page', page.toString());
-        if (size !== undefined) params.append('size', size.toString());
-        if (sortBy !== undefined) params.append('sortBy', sortBy);
-        if (sortDesc !== undefined) params.append('sortDesc', sortDesc.toString());
+    getUsers: async (paramsOrUrl: string | GetUsersParams) => {
+        if (typeof paramsOrUrl === 'string') {
+            const urlObj = new URL(paramsOrUrl, window.location.origin);
+            const response = await axiosInstance.get<AccountsHalResponse>(`/account${urlObj.search}`);
+            return response.data;
+        }
 
-        const response = await axiosInstance.get(`/account?${params.toString()}`);
+        const params = new URLSearchParams();
+        if (paramsOrUrl.phrase) params.append('phrase', paramsOrUrl.phrase);
+        if (paramsOrUrl.page !== undefined) params.append('page', paramsOrUrl.page.toString());
+        if (paramsOrUrl.size !== undefined) params.append('size', paramsOrUrl.size.toString());
+        if (paramsOrUrl.sortBy !== undefined) params.append('sortBy', paramsOrUrl.sortBy);
+        if (paramsOrUrl.sortDesc !== undefined) params.append('sortDesc', paramsOrUrl.sortDesc.toString());
+
+        const response = await axiosInstance.get<AccountsHalResponse>(`/account?${params.toString()}`);
         return response.data;
     },
 

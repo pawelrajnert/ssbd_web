@@ -61,3 +61,38 @@ export interface UpdateAccountDTO {
     name: string;
     surname: string;
 }
+
+export interface HalLink {
+    href: string;
+}
+
+export interface HalLinks {
+    first?: HalLink;
+    prev?: HalLink;
+    self?: HalLink;
+    next?: HalLink;
+    last?: HalLink;
+}
+
+export interface HalPageInfo {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
+export interface AccountsHalResponse {
+    _embedded?: {
+        accountWithAccessLevelsDTOList: AccountWithAccessLevelsDTO[];
+    };
+    _links?: HalLinks;
+    page: HalPageInfo;
+}
+
+export interface GetUsersParams {
+    page: number;
+    size?: number;
+    phrase?: string;
+    sortBy?: string;
+    sortDesc?: boolean;
+}
