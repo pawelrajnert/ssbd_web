@@ -31,6 +31,24 @@
     "confirmAction": "Zapisz zmiany",
     "searching": "Szukanie..."
   },
+  "audit": {
+    "title": "Historia zmian w systemie",
+    "subtitle": "Zarządzanie logami audytowymi i historią edycji encji w bazie danych.",
+    "filter": {
+      "all": "Wszystkie encje"
+    },
+    "table": {
+      "date": "Data",
+      "author": "Autor",
+      "entity": "Typ Encji",
+      "entityId": "ID Obiektu",
+      "action": "Akcja",
+      "modifications": "Modyfikacje pól"
+    },
+    "details": {
+      "created": "Utworzenie obiektu",
+      "deleted": "Usunięcie obiektu"
+    },
   "auth": {
     "title": "Ochrona Uczciwości Akademickiej",
     "subtitle": "Analiza wkładu naukowego z precyzją i prestiżowym autorytetem na Politechnice Łódzkiej.",
@@ -411,7 +429,8 @@
     "reportList": "Lista raportów",
     "globalRules": "Szablony reguł",
     "studentScan": "Sprawdź swój kod",
-    "changeSubjectManager": "Zmień kierownika przedmiotu"
+    "changeSubjectManager": "Zmień kierownika przedmiotu",
+    "auditLogs": "Historia zmian"
   },
   "subjectUsers": {
     "title": "Lista studentów dla przedmiotu",

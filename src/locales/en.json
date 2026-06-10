@@ -406,12 +406,13 @@
     "extend": "Extend session"
   },
   "sidebar": {
-    "userManagement": "User management",
+    "userManagement": "User Management",
     "subjectList": "My subjects",
-    "reportList": "Reports list",
-    "globalRules": "Rule templates",
+    "globalRules": "Rule presets",
+    "reportList": "Report list",
     "studentScan": "Check your code",
-    "changeSubjectManager": "Change subject manager"
+    "changeSubjectManager": "Change subject's manager",
+    "auditLogs": "System Audit"
   },
   "subjectUsers": {
     "title": "Student list for subject",
@@ -752,7 +753,26 @@
     "deleteSuccess": "Subject successfully removed.",
     "deleteError": "An error occurred while deleting the subject.",
     "deleteConflict": "Subject data was modified by another user. Refresh the page and try again.",
-    "deleteForbidden": "You do not have permission to delete this subject."
+    "deleteForbidden": "You do not have permission to delete this subject.",
+    "audit": {
+      "title": "System Change History",
+      "subtitle": "Managing audit logs and database entity edit history.",
+      "filter": {
+        "all": "All entities"
+      },
+      "table": {
+        "date": "Date",
+        "author": "Author",
+        "entity": "Entity Type",
+        "entityId": "Object ID",
+        "action": "Action",
+        "modifications": "Field Modifications"
+      },
+      "details": {
+        "created": "Object creation",
+        "deleted": "Object deletion"
+      }
+    }
   },
   "schedule": {
     "modal": {
