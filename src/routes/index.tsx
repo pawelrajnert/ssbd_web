@@ -32,9 +32,10 @@ import StudentReportDetailsPage from "../pages/student/StudentReportDetailsPage.
 import {ChangeSubjectManagerPage} from "../pages/subject/ChangeSubjectManagerPage.tsx";
 import {StudentSubjectDetailsView} from "../pages/student/StudentSubjectDetailsView.tsx";
 import TeacherReportDetailsPage from "../pages/teacher/TeacherReportDetailsPage.tsx";
-import { TeacherSubjectListPage } from "../pages/teacher/TeacherSubjectListPage.tsx";
-import { StudentSubjectListPage } from "../pages/student/StudentSubjectListPage.tsx";
+import {TeacherSubjectListPage} from "../pages/teacher/TeacherSubjectListPage.tsx";
+import {StudentSubjectListPage} from "../pages/student/StudentSubjectListPage.tsx";
 import NotFoundPage from "../shared/not_found/NotFoundPage.tsx";
+import AuditListPage from "../pages/audit/AuditListPage.tsx";
 
 const routes: RouteObject[] = [
     {
