@@ -19,7 +19,7 @@ export const LanguageSelector = () => {
     return (
         <div className="relative w-full">
             <select
-                value={i18n.language}
+                value={i18n.resolvedLanguage || 'pl'}
                 onChange={(e) => handleLanguageChange(e.target.value)}
                 className="w-full bg-base/50 text-sm font-bold text-primary border border-border rounded-xl py-2.5 pl-4 pr-10 outline-none cursor-pointer focus:border-brand focus:ring-2 focus:ring-brand/20 transition-all appearance-none"
             >
