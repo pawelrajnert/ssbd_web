@@ -161,8 +161,10 @@
       "of": "z",
       "users": "użytkowników",
       "page": "Strona",
+      "first": "Pierwsza",
       "prev": "Poprzednia",
-      "next": "Następna"
+      "next": "Następna",
+      "last": "Ostatnia"
     }
   },
   "userEdit": {

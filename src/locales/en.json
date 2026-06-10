@@ -161,8 +161,10 @@
       "of": "of",
       "users": "users",
       "page": "Page",
+      "first": "First",
       "prev": "Previous",
-      "next": "Next"
+      "next": "Next",
+      "last": "Last"
     }
   },
   "userEdit": {
