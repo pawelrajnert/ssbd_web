@@ -302,34 +302,42 @@ export default function UserEditPage() {
 
                             <div className="space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLogin')}</span>
-                                    <span className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
+                                    <span
+                                        className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLogin')}</span>
+                                    <span
+                                        className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginSuccessDateTime)}</span>
                                 </div>
 
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLoginFail')}</span>
-                                    <span className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginFailureDateTime)}</span>
+                                    <span
+                                        className="text-sm font-semibold text-secondary">{t('userEdit.stats.lastLoginFail')}</span>
+                                    <span
+                                        className="text-sm font-bold text-primary">{formatDate(user.account.lastLoginFailureDateTime)}</span>
                                 </div>
 
                                 <div className="flex justify-between items-start">
-                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.createdAt')}</span>
+                                    <span
+                                        className="text-sm font-semibold text-secondary">{t('userEdit.stats.createdAt')}</span>
                                     <div className="text-right">
                                         <p className="text-sm font-bold text-primary">{formatDate(user.account.createdAt)}</p>
                                         {user.account.createdBy && (
                                             <p className="text-[10px] text-secondary font-medium tracking-wide mt-0.5">
-                                                {t('userEdit.stats.createdBy')}: <span className="text-brand">{user.account.createdBy}</span>
+                                                {t('userEdit.stats.createdBy')}: <span
+                                                className="text-brand">{user.account.createdBy}</span>
                                             </p>
                                         )}
                                     </div>
                                 </div>
 
                                 <div className="flex justify-between items-start">
-                                    <span className="text-sm font-semibold text-secondary">{t('userEdit.stats.updatedAt')}</span>
+                                    <span
+                                        className="text-sm font-semibold text-secondary">{t('userEdit.stats.updatedAt')}</span>
                                     <div className="text-right">
                                         <p className="text-sm font-bold text-primary">{formatDate(user.account.updatedAt)}</p>
                                         {user.account.modifiedBy && (
                                             <p className="text-[10px] text-secondary font-medium tracking-wide mt-0.5">
-                                                {t('userEdit.stats.modifiedBy')}: <span className="text-brand">{user.account.modifiedBy}</span>
+                                                {t('userEdit.stats.modifiedBy')}: <span
+                                                className="text-brand">{user.account.modifiedBy}</span>
                                             </p>
                                         )}
                                     </div>
@@ -372,6 +380,7 @@ export default function UserEditPage() {
                                     {isAdmin && !isMyself && (
                                         <div className="mt-2 text-right">
                                             <button
+                                                id="changePasswordModalBtn"
                                                 type="button"
                                                 onClick={() => setIsChangePasswordModalOpen(true)}
                                                 className="text-[10px] font-bold text-brand hover:text-brand-hover tracking-widest uppercase transition-colors"
@@ -393,6 +402,7 @@ export default function UserEditPage() {
                                             <p className="text-sm text-secondary">{t('profile.securityDesc')}</p>
                                         </div>
                                         <button
+                                            id="changeOwnPasswordBtn"
                                             onClick={() => setShowPasswordForm(true)}
                                             className="bg-brand hover:bg-brand-hover text-white font-bold px-4 py-2 rounded-md transition-colors text-xs tracking-widest uppercase"
                                         >
@@ -429,6 +439,7 @@ export default function UserEditPage() {
                                 <label
                                     className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">{t('userEdit.personal.firstName')}</label>
                                 <input
+                                    id="firstNameInput"
                                     type="text"
                                     value={nameValue}
                                     onChange={(e) => setNameValue(e.target.value)}
@@ -439,6 +450,7 @@ export default function UserEditPage() {
                                 <label
                                     className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">{t('userEdit.personal.surname')}</label>
                                 <input
+                                    id="lastNameInput"
                                     type="text"
                                     value={surnameValue}
                                     onChange={(e) => setSurnameValue(e.target.value)}
@@ -452,6 +464,7 @@ export default function UserEditPage() {
                                 {t('userEdit.personal.email')}
                             </label>
                             <input
+                                id="userEmailInput"
                                 type="email"
                                 value={emailValue}
                                 required={true}
@@ -477,6 +490,7 @@ export default function UserEditPage() {
 
                             {(!isAdmin || isMyself) && !emailSuccess && (
                                 <SubmitButton
+                                    id="requestEmailChangeBtn"
                                     onClick={onEmailSubmit}
                                     isLoading={isEmailRequesting}
                                     className="mt-6"
@@ -502,6 +516,7 @@ export default function UserEditPage() {
 
                                             <div className="flex items-center gap-4">
                                                 <button
+                                                    id="resendEmailChangeBtn"
                                                     type="button"
                                                     onClick={handleResend}
                                                     disabled={resendStatus === 'loading' || resendStatus === 'success'}
@@ -535,13 +550,14 @@ export default function UserEditPage() {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <div
+                                            id="blockUserBtn"
                                             onClick={() => !isBlocking && setIsBlockModalOpen(true)}
                                             className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${isBlocking ? 'cursor-wait' : 'cursor-pointer'} ${user.account.isBlocked ? "bg-brand" : "bg-border"}`}
                                         >
                                             <div
                                                 className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${user.account.isBlocked ? "translate-x-4" : ""}`}></div>
                                         </div>
-                                        <span className="text-sm font-bold text-primary">
+                                        <span id="userBlockStatusLabel" className="text-sm font-bold text-primary">
                                         {user.account.isBlocked ? t('userEdit.blockStatus.blocked') : t('userEdit.blockStatus.active')}
                                     </span>
                                     </div>
@@ -558,6 +574,7 @@ export default function UserEditPage() {
                                             const isChecked = localRoles.includes(role.id);
                                             return (
                                                 <div
+                                                    id={`roleCard-${role.id}`}
                                                     key={role.id}
                                                     onClick={() => toggleRole(role.id)}
                                                     className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${isChecked ? 'bg-active border-brand' : 'bg-base border-transparent hover:border-border'}`}
@@ -592,13 +609,15 @@ export default function UserEditPage() {
                             >
                                 {t('userEdit.actions.discard')}
                             </button>
+
+                            <span id="saveProfileBtn">
                             <SubmitButton
                                 onClick={() => setIsSaveModalOpen(true)}
                                 isLoading={isSaving}
-                                className="w-auto mt-0 px-8 py-3 text-xs tracking-widest uppercase"
-                            >
+                                className="w-auto mt-0 px-8 py-3 text-xs tracking-widest uppercase">
                                 {t('userEdit.actions.save')}
                             </SubmitButton>
+                            </span>
                         </div>
 
                     </div>

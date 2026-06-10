@@ -47,6 +47,7 @@ export default function PasswordResetInitPage() {
     if (status === 'success') {
         return (
             <div
+                id="resetPasswordSuccessMsg"
                 className="w-full flex flex-col justify-center animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
                 <div className="flex justify-center mb-4 text-green-600">
                     <CheckCircle2 size={48}/>
@@ -108,6 +109,7 @@ export default function PasswordResetInitPage() {
                 </div>
 
                 <SubmitButton
+                    id="resetPasswordSubmitBtn"
                     type="submit"
                     isLoading={status === 'loading'}
                 >

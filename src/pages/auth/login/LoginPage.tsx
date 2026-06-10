@@ -13,7 +13,7 @@ import {authService, loginWithGoogle} from "../../../services/authService.ts";
 import SubmitButton from "../../../shared/components/buttons/SubmitButton.tsx";
 import {loginSchema, type LoginFormData} from "../../../shared/validators/loginSchema.ts";
 import {jwtDecode} from "jwt-decode";
-import type { JwtPayload } from "../../../hooks/useAuth.ts";
+import type {JwtPayload} from "../../../hooks/useAuth.ts";
 
 export default function LoginPage() {
     const {t} = useTranslation();
@@ -40,13 +40,13 @@ export default function LoginPage() {
                         from: location.state?.from
                     }
                 });
-            // } else if (response?.token) {
-            //     setTokens(response.token, response.refreshToken);
-            //     const decoded = jwtDecode<JwtPayload>(response.token);
-            //     const newRole = decoded.roles?.includes("ADMIN") ? "ADMIN" : decoded.roles?.[0];
-            //
-            //     const targetPath = location.state?.from?.pathname || getDashboardPath(newRole);
-            //     navigate(targetPath, {replace: true});
+                // } else if (response?.token) {
+                //     setTokens(response.token, response.refreshToken);
+                //     const decoded = jwtDecode<JwtPayload>(response.token);
+                //     const newRole = decoded.roles?.includes("ADMIN") ? "ADMIN" : decoded.roles?.[0];
+                //
+                //     const targetPath = location.state?.from?.pathname || getDashboardPath(newRole);
+                //     navigate(targetPath, {replace: true});
                 //to w sumie nigdy nie wystąpi bo mamy 2fa
             } else {
                 if (status === 202) {
@@ -105,7 +105,8 @@ export default function LoginPage() {
             </p>
 
             {globalError && (
-                <div className="mb-6 p-3 bg-danger-subtle text-danger text-sm rounded-md border border-danger-border">
+                <div id="loginErrorBox"
+                     className="mb-6 p-3 bg-danger-subtle text-danger text-sm rounded-md border border-danger-border">
                     {globalError}
                 </div>
             )}
@@ -165,7 +166,7 @@ export default function LoginPage() {
                     />
                 </div>
 
-                <SubmitButton type="submit" isLoading={isLoading} className="mt-2 tracking-wide">
+                <SubmitButton id="loginSubmitBtn" type="submit" isLoading={isLoading} className="mt-2 tracking-wide">
                     {t('auth.login.button')}
                 </SubmitButton>
 

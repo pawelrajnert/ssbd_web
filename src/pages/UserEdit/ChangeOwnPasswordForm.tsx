@@ -96,6 +96,7 @@ export function ChangeOwnPasswordForm({version, onSuccess}: ChangeOwnPasswordFor
 
             <div>
                 <input
+                    id="oldPasswordInput"
                     type="password"
                     placeholder={t('profile.oldPassword')}
                     className={`w-full bg-surface text-primary border p-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-brand transition-colors ${errors.oldPassword ? 'border-danger' : 'border-border'}`}
@@ -107,6 +108,7 @@ export function ChangeOwnPasswordForm({version, onSuccess}: ChangeOwnPasswordFor
 
             <div>
                 <input
+                    id="newPasswordInput"
                     type="password"
                     placeholder={t('profile.newPassword')}
                     className={`w-full bg-surface text-primary border p-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-brand transition-colors ${errors.newPassword ? 'border-danger' : 'border-border'}`}
