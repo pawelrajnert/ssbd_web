@@ -611,7 +611,8 @@
       "matches": "Dopasowania",
       "noMatches": "Brak dopasowań",
       "similarity": "Podobieństwo",
-      "matchedLines": "Pasujące linie kodu"
+      "matchedLines": "Pasujące linie kodu",
+      "openReport" : "Otwórz raport"
     },
     "errors": {
       "noTickets": "Brak dostępnych skanowań kodu dla tego repozytorium.",
@@ -950,7 +951,7 @@
     "noFiles": "Brak plików do wyświetlenia",
     "noCode": "// Brak kodu",
     "tokensLabel": "tokenów",
-    "fragmentsLabel": "fragmentów"
+    "fragmentsLabel": "frgm."
   },
   "notFound": {
     "title": "Strona nie znaleziona",
