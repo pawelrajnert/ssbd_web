@@ -112,7 +112,6 @@ export const ChangeSubjectManagerPage: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
                         <h1 className="text-3xl font-bold text-primary mb-2 flex items-center gap-3">
-                            <GraduationCap className="text-brand" size={32} />
                             {t('subject.manager.change.title')}
                         </h1>
                         <p className="text-secondary text-sm max-w-2xl">
