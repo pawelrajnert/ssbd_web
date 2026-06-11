@@ -29,7 +29,8 @@
     "save": "Zapisz",
     "accessDenied": "Nie masz dostępu do tej strony",
     "confirmAction": "Zapisz zmiany",
-    "searching": "Szukanie..."
+    "searching": "Szukanie...",
+    "edit": "Edytuj"
   },
   "audit": {
     "title": "Historia zmian w systemie",

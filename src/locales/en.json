@@ -29,7 +29,8 @@
     "save": "Save",
     "accessDenied": "You do not have access to this page",
     "confirmAction": "Save changes",
-    "searching": "Searching..."
+    "searching": "Searching...",
+    "edit": "Edit"
   },
   "audit": {
     "title": "System Change History",
