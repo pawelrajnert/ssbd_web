@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Loader2, GraduationCap, AlertCircle, CheckCircle2, UserCheck } from 'lucide-react';
+import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {AlertCircle, CheckCircle2, GraduationCap, Loader2, UserCheck} from 'lucide-react';
 import axios from 'axios';
 import SubmitButton from '../../shared/components/buttons/SubmitButton';
-import { subjectService } from '../../services/subjectService';
-import type { SubjectDTO, TeacherAssignmentDTO } from '../../types/SubjectDTO';
+import {getSubjectDetails, subjectService} from '../../services/subjectService';
+import type {SubjectDTO, TeacherAssignmentDTO} from '../../types/SubjectDTO';
 
 export const ChangeSubjectManagerPage: React.FC = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     const [subjects, setSubjects] = useState<SubjectDTO[]>([]);
     const [selectedSubjectId, setSelectedSubjectId] = useState<string>('');
@@ -49,8 +49,8 @@ export const ChangeSubjectManagerPage: React.FC = () => {
             setSuccessMessage(null);
 
             try {
-                const data = await subjectService.getSubjectUsers(selectedSubjectId);
-                const candidates = data.filter((t: TeacherAssignmentDTO) => t.role !== 'OWNER');
+                const data = await getSubjectDetails(selectedSubjectId);
+                const candidates = (data.teachers || []).filter((t: TeacherAssignmentDTO) => t.role !== 'OWNER');
                 setAssignedTeachers(candidates);
                 setSelectedTeacherLogin('');
             } catch (err) {
@@ -123,15 +123,17 @@ export const ChangeSubjectManagerPage: React.FC = () => {
                 <div className="bg-surface w-full max-w-3xl rounded-2xl shadow-sm border border-border p-6 md:p-8">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {submitError && (
-                            <div className="mb-6 p-4 bg-danger-subtle border border-danger text-danger rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
-                                <AlertCircle size={20} className="shrink-0" />
+                            <div
+                                className="mb-6 p-4 bg-danger-subtle border border-danger text-danger rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
+                                <AlertCircle size={20} className="shrink-0"/>
                                 {submitError}
                             </div>
                         )}
 
                         {successMessage && (
-                            <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
-                                <CheckCircle2 size={20} className="shrink-0" />
+                            <div
+                                className="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl flex items-center gap-3 text-sm font-semibold animate-in fade-in duration-300">
+                                <CheckCircle2 size={20} className="shrink-0"/>
                                 {successMessage}
                             </div>
                         )}
@@ -162,9 +164,12 @@ export const ChangeSubjectManagerPage: React.FC = () => {
                             <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
                                 {t('subject.manager.selectNewManager')}
                             </label>
-                            <div className="relative border border-border rounded-md focus-within:ring-2 focus-within:ring-brand transition-all bg-surface">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary">
-                                    {isTeachersLoading ? <Loader2 size={16} className="animate-spin text-brand" /> : <UserCheck size={16} />}
+                            <div
+                                className="relative border border-border rounded-md focus-within:ring-2 focus-within:ring-brand transition-all bg-surface">
+                                <div
+                                    className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-secondary">
+                                    {isTeachersLoading ? <Loader2 size={16} className="animate-spin text-brand"/> :
+                                        <UserCheck size={16}/>}
                                 </div>
                                 <select
                                     value={selectedTeacherLogin}
@@ -186,7 +191,7 @@ export const ChangeSubjectManagerPage: React.FC = () => {
                                     </option>
                                     {assignedTeachers.map((teacher) => (
                                         <option key={teacher.login} value={teacher.login}>
-                                            {teacher.login} {t('subject.manager.currentRole', { role: teacher.role })}
+                                            {teacher.login} {t('subject.manager.currentRole', {role: teacher.role})}
                                         </option>
                                     ))}
                                 </select>

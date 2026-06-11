@@ -591,7 +591,13 @@
       "scannedAt": "Scanned at",
       "matches": "Matches",
       "noMatches": "No matches",
-      "similarity": "Similarity",
+      "similarity": "Similarity","btn": {
+        "manage": "Manage course",
+        "stats": "Statistics",
+        "view": "View",
+        "students": "Students",
+        "studentsTitle": "Show students list"
+      },
       "matchedLines": "Matching code lines"
     },
     "errors": {
@@ -664,7 +670,9 @@
         "btn": {
           "manage": "Manage course",
           "stats": "Statistics",
-          "view": "View"
+          "view": "View",
+          "students": "Students",
+          "studentsTitle": "Show students list"
         },
         "status": {
           "archived": "Archived",

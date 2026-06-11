@@ -1,6 +1,10 @@
-import type { SubjectDTO, UpdateSubjectDTO } from '../types/SubjectDTO';
+import type {SubjectDTO, UpdateSubjectDTO} from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
-import type {StudentSubjectDetailsDTO, TranslatedSubjectDescriptionDTO} from '../types/subject.types';
+import type {
+    StudentSubjectDetailsDTO,
+    SubjectStudentStatsDTO,
+    TranslatedSubjectDescriptionDTO
+} from '../types/subject.types';
 
 export const subjectService = {
     createSubject: async (subject: SubjectDTO): Promise<void> => {
@@ -39,8 +43,10 @@ export const subjectService = {
         const response = await axiosInstance.get('/subjects/all');
         return response.data;
     },
-    getSubjectUsers: async (subjectId: string): Promise<any> => {
-        const response = await axiosInstance.get(`/subjects/${subjectId}/users`);
+    getSubjectUsers: async (subjectName: string): Promise<SubjectStudentStatsDTO[]> => {
+        const response = await axiosInstance.get<SubjectStudentStatsDTO[]>(
+            `/repositories/subject/${encodeURIComponent(subjectName)}/users`
+        );
         return response.data;
     },
     changeSubjectManager: async (subjectId: string, newManagerLogin: string, versionHash: string): Promise<void> => {

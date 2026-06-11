@@ -683,7 +683,9 @@
         "btn": {
           "manage": "Zarządzaj kursem",
           "stats": "Statystyki",
-          "view": "Zobacz"
+          "view": "Wyświetl",
+          "students": "Studenci",
+          "studentsTitle": "Pokaż listę studentów"
         },
         "status": {
           "archived": "Zarchiwizowany",

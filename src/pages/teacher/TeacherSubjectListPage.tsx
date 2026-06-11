@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getTeacherSubjects } from '../../services/subjectService';
-import type { SubjectDTO } from '../../types/SubjectDTO';
-import { useTranslation } from 'react-i18next';
-import { PATHS } from '../../routes/paths';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {getTeacherSubjects} from '../../services/subjectService';
+import type {SubjectDTO} from '../../types/SubjectDTO';
+import {useTranslation} from 'react-i18next';
+import {PATHS} from '../../routes/paths';
+import {Users} from "lucide-react";
 
 export const TeacherSubjectListPage: React.FC = () => {
     const navigate = useNavigate();
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
 
     const [subjects, setSubjects] = useState<SubjectDTO[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -57,7 +58,8 @@ export const TeacherSubjectListPage: React.FC = () => {
                 </button>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border mb-8 gap-4">
+            <div
+                className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border mb-8 gap-4">
                 <div className="flex space-x-8">
                     <button
                         onClick={() => setActiveTab('active')}
@@ -86,13 +88,15 @@ export const TeacherSubjectListPage: React.FC = () => {
                             key={sub.id}
                             className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl flex flex-col h-full overflow-hidden group cursor-pointer"
                         >
-                            <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
+                            <div
+                                className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
                                 <img
                                     src={`https://api.dicebear.com/7.x/shapes/svg?seed=${sub.id || sub.name}`}
                                     alt={`Okładka przedmiotu ${sub.name}`}
                                     className="w-full h-full object-cover group-hover:scale-105"
                                 />
-                                <div className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
+                                <div
+                                    className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
                                     {sub.edition}
                                 </div>
                             </div>
@@ -100,7 +104,10 @@ export const TeacherSubjectListPage: React.FC = () => {
                             <div className="p-6 flex-grow flex flex-col">
                                 <h3
                                     className="text-xl font-bold text-primary mb-2 line-clamp-2 leading-snug group-hover:text-brand transition-colors cursor-pointer"
-                                    onClick={(e) => { e.stopPropagation(); handleSubjectClick(sub.id); }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSubjectClick(sub.id);
+                                    }}
                                 >
                                     {sub.name}
                                 </h3>
@@ -114,7 +121,8 @@ export const TeacherSubjectListPage: React.FC = () => {
                                         <span className="text-xs text-secondary font-semibold mb-1">
                                             {t('subject.list.card.nextScan')}
                                         </span>
-                                        <span className={`text-sm font-medium ${sub.archived ? 'text-danger' : sub.nextScan ? 'text-blue-600 dark:text-blue-400' : 'text-secondary'}`}>
+                                        <span
+                                            className={`text-sm font-medium ${sub.archived ? 'text-danger' : sub.nextScan ? 'text-blue-600 dark:text-blue-400' : 'text-secondary'}`}>
                                             {sub.archived
                                                 ? t('subject.list.card.status.archived')
                                                 : sub.nextScan
@@ -129,10 +137,23 @@ export const TeacherSubjectListPage: React.FC = () => {
 
                                 <div className="flex gap-3">
                                     <button
-                                        onClick={(e) => { e.stopPropagation(); handleSubjectClick(sub.id); }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleSubjectClick(sub.id);
+                                        }}
                                         className="flex-grow bg-brand text-white text-sm font-bold py-2.5 rounded-lg hover:bg-brand-hover transition-colors shadow-sm"
                                     >
                                         {t('subject.list.card.btn.manage')}
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(PATHS.TEACHER_SUBJECT_USERS.replace(':subjectName', encodeURIComponent(sub.name)));
+                                        }}
+                                        className="flex items-center gap-2 px-3 py-1.5 bg-surface border border-border hover:border-brand hover:text-brand rounded-md text-sm font-semibold transition-colors"
+                                        title={t('subject.list.card.btn.studentsTitle')}>
+                                        <Users size={16}/>
+                                        <span className="hidden sm:inline">{t('subject.list.card.btn.students')}</span>
                                     </button>
                                 </div>
                             </div>
