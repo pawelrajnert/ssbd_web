@@ -611,7 +611,8 @@
       "matches": "Збіги",
       "noMatches": "Немає збігів",
       "similarity": "Подібність",
-      "matchedLines": "Збігаються рядки коду"
+      "matchedLines": "Збігаються рядки коду",
+      "openReport" : "Відкрити звіт"
     },
     "errors": {
       "noTickets": "Немає доступних сканувань коду для цього репозиторію.",
@@ -950,7 +951,7 @@
     "noFiles": "Немає файлів для відображення",
     "noCode": "// Немає коду",
     "tokensLabel": "токенів",
-    "fragmentsLabel": "фрагментів"
+    "fragmentsLabel": "фрагм."
   },
   "notFound": {
     "title": "Сторінку не знайдено",

@@ -31,6 +31,25 @@
     "confirmAction": "Save changes",
     "searching": "Searching..."
   },
+  "audit": {
+    "title": "System Change History",
+    "subtitle": "Managing audit logs and database entity edit history.",
+    "filter": {
+      "all": "All entities"
+    },
+    "table": {
+      "date": "Date",
+      "author": "Author",
+      "entity": "Entity Type",
+      "entityId": "Object ID",
+      "action": "Action",
+      "modifications": "Field Modifications"
+    },
+    "details": {
+      "created": "Object creation",
+      "deleted": "Object deletion"
+    }
+  },
   "auth": {
     "mobileTitle": "Anti-plagiarism TUL",
     "layoutTitle": "Academic Integrity",
@@ -598,7 +617,8 @@
         "students": "Students",
         "studentsTitle": "Show students list"
       },
-      "matchedLines": "Matching code lines"
+      "matchedLines": "Matching code lines",
+      "openReport" : "Open report"
     },
     "errors": {
       "noTickets": "No available code scans remaining for this repository.",
@@ -776,26 +796,7 @@
     "deleteSuccess": "Subject successfully removed.",
     "deleteError": "An error occurred while deleting the subject.",
     "deleteConflict": "Subject data was modified by another user. Refresh the page and try again.",
-    "deleteForbidden": "You do not have permission to delete this subject.",
-    "audit": {
-      "title": "System Change History",
-      "subtitle": "Managing audit logs and database entity edit history.",
-      "filter": {
-        "all": "All entities"
-      },
-      "table": {
-        "date": "Date",
-        "author": "Author",
-        "entity": "Entity Type",
-        "entityId": "Object ID",
-        "action": "Action",
-        "modifications": "Field Modifications"
-      },
-      "details": {
-        "created": "Object creation",
-        "deleted": "Object deletion"
-      }
-    }
+    "deleteForbidden": "You do not have permission to delete this subject."
   },
   "schedule": {
     "modal": {
@@ -956,7 +957,7 @@
     "noFiles": "No files to display",
     "noCode": "// No code available",
     "tokensLabel": "tokens",
-    "fragmentsLabel": "fragments"
+    "fragmentsLabel": "frag."
   },
   "notFound": {
     "title": "Page not found",

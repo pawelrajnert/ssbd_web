@@ -57,7 +57,7 @@ export const SubjectDetailsView: React.FC = () => {
     };
 
     const fetchReports = (id: string) => {
-        reportService.getAllReportsForSubject(id, 0, 1000, "created_at", false)
+        reportService.getAllReportsForSubject(id, 0, 1000, "created_at", true)
             .then(data => setReports(data))
             .catch(console.error)
     }
