@@ -26,6 +26,7 @@ export const SubjectDetailsView: React.FC = () => {
     const [subject, setSubject] = useState<SubjectDTO | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [tagError, setTagError] = useState<boolean>(false);
 
     const [reports, setReports] = useState<Page<ReportDTO> | null>(null);
     const [isReportsModalOpen, setIsReportsModalOpen] = useState<boolean>(false);
@@ -236,16 +237,16 @@ export const SubjectDetailsView: React.FC = () => {
 
             {subject.canViewStats ? (
                 <div className="flex flex-col gap-10">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12 mb-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-100 md:gap-20 mb-4">
                         {[
-                            { label: t('subject.details.stats.students'), value: uniqueStudentsCount },
+                            { label: t('subject.details.stats.students'), value: uniqueStudentsCount},
                             { label: t('subject.details.stats.repos'), value: repositories?.length?.toString() || '0' },
                             { label: t('subject.details.stats.pending'), value: reports?.totalElements?.toString() || '0' },
                             { label: t('subject.details.stats.similarity'), value: displaySimilarity }
                         ].map((stat, idx) => (
-                            <div key={idx} className="flex flex-col">
-                                <span className="text-[11px] sm:text-xs font-bold text-secondary uppercase tracking-widest mb-1">{stat.label}</span>
-                                <span className="text-4xl sm:text-5xl font-extrabold text-primary">{stat.value}</span>
+                            <div key={idx} className={`flex flex-col rounded-md px-8 py-5 bg-[#dbdbdb] drop-shadow-lg inset-shadow-sm`}>
+                                <span className="text-[11px] sm:text-xs font-bold text-secondary text-center uppercase tracking-widest mb-1">{stat.label}</span>
+                                <span className="text-4xl sm:text-5xl font-extrabold text-primary text-center">{stat.value}</span>
                             </div>
                         ))}
                     </div>
@@ -306,7 +307,6 @@ export const SubjectDetailsView: React.FC = () => {
                                         <span className="text-sm font-semibold">{t('subject.details.syncGitea')}</span>
                                     </button>
                                 )}
-                                <button type="button" className="hover:text-primary transition-colors">{t('subject.details.repos.filter')}</button>
                             </div>
                         </div>
 
@@ -406,7 +406,13 @@ export const SubjectDetailsView: React.FC = () => {
                             <h2 className="text-[20px] font-bold text-primary">
                                 {t('subject.analysis.modal.title')}
                             </h2>
-                            <button onClick={() => setIsStartAnalysisModalOpen(false)} className="text-secondary hover:text-primary transition-colors">
+                            <button
+                                onClick={() => {
+                                    setIsStartAnalysisModalOpen(false);
+                                    setTagError(false);
+                                }}
+                                className="text-secondary hover:text-primary transition-colors"
+                            >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                         </div>
@@ -421,17 +427,45 @@ export const SubjectDetailsView: React.FC = () => {
                                 <input
                                     type="text"
                                     value={analysisTag}
-                                    onChange={(e) => setAnalysisTag(e.target.value)}
+                                    onChange={(e) => {
+                                        setAnalysisTag(e.target.value);
+                                        if (tagError) setTagError(false);
+                                    }}
                                     placeholder={t('subject.analysis.modal.tagPlaceholder')}
-                                    className="w-full px-4 py-2.5 bg-base border border-border rounded-lg text-primary placeholder:text-gray-400 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
+                                    className={`w-full px-4 py-2.5 bg-base border rounded-lg text-primary placeholder:text-gray-400 focus:outline-none focus:ring-1 transition-all ${
+                                        tagError
+                                            ? 'border-danger focus:border-danger focus:ring-danger'
+                                            : 'border-border focus:border-brand focus:ring-brand'
+                                    }`}
                                 />
+                                {tagError && (
+                                    <p className="text-[11px] text-danger font-semibold mt-1.5">
+                                        {t('validation.required', 'This field is required')}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="px-6 pb-6 flex justify-end items-center gap-4">
-                            <button onClick={() => setIsStartAnalysisModalOpen(false)} className="text-[14px] font-bold text-secondary hover:text-primary transition-colors">
+                            <button
+                                onClick={() => {
+                                    setIsStartAnalysisModalOpen(false);
+                                    setTagError(false);
+                                }}
+                                className="text-[14px] font-bold text-secondary hover:text-primary transition-colors"
+                            >
                                 {t('common.cancel')}
                             </button>
-                            <button onClick={handleStartAnalysis} className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-[14px] font-bold rounded-lg shadow-sm transition-colors">
+                            <button
+                                onClick={() => {
+                                    if (!analysisTag || !analysisTag.trim()) {
+                                        setTagError(true);
+                                        return;
+                                    }
+                                    handleStartAnalysis();
+                                }}
+                                disabled={!analysisTag || !analysisTag.trim()} // Optional: visually disable button
+                                className="px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-[14px] font-bold rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 {t('subject.analysis.modal.submit')}
                             </button>
                         </div>

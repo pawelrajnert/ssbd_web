@@ -151,8 +151,8 @@ export default function Header() {
                                         <button onClick={() => setTheme('dark')} className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-bold rounded-lg transition-all ${theme === 'dark' ? 'bg-surface shadow text-primary border border-border' : 'text-secondary hover:text-primary hover:bg-surface/50'}`}><Moon size={16} /> Dark</button>
                                     </div>
                                 </div>
-                                <div className="mb-6">
-                                    <p className="text-[10px] font-black text-secondary mb-3 tracking-widest flex items-center gap-2 uppercase">
+                                <div className="mb-5 w-full">
+                                    <p className="text-[11px] font-bold text-secondary mb-2 tracking-wider flex items-center gap-2 uppercase">
                                         <Globe size={14} /> {t("header.settings.language")}
                                     </p>
                                     <LanguageSelector />
@@ -191,7 +191,9 @@ export default function Header() {
                     </Link>
                 </div>
 
-                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleLogout} className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-danger-subtle text-danger border border-danger-border hover:bg-danger hover:text-white transition-colors ml-1" title={t('header.logout')}>
+                <motion.button
+                    id={"logoutBtn"}
+                    whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleLogout} className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-danger-subtle text-danger border border-danger-border hover:bg-danger hover:text-white transition-colors ml-1" title={t('header.logout')}>
                     <LogOut size={18} />
                 </motion.button>
                 {/*<button*/}

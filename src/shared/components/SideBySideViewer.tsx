@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { TeacherComparison } from '../../types/report.types';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import React, {useState, useEffect, useRef, useMemo} from 'react';
+import {useTranslation} from 'react-i18next';
+import type {TeacherComparison} from '../../types/report.types';
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+import {vs, vscDarkPlus} from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const MATCH_PALETTE = [
     { bgLight: 'bg-red-100/80', textLight: 'text-red-900', borderLight: 'border-red-500', bgDark: 'bg-[#5a1d1d]', textDark: 'text-[#ff7b72]', borderDark: 'border-red-500' },
@@ -17,23 +17,44 @@ const getLanguageFromFileName = (fileName: string) => {
     const extension = fileName.split('.').pop()?.toLowerCase();
 
     switch (extension) {
-        case 'java': return 'java';
-        case 'cpp': case 'cxx': case 'cc': case 'h': case 'hpp': return 'cpp';
-        case 'c': return 'c';
-        case 'py': return 'python';
-        case 'js': return 'javascript';
-        case 'ts': return 'typescript';
-        case 'cs': return 'csharp';
-        case 'go': return 'go';
-        case 'rb': return 'go';
-        case 'php': return 'php';
-        case 'html': return 'markup';
-        case 'css': return 'css';
-        case 'json': return 'json';
-        case 'xml': return 'xml';
-        case 'sql': return 'sql';
-        case 'sh': return 'bash';
-        default: return 'text';
+        case 'java':
+            return 'java';
+        case 'cpp':
+        case 'cxx':
+        case 'cc':
+        case 'h':
+        case 'hpp':
+            return 'cpp';
+        case 'c':
+            return 'c';
+        case 'py':
+            return 'python';
+        case 'js':
+            return 'javascript';
+        case 'ts':
+            return 'typescript';
+        case 'cs':
+            return 'csharp';
+        case 'go':
+            return 'go';
+        case 'rb':
+            return 'go';
+        case 'php':
+            return 'php';
+        case 'html':
+            return 'markup';
+        case 'css':
+            return 'css';
+        case 'json':
+            return 'json';
+        case 'xml':
+            return 'xml';
+        case 'sql':
+            return 'sql';
+        case 'sh':
+            return 'bash';
+        default:
+            return 'text';
     }
 };
 
@@ -41,14 +62,14 @@ interface SideBySideViewerProps {
     comparison: TeacherComparison;
 }
 
-export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }) => {
-    const { t } = useTranslation();
+export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({comparison}) => {
+    const {t} = useTranslation();
     const [history, setHistory] = useState<Record<string, number>>({});
     const compKey = `${comparison.firstSubmission}-${comparison.secondSubmission}`;
     const selectedFileIdx = history[compKey] || 0;
 
     const handleSetSelectedFileIdx = (idx: number) => {
-        setHistory(prev => ({ ...prev, [compKey]: idx }));
+        setHistory(prev => ({...prev, [compKey]: idx}));
     };
 
     const [isDarkMode, setIsDarkMode] = useState(false);
@@ -61,8 +82,8 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
         };
         checkTheme();
         const observer = new MutationObserver(checkTheme);
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
-        observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+        observer.observe(document.documentElement, {attributes: true, attributeFilter: ['class', 'data-theme']});
+        observer.observe(document.body, {attributes: true, attributeFilter: ['class', 'data-theme']});
         return () => observer.disconnect();
     }, []);
 
@@ -73,13 +94,19 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
     const isSyncingRight = useRef(false);
 
     const handleScrollA = (e: React.UIEvent<HTMLDivElement>) => {
-        if (isSyncingLeft.current) { isSyncingLeft.current = false; return; }
+        if (isSyncingLeft.current) {
+            isSyncingLeft.current = false;
+            return;
+        }
         isSyncingRight.current = true;
         if (scrollContainerBRef.current) scrollContainerBRef.current.scrollLeft = e.currentTarget.scrollLeft;
     };
 
     const handleScrollB = (e: React.UIEvent<HTMLDivElement>) => {
-        if (isSyncingRight.current) { isSyncingRight.current = false; return; }
+        if (isSyncingRight.current) {
+            isSyncingRight.current = false;
+            return;
+        }
         isSyncingLeft.current = true;
         if (scrollContainerARef.current) scrollContainerARef.current.scrollLeft = e.currentTarget.scrollLeft;
     };
@@ -141,19 +168,32 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
 
             if (!isScrolledA && containerA && firstBlock.linesA.length > 0) {
                 const elA = containerA.querySelector(`#line-a-${firstBlock.linesA[0]}`);
-                if (elA) { containerA.scrollTo({ top: (elA as HTMLElement).offsetTop - 40, behavior: 'smooth' }); isScrolledA = true; }
-            } else { isScrolledA = true; }
+                if (elA) {
+                    containerA.scrollTo({top: (elA as HTMLElement).offsetTop - 40, behavior: 'smooth'});
+                    isScrolledA = true;
+                }
+            } else {
+                isScrolledA = true;
+            }
 
             if (!isScrolledB && containerB && firstBlock.linesB.length > 0) {
                 const elB = containerB.querySelector(`#line-b-${firstBlock.linesB[0]}`);
-                if (elB) { containerB.scrollTo({ top: (elB as HTMLElement).offsetTop - 40, behavior: 'smooth' }); isScrolledB = true; }
-            } else { isScrolledB = true; }
+                if (elB) {
+                    containerB.scrollTo({top: (elB as HTMLElement).offsetTop - 40, behavior: 'smooth'});
+                    isScrolledB = true;
+                }
+            } else {
+                isScrolledB = true;
+            }
 
             if (isScrolledA && isScrolledB) clearInterval(interval);
         }, 200);
 
         const timeout = setTimeout(() => clearInterval(interval), 10000);
-        return () => { clearInterval(interval); clearTimeout(timeout); };
+        return () => {
+            clearInterval(interval);
+            clearTimeout(timeout);
+        };
     }, [currentMatch]);
 
     const handleLineClick = (blockIdx: number, source: 'a' | 'b') => {
@@ -162,10 +202,16 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
 
         if (source === 'a' && block.linesB.length > 0) {
             const el = scrollContainerBRef.current?.querySelector(`#line-b-${block.linesB[0]}`);
-            if (el) scrollContainerBRef.current?.scrollTo({ top: (el as HTMLElement).offsetTop - 40, behavior: 'smooth' });
+            if (el) scrollContainerBRef.current?.scrollTo({
+                top: (el as HTMLElement).offsetTop - 40,
+                behavior: 'smooth'
+            });
         } else if (source === 'b' && block.linesA.length > 0) {
             const el = scrollContainerARef.current?.querySelector(`#line-a-${block.linesA[0]}`);
-            if (el) scrollContainerARef.current?.scrollTo({ top: (el as HTMLElement).offsetTop - 40, behavior: 'smooth' });
+            if (el) scrollContainerARef.current?.scrollTo({
+                top: (el as HTMLElement).offsetTop - 40,
+                behavior: 'smooth'
+            });
         }
     };
 
@@ -180,8 +226,13 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
                     style={isDarkMode ? vscDarkPlus : vs}
                     showLineNumbers={true}
                     wrapLines={true}
-                    codeTagProps={{ style: { fontSize: '13px', fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace' } }}
-                    customStyle={{ margin: 0, padding: '10px 0', background: 'transparent', fontSize: '13px' }}
+                    codeTagProps={{
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace'
+                        }
+                    }}
+                    customStyle={{margin: 0, padding: '10px 0', background: 'transparent', fontSize: '13px'}}
                     lineProps={(line) => {
                         const linesKey = columnPrefix === 'a' ? 'linesA' : 'linesB';
                         const blockIdx = currentMatch.blocks.findIndex((b: any) => b[linesKey].includes(line));
@@ -222,7 +273,8 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
         <div className="flex flex-col flex-1 min-h-0 bg-base pt-4">
 
             <div className="flex items-center gap-2 mb-3 shrink-0">
-                <span className="font-semibold text-primary text-sm whitespace-nowrap bg-surface px-3 py-1.5 rounded-lg border border-border shadow-sm">
+                <span
+                    className="font-semibold text-primary text-sm whitespace-nowrap bg-surface px-3 py-1.5 rounded-lg border border-border shadow-sm">
                     {t('report.files')} ({filesToRender.length}):
                 </span>
 
@@ -245,7 +297,8 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
                                 title={`${t('report.totalTokens')}: ${match.totalTokens}\n${t('report.copiedFragments')}: ${match.blocks.length}`}
                             >
                                 <span className="mb-0.5">{tabLabel}</span>
-                                <span className={`text-[10px] mt-0.5 ${isSelected ? 'text-brand/70' : 'opacity-60 font-normal'}`}>
+                                <span
+                                    className={`text-[10px] mt-0.5 ${isSelected ? 'text-brand/70' : 'opacity-60 font-normal'}`}>
     ({match.totalTokens} {t('report.tokensLabel')} | {match.blocks.length} {t('report.fragmentsLabel')})
 </span>
                             </button>
@@ -255,9 +308,12 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
             </div>
 
             <div className="flex flex-col xl:flex-row gap-4 flex-1 min-h-0">
-                <div className="flex-1 flex flex-col border border-border rounded-lg overflow-hidden shadow-sm bg-surface">
-                    <div className={`${headerBgClass} p-2 text-xs font-mono font-semibold border-b break-words shrink-0`} title={currentMatch.fileA}>
-                        <span className={headerTextClass}>👤 {comparison.firstSubmission}</span> <br/>
+                <div
+                    className="flex-1 flex flex-col border border-border rounded-lg overflow-hidden shadow-sm bg-surface">
+                    <div
+                        className={`${headerBgClass} p-2 text-xs font-mono font-semibold border-b break-words shrink-0`}
+                        title={currentMatch.fileA}>
+                        <span className={headerTextClass}> {comparison.firstSubmission}</span> <br/>
                         <span className="text-slate-500 dark:text-slate-400 text-[10px]">{currentMatch.fileA}</span>
                     </div>
                     <div
@@ -269,9 +325,12 @@ export const SideBySideViewer: React.FC<SideBySideViewerProps> = ({ comparison }
                     </div>
                 </div>
 
-                <div className="flex-1 flex flex-col border border-border rounded-lg overflow-hidden shadow-sm bg-surface">
-                    <div className={`${headerBgClass} p-2 text-xs font-mono font-semibold border-b break-words shrink-0`} title={currentMatch.fileB}>
-                        <span className={headerTextClass}>👤 {comparison.secondSubmission}</span> <br/>
+                <div
+                    className="flex-1 flex flex-col border border-border rounded-lg overflow-hidden shadow-sm bg-surface">
+                    <div
+                        className={`${headerBgClass} p-2 text-xs font-mono font-semibold border-b break-words shrink-0`}
+                        title={currentMatch.fileB}>
+                        <span className={headerTextClass}> {comparison.secondSubmission}</span> <br/>
                         <span className="text-slate-500 dark:text-slate-400 text-[10px]">{currentMatch.fileB}</span>
                     </div>
                     <div
