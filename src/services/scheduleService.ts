@@ -32,10 +32,10 @@ export const scheduleService = {
         });
     },
 
-    updateSchedule: async (scheduleId: string, data: UpdateSchedulePayload, versionHash: string): Promise<void> => {
+    updateSchedule: async (scheduleId: string, data: UpdateSchedulePayload): Promise<void> => {
         await axiosInstance.put(`/schedules/${scheduleId}`, data, {
             headers: {
-                'If-Match': versionHash
+                'If-Match': data.versionHash
             }
         });
     }

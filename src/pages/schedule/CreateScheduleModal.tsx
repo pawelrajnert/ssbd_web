@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tag, Clock, AlertCircle } from 'lucide-react';
+import { Tag, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { ScheduleDTO } from "../../types/schedule.types.ts";
 
@@ -102,10 +102,6 @@ export const CreateScheduleModal: React.FC<CreateScheduleModalProps> = ({ isOpen
                                     value={time}
                                     onChange={handleTimeChange}
                                     className={`w-full bg-base border rounded-lg px-4 py-3 text-sm font-medium text-primary focus:outline-none focus:ring-1 transition-all appearance-none ${isPastDateTime ? 'border-danger focus:border-danger focus:ring-danger' : 'border-border focus:border-brand focus:ring-brand'}`}
-                                />
-                                <Clock
-                                    size={18}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
                                 />
                             </div>
                         </div>

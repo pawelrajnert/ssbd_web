@@ -6,6 +6,7 @@ import {type FilterStatus, type ScheduleDTO, ScheduleStatus} from '../../types/s
 import {formatDate} from '../../services/reportService';
 import {CreateScheduleModal} from "./CreateScheduleModal";
 import {
+    AlertCircle,
     ArrowDown,
     ArrowLeft,
     ArrowUp,
@@ -118,7 +119,7 @@ export const SubjectSchedulePage: React.FC = () => {
             await fetchSchedules();
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response?.status === 409) {
-                setError(t('schedule.deleteScheduleConflict'));
+                await fetchSchedules();
             } else {
                 setError(t('schedule.deleteScheduleError'));
             }
@@ -142,12 +143,19 @@ export const SubjectSchedulePage: React.FC = () => {
     const handleSaveEdit = async (id: string) => {
         const schedule = schedules.find(s => s.id === id);
         if (!schedule) return;
+
         try {
             setIsLoading(true);
             const [datePart, timePart] = editDate.split('T');
             const formattedDate = `${datePart}T${timePart}:00.000`;
 
-            await (scheduleService as any).updateSchedule(id, {
+            const selectedDateTime = new Date(formattedDate).getTime();
+            if (selectedDateTime <= Date.now()) {
+                setError(t('schedule.modal.errorPast'));
+                return;
+            }
+
+            await scheduleService.updateSchedule(id, {
                 scheduleDateTime: formattedDate,
                 tag: editTag,
                 versionHash: schedule.versionHash,
@@ -158,7 +166,13 @@ export const SubjectSchedulePage: React.FC = () => {
             await fetchSchedules();
         } catch (err: unknown) {
             console.error(err);
-            setError(t('schedule.error.update'));
+            if (axios.isAxiosError(err) && err.response?.status === 409) {
+                setEditingId(null);
+                await fetchSchedules();
+            } else {
+                setEditingId(null);
+                setError(t('schedule.error.update'));
+            }
         } finally {
             setIsLoading(false);
         }
@@ -291,6 +305,19 @@ export const SubjectSchedulePage: React.FC = () => {
                     </div>
                 </div>
 
+                {error && (
+                    <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-danger/30 text-danger rounded-lg flex items-center gap-3 text-sm font-medium animate-in fade-in slide-in-from-top-2">
+                        <AlertCircle size={20} className="shrink-0" />
+                        <p>{error}</p>
+                        <button
+                            onClick={() => setError(null)}
+                            className="ml-auto p-1 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-md transition-colors"
+                        >
+                            <X size={16} />
+                        </button>
+                    </div>
+                )}
+
                 <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-visible">
                     <div className="overflow-x-visible">
                         <table className="w-full text-left border-collapse">
@@ -324,13 +351,7 @@ export const SubjectSchedulePage: React.FC = () => {
                             </thead>
                             <tbody
                                 className={`divide-y divide-border transition-opacity duration-200 ${isLoading ? 'opacity-60 pointer-events-none' : ''}`}>
-                            {error ? (
-                                <tr>
-                                    <td colSpan={4} className="py-8 text-center text-danger font-medium">
-                                        {error}
-                                    </td>
-                                </tr>
-                            ) : sortedAndFiltered.length === 0 && !isLoading ? (
+                            {sortedAndFiltered.length === 0 && !isLoading ? (
                                 <tr>
                                     <td colSpan={4} className="py-8 text-center text-secondary">
                                         {t('schedule.empty')}
@@ -351,6 +372,7 @@ export const SubjectSchedulePage: React.FC = () => {
                                                         <input
                                                             type="datetime-local"
                                                             value={editDate}
+                                                            min={new Date().toISOString().slice(0, 16)}
                                                             onChange={e => setEditDate(e.target.value)}
                                                             className="bg-surface border border-border rounded px-2 py-1 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-brand"
                                                         />
@@ -399,13 +421,15 @@ export const SubjectSchedulePage: React.FC = () => {
                                                             </button>
                                                         </>
                                                     ) : (
-                                                        <button
-                                                            onClick={() => handleEditClick(s)}
-                                                            className="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded transition-colors"
-                                                            title={t('common.edit')}
-                                                        >
-                                                            <Edit size={18}/>
-                                                        </button>
+                                                        s.calculatedStatus === ScheduleStatus.PLANNED && (
+                                                            <button
+                                                                onClick={() => handleEditClick(s)}
+                                                                className="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded transition-colors"
+                                                                title={t('common.edit')}
+                                                            >
+                                                                <Edit size={18}/>
+                                                            </button>
+                                                        )
                                                     )}
                                                     <button
                                                         onClick={() => openDeleteModal(s)}
