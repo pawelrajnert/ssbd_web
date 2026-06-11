@@ -207,9 +207,9 @@ export const CreateSubjectPage: React.FC = () => {
                                         <label className="block text-sm font-semibold text-primary mb-2">{t('subjectCreate.templateSelect')}</label>
                                         <select value={templateId} onChange={(e) => setTemplateId(e.target.value)} className="w-full bg-surface border border-border text-primary rounded-lg px-4 py-2.5 focus:outline-none focus:border-brand transition-colors">
                                             <option value="" disabled>{t('subjectCreate.templateDefault')}</option>
-                                            {availableTemplates.map(t => (
-                                                <option key={t.id} value={t.id}>
-                                                    {t('subjectCreate.templateOption', { tickets: t.studentTicketCount, match: t.minimumTokensMatch })}
+                                            {availableTemplates.map(temp => (
+                                                <option key={temp.id} value={temp.id}>
+                                                    {t('subjectCreate.templateOption', { tickets: temp.studentTicketCount, match: temp.minimumTokensMatch })}
                                                 </option>
                                             ))}
                                         </select>

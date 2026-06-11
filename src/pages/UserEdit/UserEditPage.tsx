@@ -16,6 +16,7 @@ import {useAuth} from "../../hooks/useAuth.ts";
 import {ChangeOwnPasswordForm} from "./ChangeOwnPasswordForm.tsx";
 import ConfirmationModal from "../../shared/components/modals/ConfirmationPopup.tsx";
 import ChangeOtherPasswordModal from "../UserList/ChangeOtherPasswordModal.tsx";
+import {personalDetailsSchema} from "../../shared/validators/userSchema.ts";
 
 export default function UserEditPage() {
     const {id} = useParams<{ id: string }>();
@@ -39,7 +40,9 @@ export default function UserEditPage() {
     const [isMyself, setIsMyself] = useState(true);
 
     const [nameValue, setNameValue] = useState('');
+    const [nameError, setNameError] = useState<string | null>(null);
     const [surnameValue, setSurnameValue] = useState('');
+    const [surnameError, setSurnameError] = useState<string | null>(null);
     const [showPasswordForm, setShowPasswordForm] = useState(false);
 
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
@@ -121,9 +124,13 @@ export default function UserEditPage() {
         if (!user) return;
         setIsSaving(true);
         setError(null);
+        setNameError(null);
+        setSurnameError(null);
+        setEmailError(false);
 
         try {
             await emailSchema.validate({email: emailValue});
+            await personalDetailsSchema.validate({ name: nameValue, surname: surnameValue }, { abortEarly: false });
 
             let currentHash = user.account.versionHash;
             let latestUser = user;
@@ -170,10 +177,28 @@ export default function UserEditPage() {
         } catch (err) {
             console.error(err);
             if (yup.ValidationError.isError(err)) {
-                setError(err.message);
-                setEmailError(true);
+                if (err.inner.length > 0) {
+                    err.inner.forEach((e) => {
+                        if (e.path === "name") setNameError(t(e.message));
+                        if (e.path === "surname") setSurnameError(t(e.message));
+                        if (e.path === "email") setEmailError(true);
+                    });
+                } else {
+                    if (err.path === "name") setNameError(t(err.message));
+                    else if (err.path === "surname") setSurnameError(t(err.message));
+                    else if (err.path === "email" || !err.path) setEmailError(true);
+                    else setError(t(err.message));
+                }
             } else if (axios.isAxiosError(err)) {
-                setError(err.response?.data || t('userEdit.messages.updateError'));
+                const responseData = err.response?.data;
+                if (responseData && typeof responseData === 'object' && 'violations' in responseData && Array.isArray(responseData.violations)) {
+                    const violationMessages = responseData.violations
+                        .map((v: { name: string; message: string }) => `${v.name}: ${v.message}`)
+                        .join(', ');
+                    setError(violationMessages);
+                } else {
+                    setError(typeof responseData === 'string' ? responseData : t('userEdit.messages.updateError'));
+                }
             } else if (err instanceof Error) {
                 setError(err.message);
             } else {
@@ -219,6 +244,11 @@ export default function UserEditPage() {
         if (user) {
             setLocalRoles(user.accessLevels.filter(al => al.active).map(al => al.accessLevelName));
             setEmailValue(user.account.email);
+            setNameValue(user.account.name);
+            setSurnameValue(user.account.surname);
+            setNameError(null);
+            setSurnameError(null);
+            setEmailError(false);
         }
     };
 
@@ -230,6 +260,24 @@ export default function UserEditPage() {
             if (yup.ValidationError.isError(err)) {
                 setEmailError(true);
             }
+        }
+    };
+
+    const handleNameOnBlur = async () => {
+        try {
+            await (yup.reach(personalDetailsSchema, 'name') as yup.StringSchema).validate(nameValue);
+            setNameError(null);
+        } catch (err) {
+            if (yup.ValidationError.isError(err)) setNameError(t(err.message));
+        }
+    };
+
+    const handleSurnameOnBlur = async () => {
+        try {
+            await (yup.reach(personalDetailsSchema, 'surname') as yup.StringSchema).validate(surnameValue);
+            setSurnameError(null);
+        } catch (err) {
+            if (yup.ValidationError.isError(err)) setSurnameError(t(err.message));
         }
     };
 
@@ -264,6 +312,7 @@ export default function UserEditPage() {
         if (!dateString) return t('userEdit.stats.never');
         return new Date(dateString).toLocaleString();
     };
+
     if (!user) {
         return (
             <div className="min-h-screen bg-base flex justify-center items-center">
@@ -393,7 +442,7 @@ export default function UserEditPage() {
                             </div>
                         </div>
 
-                        {!isAdmin || isMyself && (
+                        {isMyself && (
                             <div className="mb-8 p-6 bg-base rounded-xl border border-border">
                                 {!showPasswordForm ? (
                                     <div className="flex justify-between items-center">
@@ -423,7 +472,6 @@ export default function UserEditPage() {
                                         <ChangeOwnPasswordForm
                                             version={user.account.versionHash}
                                             onSuccess={() => {
-                                                alert(t('profile.passwordChangedSuccess'));
                                                 setShowPasswordForm(false);
                                             }}
                                         />
@@ -442,9 +490,18 @@ export default function UserEditPage() {
                                     id="firstNameInput"
                                     type="text"
                                     value={nameValue}
-                                    onChange={(e) => setNameValue(e.target.value)}
-                                    className="w-full bg-surface border border-border rounded-md p-3 text-sm font-medium text-primary outline-none focus:border-brand"
+                                    onChange={(e) => {
+                                        setNameValue(e.target.value);
+                                        if (nameError) setNameError(null);
+                                    }}
+                                    onBlur={handleNameOnBlur}
+                                    className={`w-full bg-surface border rounded-md p-3 text-sm font-medium text-primary outline-none transition-colors ${
+                                        nameError ? "border-danger focus:border-danger" : "border-border focus:border-brand"
+                                    }`}
                                 />
+                                {nameError && (
+                                    <p className="text-xs text-danger font-semibold mt-2">{nameError}</p>
+                                )}
                             </div>
                             <div>
                                 <label
@@ -453,9 +510,18 @@ export default function UserEditPage() {
                                     id="lastNameInput"
                                     type="text"
                                     value={surnameValue}
-                                    onChange={(e) => setSurnameValue(e.target.value)}
-                                    className="w-full bg-surface border border-border rounded-md p-3 text-sm font-medium text-primary outline-none focus:border-brand"
+                                    onChange={(e) => {
+                                        setSurnameValue(e.target.value);
+                                        if (surnameError) setSurnameError(null);
+                                    }}
+                                    onBlur={handleSurnameOnBlur}
+                                    className={`w-full bg-surface border rounded-md p-3 text-sm font-medium text-primary outline-none transition-colors ${
+                                        surnameError ? "border-danger focus:border-danger" : "border-border focus:border-brand"
+                                    }`}
                                 />
+                                {surnameError && (
+                                    <p className="text-xs text-danger font-semibold mt-2">{surnameError}</p>
+                                )}
                             </div>
                         </div>
 
@@ -655,7 +721,6 @@ export default function UserEditPage() {
                     user={user.account}
                     onSuccess={() => {
                         setIsChangePasswordModalOpen(false);
-                        alert(t('profile.passwordChangedSuccess', 'Password changed successfully!'));
                     }}
                 />
             )}

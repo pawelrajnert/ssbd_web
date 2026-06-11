@@ -40,13 +40,9 @@ export const TeacherSubjectListPage: React.FC = () => {
 
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base">
-            <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-                {t('subject.list.role.teacher')}
-            </div>
-
             <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
+                    <h1 className="text-3xl font-bold text-primary mb-3">
                         {t('subject.list.title')}
                     </h1>
                     <p className="text-secondary text-sm max-w-2xl">
@@ -88,13 +84,13 @@ export const TeacherSubjectListPage: React.FC = () => {
                         <div
                             onClick={() => handleSubjectClick(sub.id)}
                             key={sub.id}
-                            className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full overflow-hidden group cursor-pointer"
+                            className="bg-surface border border-border rounded-2xl shadow-sm hover:shadow-xl flex flex-col h-full overflow-hidden group cursor-pointer"
                         >
                             <div className="h-44 bg-active relative flex items-center justify-center overflow-hidden shrink-0 border-b border-border">
                                 <img
                                     src={`https://api.dicebear.com/7.x/shapes/svg?seed=${sub.id || sub.name}`}
                                     alt={`Okładka przedmiotu ${sub.name}`}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    className="w-full h-full object-cover group-hover:scale-105"
                                 />
                                 <div className="absolute top-4 left-4 bg-surface shadow border border-border text-primary text-xs font-bold px-2.5 py-1 rounded">
                                     {sub.edition}

@@ -2,7 +2,8 @@ import axios from 'axios';
 import type {FailedQueueItem} from "../../types/failed_query.type.ts";
 import {toast} from "react-toastify";
 import i18n from "i18next";
-
+import { router } from "../../routes";
+import {PATHS} from "../../routes/paths.ts";
 
 // const baseURL = 'http://localhost:8081/api';
 const baseURL = '/api';
@@ -40,7 +41,7 @@ axiosInstance.interceptors.response.use(
     (response) => {
         const method = response.config.method?.toUpperCase();
         const url = response.config.url || '';
-        const silentUrls = ['/auth/refresh', '/auth/login', '/auth/check2FA'];
+        const silentUrls = ['/auth/refresh', '/auth/login', '/auth/check2FA', '/auth/google'];
         const isSilentUrl = silentUrls.some(silent => url.includes(silent));
         if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method || '') && !isSilentUrl) {
             const backendMessage = response.data?.message;
@@ -93,14 +94,23 @@ axiosInstance.interceptors.response.use(
                 } catch (refreshError) {
                     processQueue(refreshError, null);
                     sessionStorage.clear();
-                    window.location.href = '/login';
+                    toast.warn(i18n.t('errors.unauthorized'), {
+                        toastId: 'session-expired-toast'
+                    });
+                    router.navigate(PATHS.LOGIN || '/login');
                     return Promise.reject(refreshError);
                 } finally {
                     isRefreshing = false;
                 }
             } else {
                 sessionStorage.clear();
-                window.location.href = '/login';
+                toast.warn(i18n.t('errors.unauthorized'), {
+                    toastId: 'session-expired-toast'
+                });
+                isRefreshing = false;
+                processQueue(new Error('Session expired'), null);
+                router.navigate(PATHS.LOGIN || '/login');
+                return Promise.reject(error);
             }
         }
         if (error.response) {

@@ -959,5 +959,13 @@
   "success": {
     "generic": "The operation completed successfully."
   },
-  "errors": {}
+  "errors": {
+    "unauthorized": "Your session time has ended, please log in again",
+    "networkDown": "Can't connect to server.",
+    "notFound": "The resource was not found.",
+    "generic": "An error occured",
+    "forbidden": "You do not have access to this resource.",
+    "conflict": "A conflict has occured",
+    "serverError": "There was an error on the server, try again later"
+  }
 }

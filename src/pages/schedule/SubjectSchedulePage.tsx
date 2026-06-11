@@ -13,11 +13,12 @@ import {
     CalendarClock,
     Check,
     Edit,
-    Filter,
+    Search,
     RefreshCw,
     X,
     Trash2,
-    Plus
+    Plus,
+    ChevronDown
 } from 'lucide-react';
 import axios from 'axios';
 import ConfirmationPopup from '../../shared/components/modals/ConfirmationPopup';
@@ -255,15 +256,16 @@ export const SubjectSchedulePage: React.FC = () => {
                             onClick={openCreateModal}
                             className="flex items-center gap-2 px-4 py-2 bg-brand hover:bg-brand-hover rounded-md text-sm font-bold text-white transition-colors"
                         >
-                            <Plus size={16} />
+                            <Plus size={16}/>
                             {t('schedule.modal.title')}
                         </button>
                     </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 mb-6">
-                    <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
-                        <Filter size={16} className="text-secondary mr-2"/>
+                    <div
+                        className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
+                        <Search size={16} className="text-secondary mr-2"/>
                         <input
                             type="text"
                             placeholder={`${t('schedule.tag')}...`}
@@ -273,7 +275,8 @@ export const SubjectSchedulePage: React.FC = () => {
                         />
                     </div>
 
-                    <div className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
+                    <div
+                        className="relative flex items-center bg-surface border border-border rounded-md px-3 py-1.5 focus-within:ring-2 focus-within:ring-brand transition-all">
                         <select
                             value={statusFilter}
                             onChange={e => setStatusFilter(e.target.value as FilterStatus)}
@@ -284,6 +287,7 @@ export const SubjectSchedulePage: React.FC = () => {
                             <option value={ScheduleStatus.EXECUTED}>{t('schedule.status.executed')}</option>
                             <option value={ScheduleStatus.FAILED}>{t('schedule.status.failed')}</option>
                         </select>
+                        <ChevronDown/>
                     </div>
                 </div>
 
@@ -408,7 +412,7 @@ export const SubjectSchedulePage: React.FC = () => {
                                                         className="text-red-800 hover:text-red-600 dark:text-danger dark:hover:text-danger/80 transition-colors inline-flex items-center p-2 rounded-full hover:bg-red-800/10 dark:hover:bg-danger/10"
                                                         title={t('schedule.deleteScheduleTitle')}
                                                     >
-                                                        <Trash2 size={18} />
+                                                        <Trash2 size={18}/>
                                                     </button>
                                                 </div>
                                             </td>

@@ -617,7 +617,7 @@
       "noTickets": "Brak dostępnych skanowań kodu dla tego repozytorium.",
       "accessDenied": "Brak dostępu do tego repozytorium.",
       "notFound": "Nie znaleziono repozytorium.",
-      "optimisticLock": "Błąd blokady optymistycznej — odśwież stronę i spróbuj ponownie.",
+      "optimisticLock": "Wystąpił błąd, odśwież stronę i spróbuj ponownie.",
       "base": "Wystąpił błąd podczas skanowania."
     },
     "history": {
@@ -960,5 +960,12 @@
     "generic": "Operacja zakończyła się sukcesem."
   },
   "errors": {
+    "unauthorized": "Twoja sesja wygasła, proszę uwierzytelnić się ponownie.",
+    "networkDown": "Nie ma połączenia z serwerem.",
+    "notFound": "Nie znaleziono zasobu",
+    "generic": "Wystąpił błąd",
+    "forbidden": "Nie masz dostępu do danego zasobu.",
+    "conflict": "Wystąpił konflikt, odśwież stronę",
+    "serverError": "Wystąpił błąd serwera, spróbuj ponownie póżniej"
   }
 }

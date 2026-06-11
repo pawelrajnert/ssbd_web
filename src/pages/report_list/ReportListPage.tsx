@@ -199,7 +199,7 @@ export default function ReportsPage() {
                                     </div>
                                 </th>
                                 <th
-                                    onClick={() => handleSort('createdAt')}
+                                    onClick={() => handleSort('created_at')}
                                     className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest w-1/4 cursor-pointer group hover:bg-active transition-colors"
                                 >
                                     <div className="flex items-center gap-2">
@@ -208,7 +208,7 @@ export default function ReportsPage() {
                                     </div>
                                 </th>
                                 <th
-                                    onClick={() => handleSort('averageSimilarity')}
+                                    onClick={() => handleSort('average_similarity')}
                                     className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest w-1/4 cursor-pointer group hover:bg-active transition-colors"
                                 >
                                     <div className="flex items-center gap-2">

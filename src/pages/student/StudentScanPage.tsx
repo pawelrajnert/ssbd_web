@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, CheckCircle, FileText, RefreshCw, ScanSearch, ExternalLink } from 'lucide-react';
-import { reportService } from '../../services/reportService';
-import { repositoryService } from '../../services/repositoryService';
-import type { StudentReportDetailsDTO, StudentRepositoryDTO } from '../../types/studentScan.types';
-import type { ReportDTO } from '../../types/report.types';
+import {useCallback, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+import {AlertTriangle, CheckCircle, FileText, RefreshCw, ScanSearch, ExternalLink} from 'lucide-react';
+import {reportService} from '../../services/reportService';
+import {repositoryService} from '../../services/repositoryService';
+import type {StudentReportDetailsDTO, StudentRepositoryDTO} from '../../types/studentScan.types';
+import type {ReportDTO} from '../../types/report.types';
 
 export default function StudentScanPage() {
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
     const navigate = useNavigate();
 
     const [selectedRepo, setSelectedRepo] = useState<StudentRepositoryDTO | null>(null);
@@ -67,15 +67,17 @@ export default function StudentScanPage() {
             await loadHistory();
             setRepositories(prev => prev.map(r =>
                 r.repositoryId === selectedRepo.repositoryId
-                    ? { ...r, usedScans: r.usedScans + 1 }
+                    ? {...r, usedScans: r.usedScans + 1}
                     : r
             ));
-            setUsedScans(prev => prev + 1);        } catch (err: any) {
+            setUsedScans(prev => prev + 1);
+        } catch (err: any) {
             const status = err?.response?.status;
             if (status === 403) setError(t('studentScan.errors.noTickets'));
             else if (status === 404) setError(t('studentScan.errors.notFound'));
-            else if (status === 409) setError(t('studentScan.errors.optimisticLock'));
+            else if (status === 409) setError(t('studentScan.errors.noTickets'));
             else setError(t('studentScan.errors.base'));
+            setUsedScans(prev => prev + 1);
         } finally {
             setIsScanning(false);
         }
@@ -85,8 +87,8 @@ export default function StudentScanPage() {
         if (!iso) return "";
         const d = new Date(iso);
         const lang = i18n.resolvedLanguage || i18n.language || 'en';
-        return d.toLocaleDateString(lang, { month: 'short', day: 'numeric', year: 'numeric' })
-            + ' • ' + d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit', hour12: false });
+        return d.toLocaleDateString(lang, {month: 'short', day: 'numeric', year: 'numeric'})
+            + ' • ' + d.toLocaleTimeString(lang, {hour: '2-digit', minute: '2-digit', hour12: false});
     };
 
     const getSimilarityBadge = (similarity: number) => {
@@ -133,7 +135,7 @@ export default function StudentScanPage() {
                             </label>
                             {isLoadingRepos ? (
                                 <div className="flex items-center gap-2 text-sm text-secondary py-2.5">
-                                    <RefreshCw size={14} className="animate-spin" />
+                                    <RefreshCw size={14} className="animate-spin"/>
                                     {t('common.loading')}
                                 </div>
                             ) : repositories.length === 0 ? (
@@ -168,7 +170,7 @@ export default function StudentScanPage() {
                                     ? 'bg-danger-subtle border-danger-border text-danger'
                                     : 'bg-base border-border text-secondary'
                             }`}>
-                                <ScanSearch size={14} />
+                                <ScanSearch size={14}/>
                                 <span>
                                     {t('studentScan.form.scansUsed')}:{' '}
                                     <span className="font-bold text-primary">
@@ -185,7 +187,8 @@ export default function StudentScanPage() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
+                                <label
+                                    className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
                                     {t('studentScan.form.studentTag')}
                                 </label>
                                 <input
@@ -197,7 +200,8 @@ export default function StudentScanPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
+                                <label
+                                    className="block text-xs font-bold text-secondary uppercase tracking-widest mb-1.5">
                                     {t('studentScan.form.taskTag')}
                                 </label>
                                 <input
@@ -211,8 +215,9 @@ export default function StudentScanPage() {
                         </div>
 
                         {error && (
-                            <div className="flex items-center gap-2 text-sm text-danger bg-danger-subtle border border-danger-border rounded-md px-4 py-2.5">
-                                <AlertTriangle size={16} />
+                            <div
+                                className="flex items-center gap-2 text-sm text-danger bg-danger-subtle border border-danger-border rounded-md px-4 py-2.5">
+                                <AlertTriangle size={16}/>
                                 {error}
                             </div>
                         )}
@@ -223,8 +228,8 @@ export default function StudentScanPage() {
                             className="flex items-center justify-center gap-2 px-6 py-2.5 bg-brand hover:bg-brand-hover text-white text-sm font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed self-start"
                         >
                             {isScanning
-                                ? <><RefreshCw size={16} className="animate-spin" />{t('studentScan.form.scanning')}</>
-                                : <><ScanSearch size={16} />{t('studentScan.form.submit')}</>
+                                ? <><RefreshCw size={16} className="animate-spin"/>{t('studentScan.form.scanning')}</>
+                                : <><ScanSearch size={16}/>{t('studentScan.form.submit')}</>
                             }
                         </button>
                     </div>
@@ -234,7 +239,7 @@ export default function StudentScanPage() {
                     <div className="bg-surface rounded-2xl shadow-sm border border-border p-6 mb-6">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
-                                <CheckCircle size={20} className="text-brand" />
+                                <CheckCircle size={20} className="text-brand"/>
                                 <h2 className="text-lg font-bold text-primary">{t('studentScan.result.title', 'Result of a code scan')}</h2>
                             </div>
 
@@ -242,23 +247,26 @@ export default function StudentScanPage() {
                                 onClick={() => handleViewReport(scanResult.reportId)}
                                 className="flex items-center gap-2 px-4 py-2 bg-base border border-border hover:bg-active text-sm font-bold text-primary rounded-md transition-colors"
                             >
-                                <FileText size={16} className="text-secondary" />
+                                <FileText size={16} className="text-secondary"/>
                                 {t('studentScan.result.openReport', 'Open Report')}
-                                <ExternalLink size={16} className="text-secondary" />
+                                <ExternalLink size={16} className="text-secondary"/>
                             </button>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                             <div className="bg-base border border-border rounded-md p-3">
-                                <span className="block text-xs text-secondary mb-1">{t('studentScan.result.tag', 'Tag')}:</span>
+                                <span
+                                    className="block text-xs text-secondary mb-1">{t('studentScan.result.tag', 'Tag')}:</span>
                                 <span className="font-bold text-primary">{scanResult.tag}</span>
                             </div>
                             <div className="bg-base border border-border rounded-md p-3">
-                                <span className="block text-xs text-secondary mb-1">{t('studentScan.result.subject', 'Subject')}:</span>
+                                <span
+                                    className="block text-xs text-secondary mb-1">{t('studentScan.result.subject', 'Subject')}:</span>
                                 <span className="font-bold text-primary">{scanResult.subjectName}</span>
                             </div>
                             <div className="bg-base border border-border rounded-md p-3">
-                                <span className="block text-xs text-secondary mb-1">{t('studentScan.result.scannedAt', 'Scanned')}:</span>
+                                <span
+                                    className="block text-xs text-secondary mb-1">{t('studentScan.result.scannedAt', 'Scanned')}:</span>
                                 <span className="font-bold text-primary">{formatDate(scanResult.createdAt)}</span>
                             </div>
                         </div>
@@ -273,11 +281,12 @@ export default function StudentScanPage() {
                             disabled={isLoadingHistory}
                             className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold text-primary bg-base border border-border rounded-md hover:bg-active transition-colors disabled:opacity-50"
                         >
-                            <RefreshCw size={14} className={isLoadingHistory ? 'animate-spin' : ''} />
+                            <RefreshCw size={14} className={isLoadingHistory ? 'animate-spin' : ''}/>
                             {t('common.refresh')}
                         </button>
                     </div>
-                    <div className={`divide-y divide-border ${isLoadingHistory ? 'opacity-60' : ''} transition-opacity`}>
+                    <div
+                        className={`divide-y divide-border ${isLoadingHistory ? 'opacity-60' : ''} transition-opacity`}>
                         {(!Array.isArray(history) || history.length === 0) ? (
                             <p className="text-center text-secondary text-sm py-8">
                                 {t('studentScan.history.empty')}
@@ -289,8 +298,9 @@ export default function StudentScanPage() {
                                 className="flex items-center justify-between px-6 py-4 hover:bg-base transition-colors group cursor-pointer"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 rounded-lg bg-base border border-border flex items-center justify-center text-secondary group-hover:bg-surface transition-colors">
-                                        <FileText size={18} />
+                                    <div
+                                        className="w-9 h-9 rounded-lg bg-base border border-border flex items-center justify-center text-secondary group-hover:bg-surface transition-colors">
+                                        <FileText size={18}/>
                                     </div>
                                     <div>
                                         <p className="text-sm font-bold text-primary">{r.tag}</p>
@@ -298,7 +308,8 @@ export default function StudentScanPage() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <span className="text-sm text-secondary font-medium">{formatDate(r.created_at)}</span>
+                                    <span
+                                        className="text-sm text-secondary font-medium">{formatDate(r.created_at)}</span>
                                     {getSimilarityBadge(r.average_similarity * 100)}
                                 </div>
                             </div>
