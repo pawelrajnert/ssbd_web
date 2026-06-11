@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {AlertCircle, ArrowLeft, RefreshCw, Search} from "lucide-react";
 import {useTranslation} from "react-i18next";
-import { subjectService } from '../../services/subjectService.ts';
+import {subjectService} from '../../services/subjectService.ts';
 import type {SubjectStudentStatsDTO} from "../../types/subject.types";
 import {PATHS} from "../../routes/paths";
 
@@ -167,20 +167,20 @@ export default function TeacherSubjectUsersPage() {
                                         </td>
 
                                         <td className="py-4 px-8 text-sm text-center">
-                                            {row.averagePlagiarismRatio !== null ? (
+                                            {typeof row.averagePlagiarismRatio === 'number' ? (
                                                 <span
                                                     className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide shadow-sm inline-block ${
                                                         row.averagePlagiarismRatio > 60
                                                             ? 'bg-danger-subtle text-danger border border-danger/20'
                                                             : 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-400 border border-green-500/20'
                                                     }`}>
-                                                        {row.averagePlagiarismRatio.toFixed(1)}%
-                                                    </span>
+                {row.averagePlagiarismRatio.toFixed(1)}%
+            </span>
                                             ) : (
                                                 <span
                                                     className="text-secondary italic text-xs bg-base px-2.5 py-1 rounded-full border border-border">
-                                                        {t('subjectUsers.table.noData')}
-                                                    </span>
+                {t('subjectUsers.table.noData')}
+        </span>
                                             )}
                                         </td>
                                     </tr>
