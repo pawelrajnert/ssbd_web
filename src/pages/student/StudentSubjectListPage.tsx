@@ -47,12 +47,9 @@ export const StudentSubjectListPage: React.FC = () => {
 
     return (
         <div className="p-6 md:p-10 max-w-[1400px] mx-auto min-h-screen bg-base">
-            <div className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-                {t('subject.list.role.student')}
-            </div>
 
             <div className="mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
+                <h1 className="text-3xl font-bold text-primary mb-3">
                     {t('subject.list.title')}
                 </h1>
                 <p className="text-secondary text-sm max-w-2xl">

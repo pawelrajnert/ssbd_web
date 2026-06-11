@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { User, Lock, CheckSquare, Square, ShieldCheck } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
+import { User, Lock, ShieldCheck } from "lucide-react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { GoogleLogin } from '@react-oauth/google';
@@ -24,7 +24,7 @@ export default function LoginPage() {
     const [globalError, setGlobalError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const { register, handleSubmit, control, formState: { errors } } = useForm<LoginFormData>({
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
         resolver: yupResolver(loginSchema),
         defaultValues: { login: "", password: "", rememberMe: false }
     });
@@ -145,20 +145,20 @@ export default function LoginPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-2 pb-4 ml-1">
-                    <Controller
-                        name="rememberMe"
-                        control={control}
-                        render={({ field }) => (
-                            <div className="flex items-center gap-3 cursor-pointer group select-none py-1" onClick={() => field.onChange(!field.value)}>
-                                <div className={`transition-colors ${field.value ? "text-brand" : "text-secondary opacity-50 group-hover:opacity-100"}`}>
-                                    {field.value ? <CheckSquare size={20}/> : <Square size={20}/>}
-                                </div>
-                                <p className="text-sm text-secondary font-bold transition-colors group-hover:text-primary">
-                                    {t('auth.login.rememberMe')}
-                                </p>
-                            </div>
-                        )}
-                    />
+                    {/*<Controller*/}
+                    {/*    name="rememberMe"*/}
+                    {/*    control={control}*/}
+                    {/*    render={({ field }) => (*/}
+                    {/*        <div className="flex items-center gap-3 cursor-pointer group select-none py-1" onClick={() => field.onChange(!field.value)}>*/}
+                    {/*            <div className={`transition-colors ${field.value ? "text-brand" : "text-secondary opacity-50 group-hover:opacity-100"}`}>*/}
+                    {/*                {field.value ? <CheckSquare size={20}/> : <Square size={20}/>}*/}
+                    {/*            </div>*/}
+                    {/*            <p className="text-sm text-secondary font-bold transition-colors group-hover:text-primary">*/}
+                    {/*                {t('auth.login.rememberMe')}*/}
+                    {/*            </p>*/}
+                    {/*        </div>*/}
+                    {/*    )}*/}
+                    {/*/>*/}
                     <Link to={PATHS.FORGOT_PASSWORD} className="text-sm font-bold text-brand hover:text-brand-hover transition-colors hover:underline py-1">
                         {t('auth.login.forgotPassword')}
                     </Link>

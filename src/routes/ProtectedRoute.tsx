@@ -29,7 +29,6 @@ const ProtectedRoute = ({ allowedRoles }: HandleProtectionProperties) => {
 
 
     if (!hasPermission) {
-        console.log(`Access Denied. User role: ${activeRole}, allowed: ${allowedRoles}`)
         toast.warn(t("common.accessDenied"), {
             toastId: "common.accessDenied"
         });

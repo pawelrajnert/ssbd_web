@@ -1,14 +1,22 @@
-import { useEffect, useState, type KeyboardEvent } from "react";
-import { RefreshCw, Filter, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronsUpDownIcon } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { userService } from "../../services/userService";
-import { PATHS } from "../../routes/paths";
-import type { AccountsHalResponse, AccountDTO } from "../../types/user.types";
+import {useEffect, useState, type KeyboardEvent} from "react";
+import {
+    RefreshCw,
+    Filter,
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight,
+    ChevronsUpDownIcon
+} from "lucide-react";
+import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router-dom";
+import {userService} from "../../services/userService";
+import {PATHS} from "../../routes/paths";
+import type {AccountsHalResponse, AccountDTO} from "../../types/user.types";
 import ChangePasswordModal from "./ChangeOtherPasswordModal";
 
 export default function UserListPage() {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const navigate = useNavigate();
 
     const [data, setData] = useState<AccountsHalResponse | null>(null);
@@ -30,7 +38,7 @@ export default function UserListPage() {
             if (!token) return null;
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
             return JSON.parse(jsonPayload).sub;
@@ -57,7 +65,8 @@ export default function UserListPage() {
                         }
                     }
                 }
-            } catch { /* empty */ } finally {
+            } catch { /* empty */
+            } finally {
                 setIsProfileLoaded(true);
             }
         };
@@ -67,18 +76,20 @@ export default function UserListPage() {
     useEffect(() => {
         if (!isProfileLoaded) return;
         setIsLoading(true);
-        userService.getUsers({ page: 0, size, phrase: searchPhrase, sortBy, sortDesc })
+        userService.getUsers({page: 0, size, phrase: searchPhrase, sortBy, sortDesc})
             .then(setData)
-            .catch(() => {})
+            .catch(() => {
+            })
             .finally(() => setIsLoading(false));
     }, [size, searchPhrase, sortBy, sortDesc, isProfileLoaded]);
 
     const handleRefresh = () => {
         setSearchPhrase(phrase);
         setIsLoading(true);
-        userService.getUsers({ page: 0, size, phrase, sortBy, sortDesc })
+        userService.getUsers({page: 0, size, phrase, sortBy, sortDesc})
             .then(setData)
-            .catch(() => {})
+            .catch(() => {
+            })
             .finally(() => setIsLoading(false));
     };
 
@@ -91,7 +102,8 @@ export default function UserListPage() {
             setIsLoading(true);
             userService.getUsers(data._links.first.href)
                 .then(setData)
-                .catch(() => {})
+                .catch(() => {
+                })
                 .finally(() => setIsLoading(false));
         }
     };
@@ -101,7 +113,8 @@ export default function UserListPage() {
             setIsLoading(true);
             userService.getUsers(data._links.last.href)
                 .then(setData)
-                .catch(() => {})
+                .catch(() => {
+                })
                 .finally(() => setIsLoading(false));
         }
     };
@@ -111,7 +124,8 @@ export default function UserListPage() {
             setIsLoading(true);
             userService.getUsers(data._links.next.href)
                 .then(setData)
-                .catch(() => {})
+                .catch(() => {
+                })
                 .finally(() => setIsLoading(false));
         }
     };
@@ -121,7 +135,8 @@ export default function UserListPage() {
             setIsLoading(true);
             userService.getUsers(data._links.prev.href)
                 .then(setData)
-                .catch(() => {})
+                .catch(() => {
+                })
                 .finally(() => setIsLoading(false));
         }
     };
@@ -175,7 +190,7 @@ export default function UserListPage() {
     if (!isProfileLoaded) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <RefreshCw className="animate-spin text-[#7A1014]" size={40} />
+                <RefreshCw className="animate-spin text-[#7A1014]" size={40}/>
             </div>
         );
     }
@@ -194,12 +209,13 @@ export default function UserListPage() {
                             disabled={isLoading}
                             className="flex items-center gap-2 px-4 py-2 bg-surface border border-border hover:bg-active disabled:opacity-50 rounded-md text-sm font-bold text-primary transition-colors"
                         >
-                            <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
+                            <RefreshCw size={16} className={isLoading ? "animate-spin" : ""}/>
                             {t('userList.refresh')}
                         </button>
                         <div className="relative">
-                            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-secondary">
-                                <Filter size={16} />
+                            <div
+                                className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-secondary">
+                                <Filter size={16}/>
                             </div>
                             <input
                                 type="text"
@@ -215,49 +231,56 @@ export default function UserListPage() {
                 <div className="bg-surface rounded-2xl shadow-sm border border-border overflow-hidden flex flex-col">
                     <div className="overflow-x-auto relative">
                         {isLoading && (
-                            <div className="absolute inset-0 bg-surface/50 backdrop-blur-[1px] flex items-center justify-center z-10">
-                                <RefreshCw className="animate-spin text-brand" size={32} />
+                            <div
+                                className="absolute inset-0 bg-surface/50 backdrop-blur-[1px] flex items-center justify-center z-10">
+                                <RefreshCw className="animate-spin text-brand" size={32}/>
                             </div>
                         )}
                         <table className="w-full text-left border-collapse relative">
                             <thead>
                             <tr className="border-b border-border  cursor-pointer select-none">
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('accessLevel')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest"
+                                    onClick={() => handleSort('accessLevel')}>
                                     <div className="flex items-center gap-2">
                                         {t('userList.table.role')}
                                         <ChevronsUpDownIcon className="h-4 w-4"/>
                                     </div>
                                 </th>
 
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('name')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest"
+                                    onClick={() => handleSort('name')}>
                                     <div className="flex items-center gap-2">
                                         {t('userList.table.firstName')}
                                         <ChevronsUpDownIcon className="h-4 w-4"/>
                                     </div>
                                 </th>
 
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('surname')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest"
+                                    onClick={() => handleSort('surname')}>
                                     <div className="flex items-center gap-2">
                                         {t('userList.table.surname')}
                                         <ChevronsUpDownIcon className="h-4 w-4"/>
                                     </div>
                                 </th>
 
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('login')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest"
+                                    onClick={() => handleSort('login')}>
                                     <div className="flex items-center gap-2">
                                         {t('userList.table.login')}
                                         <ChevronsUpDownIcon className="h-4 w-4"/>
                                     </div>
                                 </th>
 
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('email')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest"
+                                    onClick={() => handleSort('email')}>
                                     <div className="flex items-center gap-2">
                                         {t('userList.table.email')}
                                         <ChevronsUpDownIcon className="h-4 w-4"/>
                                     </div>
                                 </th>
 
-                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest" onClick={() => handleSort('lastLoginSuccessDateTime')}>
+                                <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest"
+                                    onClick={() => handleSort('lastLoginSuccessDateTime')}>
                                     <div className="flex items-center gap-2">
                                         {t('userList.table.lastLogin')}
                                         <ChevronsUpDownIcon className="h-4 w-4"/>
@@ -303,10 +326,11 @@ export default function UserListPage() {
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex flex-col md:flex-row items-center justify-between px-8 py-4 border-t border-border bg-surface gap-4">
+                    <div
+                        className="flex flex-col md:flex-row items-center justify-between px-8 py-4 border-t border-border bg-surface gap-4">
                         <div className="flex items-center gap-4">
                             <span className="text-sm text-primary font-medium">
-                                {t('userList.pagination.page')} {data ? (data.page.number + 1) : 0} {t('userList.pagination.of')} {data ? data.page.totalPages : 0}
+                                {t('userList.pagination.page')} {data?.page ? (data.page.number + 1) : 0} {t('userList.pagination.of')} {data?.page ? data.page.totalPages : 0}
                             </span>
                             <div className="flex items-center gap-2 text-sm text-primary font-medium">
                                 <label htmlFor="pageSize">{t('userList.pagination.showing')}</label>
@@ -325,10 +349,10 @@ export default function UserListPage() {
                         <div className="flex gap-2">
                             <button
                                 onClick={handleFirstPage}
-                                disabled={!data || data.page.number === 0 || isLoading}
+                                disabled={!data?.page || data.page.number === 0 || isLoading}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                <ChevronsLeft size={16} />
+                                <ChevronsLeft size={16}/>
                                 {t('userList.pagination.first', 'Pierwsza')}
                             </button>
                             <button
@@ -336,7 +360,7 @@ export default function UserListPage() {
                                 disabled={!data?._links?.prev || isLoading}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
-                                <ChevronLeft size={16} />
+                                <ChevronLeft size={16}/>
                                 {t('userList.pagination.prev', 'Poprzednia')}
                             </button>
                             <button
@@ -345,15 +369,15 @@ export default function UserListPage() {
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 {t('userList.pagination.next', 'Kolejna')}
-                                <ChevronRight size={16} />
+                                <ChevronRight size={16}/>
                             </button>
                             <button
                                 onClick={handleLastPage}
-                                disabled={!data || data.page.number === data.page.totalPages - 1 || data.page.totalPages === 0 || isLoading}
+                                disabled={!data?.page || data.page.number === data.page.totalPages - 1 || data.page.totalPages === 0 || isLoading}
                                 className="flex items-center gap-1 px-3 py-1.5 bg-surface border border-border rounded-md text-sm font-bold text-primary hover:bg-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             >
                                 {t('userList.pagination.last', 'Ostatnia')}
-                                <ChevronsRight size={16} />
+                                <ChevronsRight size={16}/>
                             </button>
                         </div>
                     </div>
