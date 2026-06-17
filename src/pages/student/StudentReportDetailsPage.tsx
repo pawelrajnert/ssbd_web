@@ -24,7 +24,7 @@ export default function StudentReportDetailsPage() {
                 const data = await reportService.getMyReportDetails(id);
                 setReportDetails(data);
             } catch (err: any) {
-                navigate('/student/reports');
+                navigate('/student-reports');
             } finally {
                 setIsLoading(false);
             }

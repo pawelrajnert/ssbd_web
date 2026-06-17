@@ -111,7 +111,7 @@ export default function StudentScanPage() {
     };
 
     const handleViewReport = (reportId: string) => {
-        navigate(`/student/reports/${reportId}`);
+        navigate(`/student-reports/${reportId}`);
     };
 
     const noScansLeft = selectedRepo != null && usedScans >= selectedRepo.maxScans;
