@@ -781,6 +781,10 @@
         }
       }
     },
+    "student": {
+      "title": "My subjects",
+      "description": "Scan your own repositories for plagiarism"
+    },
     "analysis": {
       "modal": {
         "title": "Trigger new analysis",
