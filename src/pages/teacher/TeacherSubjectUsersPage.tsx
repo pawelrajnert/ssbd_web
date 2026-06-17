@@ -48,8 +48,8 @@ export default function TeacherSubjectUsersPage() {
         }
 
         const filtered = data.filter(item =>
-            item.name.toLowerCase().includes(lowercasedFilter) ||
-            item.surname.toLowerCase().includes(lowercasedFilter) ||
+            item.firstName.toLowerCase().includes(lowercasedFilter) ||
+            item.lastName.toLowerCase().includes(lowercasedFilter) ||
             item.repositoryName.toLowerCase().includes(lowercasedFilter)
         );
         setFilteredData(filtered);
@@ -152,11 +152,11 @@ export default function TeacherSubjectUsersPage() {
                                 filteredData.map((row) => (
                                     <tr key={row.studentId} className="hover:bg-base/40 transition-colors group">
                                         <td className="py-4 px-8 text-sm text-primary font-semibold">
-                                            {row.name}
+                                            {row.firstName}
                                         </td>
 
                                         <td className="py-4 px-8 text-sm text-primary font-semibold">
-                                            {row.surname}
+                                            {row.lastName}
                                         </td>
 
                                         <td className="py-4 px-8 text-sm">
@@ -167,14 +167,14 @@ export default function TeacherSubjectUsersPage() {
                                         </td>
 
                                         <td className="py-4 px-8 text-sm text-center">
-                                            {typeof row.averagePlagiarismRatio === 'number' ? (
+                                            {typeof row.plagiarismRatio === 'number' ? (
                                                 <span
                                                     className={`px-3 py-1 rounded-full text-xs font-bold tracking-wide shadow-sm inline-block ${
-                                                        row.averagePlagiarismRatio > 60
+                                                        row.plagiarismRatio > 60
                                                             ? 'bg-danger-subtle text-danger border border-danger/20'
                                                             : 'bg-green-100 text-green-800 dark:bg-green-950/40 dark:text-green-400 border border-green-500/20'
                                                     }`}>
-                {row.averagePlagiarismRatio.toFixed(1)}%
+                {row.plagiarismRatio.toFixed(1)}%
             </span>
                                             ) : (
                                                 <span

@@ -244,9 +244,9 @@ export const SubjectDetailsView: React.FC = () => {
                             { label: t('subject.details.stats.pending'), value: reports?.totalElements?.toString() || '0' },
                             { label: t('subject.details.stats.similarity'), value: displaySimilarity }
                         ].map((stat, idx) => (
-                            <div key={idx} className={`flex flex-col rounded-md px-8 py-5 bg-[#dbdbdb] drop-shadow-lg inset-shadow-sm`}>
-                                <span className="text-[11px] sm:text-xs font-bold text-secondary text-center uppercase tracking-widest mb-1">{stat.label}</span>
-                                <span className="text-4xl sm:text-5xl font-extrabold text-primary text-center">{stat.value}</span>
+                            <div key={idx} className={`flex flex-col rounded-md px-8 py-5 text-green-700 bg-green-100 border-green-200 dark:bg-green-500/10 dark:border-green-500/20 dark:text-green-400 drop-shadow-lg inset-shadow-sm`}>
+                                <span className="text-[11px] sm:text-xs font-bold text-center uppercase tracking-widest mb-1">{stat.label}</span>
+                                <span className="text-4xl sm:text-5xl font-extrabold text-center">{stat.value}</span>
                             </div>
                         ))}
                     </div>
