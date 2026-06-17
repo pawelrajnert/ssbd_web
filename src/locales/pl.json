@@ -775,6 +775,10 @@
         }
       }
     },
+    "student": {
+      "title": "Moje przedmioty",
+      "description": "Przeglądaj swoje przedmioty i wykonuj własne skanowania antyplagiatowe"
+    },
     "analysis": {
       "modal": {
         "title": "Uruchom nową analizę",
