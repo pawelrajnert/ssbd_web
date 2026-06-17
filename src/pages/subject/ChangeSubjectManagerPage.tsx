@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {AlertCircle, CheckCircle2, Loader2, UserCheck} from 'lucide-react';
 import axios from 'axios';
 import SubmitButton from '../../shared/components/buttons/SubmitButton';
-import {getSubjectDetails, subjectService} from '../../services/subjectService';
+import {getSubjectTeachers, subjectService} from '../../services/subjectService';
 import type {SubjectDTO, TeacherAssignmentDTO} from '../../types/SubjectDTO';
 
 export const ChangeSubjectManagerPage: React.FC = () => {
@@ -49,8 +49,8 @@ export const ChangeSubjectManagerPage: React.FC = () => {
             setSuccessMessage(null);
 
             try {
-                const data = await getSubjectDetails(selectedSubjectId);
-                const candidates = (data.teachers || []).filter((t: TeacherAssignmentDTO) => t.role !== 'OWNER');
+                const data = await getSubjectTeachers(selectedSubjectId);
+                const candidates = (data || []).filter((t: TeacherAssignmentDTO) => t.role !== 'OWNER');
                 setAssignedTeachers(candidates);
                 setSelectedTeacherLogin('');
             } catch (err) {

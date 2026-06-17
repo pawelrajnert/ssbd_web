@@ -1,4 +1,4 @@
-import type {SubjectDTO, UpdateSubjectDTO} from '../types/SubjectDTO';
+import type {SubjectDTO, UpdateSubjectDTO, TeacherAssignmentDTO} from '../types/SubjectDTO';
 import axiosInstance from '../api/auth/middleware';
 import type {
     StudentSubjectDetailsDTO,
@@ -118,4 +118,9 @@ export const toggleArchiveSubject = async (subjectId: string, versionHash: strin
             'If-Match': versionHash
         }
     });
+};
+
+export const getSubjectTeachers = async (subjectId: string): Promise<TeacherAssignmentDTO[]> => {
+    const response = await axiosInstance.get<TeacherAssignmentDTO[]>(`/subjects/${subjectId}/users`);
+    return response.data;
 };
