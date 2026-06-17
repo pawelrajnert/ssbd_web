@@ -750,7 +750,7 @@
         "contributors": "Użytkownicy",
         "viewCode": "Podgląd Kodu",
         "analyze": "Analizuj",
-        "tickets": "Dostępne skanowania",
+        "tickets": "Wykorzystane skanowania",
         "empty": "Brak zsynchronizowanych repozytoriów. Kliknij \"Odśwież z Gitea\", aby pobrać nowości.",
         "noUsers": "Brak przypisanych członków"
       },
