@@ -1,10 +1,10 @@
 export interface SubjectStudentStatsDTO {
     studentId: string;
-    name: string;
-    surname: string;
+    firstName: string;
+    lastName: string;
     repositoryId: string;
     repositoryName: string;
-    averagePlagiarismRatio: number | null; // TODO: na razie null bo nie mamy jeszcze MPP.23
+    plagiarismRatio: number | null;
 }
 
 export interface StudentSubjectDetailsDTO {
