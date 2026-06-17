@@ -90,7 +90,7 @@ export default function StudentReportListPage() {
     };
 
     const handleViewReport = (reportId: string) => {
-        navigate(`/student/reports/${reportId}`);
+        navigate(`/student-reports/${reportId}`);
     };
 
     const formatDate = (isoString: string) => {
