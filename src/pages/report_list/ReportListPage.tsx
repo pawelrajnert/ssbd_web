@@ -204,7 +204,7 @@ export default function ReportsPage() {
                                 >
                                     <div className="flex items-center gap-2">
                                         {t("reportList.list.creation_date")}
-                                        {renderSortIcon('createdAt')}
+                                        {renderSortIcon('created_at')}
                                     </div>
                                 </th>
                                 <th
@@ -213,7 +213,7 @@ export default function ReportsPage() {
                                 >
                                     <div className="flex items-center gap-2">
                                         {t("reportList.list.avg")}
-                                        {renderSortIcon('averageSimilarity')}
+                                        {renderSortIcon('average_similarity')}
                                     </div>
                                 </th>
                                 <th className="py-6 px-8 text-xs font-bold text-secondary uppercase tracking-widest text-right">

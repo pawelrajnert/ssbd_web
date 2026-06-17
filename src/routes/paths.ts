@@ -24,7 +24,7 @@ export const PATHS = {
     REPORT_LIST: "/reports",
     TEACHER_REPORT_DETAILS: "/reports/:id",
     STUDENT_REPORTS: '/student-reports',
-    STUDENT_REPORT_DETAILS: '/student/reports/:id',
+    STUDENT_REPORT_DETAILS: '/student-reports/:id',
     GLOBAL_RULES: "/global-rules",
     STUDENT_SUBJECT_DETAILS: "/my-subjects/:id",
     SUBJECT_DETAILS: "/subjects/:id",

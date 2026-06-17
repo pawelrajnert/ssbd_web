@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { reportService } from "../../services/reportService";
 import type { StudentOwnReportDetailsDTO } from "../../types/report.types";
+import {PATHS} from "../../routes/paths.ts";
 
 export default function StudentReportDetailsPage() {
     const { id } = useParams<{ id: string }>();
@@ -61,7 +62,7 @@ export default function StudentReportDetailsPage() {
         <div className="min-h-screen bg-base p-4 md:p-8">
             <div className="max-w-4xl mx-auto">
                 <button
-                    onClick={() => navigate('/student/reports')}
+                    onClick={() => navigate(PATHS.STUDENT_REPORTS)}
                     className="flex items-center gap-2 text-secondary hover:text-primary transition-colors font-semibold mb-6"
                 >
                     <ArrowLeft size={18} />
