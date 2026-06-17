@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import type {SubjectDTO, TeacherAssignmentDTO, UpdateSubjectDTO} from '../../types/SubjectDTO';
-import {getSubjectDetails, toggleArchiveSubject, updateSubject} from '../../services/subjectService';
+import {getSubjectDetails, toggleArchiveSubject, updateSubject, getSubjectTeachers} from '../../services/subjectService';
 import {TeacherAssignmentManager} from './TeacherAssignmentManager';
 import {Loader2} from 'lucide-react';
 
@@ -23,6 +23,7 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({subject, onCl
     const [visibility, setVisibility] = useState(subject.manualRules?.raportLevelName || 'ONLY_PERCENTAGES');
 
     const [teachers, setTeachers] = useState<TeacherAssignmentDTO[]>([]);
+    const [currentVersionHash, setCurrentVersionHash] = useState(subject.versionHash || '');
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isArchiving, setIsArchiving] = useState(false);
@@ -31,12 +32,29 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({subject, onCl
 
     useEffect(() => {
         if (subject.id) {
-            getSubjectDetails(subject.id)
-                .then((data) => {
-                    setTeachers(data.teachers || []);
+            Promise.all([
+                getSubjectDetails(subject.id),
+                getSubjectTeachers(subject.id)
+            ])
+                .then(([detailsData, teachersData]: [SubjectDTO, TeacherAssignmentDTO[]]) => {
+                    setName(detailsData.name || '');
+                    setDescription(detailsData.subjectDescription || '');
+
+                    if (detailsData.manualRules) {
+                        setTickets(detailsData.manualRules.studentTicketCount || 10);
+                        setMinTokens(detailsData.manualRules.minimumTokensMatch || 0);
+                        setNormalization(detailsData.manualRules.enableNormalization || false);
+                        setVisibility(detailsData.manualRules.raportLevelName || 'ONLY_PERCENTAGES');
+                    }
+
+                    if (detailsData.versionHash) {
+                        setCurrentVersionHash(detailsData.versionHash);
+                    }
+
+                    setTeachers(teachersData || []);
                 })
-                .catch((err) => {
-                    console.error("Błąd pobierania kadry: ", err);
+                .catch((err: any) => {
+                    console.error("Błąd pobierania danych przedmiotu: ", err);
                 });
         }
     }, [subject.id]);
@@ -77,7 +95,7 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({subject, onCl
         };
 
         try {
-            await updateSubject(subject.id!, dto, subject.versionHash!);
+            await updateSubject(subject.id!, dto, currentVersionHash);
             onSuccess();
         } catch (err: any) {
             let errorMsg = t('subjectEdit.defaultError');
@@ -108,7 +126,7 @@ export const EditSubjectModal: React.FC<EditSubjectModalProps> = ({subject, onCl
         setIsArchiving(true);
         setError(null);
         try {
-            await toggleArchiveSubject(subject.id!, subject.versionHash!);
+            await toggleArchiveSubject(subject.id!, currentVersionHash);
             onSuccess();
         } catch (err: any) {
             let errorMsg = t('subjectEdit.archiveError');
