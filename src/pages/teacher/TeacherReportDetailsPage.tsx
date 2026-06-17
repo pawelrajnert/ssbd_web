@@ -138,7 +138,7 @@ const TeacherReportDetailsPage: React.FC = () => {
                 </span>
 
                 <div className="flex flex-nowrap overflow-x-auto custom-scrollbar gap-2 pb-1 flex-1">
-                    {report.comparisons.map((comp, index) => {
+                    {report.comparisons.sort((a, b) => b.averageSimilarity - a.averageSimilarity).map((comp, index) => {
                         const isSelected = selectedComparison === comp;
                         return (
                             <button
