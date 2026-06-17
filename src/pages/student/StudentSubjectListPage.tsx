@@ -50,10 +50,10 @@ export const StudentSubjectListPage: React.FC = () => {
 
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-primary mb-3">
-                    {t('subject.list.title')}
+                    {t('subject.student.title')}
                 </h1>
                 <p className="text-secondary text-sm max-w-2xl">
-                    {t('subject.list.description')}
+                    {t('subject.student.description')}
                 </p>
             </div>
 
