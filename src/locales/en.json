@@ -756,7 +756,7 @@
         "contributors": "Users",
         "viewCode": "Preview Code",
         "analyze": "Analyze",
-        "tickets": "Available scans",
+        "tickets": "Used scans",
         "empty": "No synchronized repositories. Click \"Refresh from Gitea\" to download updates.",
         "noUsers": "No members assigned"
       },
