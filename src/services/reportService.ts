@@ -50,6 +50,13 @@ export const reportService = {
             return response.data;
         },
 
+        getReportSummary: async (reportId: string): Promise<string> => {
+            const response = await axiosInstance.get<string>(`/reports/${reportId}/summary`, {
+                responseType: 'text',
+            });
+            return response.data;
+        },
+
         deleteReport: async (id: string) => {
             const response = await axiosInstance.delete<Page<ReportDTO>>(
                 `/reports/${id}`
