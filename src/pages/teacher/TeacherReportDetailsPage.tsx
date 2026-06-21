@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, AlertTriangle, User } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, User, BrainCircuit, X } from 'lucide-react';
+import axios from 'axios';
 import { reportService } from '../../services/reportService';
 import type { TeacherReportDetails, TeacherComparison } from '../../types/report.types';
 import {SideBySideViewer} from "../../shared/components/SideBySideViewer.tsx";
@@ -17,6 +18,34 @@ const TeacherReportDetailsPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [selectedComparison, setSelectedComparison] = useState<TeacherComparison | null>(null);
 
+    const [summaryOpen, setSummaryOpen] = useState<boolean>(false);
+    const [summaryLoading, setSummaryLoading] = useState<boolean>(false);
+    const [summaryText, setSummaryText] = useState<string | null>(null);
+    const [summaryError, setSummaryError] = useState<string | null>(null);
+
+    const handleGenerateSummary = async () => {
+        if (!reportId) return;
+        setSummaryOpen(true);
+        setSummaryLoading(true);
+        setSummaryError(null);
+        setSummaryText(null);
+        try {
+            const text = await reportService.getReportSummary(reportId);
+            setSummaryText(text);
+        } catch (err) {
+            const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+            if (status === 403) {
+                setSummaryError(t('report.accessDenied'));
+            } else if (status === 404) {
+                setSummaryError(t('report.notFound'));
+            } else {
+                setSummaryError(t('report.summaryError'));
+            }
+        } finally {
+            setSummaryLoading(false);
+        }
+    };
+
     useEffect(() => {
         if (!reportId) return;
         const fetchReport = async () => {
@@ -27,15 +56,19 @@ const TeacherReportDetailsPage: React.FC = () => {
                 if (data.comparisons && data.comparisons.length > 0) {
                     setSelectedComparison(data.comparisons[0]);
                 }
-            } catch (err: any) {
-                if (err.response?.data?.message === 'error.report.file' || err.response?.status === 500) {
+            } catch (err) {
+                const status = axios.isAxiosError(err) ? err.response?.status : undefined;
+                const message = axios.isAxiosError(err)
+                    ? (err.response?.data as { message?: string } | undefined)?.message
+                    : undefined;
+                if (message === 'error.report.file' || status === 500) {
                     setError(t('report.fileError'));
                 }
-                else if (err.response?.status === 404) {
+                else if (status === 404) {
                     setError(t('report.notFound'));
                 }
-                else if (err.response?.status === 403) {
-                    setError(t('report.accessDenied', 'Brak dostępu do tego raportu.'));
+                else if (status === 403) {
+                    setError(t('report.accessDenied'));
                 }
                 else {
                     setError(t('report.fetchError'));
@@ -97,6 +130,15 @@ const TeacherReportDetailsPage: React.FC = () => {
                     <h1 className="text-lg font-bold text-primary truncate max-w-[300px] xl:max-w-[500px]" title={report.subjectName}>
                         <SimilarityBadge similarity={report.averageSimilarity * 100}/>
                     </h1>
+                    <button
+                        onClick={handleGenerateSummary}
+                        disabled={summaryLoading}
+                        className="flex items-center gap-2 rounded-md bg-brand px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-hover disabled:opacity-60 transition-colors"
+                        title={t('report.aiSummary')}
+                    >
+                        <BrainCircuit className="h-4 w-4" />
+                        {summaryLoading ? t('report.summaryLoading') : t('report.aiSummary')}
+                    </button>
                 </div>
 
                 {selectedComparison && (
@@ -170,6 +212,50 @@ const TeacherReportDetailsPage: React.FC = () => {
                     </div>
                 )}
             </div>
+
+            {summaryOpen && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                    onClick={() => setSummaryOpen(false)}
+                >
+                    <div
+                        className="w-full max-w-2xl max-h-[80vh] flex flex-col rounded-lg bg-surface shadow-xl border border-border"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+                            <h2 className="flex items-center gap-2 text-lg font-bold text-primary">
+                                <BrainCircuit className="h-5 w-5 text-brand" />
+                                {t('report.aiSummary')}
+                            </h2>
+                            <button
+                                onClick={() => setSummaryOpen(false)}
+                                className="text-secondary hover:text-primary transition-colors"
+                                aria-label={t('common.close')}
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+                        <div className="px-5 py-4 overflow-y-auto custom-scrollbar">
+                            {summaryLoading && (
+                                <div className="flex items-center justify-center gap-3 py-8 text-secondary">
+                                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand border-t-transparent" />
+                                    {t('report.summaryLoading')}
+                                </div>
+                            )}
+                            {!summaryLoading && summaryError && (
+                                <div className="flex items-center gap-2 text-danger">
+                                    <AlertTriangle className="h-5 w-5 shrink-0" /> {summaryError}
+                                </div>
+                            )}
+                            {!summaryLoading && !summaryError && summaryText && (
+                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-primary">
+                                    {summaryText}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );
