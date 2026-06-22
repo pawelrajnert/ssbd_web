@@ -25,7 +25,18 @@ deploy-frontend:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd /opt/api
+
+    - export VAULT_TOKEN=$CI_VAULT_TOKEN
+    - export APP_FRONTEND_URL=$CI_APP_FRONTEND_URL
+    - export GOOGLE_CLIENT_ID=$CI_GOOGLE_CLIENT_ID
+    - export GITEA_URL=$CI_GITEA_URL
+    - export PG_USERNAME=$CI_PG_USERNAME
+    - export PG_DATABASE=$CI_PG_DATABASE
+    - export MOK_USER=$CI_MOK_USER
+    - export MPP_USER=$CI_MPP_USER
+
     - docker compose -f docker-compose.prod.yml pull frontend
-    - docker compose -f docker-compose.prod.yml up -d
+
+    - docker compose -f docker-compose.prod.yml up -d frontend proxy
   only:
     - main
