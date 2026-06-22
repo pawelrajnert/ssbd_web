@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, AlertTriangle, User, BrainCircuit, X } from 'lucide-react';
+import { ArrowLeft, AlertTriangle, User, SparklesIcon, X } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import { reportService } from '../../services/reportService';
 import type { TeacherReportDetails, TeacherComparison } from '../../types/report.types';
@@ -136,7 +137,7 @@ const TeacherReportDetailsPage: React.FC = () => {
                         className="flex items-center gap-2 rounded-md bg-brand px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-hover disabled:opacity-60 transition-colors"
                         title={t('report.aiSummary')}
                     >
-                        <BrainCircuit className="h-4 w-4" />
+                        <SparklesIcon className="h-4 w-4" />
                         {summaryLoading ? t('report.summaryLoading') : t('report.aiSummary')}
                     </button>
                 </div>
@@ -224,7 +225,7 @@ const TeacherReportDetailsPage: React.FC = () => {
                     >
                         <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
                             <h2 className="flex items-center gap-2 text-lg font-bold text-primary">
-                                <BrainCircuit className="h-5 w-5 text-brand" />
+                                <SparklesIcon className="h-5 w-5 text-brand" />
                                 {t('report.aiSummary')}
                             </h2>
                             <button
@@ -248,9 +249,9 @@ const TeacherReportDetailsPage: React.FC = () => {
                                 </div>
                             )}
                             {!summaryLoading && !summaryError && summaryText && (
-                                <p className="whitespace-pre-wrap text-sm leading-relaxed text-primary">
-                                    {summaryText}
-                                </p>
+                                <div className="whitespace-pre-wrap text-sm leading-relaxed text-primary">
+                                   <ReactMarkdown>{summaryText}</ReactMarkdown>
+                                </div>
                             )}
                         </div>
                     </div>
