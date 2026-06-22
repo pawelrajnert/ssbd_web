@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, AlertTriangle, User, SparklesIcon, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import axios from 'axios';
 import { reportService } from '../../services/reportService';
 import type { TeacherReportDetails, TeacherComparison } from '../../types/report.types';
@@ -249,8 +250,8 @@ const TeacherReportDetailsPage: React.FC = () => {
                                 </div>
                             )}
                             {!summaryLoading && !summaryError && summaryText && (
-                                <div className="whitespace-pre-wrap text-sm leading-relaxed text-primary">
-                                   <ReactMarkdown>{summaryText}</ReactMarkdown>
+                                <div className="prose prose-sm dark:prose-invert max-w-none">
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{summaryText}</ReactMarkdown>
                                 </div>
                             )}
                         </div>
