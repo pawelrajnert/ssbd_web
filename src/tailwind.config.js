@@ -6,6 +6,9 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+            },
             colors: {
                 base: 'var(--bg-base)',
                 surface: 'var(--bg-surface)',
